@@ -1,0 +1,187 @@
+body
+{
+	border: 0;
+	padding: 0;
+	margin : 0;
+	font-family: 'Segoe UI', Tahoma, sans-serif;
+	font-size: small;
+	color: #472400;
+}
+
+.code
+{
+	font-family: Consolas, 'Courier New', monospace;
+	font-size: medium;
+}
+
+.assembly
+{
+	border: 1em;
+	padding: 1em;
+	padding-bottom: 2em;
+}
+
+.assemblyPassed
+{
+	background-color: #DAFFF3;
+}
+
+.assemblyFailed
+{
+	background-color: #FFC2C2;
+}
+
+.dateStarted
+{
+	padding-bottom: 1em;
+}
+
+.specification
+{
+	padding-top: 1em;
+	padding-left: 3em;
+	padding-bottom: 2em;
+	margin: 1em;
+}
+
+.specificationPassed
+{
+	background-color: #DAFFF3;
+}
+
+.specificationFailed
+{
+	background-color: #FFC2C2;
+}
+
+.given
+{
+	padding-left: 3em;
+}
+
+.givenSubClass
+{
+	padding-left: 1.5em;
+}
+
+.withCreationalProperties
+{
+	padding-left: 1.5em;
+}
+
+.withProperties
+{
+	padding-left: 1.5em;
+}
+
+table.givenProperty th
+{
+	font-weight: bold;
+}
+
+table.givenProperty tr + tr , table.givenProperty tbody tr
+{
+	border-top: 1px solid black; 
+}
+	
+table.givenProperty td + td, table.givenProperty th + th
+{
+	border-left: 1px solid;
+}
+
+table.givenProperty
+{
+    border-collapse: collapse;
+}
+
+.givenCreationalPropertyList
+{
+	padding-left: 1.5em;
+}
+
+.givenPropertyList
+{
+	padding-left: 1.5em;
+}
+
+.propertyName
+{
+	display: inline-block;
+    width: 15em;
+	font-weight: 600;
+}
+
+.propertyValue
+{
+	display: inline-block;
+    width: 15em;
+}
+
+.when
+{
+	padding-left: 3em;
+}
+
+.assertions
+{
+	padding-left: 6em;
+}
+
+.assertion
+{
+	color: black;
+}
+
+.assertionSubClass
+{
+	padding: 0.4em;
+}
+
+.assertionSubClassProperties
+{
+	padding-left: 1.5em;
+}
+
+.assertionProperty
+{
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;  
+	width: 15em;
+	padding: 0.4em;
+	font-weight: 600;
+}
+
+.assertionOperator
+{
+	padding: 0.4em;
+}
+
+.assertionExpectedValue
+{
+	padding: 0.4em;
+}
+
+.assertionActualValue
+{
+	padding: 0.4em;
+}
+
+.assertionPassed
+{
+	background-color: #6CC1A5;
+}
+
+.assertionFailed
+{
+	background-color: #FF8282;
+}
+
+.dateEnded
+{
+	color: White;
+	background-color: #A39280;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	padding-left: 2em;
+}

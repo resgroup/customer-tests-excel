@@ -1,0 +1,41 @@
+﻿body
+{
+	border: 0;
+	padding-left: 2em;
+	margin : 0;
+	font-family:'Times', Times, serif;
+	color: #dddddd;
+	background-color:  #A39280;
+}
+
+a
+{
+	color: White;
+}
+
+h1
+{
+	padding-bottom: 0.25em;
+}
+
+div.parent
+{
+	padding-left:3em;
+	padding-bottom: 0.25em;
+}
+
+div.tests
+{
+	padding-bottom: 0.25em;
+	padding-left:6em;
+}
+
+div.children
+{
+	padding-left:9em;
+}
+
+li
+{
+	padding-bottom: 0.3em;
+}

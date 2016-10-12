@@ -1,0 +1,8 @@
+<package>
+  <metadata>
+    <id>RES.Specification</id>
+    <version>$version$</version>
+    <authors>RES</authors>
+    <description>RES.Specification</description>
+  </metadata>
+</package>
