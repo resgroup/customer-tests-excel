@@ -5,11 +5,15 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RES.Specification", "RES.Specification.csproj", "{8D8AD476-9558-4039-82E0-E0441D81DB85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateCodeFromExcelTest", ".\GenerateCodeFromExcelTest\GenerateCodeFromExcelTest.csproj", "{F3F7BE99-E340-4CF6-9BBA-E4EE8B7DD023}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateCodeFromExcelTest", "GenerateCodeFromExcelTest\GenerateCodeFromExcelTest.csproj", "{F3F7BE99-E340-4CF6-9BBA-E4EE8B7DD023}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RES.Specification.Test", "Test\RES.Specification.Test.csproj", "{AFAEACC5-DF54-4EDE-8D52-FE61F42717C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddNavigationToSpecificationHTMLOutputFiles", ".\AddNavigationToSpecificationHTMLOutputFiles\AddNavigationToSpecificationHTMLOutputFiles.csproj", "{23280E3B-8BE5-4D67-9C99-5F1C3EF9F09D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddNavigationToSpecificationHTMLOutputFiles", "AddNavigationToSpecificationHTMLOutputFiles\AddNavigationToSpecificationHTMLOutputFiles.csproj", "{23280E3B-8BE5-4D67-9C99-5F1C3EF9F09D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSystemUnderTest", "SampleSystemUnderTest\SampleSystemUnderTest.csproj", "{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTests", "SampleTests\SampleTests.csproj", "{BA9FC24D-DAC1-4D49-B786-DEADAD623551}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,30 @@ Global
 		{23280E3B-8BE5-4D67-9C99-5F1C3EF9F09D}.Release|Mixed Platforms.Build.0 = Release|x86
 		{23280E3B-8BE5-4D67-9C99-5F1C3EF9F09D}.Release|x86.ActiveCfg = Release|x86
 		{23280E3B-8BE5-4D67-9C99-5F1C3EF9F09D}.Release|x86.Build.0 = Release|x86
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Debug|x86.Build.0 = Debug|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Release|x86.ActiveCfg = Release|Any CPU
+		{82EA6F37-FEDA-45FD-8752-10CC14DA1FA6}.Release|x86.Build.0 = Release|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Debug|x86.Build.0 = Debug|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Release|x86.ActiveCfg = Release|Any CPU
+		{BA9FC24D-DAC1-4D49-B786-DEADAD623551}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
