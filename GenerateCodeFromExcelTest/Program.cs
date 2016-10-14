@@ -42,7 +42,7 @@ namespace GenerateCodeFromExcelTest
 
             try
             {
-                RES.Specification.TestProjectCreator.Create(folder, nameSpace, new RES.Excel.OpenXML.OpenXMLExcelApplication());
+                RES.Specification.TestProjectCreator.Create(folder, nameSpace, new RES.Specification.ExcelTabularLibrary());
             }
             catch (Exception ex)
             {

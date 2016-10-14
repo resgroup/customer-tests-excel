@@ -88,14 +88,6 @@ namespace RES.Specification
             return compileItemGroupNode;
         }
 
-        private static XElement GetNodeForCompileNodes(XDocument projectFile)
-        {
-            var compileItemGroupNode = projectFile.Descendants(xNamespace + "Compile").First().Parent;
-            compileItemGroupNode.RemoveAll();
-            compileItemGroupNode.Add(MakeFileElement("Compile", @"Properties\AssemblyInfo.cs"));
-            return compileItemGroupNode;
-        }
-
         private static XElement MakeFileElement(string noteName, string relativeFilePath)
         {
             return new XElement(xNamespace + noteName, new XAttribute("Include", relativeFilePath));
@@ -172,20 +164,6 @@ namespace RES.Specification
                 }
             }
             return projectRelativePath;
-        }
-
-        // TODO : add all the required usings for the project under test and associated projects
-        private static string CreateUsings(string projectRooNamespace)
-        {
-            return  "using System;" + Environment.NewLine +
-                    "using System.Collections.Generic;" + Environment.NewLine +
-                    "using System.Linq;" + Environment.NewLine +
-                    "using System.Text;" + Environment.NewLine +
-                    "using NUnit.Framework;" + Environment.NewLine +
-                    "using RES.Specification;" + Environment.NewLine +
-                    "using System.Linq.Expressions;" + Environment.NewLine +
-                    "using " + projectRooNamespace + ".Specification.Setup;" + Environment.NewLine
-                    ;
         }
     }
 }

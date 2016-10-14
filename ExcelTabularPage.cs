@@ -15,8 +15,6 @@ namespace RES.Specification
         WorksheetPart _worksheetPart;
         ChartsheetPart _chartsheetPart;
         Sheet _sheet;
-        Stylesheet _stylesheet;
-        Workbook _workbook;
         SpreadsheetDocument _package;
         ExcelTabularBook _parent;
 
@@ -80,12 +78,9 @@ namespace RES.Specification
         internal ExcelTabularPage(SpreadsheetDocument package, Workbook workbook, WorksheetPart worksheetPart, Sheet sheet, Stylesheet stylesheet, uint index, ExcelTabularBook parent)
         {
             _package = package;
-            _workbook = workbook;
             _worksheetPart = worksheetPart;
             _chartsheetPart = null;
             _sheet = sheet;
-            _stylesheet = stylesheet;
-            _index = index;
             _parent = parent;
             _sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
 
@@ -95,26 +90,6 @@ namespace RES.Specification
             if (pageSetup != null)
                 pageSetup.VerticalDpi = null;
         }
-
-        // standalone tocheck
-        //internal ExcelTabularPage(SpreadsheetDocument package, Workbook workbook, ChartsheetPart chartsheetPart, Sheet sheet, Stylesheet stylesheet, uint index, ExcelTabularBook parent)
-        //{
-        //    _package = package;
-        //    _workbook = workbook;
-        //    _worksheetPart = null;
-        //    _chartsheetPart = chartsheetPart;
-        //    _sheet = sheet;
-        //    _stylesheet = stylesheet;
-        //    _index = index;
-        //    _parent = parent;
-        //    _sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
-        //    PageSetup pageSetup = chartsheetPart.Chartsheet.GetFirstChild<PageSetup>();
-
-        //    if (pageSetup != null)
-        //        pageSetup.VerticalDpi = null;
-        //}
-
-        private uint _index;
 
         public void SetName(string name)
         {
@@ -177,16 +152,6 @@ namespace RES.Specification
             }
         }
 
-        // standalone tocheck
-        //public IExcelColumn GetColumn(uint columnIndex)
-        //{
-        //    ThrowExceptionIfChartSheet("GetColumn(uint)");
-        //    return new OpenXMLExcelColumn(
-        //        _worksheetPart.Worksheet,
-        //        _stylesheet,
-        //        columnIndex);
-        //}
-
         private void ThrowExceptionIfChartSheet(string functionName)
         {
             if (_worksheetPart == null && _chartsheetPart != null)
@@ -194,25 +159,6 @@ namespace RES.Specification
                 throw new ApplicationException(string.Format("Cannot call {0} on '{1}' as it is a ChartSheet", functionName, _sheet.Name));
             }
         }
-
-        // standalone tocheck
-        //public IExcelRow GetRow(uint rowIndex)
-        //{
-        //    ThrowExceptionIfChartSheet("GetRow(uint)");
-        //    return new OpenXMLExcelRow(_worksheetPart.Worksheet, _stylesheet, rowIndex);
-        //}
-
-        // standalone tocheck
-        //public IExcelRange GetRange(string range)
-        //{
-        //    if (_parent.NamedRanges.ContainsRange(Name, range))
-        //        return _parent.NamedRanges.GetRange(Name, range).Value;
-        //    else if (_parent.NamedRanges.ContainsBookLevelRange(range))
-        //        return _parent.NamedRanges.GetBookLevelRange(range).Value;
-        //    else
-        //        throw new RangeNotFoundException(string.Format("Specified named range ('{0}') not found in this sheet ('{1}').", range, Name));
-        //}
-
         public uint MaxColumn
         {
             get
@@ -244,76 +190,6 @@ namespace RES.Specification
                 return rows.Max(r => r.RowIndex.Value);
             }
         }
-
-        // standalone tocheck
-        //private IExcelRange GetRange(DefinedName name)
-        //{
-        //    if (name.LocalSheetId != null && name.LocalSheetId != _index)
-        //        throw new RangeNotFoundException("Cannot access a range from another sheet");
-
-        //    string reference = name.InnerText;
-
-        //    int index;
-        //    string sheetName;
-
-        //    if (reference.StartsWith("'"))
-        //    {
-        //        sheetName = reference.Split('\'')[1];
-        //        index = sheetName.Length + 2;
-        //    }
-        //    else
-        //    {
-        //        sheetName = reference.Split('!')[0];
-        //        index = sheetName.Length;
-        //    }
-        //    IExcelWorksheet sheetContainingData = _parent.GetWorkSheet(sheetName);
-
-        //    if (reference[index++] != '!')
-        //        throw new Exception("Cannot parse range reference");
-        //    if (reference[index++] != '$')
-        //        throw new Exception("Cannot parse range reference");
-        //    uint left = 0;
-        //    while (Char.IsUpper(reference[index]))
-        //        left = left * 26 + (uint)((reference[index++] - 'A') + 1);
-        //    if (reference[index++] != '$')
-        //        throw new Exception("Cannot parse range reference");
-        //    uint top = 0;
-        //    while (index < reference.Length && Char.IsDigit(reference[index]))
-        //        top = top * 10 + reference[index++] - '0';
-
-        //    if (index >= reference.Length || reference[index] == 0)
-        //        return sheetContainingData.GetCell(top, left);
-
-        //    if (reference[index++] != ':')
-        //        throw new Exception("Cannot parse range reference");
-        //    if (reference[index++] != '$')
-        //        throw new Exception("Cannot parse range reference");
-        //    uint right = 0;
-        //    while (Char.IsUpper(reference[index]))
-        //        right = right * 26 + (uint)((reference[index++] - 'A') + 1);
-        //    if (reference[index++] != '$')
-        //        throw new Exception("Cannot parse range reference");
-        //    uint bottom = 0;
-        //    while (index < reference.Length && Char.IsDigit(reference[index]))
-        //        bottom = bottom * 10 + reference[index++] - '0';
-
-        //    return sheetContainingData.GetRange(top, left, bottom, right);
-
-        //}
-
-        // standalone tocheck
-        //public IExcelRange GetRange(uint top, uint left, uint bottom, uint right)
-        //{
-        //    if (top == 0 || left == 0 || top > bottom || left > right)
-        //        throw new IndexOutOfRangeException();
-
-        //    ThrowExceptionIfChartSheet("GetRange(uint, uint, uint, uint)");
-        //    if (_package.WorkbookPart.SharedStringTablePart == null)
-        //        return new OpenXMLExcelRange(_worksheetPart.Worksheet, _stylesheet, top, left, bottom, right);
-        //    else
-        //        return new OpenXMLExcelRange(_worksheetPart.Worksheet, _stylesheet, top, left, bottom, right, _package.WorkbookPart.SharedStringTablePart.SharedStringTable);
-        //}
-
         //standalone todo tidy this up, make it faster
         //this is surprisingly difficult and slow just to get the value of a cell.
         public void SetCell(uint row, uint column, object value)
@@ -683,161 +559,6 @@ namespace RES.Specification
             return null;
 
         }
-
-        public void Activate()
-        {
-
-        }
-
-        // standalone tocheck
-        //public IExcelWorksheet Copy(string newSheetName)
-        //{
-        //    if (_worksheetPart != null)
-        //    {
-        //        return CopyWorkSheet(newSheetName);
-        //    }
-        //    else if (_chartsheetPart != null)
-        //    {
-        //        return CopyChartSheet(newSheetName);
-        //    }
-        //    else
-        //    {
-        //        throw new ApplicationException(string.Format("Cannot copy sheet '{0}' as it is not a Worksheet or Chartsheet", _sheet.Name));
-        //    }
-        //}
-
-        // standalone tocheck
-        //private IExcelWorksheet CopyWorkSheet(string newSheetName)
-        //{
-        //    // Can force a copy of a worksheet part by adding the sheet to another workbook then copying it back
-        //    SpreadsheetDocument tempSheet = SpreadsheetDocument.Create(new System.IO.MemoryStream(), SpreadsheetDocumentType.Workbook);
-        //    WorkbookPart tempWorkbookPart = tempSheet.AddWorkbookPart();
-        //    WorksheetPart tempWorksheetPart = tempWorkbookPart.AddPart<WorksheetPart>(_worksheetPart);
-        //    WorksheetPart clonedWorkSheetPart = _workbook.WorkbookPart.AddPart<WorksheetPart>(tempWorksheetPart);
-
-        //    // Add a new sheet to contain the worksheet part
-        //    Sheets sheets = _workbook.GetFirstChild<Sheets>();
-        //    uint sheetId = 1;
-        //    if (sheets.Elements<Sheet>().Count() > 0)
-        //    {
-        //        sheetId = sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
-        //    }
-        //    string relationshipId = _workbook.WorkbookPart.GetIdOfPart(clonedWorkSheetPart);
-        //    Sheet sheet = CreateBlankSheet(relationshipId, sheetId, newSheetName, _package);
-        //    sheets.Append(sheet);
-
-        //    uint sheetIndex = 0;
-        //    foreach (Sheet checkSheet in sheets.Elements<Sheet>())
-        //    {
-        //        if (checkSheet.SheetId == sheet.SheetId) break;
-        //        sheetIndex++;
-        //    }
-
-        //    // Copy any local named ranges
-        //    _parent.NamedRanges.CopyingSheet(Name, newSheetName);
-
-        //    OpenXMLExcelWorksheet newSheet = new OpenXMLExcelWorksheet(_package, _workbook, clonedWorkSheetPart, sheet, _stylesheet, sheetIndex, _parent);
-        //    newSheet.Visible = Visible;
-
-        //    return newSheet;
-
-        //}
-
-        // standalone tocheck
-        //private IExcelWorksheet CopyChartSheet(string newSheetName)
-        //{
-        //    // Can force a copy of a worksheet part by adding the sheet to another workbook then copying it back
-        //    SpreadsheetDocument tempSheet = SpreadsheetDocument.Create(new System.IO.MemoryStream(), SpreadsheetDocumentType.Workbook);
-        //    WorkbookPart tempWorkbookPart = tempSheet.AddWorkbookPart();
-        //    ChartsheetPart tempChartsheetPart = tempWorkbookPart.AddPart<ChartsheetPart>(_chartsheetPart);
-        //    ChartsheetPart clonedChartsheetPart = _workbook.WorkbookPart.AddPart<ChartsheetPart>(tempChartsheetPart);
-
-        //    // Add a new sheet to contain the worksheet part
-        //    Sheets sheets = _workbook.GetFirstChild<Sheets>();
-        //    uint sheetId = 1;
-        //    if (sheets.Elements<Sheet>().Count() > 0)
-        //    {
-        //        sheetId = sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
-        //    }
-        //    string relationshipId = _workbook.WorkbookPart.GetIdOfPart(clonedChartsheetPart);
-        //    Sheet sheet = CreateBlankSheet(relationshipId, sheetId, newSheetName, _package);
-        //    sheets.Append(sheet);
-
-        //    uint sheetIndex = 0;
-        //    foreach (Sheet checkSheet in sheets.Elements<Sheet>())
-        //    {
-        //        if (checkSheet.SheetId == sheet.SheetId) break;
-        //        sheetIndex++;
-        //    }
-
-        //    // Copy any local named ranges
-        //    _parent.NamedRanges.CopyingSheet(Name, newSheetName);
-
-        //    OpenXMLExcelWorksheet newSheet = new OpenXMLExcelWorksheet(_package, _workbook, clonedChartsheetPart, sheet, _stylesheet, sheetIndex, _parent);
-        //    newSheet.Visible = Visible;
-
-        //    return newSheet;
-
-        //}
-
-        // standalone tocheck
-        //public void Delete()
-        //{
-        //    uint sheetID = (uint)_sheet.SheetId;
-        //    int sheetIndex = _parent.GetSheetIndex(Name);
-        //    _parent.NamedRanges.DeletingSheet(Name);
-        //    if (_package.ExtendedFilePropertiesPart != null)
-        //    {
-        //        List<OpenXmlElement> elementsToRemove = new List<OpenXmlElement>();
-        //        foreach (OpenXmlElement titleOfPart in _package.ExtendedFilePropertiesPart.Properties.TitlesOfParts.VTVector.ChildElements)
-        //        {
-
-        //            if (titleOfPart.InnerText == Name || titleOfPart.InnerText.StartsWith(string.Format("{0}!", Name)) || titleOfPart.InnerText.StartsWith(string.Format("'{0}'!", Name)))
-        //            {
-        //                elementsToRemove.Add(titleOfPart);
-        //            }
-        //        }
-        //        foreach (OpenXmlElement element in elementsToRemove)
-        //            element.Remove();
-
-        //        var corrector = new SheetAndRangeCountCorrector(_package.ExtendedFilePropertiesPart.Properties);
-        //        corrector.Correct();
-        //    }
-
-        //    _sheet.Remove();
-
-        //    foreach (var namedRange in _parent.NamedRanges)
-        //        namedRange.UpdateIdAsSheetRemoved(sheetIndex);
-
-        //    if (_workbook.WorkbookPart.CalculationChainPart != null)
-        //    {
-        //        // Excel will automatically recreate this itself when the document is loaded
-        //        _workbook.WorkbookPart.DeletePart(_workbook.WorkbookPart.CalculationChainPart);
-        //    }
-        //}
-
-        // standalone tocheck
-        //public void WriteValueToRange(string rangeName, object value)
-        //{
-        //    GetRange(rangeName).Value = value;
-        //}
-
-        // standalone tocheck
-        //public void WriteValuesToRange(string rangeName, object[,] value)
-        //{
-        //    GetRange(rangeName).Value = value;
-        //}
-
-        // standalone tocheck
-        //public void WriteInternalHyperlinkToRange(IExcelRange range, string title, string location)
-        //{
-        //    range.AddInternalHyperlink(title, location);
-        //}
-
-        public void Dispose()
-        {
-        }
-
-
+        
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace RES.Specification
 {
-    internal class ExcelTabularBook : ITabularBook
+    public class ExcelTabularBook : ITabularBook
     {
         public int NumberOfPages => _workbookPart.WorksheetParts.Count();
 
@@ -86,7 +86,7 @@ namespace RES.Specification
 
         #region Constructors
 
-        internal ExcelTabularBook()
+        public ExcelTabularBook()
         {
             _outputStream = new MemoryStream();
             _tempFilePath = "";
@@ -149,35 +149,6 @@ namespace RES.Specification
                     new WorkbookView() { XWindow = 180, YWindow = 435, WindowWidth = (UInt32Value)18855U, WindowHeight = (UInt32Value)8895U })
             );
             return workbookPart.Workbook;
-        }
-
-        private void AddWorksheet(string sheetName)
-        {
-            // Add a new worksheet part.
-            _workbookPart.AddNewPart<WorksheetPart>();
-
-            //Create the Spreadsheet DOM.
-            _workbookPart.WorksheetParts.Last().Worksheet =
-                new Worksheet(
-                    new SheetDimension() { Reference = "A1" },
-                    new SheetViews(
-                        new SheetView() { WorkbookViewId = (UInt32Value)0U }),
-                    new SheetFormatProperties() { DefaultRowHeight = 15D },
-                    new SheetData(),
-                    new PageMargins() { Left = 0.7D, Right = 0.7D, Top = 0.75D, Bottom = 0.75D, Header = 0.3D, Footer = 0.3D });
-
-            // Save changes to the spreadsheet part.
-            _workbookPart.WorksheetParts.Last().Worksheet.Save();
-
-            // create the worksheet to workbook relation
-            _workbook.GetFirstChild<Sheets>().PrependChild(
-                new Sheet()
-                {
-                    Id = _workbookPart.GetIdOfPart(_workbookPart.WorksheetParts.Last()),
-                    SheetId = new UInt32Value((uint)_workbookPart.WorksheetParts.Count()),
-                    Name = sheetName
-                });
-
         }
 
         private void GenerateCoreFilePropertiesPart(OpenXmlPart part)
