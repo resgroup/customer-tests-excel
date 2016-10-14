@@ -11,7 +11,7 @@ namespace RES.Specification
     {
         private static XNamespace xNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
-        public static void Create(string specificationFolder, string projectRooNamespace, IExcelApplication excel)
+        public static void Create(string specificationFolder, string projectRooNamespace, ITabularLibrary excel)
         {
             var specificationProjectNamespace = projectRooNamespace + ".Specification";
             var projectFileName = specificationProjectNamespace + ".csproj";
@@ -101,17 +101,17 @@ namespace RES.Specification
             return new XElement(xNamespace + noteName, new XAttribute("Include", relativeFilePath));
         }
 
-        private static void OutputWorkbook(string specificationFolder, string projectRooNamespace, IExcelApplication excel, XElement compileItemGroupNode, string excelFileName)
+        private static void OutputWorkbook(string specificationFolder, string projectRooNamespace, ITabularLibrary excel, XElement compileItemGroupNode, string excelFileName)
         {
             using (var workbookFile = GetExcelFileStream(excelFileName))
             {
-                using (var workbook = excel.OpenWorkBook(workbookFile))
+                using (var workbook = excel.OpenBook(workbookFile))
                 {
                     var workBookName = Path.GetFileNameWithoutExtension(excelFileName);
-                    for (int i = 0; i < workbook.NumberOfWorkSheets; i++)
-                        if (IsTestSheet(workbook.GetWorkSheet(i)))
+                    for (int i = 0; i < workbook.NumberOfPages; i++)
+                        if (IsTestSheet(workbook.GetPage(i)))
                         {
-                            compileItemGroupNode.Add(MakeFileElement("Compile", OutputWorkSheet(specificationFolder, workBookName, workbook.GetWorkSheet(i), projectRooNamespace)));
+                            compileItemGroupNode.Add(MakeFileElement("Compile", OutputWorkSheet(specificationFolder, workBookName, workbook.GetPage(i), projectRooNamespace)));
                         }
                 }
             }
@@ -147,12 +147,12 @@ namespace RES.Specification
             return templateStream;
         }
 
-        private static bool IsTestSheet(IExcelWorksheet excelSheet)
+        private static bool IsTestSheet(ITabularPage excelSheet)
         {
             return excelSheet.GetCell(1, 1).Value != null ? (excelSheet.GetCell(1, 1).Value.ToString() == "Specification") : false;
         }
 
-        private static string OutputWorkSheet(string outputFolder, string workBookName, IExcelWorksheet sheet, string projectRootNamespace)
+        private static string OutputWorkSheet(string outputFolder, string workBookName, ITabularPage sheet, string projectRootNamespace)
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter());
             var sheetName = sheet.Name;

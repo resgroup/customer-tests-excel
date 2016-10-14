@@ -14,7 +14,7 @@ namespace RES.Specification.ExcelToCode
 
     public class ExcelToCodeBase
     {
-        protected IExcelWorksheet _worksheet;
+        protected ITabularPage _worksheet;
         protected readonly ICodeNameToExcelNameConverter _converter;
         protected uint _row;
         protected uint _column;

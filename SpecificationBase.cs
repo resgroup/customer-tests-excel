@@ -68,7 +68,7 @@ namespace RES.Specification
             var writers = new List<ITestOutputWriter>();
             if (_debugOutput) writers.Add(new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()));
             if (_htmlOutput) writers.Add(new HTMLTestOutputWriter(new HumanFriendlyFormatter()));
-            if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new RES.Excel.OpenXML.OpenXMLExcelApplication(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests")));
+            if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularFormatLibrary(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests")));
 
             ITestOutputWriter writer;
             if (writers.Count() == 0)

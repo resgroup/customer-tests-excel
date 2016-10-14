@@ -10,7 +10,7 @@ namespace RES.Specification.ExcelToCode
     {
         public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter) { }
 
-        public string GenerateCSharpTestCode(IExcelWorksheet worksheet, string projectRootNamespace, string workBookName)
+        public string GenerateCSharpTestCode(ITabularPage worksheet, string projectRootNamespace, string workBookName)
         {
             _worksheet = worksheet;
             _code = new AutoIndentingStringBuilder("    ");

@@ -1,10 +1,15 @@
-﻿namespace RES.Specification
+﻿using System;
+
+namespace RES.Specification
 {
-    public interface ITabularBook
+    public interface ITabularBook : IDisposable
     {
-        object GetPageNames();
-        ITabularPage GetPage(string specificationFriendlyName);
-        ITabularPage AddPageBefore(int v);
-        void SaveAs(string v);
+        int NumberOfPages { get; }
+
+        string[] GetPageNames();
+        ITabularPage GetPage(string page);
+        ITabularPage AddPageBefore(int page);
+        void SaveAs(string filename);
+        ITabularPage GetPage(int page);
     }
 }

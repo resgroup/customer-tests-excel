@@ -9,7 +9,7 @@ namespace RES.Specification
     public class ExcelTestOutputWriter : ExcelTestOutputWriterBase, ITestOutputWriter
     {
         readonly string _excelFolder;
-        public ExcelTestOutputWriter(IExcelApplication excel, ICodeNameToExcelNameConverter namer, string excelFolder) : base(excel, namer) { _excelFolder = excelFolder; }
+        public ExcelTestOutputWriter(ITabularLibrary excel, ICodeNameToExcelNameConverter namer, string excelFolder) : base(excel, namer) { _excelFolder = excelFolder; }
 
         public void StartSpecification(string specificationNamespace, string specificationName, string specificationDescription)
         {
@@ -21,7 +21,7 @@ namespace RES.Specification
             else
             {
                 _workbook = _excel.NewBook();
-                _workbook.RemoveDefaultSheets();
+                //standlone todo _workbook.RemoveDefaultSheets();
             }
 
             string specificationFriendlyName = _namer.CodeSpecificationClassNameToExcelName(specificationName);
@@ -266,7 +266,7 @@ namespace RES.Specification
 
             _workbook.SaveAs(GetFilename(specificationNamespace));
 
-            _workbook.Dispose();
+            // standlone todo _workbook.Dispose();
             _workbook = null;
         }
 

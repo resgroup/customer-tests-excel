@@ -14,7 +14,7 @@ namespace RES.Specification
         protected uint _row;
         protected uint _column;
 
-        public ExcelTestOutputWriterBase(IExcelApplication excel, ICodeNameToExcelNameConverter namer)
+        public ExcelTestOutputWriterBase(ITabularLibrary excel, ICodeNameToExcelNameConverter namer)
         {
             if (excel == null) throw new ArgumentNullException(nameof(excel));
             if (namer == null) throw new ArgumentNullException(nameof(namer));
@@ -28,29 +28,27 @@ namespace RES.Specification
             var cell = _worksheet.GetCell(row, column);
             if (cell.Value == null || cell.Value.Equals(value) == false)
             {
-                object localValue = value;
-                if (value is RES.NumberedBusinessBase.SmartDate)
-                    localValue = ((RES.NumberedBusinessBase.SmartDate)value).Date;
-                if (string.IsNullOrWhiteSpace(cell.Formula))
+                if (cell.IsFormula)
                 {
-                    cell.Value = localValue;
+                    _worksheet.SetCell(row, column, value); 
                 }
                 else
                 {
                     AddSkippedCellWarning(row, column, value);
-                    _worksheet.GetCell(row, column + 1).Value = localValue;
+                    _worksheet.SetCell(row, column + 1, value);
                 }
             }
         }
 
         protected void ClearSkippedCellWarnings()
         {
-            _worksheet.GetCell(1, 3).Value = "";
+            _worksheet.SetCell(1, 3, "");
         }
 
         void AddSkippedCellWarning(uint row, uint column, object value)
         {
-            _worksheet.GetCell(1, 3).Value += $"Skipped updating Cell R{row}C{column} to '{value}' as it has a formula in it. Please fix this value by hand, or remove the formula and re run the test.\r\n";
+            // put all warnings in cell 1, 3, which is reserved for this purpose
+            _worksheet.SetCell(1, 3, $"{_worksheet.GetCell(1, 3).Value.ToString()} Skipped updating Cell R{row}C{column} to '{value}' as it has a formula in it. Please fix this value by hand, or remove the formula and re run the test.\r\n");
         }
 
         protected void SetCell(object value)
