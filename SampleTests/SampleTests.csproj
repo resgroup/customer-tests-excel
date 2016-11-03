@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,12 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="IgnoreOnGeneration\TestItineraryLeg.cs" />
+    <Compile Include="IgnoreOnGeneration\TestCargo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rerouting\Reroute to SEA.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExcelTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -54,4 +58,17 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <None Include="ExcelTests\Rerouting.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RES.Specification.csproj">
+      <Project>{8d8ad476-9558-4039-82e0-e0441d81db85}</Project>
+      <Name>RES.Specification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleSystemUnderTest\SampleSystemUnderTest.csproj">
+      <Project>{82ea6f37-feda-45fd-8752-10cc14da1fa6}</Project>
+      <Name>SampleSystemUnderTest</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

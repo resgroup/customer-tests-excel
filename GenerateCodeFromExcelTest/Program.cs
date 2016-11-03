@@ -9,40 +9,23 @@ namespace GenerateCodeFromExcelTest
     {
         static int Main(string[] args)
         {
-            string folder = null;
-            string nameSpace = null;
-            for (int i = 0; i < args.Length; i++)
-            {
-                if(args[i][0] != '/')
-                    return ShowHelp("Argument " + i + " \"" + args[i] + "\" should be an option starting with /, but it isn't");
-
-                if(char.ToUpper(args[i][1]) != 'H' && char.ToUpper(args[i][1]) != '?')
-                    if(i == args.Length - 1 || args[i+1][0] == '/')
-                        return ShowHelp("Argument " + i + " \"" + args[i] + "\" should be followed by a value, but it isn't");
-
-                switch (char.ToUpper(args[i][1]))
-                {
-                    case 'F': // FOLDER
-                        folder = args[++i];
-                        break;
-                    case 'N': // NAMESPACE
-                        nameSpace = args[++i];
-                        break;
-                    case 'H': // HELP
-                    case '?':
-                        ShowHelp(null);
-                        return 0;
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(folder))
-                return ShowHelp("Missing Parameter: You must select a folder using the /FOLDER option.");
-            if (string.IsNullOrWhiteSpace(nameSpace))
-                return ShowHelp("Missing Parameter: You must select a namespace folder using the /NAMESPACE option.");
-
             try
             {
-                RES.Specification.TestProjectCreator.Create(folder, nameSpace, new RES.Specification.ExcelTabularLibrary());
+                string folder = GetSetting(args, "folder");
+                if (string.IsNullOrWhiteSpace(folder))
+                    return ShowHelp("Missing Parameter: You must select a folder with /folder");
+
+                string specificationProject = GetSetting(args, "project");
+                if (string.IsNullOrWhiteSpace(specificationProject))
+                    return ShowHelp("Missing Parameter: You must select a specification project with /project");
+
+                string rootNamespace = GetSetting(args, "namespace");
+                if (string.IsNullOrWhiteSpace(rootNamespace))
+                    return ShowHelp("Missing Parameter: You must specify a root namespace with /namespace");
+
+                RES.Specification.TestProjectCreator.Create(folder, specificationProject, rootNamespace, new RES.Specification.ExcelTabularLibrary());
+
+                return 0;
             }
             catch (Exception ex)
             {
@@ -53,6 +36,13 @@ namespace GenerateCodeFromExcelTest
 
             Console.Out.WriteLine("Tests created");
             return 0;
+        }
+
+        static string GetSetting(string[] args, string settingName)
+        {
+            string settingValue = args.SkipWhile(a => !a.ToLower().StartsWith("/" + settingName.ToLower())).Skip(1).Take(1).FirstOrDefault();
+
+            return settingValue ?? "";
         }
 
         static int ShowHelp(string errorMessage)

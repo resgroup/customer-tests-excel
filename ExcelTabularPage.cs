@@ -457,7 +457,9 @@ namespace RES.Specification
 
             var cell = _worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference == cellReference);
 
-            return (cell == null) ? null : new TabularCell(GetCellValue(cell), cell.CellFormula?.Text != null);
+            return (cell == null) 
+                ? new TabularCell(null, false) 
+                : new TabularCell(GetCellValue(cell), cell.CellFormula?.Text != null);
         }
 
         private string GetColumnName(uint columnNumber)
@@ -476,7 +478,7 @@ namespace RES.Specification
             return columnName;
         }
 
-        private string CellReference(uint columnIndex, uint rowIndex)
+        private string CellReference(uint rowIndex, uint columnIndex)
         {
             return GetColumnName(columnIndex) + rowIndex.ToString();
         }

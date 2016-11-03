@@ -57,27 +57,24 @@ namespace RES.Specification.ExcelToCode
             Output("using NUnit.Framework;");
             Output("using RES.Specification;");
             Output("using System.Linq.Expressions;");
-            Output("using " + projectRootNamespace + ".Specification.Setup;");
-            Output("using " + projectRootNamespace + ".Calculation.Base;");
-            Output("using " + projectRootNamespace + ".Base;");
             Output();
-            Output("namespace " + projectRootNamespace + ".Specification." + _converter.ExcelFileNameToCodeNamespacePart(workBookName));
+            Output($"namespace {projectRootNamespace}{_converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
             Output("{");
             Output("[TestFixture]");
-            Output("public class " + _converter.ExcelSpecificationNameToCodeSpecificationClassName(_worksheet.Name) + " : SpecificationBase<" + CSharpSUTSpecificationSpecificClassName() + ">, ISpecification<" + CSharpSUTSpecificationSpecificClassName() + ">");
+            Output($"public class {_converter.ExcelSpecificationNameToCodeSpecificationClassName(_worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName()}>, ISpecification<{CSharpSUTSpecificationSpecificClassName()}>");
             Output("{");
             Output("public override string Description()");
             Output("{");
-            Output("return \"" + description + "\";");
+            Output($"return \"{ description}\";");
             Output("}");
             Output();
             Output("public override string TrunkRelativePath()");
             Output("{");
-            Output("return @\"" + projectRootNamespace.Replace("RES.", "").Replace('.', '\\') + "\";");
+            Output($"return \"{projectRootNamespace.Replace('.', '\\')}\";");
             Output("}");
             Output();
             Output("// arrange");
-            Output("public override " + CSharpSUTSpecificationSpecificClassName() + " Given()");
+            Output($"public override {CSharpSUTSpecificationSpecificClassName()} Given()");
             Output("{");
         }
 
@@ -102,10 +99,6 @@ namespace RES.Specification.ExcelToCode
             MoveDown();
 
             Output($"var {CreationalCSharpVariableName(cSharpVariableName)} = new {cSharpClassName}CreationalProperties();");
-
-            // indexed properties are children so add in the parent (if there is one). If there isn't a parent then the code won't compile, but maybe it will in the future when we allow testing of lists of root objects.
-            if (index != "" && cSharpParentVariableName != "")
-                Output($"{CreationalCSharpVariableName(cSharpVariableName)}.ImplicitParent_of({cSharpParentVariableName});");
 
             DoProperties(cSharpVariableName, _converter.Creational, "CreationalProperties", cSharpParentVariableNamesConcatenated);
 
@@ -287,9 +280,6 @@ namespace RES.Specification.ExcelToCode
         void SetAllPropertiesOnTableRowVariable(string cSharpVariableName, string creationalCSharpVariableName, string cSharpSpecificationSpecificClassName, string cSharpParentVariableName, uint? creationalPropertiesStartColumn, uint creationalPropertiesEndColumn, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> propertyNames)
         {
             Output($"var {creationalCSharpVariableName} = new {cSharpSpecificationSpecificClassName}CreationalProperties();");
-
-            if (cSharpParentVariableName != "")
-                Output(creationalCSharpVariableName + ".ImplicitParent_of(" + cSharpParentVariableName + ");"); // indexed properties are children so add in the parent (if there is one). If there isn't a parent then the code won't compile, but maybe it will in the future when we allow testing of lists of root objects.
 
             SetCreationalPropertiesOnTableRowVariable(creationalPropertiesStartColumn, propertyNames, creationalPropertiesEndColumn, creationalCSharpVariableName);
 

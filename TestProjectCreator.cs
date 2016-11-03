@@ -11,11 +11,9 @@ namespace RES.Specification
     {
         private static XNamespace xNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
-        public static void Create(string specificationFolder, string projectRooNamespace, ITabularLibrary excel)
+        public static void Create(string specificationFolder, string specificationProject, string projectRootNamespace, ITabularLibrary excel)
         {
-            var specificationProjectNamespace = projectRooNamespace + ".Specification";
-            var projectFileName = specificationProjectNamespace + ".csproj";
-            var projectFilePath = Path.Combine(specificationFolder, projectFileName);
+            var projectFilePath = Path.Combine(specificationFolder, specificationProject);
 
             var project = OpenProjectFile(projectFilePath);
             var compileItemGroupNode = GetItemGroupForCompileNodes(project);
@@ -25,7 +23,7 @@ namespace RES.Specification
             foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
             {
                 excelItemGroupNode.Add(MakeFileElement("None",Path.Combine("ExcelTests", Path.GetFileName(excelFileName))));
-                OutputWorkbook(specificationFolder, projectRooNamespace, excel, compileItemGroupNode, excelFileName);
+                OutputWorkbook(specificationFolder, projectRootNamespace, excel, compileItemGroupNode, excelFileName);
             }
 
             SaveProjectFile(projectFilePath, project);
@@ -77,7 +75,8 @@ namespace RES.Specification
             if (compileNodes.Any())
             {
                 compileItemGroupNode = projectFile.Descendants(xNamespace + nodeName).First().Parent;
-                compileItemGroupNode.RemoveAll();
+                // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
+                compileItemGroupNode.Elements().Where(e => e.Attribute("Include")?.Value?.StartsWith("IgnoreOnGeneration\\") != true).Remove();
             }
             else
             {
@@ -93,7 +92,7 @@ namespace RES.Specification
             return new XElement(xNamespace + noteName, new XAttribute("Include", relativeFilePath));
         }
 
-        private static void OutputWorkbook(string specificationFolder, string projectRooNamespace, ITabularLibrary excel, XElement compileItemGroupNode, string excelFileName)
+        private static void OutputWorkbook(string specificationFolder, string projectRootNamespace, ITabularLibrary excel, XElement compileItemGroupNode, string excelFileName)
         {
             using (var workbookFile = GetExcelFileStream(excelFileName))
             {
@@ -103,7 +102,7 @@ namespace RES.Specification
                     for (int i = 0; i < workbook.NumberOfPages; i++)
                         if (IsTestSheet(workbook.GetPage(i)))
                         {
-                            compileItemGroupNode.Add(MakeFileElement("Compile", OutputWorkSheet(specificationFolder, workBookName, workbook.GetPage(i), projectRooNamespace)));
+                            compileItemGroupNode.Add(MakeFileElement("Compile", OutputWorkSheet(specificationFolder, workBookName, workbook.GetPage(i), projectRootNamespace)));
                         }
                 }
             }
@@ -147,7 +146,6 @@ namespace RES.Specification
         private static string OutputWorkSheet(string outputFolder, string workBookName, ITabularPage sheet, string projectRootNamespace)
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter());
-            var sheetName = sheet.Name;
 
             var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
             var outputPath = Path.Combine(outputFolder, projectRelativePath);
