@@ -10,17 +10,17 @@ namespace SampleSystemUnderTest
     public class Cargo : ICargo
     {
 
-        public Cargo(string origin, string destination, IItinerary itinerary)
+        public Cargo(string origin, string destination, IEnumerable<ILeg> itineraryLegs)
         {
-            Contract.Requires(itinerary != null);
+            Contract.Requires(itineraryLegs != null);
 
             Origin = origin;
             Destination = destination;
-            Itinerary = itinerary;
+            ItineraryLegs = itineraryLegs;
         }
 
         public string Destination { get; }
         public string Origin { get; }
-        public IItinerary Itinerary { get; }
+        public IEnumerable<ILeg> ItineraryLegs { get; }
     }
 }

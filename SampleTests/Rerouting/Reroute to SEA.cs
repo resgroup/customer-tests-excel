@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using RES.Specification;
 using System.Linq.Expressions;
+using SampleSystemUnderTest;
 
 namespace SampleTestsRerouting
 {
@@ -25,25 +26,25 @@ namespace SampleTestsRerouting
         public override SpecificationSpecificRoutingService Given()
         {
             var routingServiceCreationalProperties = new SpecificationSpecificRoutingServiceCreationalProperties();
-            routingServiceCreationalProperties.Reroute_From_of("DAL");
-            routingServiceCreationalProperties.Reroute_To_of("SEA");
+            routingServiceCreationalProperties.RerouteFrom_of("DAL");
+            routingServiceCreationalProperties.RerouteTo_of("SEA");
 
             var routingService_CargoCreationalProperties = new SpecificationSpecificCargoCreationalProperties();
-            routingService_CargoCreationalProperties.Origin_of("HKG");
-            routingService_CargoCreationalProperties.Destination_of("DAL");
+            var routingService_Cargo = new SpecificationSpecificCargo(routingService_CargoCreationalProperties);
+            routingService_Cargo.Origin_of("HKG");
+            routingService_Cargo.Destination_of("DAL");
             var routingService_Cargo_ItineraryLeg_table = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
             var routingService_Cargo_ItineraryLeg_table_ItineraryLeg0CreationalProperties = new SpecificationSpecificItineraryLegCreationalProperties();
-            routingService_Cargo_ItineraryLeg_table_ItineraryLeg0CreationalProperties.Origin_of("HKG");
-            routingService_Cargo_ItineraryLeg_table_ItineraryLeg0CreationalProperties.Destination_of("LGB");
             var routingService_Cargo_ItineraryLeg_table_ItineraryLeg0 = new SpecificationSpecificItineraryLeg(routingService_Cargo_ItineraryLeg_table_ItineraryLeg0CreationalProperties);
+            routingService_Cargo_ItineraryLeg_table_ItineraryLeg0.Origin_of("HKG");
+            routingService_Cargo_ItineraryLeg_table_ItineraryLeg0.Destination_of("LGB");
             routingService_Cargo_ItineraryLeg_table.Add(routingService_Cargo_ItineraryLeg_table_ItineraryLeg0);
             var routingService_Cargo_ItineraryLeg_table_ItineraryLeg1CreationalProperties = new SpecificationSpecificItineraryLegCreationalProperties();
-            routingService_Cargo_ItineraryLeg_table_ItineraryLeg1CreationalProperties.Origin_of("LGB");
-            routingService_Cargo_ItineraryLeg_table_ItineraryLeg1CreationalProperties.Destination_of("DAL");
             var routingService_Cargo_ItineraryLeg_table_ItineraryLeg1 = new SpecificationSpecificItineraryLeg(routingService_Cargo_ItineraryLeg_table_ItineraryLeg1CreationalProperties);
+            routingService_Cargo_ItineraryLeg_table_ItineraryLeg1.Origin_of("LGB");
+            routingService_Cargo_ItineraryLeg_table_ItineraryLeg1.Destination_of("DAL");
             routingService_Cargo_ItineraryLeg_table.Add(routingService_Cargo_ItineraryLeg_table_ItineraryLeg1);
-            routingService_CargoCreationalProperties.ItineraryLeg_table_of(routingService_Cargo_ItineraryLeg_table);
-            var routingService_Cargo = new SpecificationSpecificCargo(routingService_CargoCreationalProperties);
+            routingService_Cargo.ItineraryLeg_table_of(routingService_Cargo_ItineraryLeg_table);
             routingServiceCreationalProperties.Cargo_of(routingService_Cargo);
             var routingService = new SpecificationSpecificRoutingService(routingServiceCreationalProperties);
 

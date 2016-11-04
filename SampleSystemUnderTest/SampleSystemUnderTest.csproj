@@ -42,7 +42,6 @@
   <ItemGroup>
     <Compile Include="Cargo.cs" />
     <Compile Include="ICargo.cs" />
-    <Compile Include="IItinerary.cs" />
     <Compile Include="ILeg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingService.cs" />

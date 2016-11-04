@@ -10,6 +10,6 @@ namespace SampleSystemUnderTest
     {
         string Origin { get; }
         string Destination { get; }
-        IItinerary Itinerary { get; }
+        IEnumerable<ILeg> ItineraryLegs { get; }
     }
 }
