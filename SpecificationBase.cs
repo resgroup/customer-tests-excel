@@ -20,7 +20,7 @@ namespace RES.Specification
         // I'm not sure about the best way to decide when to output back to excel. Maybe the programmer could add an attribute
         // to the test which we could check for. Or set the variable below
         protected bool _debugOutput = true;
-        protected bool _htmlOutput = true;
+        protected bool _htmlOutput = false;
         protected bool _excelOutput = false; // make this true to write out to excel. this should always be false when checked in, otherwise it will cause a lot of extra work on the build. It should be set to true manually by programmers when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
 
         public abstract string Description();
@@ -71,11 +71,11 @@ namespace RES.Specification
             if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests")));
 
             ITestOutputWriter writer;
-            if (writers.Count() == 0)
+            if (writers.Any() == false)
             {
                 writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()); // change this for a null object output writer
             }
-            else if (writers.Count() == 1)
+            else if (writers.Any())
             {
                 writer = writers.First();
             }

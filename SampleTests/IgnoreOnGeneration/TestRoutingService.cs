@@ -32,9 +32,24 @@ namespace SampleTestsRerouting
         }
     }
 
-    public class SpecificationSpecificRoutingService : RoutingService//, IReportsSpecificationSetup
+    public class SpecificationSpecificRoutingService : ReportsSpecificationSetup
     {
+        private readonly RoutingService _routingService;
+        private ICargo _reroutedCargo;
+
         public SpecificationSpecificRoutingService(SpecificationSpecificRoutingServiceCreationalProperties creationalProperties)
-            : base(rerouteFrom: creationalProperties._rerouteFrom, rerouteTo: creationalProperties._rerouteTo, cargo: creationalProperties._cargo.Cargo ) { }
+            : base(creationalProperties)
+        {
+            _routingService = new RoutingService(rerouteFrom: creationalProperties._rerouteFrom, rerouteTo: creationalProperties._rerouteTo, cargo: creationalProperties._cargo.Cargo); 
+        }
+
+        public ICargo Returns => _reroutedCargo;
+
+        public ICargo Reroute()
+        {
+            _reroutedCargo = _routingService.Reroute();
+            return _reroutedCargo;
+        }
+
     }
 }

@@ -24,8 +24,13 @@ namespace SampleSystemUnderTest
 
         public ICargo Reroute()
         {
-            return Cargo;
+            // this code doesn't capture all situations, but it gives you an idea.
+            return new Cargo(Reroute(Cargo.Origin), Reroute(Cargo.Destination), Cargo.ItineraryLegs.Select(l => new Leg(Reroute(l.Origin), Reroute(l.Destination))));
         }
 
+        private string Reroute(string location)
+        {
+            return (location == RerouteFrom) ? RerouteTo : location;
+        }
     }
 }

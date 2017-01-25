@@ -10,7 +10,7 @@ using SampleSystemUnderTest;
 namespace SampleTestsRerouting
 {
     [TestFixture]
-    public class Reroute_to_SEA : SpecificationBase<SpecificationSpecificRoutingService>, ISpecification<SpecificationSpecificRoutingService>
+    public class Reroute_To_Sea : SpecificationBase<SpecificationSpecificRoutingService>, ISpecification<SpecificationSpecificRoutingService>
     {
         public override string Description()
         {
@@ -62,25 +62,13 @@ namespace SampleTestsRerouting
         {
             return new List<IAssertion<SpecificationSpecificRoutingService>>
             {
-                 new ParentAssertion<SpecificationSpecificRoutingService, Cargo>
+                 new ParentAssertion<SpecificationSpecificRoutingService, ICargo>
                 (
-                    rerouted_Cargo => rerouted_Cargo.Rerouted_Cargo,
-                    new List<IAssertion<Cargo>>
+                    rerouted_Cargo => rerouted_Cargo.Returns,
+                    new List<IAssertion<ICargo>>
                     {
-                         new ParentAssertion<Cargo, HKG>
-                        (
-                            origin_of => origin_of.Origin_of,
-                            new List<IAssertion<HKG>>
-                            {
-                            }
-                        )
-                        ,new ParentAssertion<Cargo, SEA>
-                        (
-                            destination_of => destination_of.Destination_of,
-                            new List<IAssertion<SEA>>
-                            {
-                            }
-                        )
+                         new EqualityAssertion<ICargo>(cargo => cargo.Origin, "HKG")
+                         , new EqualityAssertion<ICargo>(cargo => cargo.Destination, "SEA")
                     }
                 )
             };
