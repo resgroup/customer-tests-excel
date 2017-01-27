@@ -23,7 +23,11 @@ namespace GenerateCodeFromExcelTest
                 if (string.IsNullOrWhiteSpace(rootNamespace))
                     return ShowHelp("Missing Parameter: You must specify a root namespace with /namespace");
 
-                RES.Specification.TestProjectCreator.Create(folder, specificationProject, rootNamespace, new RES.Specification.ExcelTabularLibrary());
+                string assertionClassPrefix = GetSetting(args, "assertionClassPrefix");
+
+                var usings = GetSetting(args, "usings").Split(' ').ToList();
+
+                RES.Specification.TestProjectCreator.Create(folder, specificationProject, rootNamespace, usings, assertionClassPrefix, new RES.Specification.ExcelTabularLibrary());
 
                 return 0;
             }
@@ -40,7 +44,7 @@ namespace GenerateCodeFromExcelTest
 
         static string GetSetting(string[] args, string settingName)
         {
-            string settingValue = args.SkipWhile(a => !a.ToLower().StartsWith("/" + settingName.ToLower())).Skip(1).Take(1).FirstOrDefault();
+            string settingValue = args.SkipWhile(a => !a.ToLowerInvariant().StartsWith("/" + settingName.ToLowerInvariant())).Skip(1).Take(1).FirstOrDefault();
 
             return settingValue ?? "";
         }
@@ -53,10 +57,12 @@ namespace GenerateCodeFromExcelTest
                 Console.Out.WriteLine();
             }
             Console.Out.WriteLine("Usage:");
-            Console.Out.WriteLine("GenerateCodeFromExcelTest /FOLDER <folder> /NAMESPACE <namespace> [/help]");
+            Console.Out.WriteLine("GenerateCodeFromExcelTest /FOLDER <folder> /NAMESPACE <namespace> /AssertionClassPrefix <assertionClassPrefix> [/help]");
             Console.Out.WriteLine();
             Console.Out.WriteLine("<folder> : the full path to the specification folder for the project, excel files are expected to be in a sub folder called ExcelTests");
             Console.Out.WriteLine("<namespace> : the root namespace for the project");
+            Console.Out.WriteLine("<usings> : Space delimited list of namespaces to add as 'using' statements");
+            Console.Out.WriteLine("<assertionClassPrefix> : Apply a prefix to the class / type names in the assertion section. For example, 'I', would output 'ICargo', in place of 'Cargo'");
             Console.Out.WriteLine("/help : show this message and exit");
             return -1;
         }

@@ -8,17 +8,19 @@ namespace RES.Specification.ExcelToCode
     // a better way of doing this would probably be to form a representation of the test in code (like the _assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
     public class ExcelToCode : ExcelToCodeBase
     {
+        private string _assertionClassPrefix;
         public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter) { }
 
-        public string GenerateCSharpTestCode(ITabularPage worksheet, string projectRootNamespace, string workBookName)
+        public string GenerateCSharpTestCode(IEnumerable<string> usings, string assertionClassPrefix, ITabularPage worksheet, string projectRootNamespace, string workBookName)
         {
             _worksheet = worksheet;
             _code = new AutoIndentingStringBuilder("    ");
             _column = 1;
             _row = 1;
+            _assertionClassPrefix = assertionClassPrefix ?? "";
 
             var description = DoSpecification();
-            DoGiven(description, projectRootNamespace, workBookName);
+            DoGiven(usings, description, projectRootNamespace, workBookName);
             DoWhen();
             DoAssert();
 
@@ -48,7 +50,7 @@ namespace RES.Specification.ExcelToCode
             return description;
         }
 
-        void StartOutput(string description, string projectRootNamespace, string workBookName)
+        void StartOutput(IEnumerable<string> usings, string description, string projectRootNamespace, string workBookName)
         {
             Output("using System;");
             Output("using System.Collections.Generic;");
@@ -57,6 +59,9 @@ namespace RES.Specification.ExcelToCode
             Output("using NUnit.Framework;");
             Output("using RES.Specification;");
             Output("using System.Linq.Expressions;");
+            Output();
+            foreach (var usingNamespace in usings)
+                Output($"using {usingNamespace};");
             Output();
             Output($"namespace {projectRootNamespace}{_converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
             Output("{");
@@ -78,7 +83,7 @@ namespace RES.Specification.ExcelToCode
             Output("{");
         }
 
-        void DoGiven(string description, string projectRootNamespace, string workBookName)
+        void DoGiven(IEnumerable<string> usings, string description, string projectRootNamespace, string workBookName)
         {
             MoveDownToToken(_converter.Given);
 
@@ -86,7 +91,7 @@ namespace RES.Specification.ExcelToCode
             {
                 _sutName = CurrentCell();
 
-                StartOutput(description, projectRootNamespace, workBookName);
+                StartOutput(usings, description, projectRootNamespace, workBookName);
 
                 CreateObject(CSharpSUTVariableName(), CSharpSUTSpecificationSpecificClassName(), "", "", "");
 
@@ -199,7 +204,7 @@ namespace RES.Specification.ExcelToCode
                     string indexedCSharpVariableName = $"{cSharpVariableName}_{cSharpClassName}{row}";
                     string indexedCreationalCSharpVariableName = $"{indexedCSharpVariableName}CreationalProperties";
 
-                    SetAllPropertiesOnTableRowVariable(indexedCSharpVariableName, indexedCreationalCSharpVariableName, cSharpSpecificationSpecificClassName, cSharpParentVariableName, creationalPropertiesStartColumn, creationalPropertiesEndColumn, propertiesStartColumn, propertiesEndColumn, headers);
+                    SetAllPropertiesOnTableRowVariable(indexedCSharpVariableName, indexedCreationalCSharpVariableName, cSharpSpecificationSpecificClassName, creationalPropertiesStartColumn, creationalPropertiesEndColumn, propertiesStartColumn, propertiesEndColumn, headers);
 
                     Output($"{cSharpVariableName}.Add({indexedCSharpVariableName});");
 
@@ -272,12 +277,12 @@ namespace RES.Specification.ExcelToCode
 
             uint creationalPropertiesEndColumn = propertiesStartColumn.HasValue ? propertiesStartColumn.Value - 1 : propertiesEndColumn;
 
-            MoveRight((uint)headers.Count() - 1);
+            MoveRight((uint)headers.Count - 1);
 
             return new SubClassTableHeader(propertyName, subClassName, _converter.ExcelClassNameToCodeName(subClassName), startRow, endRow, creationalPropertiesStartColumn, creationalPropertiesEndColumn, propertiesStartColumn, propertiesEndColumn, headers);
         }
 
-        void SetAllPropertiesOnTableRowVariable(string cSharpVariableName, string creationalCSharpVariableName, string cSharpSpecificationSpecificClassName, string cSharpParentVariableName, uint? creationalPropertiesStartColumn, uint creationalPropertiesEndColumn, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> propertyNames)
+        void SetAllPropertiesOnTableRowVariable(string cSharpVariableName, string creationalCSharpVariableName, string cSharpSpecificationSpecificClassName, uint? creationalPropertiesStartColumn, uint creationalPropertiesEndColumn, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> propertyNames)
         {
             Output($"var {creationalCSharpVariableName} = new {cSharpSpecificationSpecificClassName}CreationalProperties();");
 
@@ -328,7 +333,7 @@ namespace RES.Specification.ExcelToCode
                 var subClassHeader = headers[_column] as SubClassTableHeader;
                 string subClassCSharpVariableName = $"{cSharpVariableName}_{subClassHeader.subClassName.Replace(".", "")}"; // this <.Replace(".", "")> is shared with DoProperty, we should move in into the _converter
 
-                SetAllPropertiesOnTableRowVariable(subClassCSharpVariableName, CreationalCSharpVariableName(subClassCSharpVariableName), subClassHeader.FullSubClassName, ""/*parent variable name not required*/, subClassHeader.CreationalPropertiesStartColumn, subClassHeader.CreationalPropertiesEndColumn, subClassHeader.PropertiesStartColumn, subClassHeader.PropertiesEndColumn, subClassHeader.Headers);
+                SetAllPropertiesOnTableRowVariable(subClassCSharpVariableName, CreationalCSharpVariableName(subClassCSharpVariableName), subClassHeader.FullSubClassName, subClassHeader.CreationalPropertiesStartColumn, subClassHeader.CreationalPropertiesEndColumn, subClassHeader.PropertiesStartColumn, subClassHeader.PropertiesEndColumn, subClassHeader.Headers);
 
                 MoveLeft();
 
@@ -452,11 +457,11 @@ namespace RES.Specification.ExcelToCode
             {
                 DoSubAssertion(assertIndex, simpleCSharpPropertyName, assertionOperatorOrExcelSubClassName, cSharpClassName);
             }
-            else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLower() == "percentageprecision")
+            else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLowerInvariant() == "percentageprecision")
             {
                 DoEqualityWithPercentagePrecisionAssertion(assertIndex, excelPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
             }
-            else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLower() == "stringformat")
+            else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLowerInvariant() == "stringformat")
             {
                 DoEqualityWithStringFormatAssertion(assertIndex, excelPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
             }
@@ -498,7 +503,7 @@ namespace RES.Specification.ExcelToCode
 
         void DoSubAssertion(int assertIndex, string excelPropertyName, string excelSubClassName, string cSharpClassName)
         {
-            string cSharpSubClassName = _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
+            string cSharpSubClassName = _assertionClassPrefix + _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
             string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeName(excelPropertyName);
             string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
 

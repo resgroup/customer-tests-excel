@@ -52,11 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IgnoreOnGeneration\Class1.cs" />
     <Compile Include="IgnoreOnGeneration\TestRoutingService.cs" />
     <Compile Include="IgnoreOnGeneration\TestItineraryLeg.cs" />
     <Compile Include="IgnoreOnGeneration\TestCargo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rerouting\Reroute to SEA.cs" />
+    <Compile Include="Rerouting\Reroute To Sea.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

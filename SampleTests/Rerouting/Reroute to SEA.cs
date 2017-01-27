@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using RES.Specification;
 using System.Linq.Expressions;
+
 using SampleSystemUnderTest;
 
 namespace SampleTestsRerouting
@@ -14,7 +15,7 @@ namespace SampleTestsRerouting
     {
         public override string Description()
         {
-            return "Reroute to SEA";
+            return "Reroute Cargo from HKG - DAL to HKG - SEA";
         }
 
         public override string TrunkRelativePath()
@@ -64,11 +65,11 @@ namespace SampleTestsRerouting
             {
                  new ParentAssertion<SpecificationSpecificRoutingService, ICargo>
                 (
-                    rerouted_Cargo => rerouted_Cargo.Returns,
+                    returns => returns.Returns,
                     new List<IAssertion<ICargo>>
                     {
-                         new EqualityAssertion<ICargo>(cargo => cargo.Origin, "HKG")
-                         , new EqualityAssertion<ICargo>(cargo => cargo.Destination, "SEA")
+                         new EqualityAssertion<ICargo>(returns => returns.Origin, "HKG")
+                        ,new EqualityAssertion<ICargo>(returns => returns.Destination, "SEA")
                     }
                 )
             };
