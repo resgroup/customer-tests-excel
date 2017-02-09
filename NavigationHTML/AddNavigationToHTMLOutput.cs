@@ -3,101 +3,119 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO.Abstractions;
+using RES.Specification.Indentation;
 
 namespace RES.Specification.NavigationHTML
 {
     public class AddNavigationToHTMLOutput
     {
-        private Queue<DirectoryToIndex> _directories = new Queue<DirectoryToIndex>();
-        public IFileSystem FileSystem { get; }
-        public INavigationHTMLFormatter Formatter { get; }
+        readonly Queue<DirectoryToIndex> _directories;
+        readonly IFileSystem _fileSystem;
+        readonly INavigationHTMLFormatter _formatter;
 
         public AddNavigationToHTMLOutput(IFileSystem fileSystem, INavigationHTMLFormatter formatter)
         {
             if (fileSystem == null) throw new ArgumentNullException("fileSystem");
             if (formatter == null) throw new ArgumentNullException("formatter");
 
-            FileSystem = fileSystem;
-            Formatter = formatter;
+            _fileSystem = fileSystem;
+            _formatter = formatter;
+
+            _directories = new Queue<DirectoryToIndex>();
         }
 
         public void CreateIndexHtmlFiles(string rootDirectory, string rootName)
         {
             if (string.IsNullOrEmpty(rootDirectory)) throw new ArgumentNullException("rootDirectory");
 
-            var directoryToIndex = new DirectoryToIndex(
-                fullDirectory: rootDirectory,
-                parentDirectory: null,
-                description: rootName,
-                nestDepth: 0);
-
-            _directories.Enqueue(directoryToIndex);
+            _directories.Enqueue(
+                new DirectoryToIndex(
+                    fullDirectory: rootDirectory,
+                    parentDirectory: null,
+                    description: rootName,
+                    nestDepth: 0)
+                );
 
             while (_directories.Any())
-            {
                 AddIndex(_directories.Dequeue());
-            }
         }
 
         private void AddIndex(DirectoryToIndex directoryToIndex)
         {
-            Formatter.StartIndex(directoryToIndex.Description, directoryToIndex.NestDepth);
-
-            if (string.IsNullOrEmpty(directoryToIndex.ParentDirectory) == false)
+            using (new TidyUp(() => _formatter.StartIndex(directoryToIndex.Description, directoryToIndex.NestDepth), EndIndex))
             {
-                Formatter.StartParent();
-                Formatter.AddLink(Index(".."), GetLastDirectoryName(directoryToIndex.ParentDirectory), "parentLink");
-                Formatter.EndParent();
-            }
+                AddLinkToParentDirectory(directoryToIndex);
 
-            Formatter.StartTests();
-            foreach (var filename in FileSystem.Directory.GetFiles(directoryToIndex.FullDirectory, "*.html"))
-            {
-                if (FileSystem.Path.GetFileName(filename).ToLower() != "index.html")
-                {
-                    Formatter.AddLink(FileSystem.Path.GetFileName(filename), FileSystem.Path.GetFileNameWithoutExtension(filename), "testLink");
-                }
-            }
-            Formatter.EndTests();
+                AddLinksToTestsAtDirectory(directoryToIndex);
 
-            var subSirectories = FileSystem.Directory.GetDirectories(directoryToIndex.FullDirectory);
-            if (subSirectories.Any())
-            {
-                Formatter.StartChildren();
-                foreach (var fullDirectory in FileSystem.Directory.GetDirectories(directoryToIndex.FullDirectory))
-                {
-                    if (fullDirectory.TrimEnd(FileSystem.Path.DirectorySeparatorChar).ToLower() != directoryToIndex.FullDirectory.TrimEnd(FileSystem.Path.DirectorySeparatorChar).ToLower())
-                    {
-                        var subDirectory = GetLastDirectoryName(fullDirectory);
-                        Formatter.AddLink(Index(subDirectory), subDirectory, "childLink");
-
-                        _directories.Enqueue(new DirectoryToIndex(
-                            fullDirectory,
-                            parentDirectory: directoryToIndex.FullDirectory,
-                            description: subDirectory,
-                            nestDepth: directoryToIndex.NestDepth + 1));
-                    }
-                }
-                Formatter.EndChildren();
+                AddLinksToChildDirectories(directoryToIndex);
             }
-            Formatter.EndIndex();
 
             SaveIndex(Index(directoryToIndex.FullDirectory));
         }
 
-        private string GetLastDirectoryName(string parentDirectory)
+        void AddLinksToChildDirectories(DirectoryToIndex directoryToIndex)
         {
-            return FileSystem.Path.GetFileName(parentDirectory.TrimEnd(FileSystem.Path.DirectorySeparatorChar));
+            var subDirectories = _fileSystem.Directory.GetDirectories(directoryToIndex.FullDirectory);
+            if (subDirectories.Any())
+                using (new TidyUp(StartChildren, EndChildren))
+                    _fileSystem.Directory.GetDirectories(directoryToIndex.FullDirectory).ToList().ForEach(fullDirectory => AddLinkToChildDirectoryAndEnqueue(directoryToIndex, fullDirectory));
         }
 
-        private void SaveIndex(string filename)
+        private void AddLinkToChildDirectoryAndEnqueue(DirectoryToIndex directoryToIndex, string fullDirectory)
         {
-            FileSystem.File.WriteAllText(filename, Formatter.HTML());
+            if (fullDirectory.TrimEnd(_fileSystem.Path.DirectorySeparatorChar).ToLowerInvariant() != directoryToIndex.FullDirectory.TrimEnd(_fileSystem.Path.DirectorySeparatorChar).ToLowerInvariant())
+            {
+                var subDirectory = GetLastDirectoryName(fullDirectory);
+                _formatter.AddLink(Index(subDirectory), subDirectory, "childLink");
+
+                EnqueueChildDirectory(directoryToIndex, fullDirectory, subDirectory);
+            }
         }
 
-        private string Index(string directory)
+        private void EnqueueChildDirectory(DirectoryToIndex directoryToIndex, string fullDirectory, string subDirectory)
         {
-            return directory + @"\index.html";
+            _directories.Enqueue(
+                new DirectoryToIndex(
+                    fullDirectory: fullDirectory,
+                    parentDirectory: directoryToIndex.FullDirectory,
+                    description: subDirectory,
+                    nestDepth: directoryToIndex.NestDepth + 1)
+                );
         }
+
+        void AddLinksToTestsAtDirectory(DirectoryToIndex directoryToIndex)
+        {
+            using (new TidyUp(StartTests, EndTests))
+                _fileSystem.Directory.GetFiles(directoryToIndex.FullDirectory, "*.html").ToList().ForEach(filename => AddLinkAtCurrentDirectory(filename));
+        }
+
+        private void AddLinkAtCurrentDirectory(string filename)
+        {
+            if (_fileSystem.Path.GetFileName(filename).ToLowerInvariant() != "index.html")
+                _formatter.AddLink(_fileSystem.Path.GetFileName(filename), _fileSystem.Path.GetFileNameWithoutExtension(filename), "testLink");
+        }
+
+        void AddLinkToParentDirectory(DirectoryToIndex directoryToIndex)
+        {
+            if (string.IsNullOrEmpty(directoryToIndex.ParentDirectory) == true) return;
+
+            using (new TidyUp(StartParent, EndParent))
+                _formatter.AddLink(Index(".."), GetLastDirectoryName(directoryToIndex.ParentDirectory), "parentLink");
+        }
+
+        string GetLastDirectoryName(string parentDirectory) => _fileSystem.Path.GetFileName(parentDirectory.TrimEnd(_fileSystem.Path.DirectorySeparatorChar));
+
+        void SaveIndex(string filename) => _fileSystem.File.WriteAllText(filename, _formatter.HTML());
+
+        string Index(string directory) => directory + @"\index.html";
+
+        Action EndIndex => _formatter.EndIndex;
+        Action StartTests => _formatter.StartTests;
+        Action EndTests => _formatter.EndTests;
+        Action StartParent => _formatter.StartParent;
+        Action EndParent => _formatter.EndParent;
+        Action StartChildren => _formatter.StartChildren;
+        Action EndChildren => _formatter.EndChildren;
     }
 }
