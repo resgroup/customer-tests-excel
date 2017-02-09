@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO.Abstractions;
+using RES.Specification.NavigationHTML;
 
 namespace AddNavigationToSpecificationHTMLOutputFiles
 {
@@ -10,7 +11,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
     {
         static int Main(string[] args)
         {
-            if (string.IsNullOrWhiteSpace(GetSetting(args, "rootfolder")) || string.IsNullOrWhiteSpace(GetSetting(args, "description"))) 
+            if (string.IsNullOrWhiteSpace(GetSetting(args, "rootfolder")) || string.IsNullOrWhiteSpace(GetSetting(args, "description")))
             {
                 Console.WriteLine(@"Usage: AddNavigationToSpecificationHTMLOutputFiles /rootFolder <RootFolder> /description <Description>");
                 Console.WriteLine(@" eg AddNavigationToSpecificationHTMLOutputFiles /rootFolder \\kl-web-001\CustomerTests\IDAM /description ""IDAM Customer Tests""");

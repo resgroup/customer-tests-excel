@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AddNavigationToSpecificationHTMLOutputFiles
+namespace RES.Specification.NavigationHTML
 {
     public interface INavigationHTMLFormatter
     {
@@ -12,15 +12,15 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
 
         void StartParent();
         void EndParent();
-        
+
         void StartTests();
         void EndTests();
-        
+
         void StartChildren();
         void EndChildren();
-        
+
         void AddLink(string url, string description, string cssClass);
-        
+
         string HTML();
     }
 }

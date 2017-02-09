@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AddNavigationToSpecificationHTMLOutputFiles
+namespace RES.Specification.NavigationHTML
 {
     public class NavigationHTMLFormatter : INavigationHTMLFormatter
     {

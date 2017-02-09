@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO.Abstractions;
 
-namespace AddNavigationToSpecificationHTMLOutputFiles
+namespace RES.Specification.NavigationHTML
 {
     public class AddNavigationToHTMLOutput
     {
@@ -37,7 +37,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
         {
             if (string.IsNullOrEmpty(rootDirectory)) throw new ArgumentNullException("rootDirectory");
 
-            _directories.Enqueue(new DirectoryToIndex() { FullDirectory = rootDirectory, ParentDirectory =  null, Description = rootName, NestDepth = 0});
+            _directories.Enqueue(new DirectoryToIndex() { FullDirectory = rootDirectory, ParentDirectory = null, Description = rootName, NestDepth = 0 });
 
             while (_directories.Any())
             {

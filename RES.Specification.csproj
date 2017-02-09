@@ -55,7 +55,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddNavigationToHTMLOutput.cs" />
+    <Compile Include="NavigationHTML\AddNavigationToHTMLOutput.cs" />
     <Compile Include="AssertionOperator.cs" />
     <Compile Include="BaseAssertion.cs" />
     <Compile Include="CreateTableHeaders.cs" />
@@ -64,7 +64,7 @@
     <Compile Include="EqualityAssertionWithPercentagePrecision.cs" />
     <Compile Include="ExcelTabularBook.cs" />
     <Compile Include="ExcelTabularLibrary.cs" />
-    <Compile Include="ExcelToCodeTableHeaders.cs" />
+    <Compile Include="ExcelToCode\ExcelToCodeTableHeaders.cs" />
     <Compile Include="IExcelApplication.cs" />
     <Compile Include="ITabularBook.cs" />
     <Compile Include="ITabularCell.cs" />
@@ -78,16 +78,16 @@
     <Compile Include="StringBuilderTextLineWriter.cs" />
     <Compile Include="StringTestOutputWriterBase.cs" />
     <Compile Include="EqualityAssertion.cs" />
-    <Compile Include="ExcelToCode.cs" />
+    <Compile Include="ExcelToCode\ExcelToCode.cs" />
     <Compile Include="ExcelFormulaDoesNotMatchCodeAssertion.cs" />
-    <Compile Include="ExcelToCodeBase.cs" />
+    <Compile Include="ExcelToCode\ExcelToCodeBase.cs" />
     <Compile Include="HumanFriendlyFormatter.cs" />
     <Compile Include="IAssertion.cs" />
     <Compile Include="IBlank.cs" />
     <Compile Include="IHumanFriendlyFormatter.cs" />
-    <Compile Include="INavigationHTMLFormatter.cs" />
+    <Compile Include="NavigationHTML\INavigationHTMLFormatter.cs" />
     <Compile Include="IndentingStringBuilder.cs" />
-    <Compile Include="NavigationHTMLFormatter.cs" />
+    <Compile Include="NavigationHTML\NavigationHTMLFormatter.cs" />
     <Compile Include="NoValue.cs" />
     <Compile Include="ParentAssertion.cs" />
     <Compile Include="ParseAssertionProperty.cs" />

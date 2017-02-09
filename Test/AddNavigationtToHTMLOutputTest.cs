@@ -6,8 +6,9 @@ using NUnit.Framework;
 using System.IO.Abstractions.TestingHelpers;
 using Moq;
 using System.IO;
+using RES.Specification.NavigationHTML;
 
-namespace AddNavigationToSpecificationHTMLOutputFiles
+namespace RES.Specification.Test
 {
     [TestFixture]
     public class AddNavigationtToHTMLOutputTest
@@ -18,7 +19,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
             public List<string> CalculatedDescriptions;
             public Mock<INavigationHTMLFormatter> Formatter;
         }
-        
+
         [Test]
         public void UrlShouldBeFilenameWithoutPath()
         {
@@ -33,7 +34,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
 
             //act
             new AddNavigationToHTMLOutput(fileSystem, spy.Formatter.Object).CreateIndexHtmlFiles(@"c:\", "");
-            
+
             Assert.AreEqual(Path.GetFileName(filename), spy.CalculatedUrls[0]);
         }
 
@@ -52,7 +53,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
             //act
             new AddNavigationToHTMLOutput(fileSystem, spy.Formatter.Object).CreateIndexHtmlFiles(@"c:\", "");
 
-            
+
             Assert.AreEqual(Path.GetFileNameWithoutExtension(filename), spy.CalculatedDescriptions[0]);
         }
 
@@ -96,7 +97,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
         public void SubdirectoriesShouldRelativeLinkToIndexDotHtml()
         {
             var fileSystem = new MockFileSystem();
-            fileSystem.AddDirectory(@"c:\subdir\"); 
+            fileSystem.AddDirectory(@"c:\subdir\");
 
             var spy = CreateNavigationHTMLFormatterSpy();
 
@@ -116,7 +117,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
 
             //act
             new AddNavigationToHTMLOutput(fileSystem, spy.Formatter.Object).CreateIndexHtmlFiles(@"c:\", "");
-            
+
             Assert.AreEqual("subdir", spy.CalculatedDescriptions[0]);
         }
 
@@ -153,7 +154,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
         public void NestedFiles()
         {
             const int NestingDepth = 5; // must be greater than one for test to make sense
-            
+
             var fileSystem = new MockFileSystem();
             for (int depth = 0; depth < NestingDepth; depth++)
             {
@@ -180,7 +181,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
             // 1st level directory
             expectedUrls.Add(@"subdir0\index.html");
             expectedDescriptions.Add("subdir0");
-            
+
             // intermediate levels
             for (int depth = 1; depth < NestingDepth - 1; depth++)
             {
@@ -189,7 +190,7 @@ namespace AddNavigationToSpecificationHTMLOutputFiles
                 expectedDescriptions.Add("subdir" + (depth - 2).ToString());
 
                 // file
-                expectedUrls.Add("test" + depth.ToString()+ ".html");
+                expectedUrls.Add("test" + depth.ToString() + ".html");
                 expectedDescriptions.Add("test" + depth.ToString());
 
                 // sub directory
