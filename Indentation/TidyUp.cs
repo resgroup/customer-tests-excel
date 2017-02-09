@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RES.Specification
+namespace RES.Specification.Indentation
 {
     public class TidyUp : IDisposable
     {
@@ -21,7 +21,7 @@ namespace RES.Specification
 
             makeMess();
         }
-        
+
         public void Dispose()
         {
             _tidyUp();

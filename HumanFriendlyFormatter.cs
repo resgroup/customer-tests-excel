@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace RES.Specification
 {
@@ -27,16 +28,20 @@ namespace RES.Specification
             }
         }
 
-        public string  FormatSpecificationSpecificClassName(string className)
+        public string FormatSpecificationSpecificClassName(string className)
         {
             return className.Replace("SpecificationSpecific", "").Replace("specificationSpecific", "");
         }
 
         public string FormatMethodName(string methodName)
         {
-            string underscoresAndSpecificationSpecificRemoved = methodName.Replace('_', ' ').Replace("SpecificationSpecific", ""); 
-            return System.Text.RegularExpressions.Regex.Replace(underscoresAndSpecificationSpecificRemoved, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
-        }
+            string underscoresAndSpecificationSpecificRemoved =
+                methodName.Replace('_', ' ')
+                          .Replace("SpecificationSpecific", "");
 
+            string replaced = Regex.Replace(underscoresAndSpecificationSpecificRemoved, "([A-Z])", " $1", RegexOptions.Compiled);
+            string trimmed = replaced.Trim();
+            return trimmed;
+        }
     }
 }

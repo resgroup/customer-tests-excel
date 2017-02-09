@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RES.Specification.Indentation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,7 @@ namespace RES.Specification
             {
                 if (cell.IsFormula)
                 {
-                    _worksheet.SetCell(row, column, value); 
+                    _worksheet.SetCell(row, column, value);
                 }
                 else
                 {

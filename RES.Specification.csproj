@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelToCode\ExcelToCodeException.cs" />
+    <Compile Include="Indentation\AutoIndentingStringBuilder.cs" />
     <Compile Include="NavigationHTML\AddNavigationToHTMLOutput.cs" />
     <Compile Include="AssertionOperator.cs" />
     <Compile Include="BaseAssertion.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="ExcelTabularBook.cs" />
     <Compile Include="ExcelTabularLibrary.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeTableHeaders.cs" />
-    <Compile Include="IExcelApplication.cs" />
     <Compile Include="ITabularBook.cs" />
     <Compile Include="ITabularCell.cs" />
     <Compile Include="ITabularLibrary.cs" />
@@ -88,7 +88,7 @@
     <Compile Include="IBlank.cs" />
     <Compile Include="IHumanFriendlyFormatter.cs" />
     <Compile Include="NavigationHTML\INavigationHTMLFormatter.cs" />
-    <Compile Include="IndentingStringBuilder.cs" />
+    <Compile Include="Indentation\IndentingStringBuilder.cs" />
     <Compile Include="NavigationHTML\NavigationHTMLFormatter.cs" />
     <Compile Include="NoValue.cs" />
     <Compile Include="ParentAssertion.cs" />
@@ -112,7 +112,7 @@
     <Compile Include="Runner.cs" />
     <Compile Include="TabularCell.cs" />
     <Compile Include="TestProjectCreator.cs" />
-    <Compile Include="TidyUp.cs" />
+    <Compile Include="Indentation\TidyUp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Specification.css" />
