@@ -8,12 +8,12 @@ namespace RES.Specification
 {
     public class ParentAssertion<Parent, Child> : IAssertion<Parent> where Child : class
     {
-        protected readonly Expression<Func<Parent, Child>> _property;
+        protected Expression<Func<Parent, Child>> Property { get; }
 
         public ParentAssertion(Expression<Func<Parent, Child>> property, IEnumerable<IAssertion<Child>> childAssertions)
         {
-            _property = property; 
-            ChildAssertions = childAssertions; 
+            Property = property;
+            ChildAssertions = childAssertions;
         }
 
         public bool Passed(Parent sut)
@@ -25,7 +25,7 @@ namespace RES.Specification
             {
                 result = ChildAssertions.Min(c => c.Passed(child));
             }
-            
+
             return result;
         }
 
@@ -39,7 +39,8 @@ namespace RES.Specification
             {
                 foreach (var assertion in ChildAssertions)
                 {
-                    assertion.Write(child, assertion.Passed(child), writer);
+                    bool childPassed = assertion.Passed(child);
+                    assertion.Write(child, childPassed, writer);
                 }
             }
 
@@ -48,7 +49,7 @@ namespace RES.Specification
 
         private Child GetChild(Parent sut)
         {
-            var expression = _property.Compile();
+            var expression = Property.Compile();
             try
             {
                 return expression(sut);
@@ -59,15 +60,9 @@ namespace RES.Specification
             }
         }
 
-        private object Index
-        {
-            get { return new ParseAssertionProperty(_property).Index; }
-        }
+        private object Index => new ParseAssertionProperty(Property).Index;
 
-        private string PropertyName
-        {
-            get { return new ParseAssertionProperty(_property).PropertyName; }
-        }
+        private string PropertyName => new ParseAssertionProperty(Property).PropertyName;
 
         private IEnumerable<IAssertion<Child>> ChildAssertions { get; set; }
     }

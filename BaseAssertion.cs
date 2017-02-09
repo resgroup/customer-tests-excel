@@ -10,37 +10,29 @@ namespace RES.Specification
     {
         protected abstract AssertionOperator Operator { get; }
 
-        protected object Expected { get; private set; }
-        readonly Expression<Func<T, object>> _property;
+        protected object Expected { get; }
+        public Expression<Func<T, object>> Property { get; }
 
         public BaseAssertion(Expression<Func<T, object>> property, object expected)
         {
             if (property == null) throw new ArgumentNullException("property");
-            
-            _property = property;
+
+            Property = property;
             Expected = expected;
         }
 
-        string PropertyName
-        {
-            get
-            {
-                return new ParseAssertionProperty(_property).PropertyName;
-            }
-        }
+        string PropertyName => new ParseAssertionProperty(Property).PropertyName;
 
         object Actual(T sut)
         {
-            var propertyGetter = _property.Compile();
-            return propertyGetter(sut);         
+            var propertyGetter = Property.Compile();
+            return propertyGetter(sut);
         }
 
         public bool Passed(T sut)
         {
             var actual = Actual(sut);
             return InternalPassed(actual);
-            //writer.Assert(PropertyName, Expected, Operator, actual, result);
-            //return result;
         }
 
         public void Write(T sut, bool passed, ITestOutputWriter writer)
@@ -49,10 +41,7 @@ namespace RES.Specification
             writer.Assert(PropertyName, Expected, Operator, actual, passed, AssertionSpecifics());
         }
 
-        protected virtual IEnumerable<string> AssertionSpecifics()
-        {
-            return new List<string>();
-        }
+        protected virtual IEnumerable<string> AssertionSpecifics() => new List<string>();
 
         protected abstract bool InternalPassed(object actual);
     }

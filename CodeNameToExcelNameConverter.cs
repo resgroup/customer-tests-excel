@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -37,7 +35,7 @@ namespace RES.Specification
             var lastIndex = excelSpecificationName.LastIndexOf('.');
             var className = excelSpecificationName;
             var nameSpace = "";
-            if(lastIndex > 0)
+            if (lastIndex > 0)
             {
                 className = excelSpecificationName.Substring(lastIndex + 1);
                 nameSpace = excelSpecificationName.Substring(0, lastIndex + 1) + "Specification.Setup.";
@@ -49,7 +47,7 @@ namespace RES.Specification
         // the property names (not values) of the "Given" part of the test
         public string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
         {
-            if (isChild == true)
+            if (isChild)
             {
                 return cSharpPropertyName.Replace("_", "(" + indexInParent.ToString() + ") ");
             }
@@ -84,7 +82,7 @@ namespace RES.Specification
             {
                 // these will appear in excel as text and not numbers, which is a shame, but otherwise strange things can happen, such as: (decimal) 50 doesn't equal (int) 50, so I think its better this way
                 // we only want this for assertions, where this strange stuff happens
-               return cSharpAssertValue.ToString() + "m"; 
+                return cSharpAssertValue.ToString() + "m";
             }
             else
             {
@@ -223,7 +221,7 @@ namespace RES.Specification
                 // Other possible types are currently Dates, numbers (including decimals) and enums.
                 if (stringValue.StartsWith("\"", StringComparison.InvariantCulture) && stringValue.EndsWith("\"", StringComparison.InvariantCulture))
                     return stringValue;
-                return $"\"{stringValue}\""; 
+                return $"\"{stringValue}\"";
             }
         }
 
@@ -241,7 +239,7 @@ namespace RES.Specification
         static bool IsEnum(string value)
         {
             return (
-                value.StartsWith("Base.", StringComparison.CurrentCultureIgnoreCase) 
+                value.StartsWith("Base.", StringComparison.CurrentCultureIgnoreCase)
                 || (!string.IsNullOrWhiteSpace(value) && Regex.Match(value, @"[A-Za-z0-9_]*\.[A-Za-z0-9_]*").Value == value)
             );
         }
@@ -276,16 +274,16 @@ namespace RES.Specification
             get { return ASSERT; }
         }
 
-        public string WhenValidating 
+        public string WhenValidating
         {
-            get { return WHEN_VALIDATING; } 
+            get { return WHEN_VALIDATING; }
         }
 
-        public string WhenCalculating 
+        public string WhenCalculating
         {
-            get { return WHEN_CALCULATING; } 
+            get { return WHEN_CALCULATING; }
         }
-        
+
 
 
     }

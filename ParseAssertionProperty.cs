@@ -10,12 +10,9 @@ namespace RES.Specification
     {
         protected readonly StringBuilder _propertyName;
 
-        public string PropertyName
-        {
-            get { return _propertyName.ToString(); }
-        }
+        public string PropertyName => _propertyName.ToString();
 
-        public string Index { get; private set; }
+        public string Index { get; }
 
         public ParseAssertionProperty(Expression exp)
         {
