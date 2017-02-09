@@ -8,18 +8,15 @@ namespace RES.Specification
 {
     public class EqualityAssertionWithStringFormat<T> : BaseAssertion<T>
     {
-        private string _format;
+        private readonly string _format;
 
         public EqualityAssertionWithStringFormat(Expression<Func<T, object>> property, object expected, string format)
-            : base(property, expected) 
+            : base(property, expected)
         {
             _format = format;
         }
 
-        protected override AssertionOperator Operator
-        {
-            get { return AssertionOperator.Equality; }
-        }
+        protected override AssertionOperator Operator => AssertionOperator.Equality;
 
         protected override bool InternalPassed(object actual)
         {
@@ -29,9 +26,6 @@ namespace RES.Specification
         }
 
         protected override IEnumerable<string> AssertionSpecifics()
-        {
-            return new List<string>() { "StringFormat", _format };
-        }
-
+            => new[] { "StringFormat", _format };
     }
 }

@@ -8,9 +8,9 @@ namespace RES.Specification
 {
     public class ExcelFormulaDoesNotMatchCodeAssertion<T> : IAssertion<T>
     {
-        string _propertyName;
-        string _excelValue;
-        string _csharpValue;
+        private readonly string _propertyName;
+        private readonly string _excelValue;
+        private readonly string _csharpValue;
 
         public ExcelFormulaDoesNotMatchCodeAssertion(string propertyName, string excelValue, string csharpValue)
         {
@@ -19,10 +19,7 @@ namespace RES.Specification
             _csharpValue = csharpValue;
         }
 
-        public bool Passed(T sut)
-        {
-            return false;
-        }
+        public bool Passed(T sut) => false;
 
         public void Write(T sut, bool passed, ITestOutputWriter writer)
         {

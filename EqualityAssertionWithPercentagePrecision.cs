@@ -10,15 +10,12 @@ namespace RES.Specification
     {
         private double _percentagePrecision;
 
-        public EqualityAssertionWithPercentagePrecision(Expression<Func<T, object>> property, double? expected, double percentagePrecision) : base(property, expected) 
+        public EqualityAssertionWithPercentagePrecision(Expression<Func<T, object>> property, double? expected, double percentagePrecision) : base(property, expected)
         {
             _percentagePrecision = percentagePrecision;
         }
 
-        protected override AssertionOperator Operator
-        {
-            get { return AssertionOperator.Equality; }
-        }
+        protected override AssertionOperator Operator => AssertionOperator.Equality;
 
         protected override bool InternalPassed(object actual)
         {
@@ -27,7 +24,7 @@ namespace RES.Specification
             double actualDouble;
             try
             {
-                 actualDouble = Convert.ToDouble(actual);
+                actualDouble = Convert.ToDouble(actual);
             }
             catch (Exception e)
             {
@@ -36,13 +33,11 @@ namespace RES.Specification
 
             double difference = Math.Abs(actualDouble - (double)Expected);
 
-            return difference <= Math.Abs((double) Expected * _percentagePrecision);
+            return difference <= Math.Abs((double)Expected * _percentagePrecision);
         }
 
         protected override IEnumerable<string> AssertionSpecifics()
-        {
-            return new List<string>() { "PercentagePrecision", _percentagePrecision.ToString() };
-        }
+            => new[] { "PercentagePrecision", _percentagePrecision.ToString() };
 
     }
 }

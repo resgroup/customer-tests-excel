@@ -8,19 +8,21 @@ namespace RES.Specification
 {
     public class EqualityAssertion<T> : BaseAssertion<T>
     {
-        public EqualityAssertion(Expression<Func<T, object>> property, object expected) : base (property, expected) {}
+        public EqualityAssertion(Expression<Func<T, object>> property, object expected)
+            : base(property, expected) { }
 
-        protected override AssertionOperator Operator
-        {
-            get { return AssertionOperator.Equality; }
-        }
+        protected override AssertionOperator Operator => AssertionOperator.Equality;
 
         protected override bool InternalPassed(object actual)
         {
             if (actual == null)
+            {
                 return Expected == null || Expected.ToString().Equals("null", StringComparison.InvariantCultureIgnoreCase);
-
-            return actual.Equals(Expected);
+            }
+            else
+            {
+                return actual.Equals(Expected);
+            }
         }
     }
 }
