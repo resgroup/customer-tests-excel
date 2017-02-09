@@ -55,6 +55,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcelToCode\ExcelToCodeException.cs" />
     <Compile Include="NavigationHTML\AddNavigationToHTMLOutput.cs" />
     <Compile Include="AssertionOperator.cs" />
     <Compile Include="BaseAssertion.cs" />

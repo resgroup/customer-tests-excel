@@ -5,13 +5,6 @@ using System.Text;
 
 namespace RES.Specification.ExcelToCode
 {
-    public class ExcelToCodeException : System.Exception
-    {
-        public ExcelToCodeException() : base() { }
-        public ExcelToCodeException(string message) : base(message) { }
-        public ExcelToCodeException(string message, System.Exception inner) : base(message, inner) { }
-    }
-
     public class ExcelToCodeBase
     {
         protected ITabularPage _worksheet;
@@ -114,10 +107,10 @@ namespace RES.Specification.ExcelToCode
 
         protected bool AnyFollowingColumnHasAValue(int rowOffset = 0)
         {
-            for (uint column = _column + 1; column < 
+            for (uint column = _column + 1; column <
                 GetLastColumn(); column++)
             {
-                if (!string.IsNullOrWhiteSpace(Cell((uint) (_row + rowOffset), column))) return true;
+                if (!string.IsNullOrWhiteSpace(Cell((uint)(_row + rowOffset), column))) return true;
             }
 
             return false;
