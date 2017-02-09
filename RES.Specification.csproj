@@ -73,6 +73,7 @@
     <Compile Include="ITabularPage.cs" />
     <Compile Include="ITextLineWriter.cs" />
     <Compile Include="ExcelTabularPage.cs" />
+    <Compile Include="NavigationHTML\DirectoryToIndex.cs" />
     <Compile Include="ReportSpecificationSetupClassUsingTable.cs" />
     <Compile Include="ReportSpecificationSetupClassUsingTableRow.cs" />
     <Compile Include="ReportsSpecificationSetupIBlank.cs" />
