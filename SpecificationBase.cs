@@ -10,7 +10,7 @@ using System.Reflection;
 namespace RES.Specification
 {
     [TestFixture]
-    public abstract class SpecificationBase<T> : ISpecification<T> 
+    public abstract class SpecificationBase<T> : ISpecification<T>
         where T : IReportsSpecificationSetup
     {
         protected T _sut;
@@ -63,29 +63,24 @@ namespace RES.Specification
 
         private ITestOutputWriter GetWriter()
         {
-            // executing directory is expected to be svn\builtsdlls\debug, you need to make sure that the build path for your test projects are set to build here.
-            var trunkPath = GetTrunkPath();
-            var writers = new List<ITestOutputWriter>();
-            if (_debugOutput) writers.Add(new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()));
-            if (_htmlOutput) writers.Add(new HTMLTestOutputWriter(new HumanFriendlyFormatter()));
-            if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests")));
-
-            ITestOutputWriter writer;
-            if (writers.Any() == false)
+            if (_debugOutput)
             {
-                writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()); // change this for a null object output writer
+                return new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter());
             }
-            else if (writers.Any())
+            else if (_htmlOutput)
             {
-                writer = writers.First();
+                return new HTMLTestOutputWriter(new HumanFriendlyFormatter());
+            }
+            else if (_excelOutput)
+            {
+                // executing directory is expected to be svn\builtsdlls\debug, you need to make sure that the build path for your test projects are set to build here.
+                var trunkPath = GetTrunkPath();
+                return new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests"));
             }
             else
             {
-                writer = new CombinedTestOutputWriter(writers);
+                return new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter());// change this for a null object output writer
             }
-
-            return writer;
         }
-
     }
 }
