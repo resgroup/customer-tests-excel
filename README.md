@@ -18,6 +18,10 @@ Advantages
 
 # Example
 
-There is an example Excel test in SampleTests/ExcelTests/Rerouting.xlsx.
-
 The SampleTests and SampleSystemUnderTest projects are in the main solution (RES.Specification.sln), and are in the SampleTests and SampleSystemUnderTest directories. 
+
+There is an example Excel test in SampleTests/ExcelTests/Rerouting.xlsx, which looks like this:
+
+![Example Excel Test](example-excel-test.png "Example Excel Test")
+
+
