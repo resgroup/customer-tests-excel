@@ -23,16 +23,18 @@ namespace SampleTestsRerouting
 
         public ILeg Leg => _leg.Object;
 
-        public void Origin_of(string origin)
+        public SpecificationSpecificItineraryLeg Origin_of(string origin)
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, origin);
             _leg.Setup(m => m.Origin).Returns(origin);
+            return this;
         }
 
-        public void Destination_of(string destination)
+        public SpecificationSpecificItineraryLeg Destination_of(string destination)
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, destination);
             _leg.Setup(m => m.Destination).Returns(destination);
+            return this;
         }
     }
 }

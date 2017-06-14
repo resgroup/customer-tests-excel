@@ -1,8 +1,8 @@
 <package>
   <metadata>
-    <id>RES.Specification</id>
+    <id>customer-tests-excel</id>
     <version>$version$</version>
     <authors>RES</authors>
-    <description>RES.Specification</description>
+    <description>customer-tests-excel</description>
   </metadata>
 </package>

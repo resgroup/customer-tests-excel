@@ -24,30 +24,34 @@ namespace SampleTestsRerouting
 
         public ICargo Cargo => _cargo.Object;
 
-        public void Origin_of(string origin)
+        public SpecificationSpecificCargo Origin_of(string origin)
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, origin);
             _cargo.Setup(m => m.Origin).Returns(origin);
+            return this;
         }
 
-        public void Destination_of(string destination)
+        public SpecificationSpecificCargo Destination_of(string destination)
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, destination);
             _cargo.Setup(m => m.Destination).Returns(destination);
+            return this;
         }
 
         readonly List<SpecificationSpecificItineraryLeg> _legs = new List<SpecificationSpecificItineraryLeg>();
-        public void ItineraryLeg_of(SpecificationSpecificItineraryLeg leg)
+        public SpecificationSpecificCargo ItineraryLeg_of(SpecificationSpecificItineraryLeg leg)
         {
             _classProperties.Add(new ReportSpecificationSetupClass(System.Reflection.MethodBase.GetCurrentMethod().Name, leg, true, _legs.Count));
             _legs.Add(leg);
+            return this;
         }
 
-        public void ItineraryLeg_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg> legs)
+        public SpecificationSpecificCargo ItineraryLeg_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg> legs)
         {
             legs.PropertyName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             _classTableProperties.Add(legs);
             foreach (var row in legs.Rows) _legs.Add(row.Properties);
+            return this;
         }
 
     }
