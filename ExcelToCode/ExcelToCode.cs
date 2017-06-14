@@ -6,6 +6,9 @@ using System.Text;
 
 namespace RES.Specification.ExcelToCode
 {
+    // this clase is very much too big, split in to smaller ones
+    // easy targets would be give, when, assert.
+    // the various property types could probably also be split off quite easily as well
     // a better way of doing this would probably be to form a representation of the test in code (like the _assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
     public class ExcelToCode : ExcelToCodeBase
     {
@@ -150,7 +153,7 @@ namespace RES.Specification.ExcelToCode
                     string cSharpClassName = _converter.ExcelClassNameToCodeName(excelGivenRightString);
                     string cSharpChildVariableName = cSharpNonCreationalVariableName + "_" + TableVariableNameFromMethodName(cSharpMethodName);
                     CreateObjectsFromTable(cSharpChildVariableName, excelGivenRightString, cSharpClassName, cSharpNonCreationalVariableName, ConcatenatecSharpParentVariableNames(cSharpParentVariableNamesConcatenated, cSharpNonCreationalVariableName));
-                    Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ");");
+                    Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                 }
                 else if (HasGivenSubProperties())
                 {
@@ -158,13 +161,15 @@ namespace RES.Specification.ExcelToCode
                     string cSharpChildVariableName = cSharpNonCreationalVariableName + "_" + excelGivenRightString.Replace(".", "") + GetIndex(excelGivenLeft);
 
                     Output();
+                    Output("{");
                     CreateObject(cSharpChildVariableName, cSharpClassName, cSharpNonCreationalVariableName, ConcatenatecSharpParentVariableNames(cSharpParentVariableNamesConcatenated, cSharpNonCreationalVariableName), GetIndex(excelGivenLeft));
-                    Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ");");
+                    Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                    Output("}");
                 }
                 else
                 {
                     string cSharpVariableName = cSharpNonCreationalVariableName + cSharpVariableNamePostfix;
-                    Output(cSharpVariableName + "." + cSharpMethodName + "(" + _converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight) + ");");
+                    Output(cSharpVariableName +  "." + cSharpMethodName + "(" + _converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight) + ")" + ";");
                 }
             }
         }
