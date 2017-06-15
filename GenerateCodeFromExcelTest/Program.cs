@@ -5,6 +5,8 @@ using System.Text;
 
 namespace GenerateCodeFromExcelTest
 {
+    // To work with the SampleTests project included in this solution, use the following command line parameters
+    // /folder "[path to]\SampleTests" /project SampleTests.csproj /namespace SampleTests /usings SampleSystemUnderTest /assertionClassPrefix I
     class Program
     {
         static int Main(string[] args)

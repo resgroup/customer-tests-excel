@@ -168,6 +168,12 @@ namespace RES.Specification.ExcelToCode
             return column;
         }
 
+        protected TidyUp Scope()
+        {
+            Output("{");
+            return new TidyUp(() => Output("}"));
+        }
+
         protected TidyUp SavePosition()
         {
             uint row = _row;

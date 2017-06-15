@@ -97,28 +97,28 @@ namespace RES.Specification.ExcelToCode
 
                 StartOutput(usings, description, projectRootNamespace, workBookName);
 
-                CreateObject(CSharpSUTVariableName(), CSharpSUTSpecificationSpecificClassName(), "", "", "");
+                CreateObject(CSharpSUTVariableName(), CSharpSUTSpecificationSpecificClassName());
 
                 EndGiven();
             }
         }
 
-        void CreateObject(string cSharpVariableName, string cSharpClassName, string cSharpParentVariableName, string cSharpParentVariableNamesConcatenated, string index)
+        void CreateObject(string cSharpVariableName, string cSharpClassName)
         {
             MoveDown();
 
             Output($"var {CreationalCSharpVariableName(cSharpVariableName)} = new {cSharpClassName}CreationalProperties();");
 
-            DoProperties(cSharpVariableName, _converter.Creational, "CreationalProperties", cSharpParentVariableNamesConcatenated);
+            DoProperties(cSharpVariableName, _converter.Creational, "CreationalProperties");
 
             Output($"var {cSharpVariableName} = new {cSharpClassName}({CreationalCSharpVariableName(cSharpVariableName)});");
 
-            DoProperties(cSharpVariableName, _converter.Properties, "", cSharpParentVariableNamesConcatenated);
+            DoProperties(cSharpVariableName, _converter.Properties, "");
 
             MoveUp();
         }
 
-        void DoProperties(string cSharpNonCreationalVariableName, string markAtBeginningOfProperties, string cSharpVariableNamePostfix, string cSharpParentVariableNamesConcatenated)
+        void DoProperties(string cSharpNonCreationalVariableName, string markAtBeginningOfProperties, string cSharpVariableNamePostfix)
         {
             if (CurrentCell() == markAtBeginningOfProperties)
             {
@@ -127,19 +127,20 @@ namespace RES.Specification.ExcelToCode
                     MoveDown();
                     while (!string.IsNullOrEmpty(CurrentCell()))
                     {
-                        DoProperty(cSharpNonCreationalVariableName, cSharpVariableNamePostfix, cSharpParentVariableNamesConcatenated);
+                        DoProperty(cSharpNonCreationalVariableName, cSharpVariableNamePostfix);
                         MoveDown();
                     }
                 }
             }
         }
 
-        protected void DoProperty(string cSharpNonCreationalVariableName, string cSharpVariableNamePostfix, string cSharpParentVariableNamesConcatenated)
+        protected void DoProperty(string cSharpNonCreationalVariableName, string cSharpVariableNamePostfix)
         {
             // "Calibrations(0) of", "InstrumentCalibration"
             // methodname = "Calibrations_of"
             // index = 0;
-            // variable name = instrumentCalibration0
+            // variable name = instrumentCalibration
+            // we actually don't need the index any more now that each item in the list has its own scope, so we could remove it from the excel definition
             var excelGivenLeft = CurrentCell();
             using (AutoCloseIndent())
             {
@@ -150,21 +151,26 @@ namespace RES.Specification.ExcelToCode
 
                 if (IsTable(excelGivenLeft))
                 {
-                    string cSharpClassName = _converter.ExcelClassNameToCodeName(excelGivenRightString);
-                    string cSharpChildVariableName = cSharpNonCreationalVariableName + "_" + TableVariableNameFromMethodName(cSharpMethodName);
-                    CreateObjectsFromTable(cSharpChildVariableName, excelGivenRightString, cSharpClassName, cSharpNonCreationalVariableName, ConcatenatecSharpParentVariableNames(cSharpParentVariableNamesConcatenated, cSharpNonCreationalVariableName));
-                    Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                    using (Scope())
+                    {
+                        string cSharpClassName = _converter.ExcelClassNameToCodeName(excelGivenRightString);
+                        string cSharpChildVariableName = TableVariableNameFromMethodName(cSharpMethodName);
+
+                        CreateObjectsFromTable(cSharpChildVariableName, excelGivenRightString, cSharpClassName);
+                        Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                    }
                 }
                 else if (HasGivenSubProperties())
                 {
-                    string cSharpClassName = _converter.ExcelClassNameToCodeName(excelGivenRightString);
-                    string cSharpChildVariableName = cSharpNonCreationalVariableName + "_" + excelGivenRightString.Replace(".", "") + GetIndex(excelGivenLeft);
-
                     Output();
-                    Output("{");
-                    CreateObject(cSharpChildVariableName, cSharpClassName, cSharpNonCreationalVariableName, ConcatenatecSharpParentVariableNames(cSharpParentVariableNamesConcatenated, cSharpNonCreationalVariableName), GetIndex(excelGivenLeft));
-                    Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
-                    Output("}");
+                    using (Scope())
+                    {
+                        string cSharpClassName = _converter.ExcelClassNameToCodeName(excelGivenRightString);
+                        string cSharpChildVariableName = VariableCase(excelGivenRightString.Replace(".", ""));
+
+                        CreateObject(cSharpChildVariableName, cSharpClassName);
+                        Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                    }
                 }
                 else
                 {
@@ -176,8 +182,8 @@ namespace RES.Specification.ExcelToCode
 
         string TableVariableNameFromMethodName(string cSharpMethodName)
         {
-            // change "...table_of" (method name) to "...table (variable name)"
-            return cSharpMethodName.Substring(0, cSharpMethodName.Length - 3);
+            // change "Cargo table_of" (method name from Excel) to "cargoTable (c# variable name)"
+            return VariableCase(cSharpMethodName.Substring(0, cSharpMethodName.Length - 3));
         }
 
         bool IsTable(string excelGivenLeft)
@@ -185,7 +191,7 @@ namespace RES.Specification.ExcelToCode
             return excelGivenLeft.EndsWith("table of", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        void CreateObjectsFromTable(string cSharpVariableName, string cSharpClassName, string cSharpSpecificationSpecificClassName, string cSharpParentVariableName, string cSharpParentVariableNamesConcatenated)
+        void CreateObjectsFromTable(string cSharpVariableName, string cSharpClassName, string cSharpSpecificationSpecificClassName)
         {
             // read tokens that speficy the start of the creational and normal properties
             MoveDown();
@@ -207,13 +213,23 @@ namespace RES.Specification.ExcelToCode
             {
                 using (SavePosition())
                 {
-                    string indexedCSharpVariableName = $"{cSharpVariableName}_{cSharpClassName}{row}";
+                    string indexedCSharpVariableName = VariableCase(cSharpClassName);
                     string indexedCreationalCSharpVariableName = $"{indexedCSharpVariableName}CreationalProperties";
 
-                    SetAllPropertiesOnTableRowVariable(indexedCSharpVariableName, indexedCreationalCSharpVariableName, cSharpSpecificationSpecificClassName, creationalPropertiesStartColumn, creationalPropertiesEndColumn, propertiesStartColumn, propertiesEndColumn, headers);
+                    using (Scope())
+                    {
+                        SetAllPropertiesOnTableRowVariable(
+                            indexedCSharpVariableName, 
+                            indexedCreationalCSharpVariableName, 
+                            cSharpSpecificationSpecificClassName, 
+                            creationalPropertiesStartColumn, 
+                            creationalPropertiesEndColumn, 
+                            propertiesStartColumn, 
+                            propertiesEndColumn, 
+                            headers);
 
-                    Output($"{cSharpVariableName}.Add({indexedCSharpVariableName});");
-
+                        Output($"{cSharpVariableName}.Add({indexedCSharpVariableName});");
+                    }
                     row++;
                 }
 
@@ -355,11 +371,6 @@ namespace RES.Specification.ExcelToCode
             {
                 throw new ExcelToCodeException("Unknown type of Table Header");
             }
-        }
-
-        string ConcatenatecSharpParentVariableNames(string cSharpParentVariableNamesConcatenated, string cSharpNonCreationalVariableName)
-        {
-            return cSharpParentVariableNamesConcatenated + cSharpNonCreationalVariableName + "_";
         }
 
         void EndGiven()

@@ -6,7 +6,7 @@ using NUnit.Framework;
 using RES.Specification;
 using System.Linq.Expressions;
 
-using SampleTestsRerouting;
+using SampleSystemUnderTest;
 
 namespace SampleTestsRerouting
 {
@@ -31,23 +31,29 @@ namespace SampleTestsRerouting
             routingServiceCreationalProperties.RerouteTo_of("SEA");
 
             {
-                var routingService_CargoCreationalProperties = new SpecificationSpecificCargoCreationalProperties();
-                var routingService_Cargo = new SpecificationSpecificCargo(routingService_CargoCreationalProperties);
-                routingService_Cargo.Origin_of("HKG");
-                routingService_Cargo.Destination_of("DAL");
-                var routingService_Cargo_ItineraryLeg_table = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
-                var routingService_Cargo_ItineraryLeg_table_ItineraryLeg0CreationalProperties = new SpecificationSpecificItineraryLegCreationalProperties();
-                var routingService_Cargo_ItineraryLeg_table_ItineraryLeg0 = new SpecificationSpecificItineraryLeg(routingService_Cargo_ItineraryLeg_table_ItineraryLeg0CreationalProperties);
-                routingService_Cargo_ItineraryLeg_table_ItineraryLeg0.Origin_of("HKG");
-                routingService_Cargo_ItineraryLeg_table_ItineraryLeg0.Destination_of("LGB");
-                routingService_Cargo_ItineraryLeg_table.Add(routingService_Cargo_ItineraryLeg_table_ItineraryLeg0);
-                var routingService_Cargo_ItineraryLeg_table_ItineraryLeg1CreationalProperties = new SpecificationSpecificItineraryLegCreationalProperties();
-                var routingService_Cargo_ItineraryLeg_table_ItineraryLeg1 = new SpecificationSpecificItineraryLeg(routingService_Cargo_ItineraryLeg_table_ItineraryLeg1CreationalProperties);
-                routingService_Cargo_ItineraryLeg_table_ItineraryLeg1.Origin_of("LGB");
-                routingService_Cargo_ItineraryLeg_table_ItineraryLeg1.Destination_of("DAL");
-                routingService_Cargo_ItineraryLeg_table.Add(routingService_Cargo_ItineraryLeg_table_ItineraryLeg1);
-                routingService_Cargo.ItineraryLeg_table_of(routingService_Cargo_ItineraryLeg_table);
-                routingServiceCreationalProperties.Cargo_of(routingService_Cargo);
+                var cargoCreationalProperties = new SpecificationSpecificCargoCreationalProperties();
+                var cargo = new SpecificationSpecificCargo(cargoCreationalProperties);
+                cargo.Origin_of("HKG");
+                cargo.Destination_of("DAL");
+                {
+                    var itineraryLeg_table = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
+                    {
+                        var itineraryLegCreationalProperties = new SpecificationSpecificItineraryLegCreationalProperties();
+                        var itineraryLeg = new SpecificationSpecificItineraryLeg(itineraryLegCreationalProperties);
+                        itineraryLeg.Origin_of("HKG");
+                        itineraryLeg.Destination_of("LGB");
+                        itineraryLeg_table.Add(itineraryLeg);
+                    }
+                    {
+                        var itineraryLegCreationalProperties = new SpecificationSpecificItineraryLegCreationalProperties();
+                        var itineraryLeg = new SpecificationSpecificItineraryLeg(itineraryLegCreationalProperties);
+                        itineraryLeg.Origin_of("LGB");
+                        itineraryLeg.Destination_of("DAL");
+                        itineraryLeg_table.Add(itineraryLeg);
+                    }
+                    cargo.ItineraryLeg_table_of(itineraryLeg_table);
+                }
+                routingServiceCreationalProperties.Cargo_of(cargo);
             }
             var routingService = new SpecificationSpecificRoutingService(routingServiceCreationalProperties);
 
@@ -65,13 +71,13 @@ namespace SampleTestsRerouting
         {
             return new List<IAssertion<SpecificationSpecificRoutingService>>
             {
-                 new ParentAssertion<SpecificationSpecificRoutingService, Cargo>
+                 new ParentAssertion<SpecificationSpecificRoutingService, ICargo>
                 (
                     returns => returns.Returns,
-                    new List<IAssertion<Cargo>>
+                    new List<IAssertion<ICargo>>
                     {
-                         new EqualityAssertion<Cargo>(returns => returns.Origin, "HKG")
-                        ,new EqualityAssertion<Cargo>(returns => returns.Destination, "SEA")
+                         new EqualityAssertion<ICargo>(returns => returns.Origin, "HKG")
+                        ,new EqualityAssertion<ICargo>(returns => returns.Destination, "SEA")
                     }
                 )
             };
