@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace RES.Specification.Test
+namespace CustomerTestsExcel.Test
 {
     [TestFixture]
     class EqualityAssertionTest

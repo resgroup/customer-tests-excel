@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RES.Specification.Test
+namespace CustomerTestsExcel.Test
 {
     public class TestReportsSpecificationSetup : ReportsSpecificationSetup
     {

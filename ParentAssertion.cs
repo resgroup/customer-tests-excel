@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public class ParentAssertion<Parent, Child> : IAssertion<Parent> where Child : class
     {

@@ -5,7 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using System.Linq.Expressions;
 
-namespace RES.Specification.Test
+namespace CustomerTestsExcel.Test
 {
     [TestFixture]
     public class ParseAssertionPropertyTest

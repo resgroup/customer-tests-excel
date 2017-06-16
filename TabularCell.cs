@@ -1,4 +1,4 @@
-﻿namespace RES.Specification
+﻿namespace CustomerTestsExcel
 {
     internal class TabularCell : ITabularCell
     {

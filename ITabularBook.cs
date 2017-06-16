@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public interface ITabularBook : IDisposable
     {

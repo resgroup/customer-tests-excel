@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Linq;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public static class TestProjectCreator
     {

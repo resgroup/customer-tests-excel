@@ -6,9 +6,9 @@ using NUnit.Framework;
 using System.IO.Abstractions.TestingHelpers;
 using Moq;
 using System.IO;
-using RES.Specification.NavigationHTML;
+using CustomerTestsExcel.NavigationHTML;
 
-namespace RES.Specification.Test
+namespace CustomerTestsExcel.Test
 {
     [TestFixture]
     public class AddNavigationtToHTMLOutputTest

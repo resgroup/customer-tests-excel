@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     internal class ExcelTabularPage : ITabularPage
     {

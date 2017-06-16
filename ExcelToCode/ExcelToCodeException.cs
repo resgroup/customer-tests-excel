@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RES.Specification.ExcelToCode
+namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelToCodeException : Exception
     {

@@ -1,4 +1,4 @@
-﻿namespace RES.Specification
+﻿namespace CustomerTestsExcel
 {
     public interface ITabularCell
     {

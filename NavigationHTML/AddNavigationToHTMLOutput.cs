@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO.Abstractions;
-using RES.Specification.Indentation;
+using CustomerTestsExcel.Indentation;
 
-namespace RES.Specification.NavigationHTML
+namespace CustomerTestsExcel.NavigationHTML
 {
     public class AddNavigationToHTMLOutput
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using RES.Specification;
+using CustomerTestsExcel;
 
-namespace RES.Specification.Test
+namespace CustomerTestsExcel.Test
 {
     [TestFixture]
     class CreateTableHeadersTest

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public class CreateTableHeaders
     {

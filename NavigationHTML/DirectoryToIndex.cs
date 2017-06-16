@@ -1,4 +1,4 @@
-﻿namespace RES.Specification.NavigationHTML
+﻿namespace CustomerTestsExcel.NavigationHTML
 {
     public struct DirectoryToIndex
     {

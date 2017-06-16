@@ -1,5 +1,5 @@
 ﻿using System;
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     // This interface is to handle the 2 way conversion to and from Excel and code
     // It defines the method of changing stuff

@@ -1,10 +1,10 @@
-﻿using RES.Specification.Indentation;
+﻿using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RES.Specification.ExcelToCode
+namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelToCodeBase
     {

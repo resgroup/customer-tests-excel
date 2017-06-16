@@ -4,7 +4,7 @@ using System.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public class CodeNameToExcelNameConverter : ICodeNameToExcelNameConverter
     {

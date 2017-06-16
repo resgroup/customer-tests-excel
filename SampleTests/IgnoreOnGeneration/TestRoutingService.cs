@@ -1,4 +1,4 @@
-﻿using RES.Specification;
+﻿using CustomerTestsExcel;
 using SampleSystemUnderTest;
 using System;
 using System.Collections.Generic;

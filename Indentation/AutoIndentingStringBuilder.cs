@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RES.Specification.Indentation
+namespace CustomerTestsExcel.Indentation
 {
     public class AutoIndentingStringBuilder : IndentingStringBuilder
     {

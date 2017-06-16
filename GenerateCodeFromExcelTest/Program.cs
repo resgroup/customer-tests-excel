@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerTestsExcel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,7 @@ namespace GenerateCodeFromExcelTest
 
                 var usings = GetSetting(args, "usings").Split(' ').ToList();
 
-                RES.Specification.TestProjectCreator.Create(folder, specificationProject, rootNamespace, usings, assertionClassPrefix, new RES.Specification.ExcelTabularLibrary());
+                TestProjectCreator.Create(folder, specificationProject, rootNamespace, usings, assertionClassPrefix, new ExcelTabularLibrary());
 
                 return 0;
             }
@@ -39,9 +40,6 @@ namespace GenerateCodeFromExcelTest
                 Console.Error.WriteLine(ex.Message);
                 return -1;
             }
-
-            Console.Out.WriteLine("Tests created");
-            return 0;
         }
 
         static string GetSetting(string[] args, string settingName)

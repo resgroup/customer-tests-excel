@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public interface ITabularLibrary
     {

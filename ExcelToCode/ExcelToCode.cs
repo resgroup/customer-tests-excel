@@ -1,10 +1,10 @@
-﻿using RES.Specification.Indentation;
+﻿using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RES.Specification.ExcelToCode
+namespace CustomerTestsExcel.ExcelToCode
 {
     // this clase is very much too big, split in to smaller ones
     // easy targets would be give, when, assert.
@@ -61,7 +61,7 @@ namespace RES.Specification.ExcelToCode
             Output("using System.Linq;");
             Output("using System.Text;");
             Output("using NUnit.Framework;");
-            Output("using RES.Specification;");
+            Output("using CustomerTestsExcel;");
             Output("using System.Linq.Expressions;");
             Output();
             foreach (var usingNamespace in usings)

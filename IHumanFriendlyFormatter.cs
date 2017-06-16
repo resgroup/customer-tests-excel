@@ -1,5 +1,5 @@
 ﻿using System;
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public interface IHumanFriendlyFormatter
     {

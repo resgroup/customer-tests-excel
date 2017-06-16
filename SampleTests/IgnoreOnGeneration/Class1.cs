@@ -3,7 +3,7 @@
 //using System.Linq;
 //using System.Text;
 //using NUnit.Framework;
-//using RES.Specification;
+//using CustomerTestsExcel;
 //using System.Linq.Expressions;
 //using SampleSystemUnderTest;
 

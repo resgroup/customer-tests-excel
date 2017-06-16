@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public class ExcelTabularBook : ITabularBook
     {

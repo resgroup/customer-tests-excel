@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public interface ITextLineWriter
     {

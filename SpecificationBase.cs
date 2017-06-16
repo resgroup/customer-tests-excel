@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.IO;
 using System.Reflection;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     [TestFixture]
     public abstract class SpecificationBase<T> : ISpecification<T> 

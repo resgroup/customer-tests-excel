@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 
-namespace RES.Specification
+namespace CustomerTestsExcel
 {
     public interface ISpecification<T>
         where T : IReportsSpecificationSetup
