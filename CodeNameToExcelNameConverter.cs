@@ -10,7 +10,6 @@ namespace CustomerTestsExcel
     {
         public const string SPECIFICATION = "Specification";
         public const string GIVEN = "Given a";
-        public const string CREATIONAL = "With Creational";
         public const string PROPERTIES = "With Properties";
         public const string WHEN = "When";
         public const string WHEN_VALIDATING = "Validating";
@@ -252,11 +251,6 @@ namespace CustomerTestsExcel
         public string Given
         {
             get { return GIVEN; }
-        }
-
-        public string Creational
-        {
-            get { return CREATIONAL; }
         }
 
         public string Properties

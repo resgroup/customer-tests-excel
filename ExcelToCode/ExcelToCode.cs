@@ -10,9 +10,10 @@ namespace CustomerTestsExcel.ExcelToCode
     // easy targets would be give, when, assert.
     // the various property types could probably also be split off quite easily as well
     // a better way of doing this would probably be to form a representation of the test in code (like the _assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
+    // might be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
-        private string _assertionClassPrefix;
+        string _assertionClassPrefix;
         public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter) { }
 
         public string GenerateCSharpTestCode(IEnumerable<string> usings, string assertionClassPrefix, ITabularPage worksheet, string projectRootNamespace, string workBookName)
@@ -33,7 +34,7 @@ namespace CustomerTestsExcel.ExcelToCode
             return _code.ToString();
         }
 
-        protected void EndSpecification()
+        void EndSpecification()
         {
             Output("};");
             Output("}");
@@ -41,7 +42,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("}");
         }
 
-        protected string DoSpecification()
+        string DoSpecification()
         {
             MoveDownToToken(_converter.Specification);
 
@@ -105,20 +106,19 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void CreateObject(string cSharpVariableName, string cSharpClassName)
         {
-            MoveDown();
+            MoveDown(); // this is a bit mysterious
 
-            Output($"var {CreationalCSharpVariableName(cSharpVariableName)} = new {cSharpClassName}CreationalProperties();");
+            DeclareVariable(cSharpVariableName, cSharpClassName);
 
-            DoProperties(cSharpVariableName, _converter.Creational, "CreationalProperties");
+            SetVariableProperties(cSharpVariableName, _converter.Properties, "");
 
-            Output($"var {cSharpVariableName} = new {cSharpClassName}({CreationalCSharpVariableName(cSharpVariableName)});");
-
-            DoProperties(cSharpVariableName, _converter.Properties, "");
-
-            MoveUp();
+            MoveUp(); // this is a bit mysterious
         }
 
-        void DoProperties(string cSharpNonCreationalVariableName, string markAtBeginningOfProperties, string cSharpVariableNamePostfix)
+        void DeclareVariable(string cSharpVariableName, string cSharpClassName) =>
+            Output($"var {cSharpVariableName} = new {cSharpClassName}();");
+
+        void SetVariableProperties(string cSharpVariableName, string markAtBeginningOfProperties, string cSharpVariableNamePostfix)
         {
             if (CurrentCell() == markAtBeginningOfProperties)
             {
@@ -127,14 +127,14 @@ namespace CustomerTestsExcel.ExcelToCode
                     MoveDown();
                     while (!string.IsNullOrEmpty(CurrentCell()))
                     {
-                        DoProperty(cSharpNonCreationalVariableName, cSharpVariableNamePostfix);
+                        DoProperty(cSharpVariableName, cSharpVariableNamePostfix);
                         MoveDown();
                     }
                 }
             }
         }
 
-        protected void DoProperty(string cSharpNonCreationalVariableName, string cSharpVariableNamePostfix)
+        void DoProperty(string cSharpVariableName, string cSharpVariableNamePostfix)
         {
             // "Calibrations(0) of", "InstrumentCalibration"
             // methodname = "Calibrations_of"
@@ -157,7 +157,7 @@ namespace CustomerTestsExcel.ExcelToCode
                         string cSharpChildVariableName = TableVariableNameFromMethodName(cSharpMethodName);
 
                         CreateObjectsFromTable(cSharpChildVariableName, excelGivenRightString, cSharpClassName);
-                        Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                        Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
                 else if (HasGivenSubProperties())
@@ -169,13 +169,12 @@ namespace CustomerTestsExcel.ExcelToCode
                         string cSharpChildVariableName = VariableCase(excelGivenRightString.Replace(".", ""));
 
                         CreateObject(cSharpChildVariableName, cSharpClassName);
-                        Output(cSharpNonCreationalVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                        Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
                 else
                 {
-                    string cSharpVariableName = cSharpNonCreationalVariableName + cSharpVariableNamePostfix;
-                    Output(cSharpVariableName +  "." + cSharpMethodName + "(" + _converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight) + ")" + ";");
+                    Output($"{cSharpVariableName}{cSharpVariableNamePostfix}.{cSharpMethodName}({_converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
                 }
             }
         }
@@ -193,16 +192,15 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void CreateObjectsFromTable(string cSharpVariableName, string cSharpClassName, string cSharpSpecificationSpecificClassName)
         {
-            // read tokens that speficy the start of the creational and normal properties
+            // read token that speficy the start of the properties
+            //todo: this should always be the first column now that we don't have creational properties to worry about
             MoveDown();
-            uint? creationalPropertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Creational);
             uint? propertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Properties);
 
             var headers = ReadHeaders();
 
             uint lastColumn = (uint)headers.Max(h => h.Value.EndColumn);
             uint propertiesEndColumn = lastColumn;
-            uint creationalPropertiesEndColumn = propertiesStartColumn.HasValue ? propertiesStartColumn.Value - 1 : lastColumn;
 
             Output($"var {cSharpVariableName} = new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>();");
 
@@ -214,16 +212,12 @@ namespace CustomerTestsExcel.ExcelToCode
                 using (SavePosition())
                 {
                     string indexedCSharpVariableName = VariableCase(cSharpClassName);
-                    string indexedCreationalCSharpVariableName = $"{indexedCSharpVariableName}CreationalProperties";
 
                     using (Scope())
                     {
                         SetAllPropertiesOnTableRowVariable(
                             indexedCSharpVariableName, 
-                            indexedCreationalCSharpVariableName, 
                             cSharpSpecificationSpecificClassName, 
-                            creationalPropertiesStartColumn, 
-                            creationalPropertiesEndColumn, 
                             propertiesStartColumn, 
                             propertiesEndColumn, 
                             headers);
@@ -258,7 +252,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         TableHeader CreatePropertyHeader()
         {
-            if (PeekBelow(2) == _converter.Creational || PeekBelow(2) == _converter.Properties)
+            if (PeekBelow(2) == _converter.Properties)
                 return CreateSubClassHeader();
 
             return new PropertyTableHeader(CurrentCell(), _row, _column);
@@ -268,7 +262,6 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             string propertyName;
             string subClassName;
-            uint? creationalPropertiesStartColumn;
             uint startRow;
             uint endRow;
             uint? propertiesStartColumn;
@@ -283,7 +276,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 MoveDown();
                 subClassName = CurrentCell();
                 MoveDown();
-                creationalPropertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Creational);
                 propertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Properties);
 
                 MoveDown();
@@ -297,25 +289,22 @@ namespace CustomerTestsExcel.ExcelToCode
                 endRow = _row;
             }
 
-            uint creationalPropertiesEndColumn = propertiesStartColumn.HasValue ? propertiesStartColumn.Value - 1 : propertiesEndColumn;
-
             MoveRight((uint)headers.Count - 1);
 
-            return new SubClassTableHeader(propertyName, subClassName, _converter.ExcelClassNameToCodeName(subClassName), startRow, endRow, creationalPropertiesStartColumn, creationalPropertiesEndColumn, propertiesStartColumn, propertiesEndColumn, headers);
+            return new SubClassTableHeader(propertyName, subClassName, _converter.ExcelClassNameToCodeName(subClassName), startRow, endRow, propertiesStartColumn, propertiesEndColumn, headers);
         }
 
-        void SetAllPropertiesOnTableRowVariable(string cSharpVariableName, string creationalCSharpVariableName, string cSharpSpecificationSpecificClassName, uint? creationalPropertiesStartColumn, uint creationalPropertiesEndColumn, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> propertyNames)
+        void SetAllPropertiesOnTableRowVariable(string cSharpVariableName, string cSharpSpecificationSpecificClassName, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> propertyNames)
         {
-            Output($"var {creationalCSharpVariableName} = new {cSharpSpecificationSpecificClassName}CreationalProperties();");
+            DeclareTableRowVariable(cSharpVariableName, cSharpSpecificationSpecificClassName);
 
-            SetCreationalPropertiesOnTableRowVariable(creationalPropertiesStartColumn, propertyNames, creationalPropertiesEndColumn, creationalCSharpVariableName);
-
-            Output($"var {cSharpVariableName} = new {cSharpSpecificationSpecificClassName}({creationalCSharpVariableName});");
-
-            SetNonCreationalPropertiesOnTableRowVariable(propertiesStartColumn, propertyNames, propertiesEndColumn, cSharpVariableName);
+            SetPropertiesOnTableRowVariable(propertiesStartColumn, propertyNames, propertiesEndColumn, cSharpVariableName);
         }
 
-        // This still works with sub classes in tables
+        void DeclareTableRowVariable(string cSharpVariableName, string cSharpSpecificationSpecificClassName) =>
+            Output($"var {cSharpVariableName} = new {cSharpSpecificationSpecificClassName}();");
+
+        // This should work when there are sub classes in the table
         bool TableHasMoreRows()
         {
             if (AllColumnsAreEmpty()) return false;
@@ -324,21 +313,11 @@ namespace CustomerTestsExcel.ExcelToCode
             return true;
         }
 
-        void SetCreationalPropertiesOnTableRowVariable(uint? propertiesStartColumn, Dictionary<uint, TableHeader> headers, uint propertiesEndColumn, string cSharpVariableName)
-        {
-            SetCreationalOrClassPropertiesOnTableRowVariable(propertiesStartColumn, headers, propertiesEndColumn, cSharpVariableName);
-        }
-
-        void SetNonCreationalPropertiesOnTableRowVariable(uint? propertiesStartColumn, Dictionary<uint, TableHeader> headers, uint propertiesEndColumn, string cSharpVariableName)
-        {
-            SetCreationalOrClassPropertiesOnTableRowVariable(propertiesStartColumn, headers, propertiesEndColumn, cSharpVariableName);
-        }
-
-        void SetCreationalOrClassPropertiesOnTableRowVariable(uint? propertiesStartColumn, Dictionary<uint, TableHeader> headers, uint propertiesEndColumn, string cSharpVariableName)
+        void SetPropertiesOnTableRowVariable(uint? propertiesStartColumn, Dictionary<uint, TableHeader> headers, uint propertiesEndColumn, string cSharpVariableName)
         {
             if (propertiesStartColumn.HasValue)
             {
-                if (_column != propertiesStartColumn.Value) throw new ExcelToCodeException("Table must have 'With Creational' and / or 'With Properties' tokens, the first of which must be on the first column of the table, and both of which must be within the columns of the table.");
+                if (_column != propertiesStartColumn.Value) throw new ExcelToCodeException("Table must have a 'With Properties' token, which must be on the first column of the table.");
 
                 while (_column <= propertiesEndColumn)
                 {
@@ -353,9 +332,9 @@ namespace CustomerTestsExcel.ExcelToCode
             if (headers[_column] is SubClassTableHeader)
             {
                 var subClassHeader = headers[_column] as SubClassTableHeader;
-                string subClassCSharpVariableName = $"{cSharpVariableName}_{subClassHeader.subClassName.Replace(".", "")}"; // this <.Replace(".", "")> is shared with DoProperty, we should move in into the _converter
+                string subClassCSharpVariableName = $"{cSharpVariableName}_{subClassHeader.SubClassName.Replace(".", "")}"; // this <.Replace(".", "")> is shared with DoProperty, we should move in into the _converter
 
-                SetAllPropertiesOnTableRowVariable(subClassCSharpVariableName, CreationalCSharpVariableName(subClassCSharpVariableName), subClassHeader.FullSubClassName, subClassHeader.CreationalPropertiesStartColumn, subClassHeader.CreationalPropertiesEndColumn, subClassHeader.PropertiesStartColumn, subClassHeader.PropertiesEndColumn, subClassHeader.Headers);
+                SetAllPropertiesOnTableRowVariable(subClassCSharpVariableName, subClassHeader.FullSubClassName, subClassHeader.PropertiesStartColumn, subClassHeader.PropertiesEndColumn, subClassHeader.Headers);
 
                 MoveLeft();
 
@@ -382,7 +361,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         bool HasGivenSubProperties()
         {
-            return (PeekBelow() == _converter.Creational || PeekBelow() == _converter.Properties);
+            return (PeekBelow() == _converter.Properties);
         }
 
         protected void DoWhen()
@@ -453,7 +432,7 @@ namespace CustomerTestsExcel.ExcelToCode
         // IllustrativeFoundationCost|=|2479680|PercentagePrecision|0.001 
         // CFDCalculator|CFDCalulator (this starts off a class which contains sub properties to be asserted)
         //              |TotalCost|=|0 (this is a property of CFDCalculator to assert)  
-        protected void DoAssertion(int assertIndex, string cSharpClassName, string cSharpVariableName)
+        void DoAssertion(int assertIndex, string cSharpClassName, string cSharpVariableName)
         {
             string excelPropertyName = CurrentCell();
             string simpleCSharpPropertyName = _converter.AssertPropertyExcelNameToCodeName(excelPropertyName);

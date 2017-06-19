@@ -11,9 +11,6 @@ namespace CustomerTestsExcel
         public ReportsSpecificationSetupIBlank() 
             : base () { }
 
-        public ReportsSpecificationSetupIBlank(IReportsSpecificationSetup creationalProperties)
-            : base(creationalProperties){}
-
         public IBlank BusinessInterface
         {
             get { return this; }

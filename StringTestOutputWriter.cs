@@ -32,17 +32,6 @@ namespace CustomerTestsExcel
             Indent();
         }
 
-        public void StartCreationalProperties()
-        {
-            WriteLine("With Creational");
-            Indent();
-        }
-
-        public void EndCreationalProperties()
-        {
-            Outdent();
-        }
-
         public void StartGivenProperties()
         {
             WriteLine("With Properties");
@@ -88,13 +77,9 @@ namespace CustomerTestsExcel
             Indent();
         }
 
-        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> creationalPropertyNames, IEnumerable<string> propertyNames)
+        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames)
         {
-            var allProperties = new List<string>();
-            allProperties.AddRange(creationalPropertyNames);
-            allProperties.AddRange(propertyNames);
-
-            WriteLine(string.Join(", ", allProperties));
+            WriteLine(string.Join(", ", propertyNames));
         }
 
         public void ClassTablePropertyRow(IEnumerable<ReportSpecificationSetupProperty> cells)

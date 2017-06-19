@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IgnoreOnGeneration\Class1.cs" />
     <Compile Include="IgnoreOnGeneration\TestRoutingService.cs" />
     <Compile Include="IgnoreOnGeneration\TestItineraryLeg.cs" />
     <Compile Include="IgnoreOnGeneration\TestCargo.cs" />
@@ -72,9 +71,9 @@
     <None Include="ExcelTests\Rerouting.xlsx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RES.Specification.csproj">
+    <ProjectReference Include="..\CustomerTestsExcel.csproj">
       <Project>{8d8ad476-9558-4039-82e0-e0441d81db85}</Project>
-      <Name>RES.Specification</Name>
+      <Name>CustomerTestsExcel</Name>
     </ProjectReference>
     <ProjectReference Include="..\SampleSystemUnderTest\SampleSystemUnderTest.csproj">
       <Project>{82ea6f37-feda-45fd-8752-10cc14da1fa6}</Project>

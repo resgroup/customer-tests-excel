@@ -64,22 +64,6 @@ namespace CustomerTestsExcel
             }
         }
 
-        public void StartCreationalProperties()
-        {
-            foreach (var writer in _writers)
-            {
-                writer.StartCreationalProperties();
-            }
-        }
-
-        public void EndCreationalProperties()
-        {
-            foreach (var writer in _writers)
-            {
-                writer.EndCreationalProperties();
-            }
-        }
-
         public void EndGivenProperties()
         {
             foreach (var writer in _writers)
@@ -201,11 +185,11 @@ namespace CustomerTestsExcel
             }
         }
 
-        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> creationalPropertyNames, IEnumerable<string> propertyNames)
+        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames)
         {
             foreach (var writer in _writers)
             {
-                writer.ClassTablePropertyNamesHeaderRow(creationalPropertyNames, propertyNames);
+                writer.ClassTablePropertyNamesHeaderRow(propertyNames);
             }
         }
 

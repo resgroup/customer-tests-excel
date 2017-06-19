@@ -77,20 +77,6 @@ namespace CustomerTestsExcel
             UnIndent();
         }
 
-        public void StartCreationalProperties()
-        {
-            SetCell("With Creational");
-
-            MoveToNextRow();
-
-            Indent();
-        }
-
-        public void EndCreationalProperties()
-        {
-            UnIndent();
-        }
-
         public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
         {
             SetCell(_namer.GivenPropertyNameCodeNameToExcelName(propertyName, isChild, indexInParent));
@@ -133,26 +119,17 @@ namespace CustomerTestsExcel
             MoveToNextRow();
         }
 
-        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> creationalPropertyNames, IEnumerable<string> propertyNames)
+        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames)
         {
-            var allProperties = new List<string>();
-            allProperties.AddRange(creationalPropertyNames);
-            allProperties.AddRange(propertyNames);
-
-            // write out the "withcreational" and "withproperties" row
-            using (SavePosition())
-            {
-                if (creationalPropertyNames.Count() > 0) SetCell(_namer.Creational);
-                Indent((uint)creationalPropertyNames.Count());
-                SetCell(_namer.Properties);
-            }
+            // write out the "withproperties" row
+            SetCell(_namer.Properties);
 
             MoveToNextRow();
 
             // write out the property names
             using (SavePosition())
             {
-                foreach (var property in allProperties)
+                foreach (var property in propertyNames)
                 {
                     SetCell(_namer.GivenPropertyNameCodeNameToExcelName(property, false, null));
                     Indent();

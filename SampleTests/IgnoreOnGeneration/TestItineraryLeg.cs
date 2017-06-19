@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace SampleTestsRerouting
 {
-    public class SpecificationSpecificItineraryLegCreationalProperties : ReportsSpecificationSetup  { }
-
-    public class SpecificationSpecificItineraryLeg : ReportsSpecificationSetupIBlank//, IReportsSpecificationSetup//<IBlank>
+    public class SpecificationSpecificItineraryLeg : ReportsSpecificationSetupIBlank
     {
         readonly Mock<ILeg> _leg;
 
-        public SpecificationSpecificItineraryLeg(IReportsSpecificationSetup creationalProperties)
-            : base(creationalProperties)
+        public SpecificationSpecificItineraryLeg()
+            : base()
         {
             _leg = new Mock<ILeg>();
         }

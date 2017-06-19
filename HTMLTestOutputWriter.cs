@@ -103,19 +103,6 @@ namespace CustomerTestsExcel
             _writer.AppendLine("</div>");
         }
 
-        public void StartCreationalProperties()
-        {
-            _writer.AppendLine(@"<div class='withCreationalProperties'>");
-            _writer.AppendLine(@"<div>With Creational Properties</div>");
-            _writer.AppendLine(@"<div class='givenCreationalPropertyList'>");
-        }
-
-        public void EndCreationalProperties()
-        {
-            _writer.AppendLine(@"</div>");
-            _writer.AppendLine(@"</div>");
-        }
-
         public void EndGivenProperties()
         {
             _writer.AppendLine(@"</div>");
@@ -136,13 +123,9 @@ namespace CustomerTestsExcel
             _writer.AppendLine($"<div class='givenProperty'><span class='propertyName'>{_formatter.FormatMethodName(propertyName)}</span></div><div class='givenSubClass'>");
         }
 
-        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> creationalPropertyNames, IEnumerable<string> propertyNames)
+        public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames)
         {
-            var allProperties = new List<string>();
-            allProperties.AddRange(creationalPropertyNames);
-            allProperties.AddRange(propertyNames);
-
-            _writer.AppendLine($"<table class='givenProperty'><thead><tr><th>{string.Join("</th><th>", allProperties.Select(s => _formatter.FormatMethodName(s)))}</th></tr></thead><tbody>");
+            _writer.AppendLine($"<table class='givenProperty'><thead><tr><th>{string.Join("</th><th>", propertyNames.Select(s => _formatter.FormatMethodName(s)))}</th></tr></thead><tbody>");
         }
 
         public void ClassTablePropertyRow(IEnumerable<ReportSpecificationSetupProperty> cells)

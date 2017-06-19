@@ -7,6 +7,7 @@ using CustomerTestsExcel.Indentation;
 
 namespace CustomerTestsExcel
 {
+    // split these out in to their own classes
     public interface ITableHeader
     {
         string PropertyName { get; }
@@ -15,12 +16,11 @@ namespace CustomerTestsExcel
 
     public class TableHeader
     {
-        protected readonly string _propertyName;
-        public string PropertyName { get { return _propertyName; } }
+        public string PropertyName { get; }
 
         public TableHeader(string propertyName)
         {
-            _propertyName = propertyName;
+            PropertyName = propertyName;
         }
     }
 
@@ -36,21 +36,14 @@ namespace CustomerTestsExcel
 
     public class SubClassTableHeader : TableHeader, ITableHeader
     {
-        protected readonly string _className;
-        public string ClassName { get { return _className; } }
-
-        protected readonly IEnumerable<ITableHeader> _creationalHeaders;
-        public IEnumerable<ITableHeader> CreationalHeaders { get { return _creationalHeaders; } }
-
-        protected readonly IEnumerable<ITableHeader> _headers;
-        public IEnumerable<ITableHeader> Headers { get { return _headers; } }
+        public string ClassName { get; }
+        public IEnumerable<ITableHeader> Headers { get; }
 
         public SubClassTableHeader(string propertyName, string className, IEnumerable<ITableHeader> creationalHeaders, IEnumerable<ITableHeader> headers)
             : base(propertyName)
         {
-            _className = className;
-            _creationalHeaders = creationalHeaders;
-            _headers = headers;
+            ClassName = className;
+            Headers = headers;
         }
 
         public bool Equals(ITableHeader other)
@@ -63,12 +56,10 @@ namespace CustomerTestsExcel
 
             if (EqualHeaders(Headers, subClassOther.Headers) == false) return false;
 
-            if (EqualHeaders(CreationalHeaders, subClassOther.CreationalHeaders) == false) return false;
-
             return true;
         }
 
-        private bool EqualHeaders(IEnumerable<ITableHeader> ours, IEnumerable<ITableHeader> theirs)
+        bool EqualHeaders(IEnumerable<ITableHeader> ours, IEnumerable<ITableHeader> theirs)
         {
             if (ours.Count() != theirs.Count()) return false;
 
@@ -153,7 +144,7 @@ namespace CustomerTestsExcel
             return allPassed;
         }
 
-        private void WriteRootClass(IReportsSpecificationSetup properties)
+        void WriteRootClass(IReportsSpecificationSetup properties)
         {
             _writer.StartClass(ClassName(properties));
 
@@ -162,7 +153,7 @@ namespace CustomerTestsExcel
             _writer.EndClass();
         }
 
-        private void WriteSubClass(IReportsSpecificationSetup properties)
+        void WriteSubClass(IReportsSpecificationSetup properties)
         {
             _writer.StartSubClass(ClassName(properties));
 
@@ -171,19 +162,12 @@ namespace CustomerTestsExcel
             _writer.EndSubClass();
         }
 
-        private void WriteClass(IReportsSpecificationSetup properties)
-        {
-            WriteClassProperties(properties.CreationalProperties, _writer.StartCreationalProperties, _writer.EndCreationalProperties);
-
-            WriteClassProperties(properties, _writer.StartGivenProperties, _writer.EndGivenProperties);
-        }
-
-        private void WriteClassProperties(IReportsSpecificationSetup properties, Action start, Action end)
+        void WriteClass(IReportsSpecificationSetup properties)
         {
             // TODO: let properties class decide if it needs doing
             if (properties.ValueProperties.Any() || properties.ClassProperties.Any() || properties.ClassTableProperties.Any())
             {
-                using (new TidyUp(start, end))
+                using (new TidyUp(_writer.StartGivenProperties, _writer.EndGivenProperties))
                 {
                     foreach (var property in properties.ValueProperties) _writer.GivenProperty(property);
 
@@ -199,7 +183,7 @@ namespace CustomerTestsExcel
                         if (classTableProperty.Rows.Count() > 0)
                         {
                             _writer.StartClassTable(classTableProperty.PropertyName, ClassName(classTableProperty.Rows.First().Properties));
-                            _writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.CreationalProperties.ValueProperties.Select(p => p.PropertyName), classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
+                            _writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
 
                             foreach (var row in classTableProperty.Rows) _writer.ClassTablePropertyRow(row.Properties.ValueProperties);
 
@@ -211,7 +195,7 @@ namespace CustomerTestsExcel
             }
         }
 
-        private static string ClassName(IReportsSpecificationSetup properties)
+        static string ClassName(IReportsSpecificationSetup properties)
         {
             var className = properties.GetType().Name;
             var nameSpace = properties.GetType().Namespace;

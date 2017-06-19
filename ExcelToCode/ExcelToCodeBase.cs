@@ -59,11 +59,6 @@ namespace CustomerTestsExcel.ExcelToCode
             return _sutName;
         }
 
-        protected static string CreationalCSharpVariableName(string cSharpVariableName)
-        {
-            return cSharpVariableName + "CreationalProperties";
-        }
-
         protected string CSharpSUTSpecificationSpecificClassName()
         {
             return _converter.ExcelClassNameToCodeName(SUTClassName());

@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 
 namespace SampleTestsRerouting
 {
-    public class SpecificationSpecificRoutingServiceCreationalProperties : ReportsSpecificationSetup
+    public class SpecificationSpecificRoutingService : ReportsSpecificationSetup
     {
-        internal string _rerouteFrom { get; private set;  }
-        public SpecificationSpecificRoutingServiceCreationalProperties RerouteFrom_of(string rerouteFrom)
+        ICargo _reroutedCargo;
+
+        public SpecificationSpecificRoutingService()
+            : base()
+        {
+        }
+
+        internal string _rerouteFrom { get; private set; }
+        public SpecificationSpecificRoutingService RerouteFrom_of(string rerouteFrom)
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, rerouteFrom);
             _rerouteFrom = rerouteFrom;
@@ -19,7 +26,7 @@ namespace SampleTestsRerouting
         }
 
         internal string _rerouteTo { get; private set; }
-        public SpecificationSpecificRoutingServiceCreationalProperties RerouteTo_of(string rerouteTo)
+        public SpecificationSpecificRoutingService RerouteTo_of(string rerouteTo)
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, rerouteTo);
             _rerouteTo = rerouteTo;
@@ -27,32 +34,18 @@ namespace SampleTestsRerouting
         }
 
         internal SpecificationSpecificCargo _cargo { get; private set; }
-        public SpecificationSpecificRoutingServiceCreationalProperties Cargo_of(SpecificationSpecificCargo cargo)
+        public SpecificationSpecificRoutingService Cargo_of(SpecificationSpecificCargo cargo)
         {
             _classProperties.Add(new ReportSpecificationSetupClass(System.Reflection.MethodBase.GetCurrentMethod().Name, cargo));
             _cargo = cargo;
             return this;
         }
-    }
 
-    public class SpecificationSpecificRoutingService : ReportsSpecificationSetup
-    {
-        private readonly RoutingService _routingService;
-        private ICargo _reroutedCargo;
-
-        public SpecificationSpecificRoutingService(SpecificationSpecificRoutingServiceCreationalProperties creationalProperties)
-            : base(creationalProperties)
+        public void Reroute()
         {
-            _routingService = new RoutingService(rerouteFrom: creationalProperties._rerouteFrom, rerouteTo: creationalProperties._rerouteTo, cargo: creationalProperties._cargo.Cargo); 
+            _reroutedCargo = new RoutingService(rerouteFrom: _rerouteFrom, rerouteTo: _rerouteTo, cargo: _cargo.Cargo).Reroute();
         }
 
         public ICargo Returns => _reroutedCargo;
-
-        public ICargo Reroute()
-        {
-            _reroutedCargo = _routingService.Reroute();
-            return _reroutedCargo;
-        }
-
     }
 }

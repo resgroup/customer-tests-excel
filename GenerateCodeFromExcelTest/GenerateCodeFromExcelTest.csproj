@@ -57,9 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RES.Specification.csproj">
+    <ProjectReference Include="..\CustomerTestsExcel.csproj">
       <Project>{8D8AD476-9558-4039-82E0-E0441D81DB85}</Project>
-      <Name>RES.Specification</Name>
+      <Name>CustomerTestsExcel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,6 @@ namespace CustomerTestsExcel
     {
         string Specification { get; }
         string Given { get; }
-        string Creational { get; }
         string Properties { get; }
         string When { get; }
         string WhenValidating { get; }

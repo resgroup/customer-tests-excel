@@ -19,12 +19,9 @@ namespace CustomerTestsExcel
         void EndClass();
 
         void StartClassTable(string propertyName, string className);
-        void ClassTablePropertyNamesHeaderRow(IEnumerable<string> creationalPropertyNames, IEnumerable<string> propertyNames);
+        void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames);
         void ClassTablePropertyRow(IEnumerable<ReportSpecificationSetupProperty> cells);
         void EndClassTable();
-
-        void StartCreationalProperties();
-        void EndCreationalProperties();
 
         void StartGivenProperties();
         void EndGivenProperties();

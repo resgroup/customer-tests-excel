@@ -34,42 +34,22 @@ namespace CustomerTestsExcel.ExcelToCode
 
     class SubClassTableHeader : TableHeader
     {
-        private readonly string _fullSubClassName;
-        public string FullSubClassName { get { return _fullSubClassName; } }
+        public string FullSubClassName { get; }
+        public string SubClassName { get; }
+        public uint StartRow { get; }
+        public uint? PropertiesStartColumn { get; }
+        public uint PropertiesEndColumn { get; }
+        public Dictionary<uint, TableHeader> Headers { get; }
 
-        private readonly string _subClassName;
-        public string subClassName { get { return _subClassName; } }
-
-        private readonly uint _startRow;
-        public uint StartRow { get { return _startRow; } }
-
-        private readonly uint? _creationalPropertiesStartColumn;
-        public uint? CreationalPropertiesStartColumn { get { return _creationalPropertiesStartColumn; } }
-
-        private readonly uint _creationalPropertiesEndColumn;
-        public uint CreationalPropertiesEndColumn { get { return _creationalPropertiesEndColumn; } }
-
-        private readonly uint? _propertiesStartColumn;
-        public uint? PropertiesStartColumn { get { return _propertiesStartColumn; } }
-
-        private readonly uint _propertiesEndColumn;
-        public uint PropertiesEndColumn { get { return _propertiesEndColumn; } }
-
-        private readonly Dictionary<uint, TableHeader> _headers;
-
-        public Dictionary<uint, TableHeader> Headers { get { return _headers; } }
-
-        public SubClassTableHeader(string propertyName, string subClassName, string fullSubClassName, uint startRow, uint endRow, uint? creationalPropertiesStartColumn, uint creationalPropertiesEndColumn, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> headers)
-            : base(propertyName, endRow, Math.Max(creationalPropertiesEndColumn, propertiesEndColumn))
+        public SubClassTableHeader(string propertyName, string subClassName, string fullSubClassName, uint startRow, uint endRow, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> headers)
+            : base(propertyName, endRow, propertiesEndColumn)
         {
-            _subClassName = subClassName;
-            _fullSubClassName = fullSubClassName;
-            _startRow = startRow;
-            _creationalPropertiesStartColumn = creationalPropertiesStartColumn;
-            _creationalPropertiesEndColumn = creationalPropertiesEndColumn;
-            _propertiesStartColumn = propertiesStartColumn;
-            _propertiesEndColumn = propertiesEndColumn;
-            _headers = headers;
+            SubClassName = subClassName;
+            FullSubClassName = fullSubClassName;
+            StartRow = startRow;
+            PropertiesStartColumn = propertiesStartColumn;
+            PropertiesEndColumn = propertiesEndColumn;
+            Headers = headers;
         }
     }
 }
