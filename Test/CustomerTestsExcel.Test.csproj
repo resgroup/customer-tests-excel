@@ -8,8 +8,8 @@
     <ProjectGuid>{AFAEACC5-DF54-4EDE-8D52-FE61F42717C4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RES.Specification.Test</RootNamespace>
-    <AssemblyName>RES.Specification.Test</AssemblyName>
+    <RootNamespace>CustomerTestsExcel.Test</RootNamespace>
+    <AssemblyName>CustomerTestsExcel.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\BuiltDLLs\Debug\</OutputPath>
+    <OutputPath>..\BuiltDLLs\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\BuiltDLLs\Release\</OutputPath>
+    <OutputPath>..\Builtdlls\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
