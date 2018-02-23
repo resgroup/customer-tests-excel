@@ -114,9 +114,6 @@
     <Compile Include="Indentation\TidyUp.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Specification.css" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
