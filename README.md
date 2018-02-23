@@ -12,16 +12,21 @@ Advantages
 - Automated refactoring can be done in C#, using existing tooling, and then the changes written back to Excel
 - The NUnit tests are generated from Excel, so the two are guaranteed to be in sync
 
-# Building
+# Usage
 
-- RES.Specification.sln
-
-# Example
-
-The SampleTests and SampleSystemUnderTest projects are in the main solution (RES.Specification.sln), and are in the SampleTests and SampleSystemUnderTest directories. 
+There are SampleTests and SampleSystemUnderTest projects in the main solution (CustomerTestsExcel.sln), and in the SampleTests and SampleSystemUnderTest directories. 
 
 There is an example Excel test in SampleTests/ExcelTests/Rerouting.xlsx, which looks like this:
 
 ![Example Excel Test](example-excel-test.png "Example Excel Test")
+
+# Building
+
+- CustomerTestsExcel.sln
+
+# Deploying
+
+`nuget pack` in root directory, then push .nupkg to a feed
+
 
 
