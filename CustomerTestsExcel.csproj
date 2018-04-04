@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelToCode\ExcelToCodeException.cs" />
+    <Compile Include="ExcelToCode\PropertyTableHeader.cs" />
+    <Compile Include="ExcelToCode\SubClassTableHeader.cs" />
+    <Compile Include="ExcelToCode\TableHeader.cs" />
     <Compile Include="Indentation\AutoIndentingStringBuilder.cs" />
     <Compile Include="NavigationHTML\AddNavigationToHTMLOutput.cs" />
     <Compile Include="AssertionOperator.cs" />
@@ -65,7 +68,6 @@
     <Compile Include="EqualityAssertionWithPercentagePrecision.cs" />
     <Compile Include="ExcelTabularBook.cs" />
     <Compile Include="ExcelTabularLibrary.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeTableHeaders.cs" />
     <Compile Include="ITabularBook.cs" />
     <Compile Include="ITabularCell.cs" />
     <Compile Include="ITabularLibrary.cs" />
@@ -110,7 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner.cs" />
     <Compile Include="TabularCell.cs" />
-    <Compile Include="TestProjectCreator.cs" />
+    <Compile Include="ExcelToCode\TestProjectCreator.cs" />
     <Compile Include="Indentation\TidyUp.cs" />
   </ItemGroup>
   <ItemGroup>
