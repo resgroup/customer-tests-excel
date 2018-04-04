@@ -11,7 +11,7 @@ namespace CustomerTestsExcel
     {
         string Description();
         T Given();
-        string When(T t);
+        string When(T sut);
         IEnumerable<IAssertion<T>> Assertions();
     }
 }
