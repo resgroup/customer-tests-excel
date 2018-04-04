@@ -29,11 +29,11 @@ namespace CustomerTestsExcel
         public abstract string When(T sut);
         public abstract IEnumerable<IAssertion<T>> Assertions();
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
-        {
+        //[TestFixtureSetUp]
+        //public void TestFixtureSetUp()
+        //{
             //RES.User.Stubs.StubFactoryInitializer.InitializeAll();
-        }
+        //}
 
         [Test]
         public void RunTests()
@@ -45,7 +45,7 @@ namespace CustomerTestsExcel
             if (!passed) Assert.Fail(runner.Message);
         }
 
-        protected static string AssemblyDirectory
+        protected string AssemblyDirectory
         {
             get
             {
@@ -56,19 +56,19 @@ namespace CustomerTestsExcel
             }
         }
 
-        private string GetTrunkPath()
-        {
-            return Path.Combine(new DirectoryInfo(AssemblyDirectory).Parent.Parent.FullName, TrunkRelativePath());
-        }
+        //private string GetTrunkPath()
+        //{
+        //    return Path.Combine(new DirectoryInfo(AssemblyDirectory).Parent.Parent.FullName, TrunkRelativePath());
+        //}
 
         private ITestOutputWriter GetWriter()
         {
-            // executing directory is expected to be svn\builtsdlls\debug, you need to make sure that the build path for your test projects are set to build here.
-            var trunkPath = GetTrunkPath();
+            //var trunkPath = GetTrunkPath();
             var writers = new List<ITestOutputWriter>();
             if (_debugOutput) writers.Add(new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()));
             if (_htmlOutput) writers.Add(new HTMLTestOutputWriter(new HumanFriendlyFormatter()));
-            if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests")));
+            //if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests")));
+            if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), @"Specification\ExcelTests"));
 
             ITestOutputWriter writer;
             if (writers.Any() == false)
