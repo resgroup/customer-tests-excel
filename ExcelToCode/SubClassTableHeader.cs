@@ -5,32 +5,6 @@ using System.Text;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    abstract class TableHeader
-    {
-        private readonly string _propertyName;
-        public string PropertyName { get { return _propertyName; } }
-
-        protected readonly uint _endRow;
-        public uint EndRow { get { return _endRow; } }
-
-        private readonly uint _endColumn;
-        public uint EndColumn { get { return _endColumn; } }
-
-        public TableHeader(string propertyName, uint endRow, uint endColumn)
-        {
-            _propertyName = propertyName;
-            _endRow = endRow;
-            _endColumn = endColumn;
-        }
-    }
-
-    class PropertyTableHeader : TableHeader
-    {
-        public PropertyTableHeader(string propertyName, uint endRow, uint endColumn)
-            : base(propertyName, endRow, endColumn)
-        {
-        }
-    }
 
     class SubClassTableHeader : TableHeader
     {
