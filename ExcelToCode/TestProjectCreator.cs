@@ -5,12 +5,10 @@ using System.Text;
 using System.IO;
 using System.Xml.Linq;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.ExcelToCode
 {
     public static class TestProjectCreator
     {
-        private static XNamespace xNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
-
         public static void Create(string specificationFolder, string specificationProject, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel)
         {
             var projectFilePath = Path.Combine(specificationFolder, specificationProject);
@@ -59,7 +57,6 @@ namespace CustomerTestsExcel
         private static XElement GetItemGroupForCompileNodes(XDocument projectFile)
         {
             var compileItemGroupNode = GetItemGroupForNodeTypes(projectFile, "Compile"); ;
-            compileItemGroupNode.Add(MakeFileElement("Compile", @"Properties\AssemblyInfo.cs"));
             return compileItemGroupNode;
         }
 
@@ -70,18 +67,18 @@ namespace CustomerTestsExcel
 
         private static XElement GetItemGroupForNodeTypes(XDocument projectFile, string nodeName)
         {
-            var compileNodes = projectFile.Descendants(xNamespace + nodeName);
+            var compileNodes = projectFile.Descendants(nodeName);
             XElement compileItemGroupNode;
             if (compileNodes.Any())
             {
-                compileItemGroupNode = projectFile.Descendants(xNamespace + nodeName).First().Parent;
+                compileItemGroupNode = projectFile.Descendants(nodeName).First().Parent;
                 // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
                 compileItemGroupNode.Elements().Where(e => e.Attribute("Include")?.Value?.StartsWith("IgnoreOnGeneration\\") != true).Remove();
             }
             else
             {
 
-                compileItemGroupNode = new XElement(xNamespace + "ItemGroup");
+                compileItemGroupNode = new XElement("ItemGroup");
                 projectFile.Root.Add(compileItemGroupNode);
             }
             return compileItemGroupNode;
@@ -89,7 +86,7 @@ namespace CustomerTestsExcel
 
         private static XElement MakeFileElement(string noteName, string relativeFilePath)
         {
-            return new XElement(xNamespace + noteName, new XAttribute("Include", relativeFilePath));
+            return new XElement(noteName, new XAttribute("Include", relativeFilePath));
         }
 
         private static void OutputWorkbook(string specificationFolder, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, XElement compileItemGroupNode, string excelFileName)
@@ -145,7 +142,7 @@ namespace CustomerTestsExcel
 
         private static string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, string projectRootNamespace)
         {
-            var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter());
+            var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter());
 
             var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
             var outputPath = Path.Combine(outputFolder, projectRelativePath);
