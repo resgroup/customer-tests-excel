@@ -11,5 +11,7 @@
 	<file src="BuiltDlls\Debug\GenerateCodeFromExcelTest.exe.config" target="tools" />
 	<file src="BuiltDlls\Debug\AddNavigationToSpecificationHTMLOutputFiles.exe" target="tools" />
 	<file src="BuiltDlls\Debug\AddNavigationToSpecificationHTMLOutputFiles.exe.config" target="tools" />
+	<file src="BuiltDlls\Debug\CustomerTestsExcel.dll" target="tools" />
+	<file src="BuiltDlls\Debug\DocumentFormat.OpenXml.dll" target="tools" />
   </files>
 </package>
