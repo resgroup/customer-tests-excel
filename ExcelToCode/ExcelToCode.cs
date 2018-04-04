@@ -78,11 +78,11 @@ namespace CustomerTestsExcel.ExcelToCode
             Output($"return \"{ description}\";");
             Output("}");
             Output();
-            Output("public override string TrunkRelativePath()");
-            Output("{");
-            Output($"return \"{projectRootNamespace.Replace('.', '\\')}\";");
-            Output("}");
-            Output();
+            //Output("public override string TrunkRelativePath()");
+            //Output("{");
+            //Output($"return \"{projectRootNamespace.Replace('.', '\\')}\";");
+            //Output("}");
+            //Output();
             Output("// arrange");
             Output($"public override {CSharpSUTSpecificationSpecificClassName()} Given()");
             Output("{");
