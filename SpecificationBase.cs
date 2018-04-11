@@ -24,7 +24,7 @@ namespace CustomerTestsExcel
         protected bool _excelOutput = false; // make this true to write out to excel. this should always be false when checked in, otherwise it will cause a lot of extra work on the build. It should be set to true manually by programmers when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
 
         public abstract string Description();
-        public abstract string TrunkRelativePath();
+        //public abstract string TrunkRelativePath();
         public abstract T Given();
         public abstract string When(T sut);
         public abstract IEnumerable<IAssertion<T>> Assertions();

@@ -18,10 +18,10 @@ namespace SampleTestsRerouting
             return "Reroute Cargo from HKG - DAL to HKG - SEA";
         }
 
-        public override string TrunkRelativePath()
-        {
-            return "SampleTests";
-        }
+        //public override string TrunkRelativePath()
+        //{
+        //    return "SampleTests";
+        //}
 
         // arrange
         public override SpecificationSpecificRoutingService Given()
