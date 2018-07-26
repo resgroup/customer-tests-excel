@@ -1,6 +1,6 @@
 before_build:
- - nuget restore "RES.Caching.sln" -verbosity quiet
+ - nuget restore "CustomerTestsExcel.sln" -verbosity quiet
 build:
-  project: RES.Caching.sln        # path to Visual Studio solution or project
+  project: CustomerTestsExcel.sln        # path to Visual Studio solution or project
   publish_nuget: true             # package projects with .nuspec files and push to artifacts
   publish_nuget_symbols: true     # generate and publish NuGet symbol packages
