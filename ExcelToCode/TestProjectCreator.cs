@@ -9,7 +9,13 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public static class TestProjectCreator
     {
-        public static void Create(string specificationFolder, string specificationProject, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel)
+        public static void Create(
+            string specificationFolder, 
+            string specificationProject, 
+            string projectRootNamespace, 
+            IEnumerable<string> usings, 
+            string assertionClassPrefix, 
+            ITabularLibrary excel)
         {
             var projectFilePath = Path.Combine(specificationFolder, specificationProject);
 
@@ -20,7 +26,7 @@ namespace CustomerTestsExcel.ExcelToCode
             string excelFolder = Path.Combine(specificationFolder, "ExcelTests");
             foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
             {
-                excelItemGroupNode.Add(MakeFileElement("None",Path.Combine("ExcelTests", Path.GetFileName(excelFileName))));
+                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None",Path.Combine("ExcelTests", Path.GetFileName(excelFileName))));
                 OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, compileItemGroupNode, excelFileName);
             }
 
@@ -56,8 +62,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         private static XElement GetItemGroupForCompileNodes(XDocument projectFile)
         {
-            var compileItemGroupNode = GetItemGroupForNodeTypes(projectFile, "Compile"); ;
-            return compileItemGroupNode;
+            return GetItemGroupForNodeTypes(projectFile, "Compile");
         }
 
         private static XElement GetItemGroupForExcelNodes(XDocument projectFile)
@@ -67,29 +72,35 @@ namespace CustomerTestsExcel.ExcelToCode
 
         private static XElement GetItemGroupForNodeTypes(XDocument projectFile, string nodeName)
         {
-            var compileNodes = projectFile.Descendants(nodeName);
+            var compileNodes = projectFile.Descendants().Where(n => n.Name.LocalName == nodeName);
             XElement compileItemGroupNode;
             if (compileNodes.Any())
             {
-                compileItemGroupNode = projectFile.Descendants(nodeName).First().Parent;
+                compileItemGroupNode = compileNodes.First().Parent;
                 // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
                 compileItemGroupNode.Elements().Where(e => e.Attribute("Include")?.Value?.StartsWith("IgnoreOnGeneration\\") != true).Remove();
             }
             else
             {
-
                 compileItemGroupNode = new XElement("ItemGroup");
                 projectFile.Root.Add(compileItemGroupNode);
             }
             return compileItemGroupNode;
         }
 
-        private static XElement MakeFileElement(string noteName, string relativeFilePath)
+        private static XElement MakeFileElement(string xmlNamespace, string nodeName, string relativeFilePath)
         {
-            return new XElement(noteName, new XAttribute("Include", relativeFilePath));
+            return new XElement(XName.Get(nodeName, xmlNamespace), new XAttribute("Include", relativeFilePath));
         }
 
-        private static void OutputWorkbook(string specificationFolder, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, XElement compileItemGroupNode, string excelFileName)
+        private static void OutputWorkbook(
+            string specificationFolder, 
+            string projectRootNamespace, 
+            IEnumerable<string> usings, 
+            string assertionClassPrefix, 
+            ITabularLibrary excel, 
+            XElement compileItemGroupNode, 
+            string excelFileName)
         {
             using (var workbookFile = GetExcelFileStream(excelFileName))
             {
@@ -99,7 +110,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     for (int i = 0; i < workbook.NumberOfPages; i++)
                         if (IsTestSheet(workbook.GetPage(i)))
                         {
-                            compileItemGroupNode.Add(MakeFileElement("Compile", OutputWorkSheet(specificationFolder, usings, assertionClassPrefix, workBookName, workbook.GetPage(i), projectRootNamespace)));
+                            compileItemGroupNode.Add(MakeFileElement(compileItemGroupNode.Name.Namespace.NamespaceName, "Compile", OutputWorkSheet(specificationFolder, usings, assertionClassPrefix, workBookName, workbook.GetPage(i), projectRootNamespace)));
                         }
                 }
             }
