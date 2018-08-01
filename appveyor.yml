@@ -1,6 +1,6 @@
 before_build:
   - nuget restore "CustomerTestsExcel.sln" -verbosity quiet
-  - msbuild CustomerTestsExcel.sln    # build GenerateCodeFromExcelTest.exe
+  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   # build GenerateCodeFromExcelTest.exe
   - SampleTests\GenerateTests.bat     # Regenerate the sample tests from the excel (requires GenerateCodeFromExcelTest.exe)
                                     # TODO: make them write out the excel test again
 build:
