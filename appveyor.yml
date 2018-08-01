@@ -1,7 +1,7 @@
 before_build:
   - nuget restore "CustomerTestsExcel.sln" -verbosity quiet
   - msbuild CustomerTestsExcel.sln    # build GenerateCodeFromExcelTest.exe
-  - SampleTests/GenerateTests.bat     # Regenerate the sample tests from the excel (requires GenerateCodeFromExcelTest.exe)
+  - SampleTests\GenerateTests.bat     # Regenerate the sample tests from the excel (requires GenerateCodeFromExcelTest.exe)
                                     # TODO: make them write out the excel test again
 build:
   project: CustomerTestsExcel.sln   # path to Visual Studio solution or project
