@@ -1,0 +1,1 @@
+"Builtdlls\Release\GenerateCodeFromExcelTest.exe" /folder "SampleTests" /project SampleTests.csproj /namespace SampleTests /usings "SampleSystemUnderTest" /assertionClassPrefix "I"
