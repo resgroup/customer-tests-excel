@@ -84,7 +84,7 @@ namespace CustomerTestsExcel
             _parent = parent;
             _sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
 
-            _sharedStringTable = package.WorkbookPart.SharedStringTablePart.SharedStringTable;
+            _sharedStringTable = package.WorkbookPart.SharedStringTablePart?.SharedStringTable;
 
             PageSetup pageSetup = worksheetPart.Worksheet.GetFirstChild<PageSetup>();
             if (pageSetup != null)

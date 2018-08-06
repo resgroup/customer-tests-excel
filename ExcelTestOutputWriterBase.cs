@@ -49,7 +49,7 @@ namespace CustomerTestsExcel
         void AddSkippedCellWarning(uint row, uint column, object value)
         {
             // put all warnings in cell 1, 3, which is reserved for this purpose
-            _worksheet.SetCell(1, 3, $"{_worksheet.GetCell(1, 3).Value.ToString()} Skipped updating Cell R{row}C{column} to '{value}' as it has a formula in it. Please fix this value by hand, or remove the formula and re run the test.\r\n");
+            _worksheet.SetCell(1, 3, $"{_worksheet.GetCell(1, 3).Value} Skipped updating Cell R{row}C{column} to '{value}' as it has a formula in it. Please fix this value by hand, or remove the formula and re run the test.\r\n");
         }
 
         protected void SetCell(object value)
