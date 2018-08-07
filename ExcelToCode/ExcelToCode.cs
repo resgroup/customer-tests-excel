@@ -64,11 +64,12 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("using NUnit.Framework;");
             Output("using CustomerTestsExcel;");
             Output("using System.Linq.Expressions;");
+            Output($"using {projectRootNamespace};");
             Output();
             foreach (var usingNamespace in usings)
                 Output($"using {usingNamespace};");
             Output();
-            Output($"namespace {projectRootNamespace}{_converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
+            Output($"namespace {projectRootNamespace}.{_converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
             Output("{");
             Output("[TestFixture]");
             Output($"public class {_converter.ExcelSpecificationNameToCodeSpecificationClassName(_worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName()}>, ISpecification<{CSharpSUTSpecificationSpecificClassName()}>");

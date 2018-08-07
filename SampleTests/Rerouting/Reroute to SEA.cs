@@ -5,10 +5,11 @@ using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
 using System.Linq.Expressions;
+using SampleTests;
 
 using SampleSystemUnderTest;
 
-namespace SampleTestsRerouting
+namespace SampleTests.Rerouting
 {
     [TestFixture]
     public class Reroute_To_Sea : SpecificationBase<SpecificationSpecificRoutingService>, ISpecification<SpecificationSpecificRoutingService>
