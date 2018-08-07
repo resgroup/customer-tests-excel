@@ -6,7 +6,7 @@ before_build:
   - GenerateTests.bat        
   - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
   # run the tests, so that they re create the Excel Spreadsheets (requires some environment variables to be set)
-  - nunit3-console.exe Builtdlls\Debug\SampleTests.dll 
+  - nunit3-console.exe Builtdlls\Release\SampleTests.dll 
   # Regenerate the sample tests again. These are tested in the standard test_script.
   - GenerateTests.bat
 build:
