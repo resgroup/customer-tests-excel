@@ -16,24 +16,14 @@ namespace CustomerTestsExcel
         protected T _sut;
 
         // these control what writers are used.
-        // we could have an nunit plugin installed on the build server to make sure that the html output is always generated
-        // I'm not sure about the best way to decide when to output back to excel. Maybe the programmer could add an attribute
-        // to the test which we could check for. Or set the variable below
         protected bool _debugOutput = true;
         protected bool _htmlOutput = false;
-        protected bool _excelOutput = false; // make this true to write out to excel. this should always be false when checked in, otherwise it will cause a lot of extra work on the build. It should be set to true manually by programmers when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
+        protected bool _excelOutput = false; // This can be set to true manually by programmers (on a per test basis) when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
 
         public abstract string Description();
-        //public abstract string TrunkRelativePath();
         public abstract T Given();
         public abstract string When(T sut);
         public abstract IEnumerable<IAssertion<T>> Assertions();
-
-        //[TestFixtureSetUp]
-        //public void TestFixtureSetUp()
-        //{
-            //RES.User.Stubs.StubFactoryInitializer.InitializeAll();
-        //}
 
         [Test]
         public void RunTests()
@@ -56,36 +46,31 @@ namespace CustomerTestsExcel
             }
         }
 
-        //private string GetTrunkPath()
-        //{
-        //    return Path.Combine(new DirectoryInfo(AssemblyDirectory).Parent.Parent.FullName, TrunkRelativePath());
-        //}
-
-        private ITestOutputWriter GetWriter()
+        ITestOutputWriter GetWriter()
         {
-            //var trunkPath = GetTrunkPath();
             var writers = new List<ITestOutputWriter>();
+
             if (_debugOutput) writers.Add(new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()));
             if (_htmlOutput) writers.Add(new HTMLTestOutputWriter(new HumanFriendlyFormatter()));
-            //if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Path.Combine(trunkPath, @"Specification\ExcelTests")));
-            if (_excelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), @"Specification\ExcelTests"));
+            if (ExcelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Environment.GetEnvironmentVariable("CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS") ?? @"..\..\ExcelTests"));
 
-            ITestOutputWriter writer;
-            if (writers.Any() == false)
+            if (writers.Count > 1)
             {
-                writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()); // change this for a null object output writer
+                return new CombinedTestOutputWriter(writers);
             }
-            else if (writers.Any())
+            else if (writers.Count == 1)
             {
-                writer = writers.First();
+                return writers.First();
             }
             else
             {
-                writer = new CombinedTestOutputWriter(writers);
+                return new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()); // change this for a null object output writer
             }
-
-            return writer;
         }
+
+        bool ExcelOutput =>
+            _excelOutput || 
+            Environment.GetEnvironmentVariable("CUSTOMER_TESTS_EXCEL_WRITE_TO_EXCEL")?.ToLowerInvariant() == "true";
 
     }
 }
