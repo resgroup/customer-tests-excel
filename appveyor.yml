@@ -1,3 +1,5 @@
+configuration:
+  - Release
 before_build:
   - nuget restore "CustomerTestsExcel.sln" -verbosity quiet
   # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
