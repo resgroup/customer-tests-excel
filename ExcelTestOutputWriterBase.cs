@@ -29,7 +29,7 @@ namespace CustomerTestsExcel
             var cell = _worksheet.GetCell(row, column);
             if (cell.Value == null || cell.Value.Equals(value) == false)
             {
-                if (cell.IsFormula)
+                if (!cell.IsFormula)
                 {
                     _worksheet.SetCell(row, column, value);
                 }
