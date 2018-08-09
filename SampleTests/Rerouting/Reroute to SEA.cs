@@ -74,5 +74,6 @@ namespace SampleTests.Rerouting
                 )
             };
         }
+        protected override string AssertionClassPrefixAddedByGenerator => "I";
     }
 }

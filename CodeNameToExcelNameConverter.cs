@@ -16,6 +16,13 @@ namespace CustomerTestsExcel
         public const string WHEN_CALCULATING = "Calculating";
         public const string ASSERT = "Assert";
 
+        readonly string assertionClassPrefixAddedByGenerator;
+
+        public CodeNameToExcelNameConverter(string assertionClassPrefixAddedByGenerator)
+        {
+            this.assertionClassPrefixAddedByGenerator = assertionClassPrefixAddedByGenerator;
+    }
+
         public string CodeSpecificationClassNameToExcelName(string cSharpClassName)
         {
             return cSharpClassName.Replace("_", " ");
@@ -94,13 +101,26 @@ namespace CustomerTestsExcel
             return PropertyValueExcelToCode(excelPropertyName, excelAssertValue);
         }
 
-        public string AssertionSubPropertyCodeNameToExcelName(string cSharpAssertPropertyName)
+        public string AssertionSubPropertyCodePropertyNameToExcelName(string cSharpAssertPropertyName)
         {
             return cSharpAssertPropertyName.Replace("SpecificationSpecific", "");
         }
-        public string AssertionSubPropertyExcelNameToCodeName(string excelAssertPropertyName)
+        public string AssertionSubPropertyExcelNameToCodeMethodName(string excelAssertPropertyName)
         {
             return excelAssertPropertyName;
+        }
+
+        public string AssertionSubPropertyCodeClassNameToExcelName(string cSharpAssertClassName)
+        {
+            return RemoveAssertionClassPrefixAddedByGenerator(cSharpAssertClassName);
+        }
+        string RemoveAssertionClassPrefixAddedByGenerator(string cSharpAssertName) =>
+            cSharpAssertName.StartsWith(assertionClassPrefixAddedByGenerator) ? cSharpAssertName.Substring(assertionClassPrefixAddedByGenerator.Length) : cSharpAssertName;
+        // It seems like this should include the AssertionClassPrefixAddedByGenerator, being as the matching method above removes it
+        // It must be added somewhere else, but we should move it here instead.
+        public string AssertionSubPropertyExcelNameToCodeClassName(string excelAssertClassName)
+        {
+            return excelAssertClassName;
         }
 
         public string AssertionSubClassExcelNameToCodeName(string excelClassName)
@@ -109,11 +129,13 @@ namespace CustomerTestsExcel
         }
 
 
+
         // the property name side of an assertion (ig the "IsValid" bit of "IsValid == true"
         public string AssertPropertyCodeNameToExcelName(string cSharpAssertName)
         {
             return cSharpAssertName.Replace("_", " ");
         }
+
         public string AssertPropertyExcelNameToCodeName(string excelAssertName)
         {
             return excelAssertName.Replace(" ", "_");

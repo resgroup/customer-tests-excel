@@ -153,7 +153,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         private static string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, string projectRootNamespace)
         {
-            var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter());
+            var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
 
             var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
             var outputPath = Path.Combine(outputFolder, projectRelativePath);

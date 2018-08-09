@@ -14,6 +14,7 @@ namespace CustomerTestsExcel
         where T : IReportsSpecificationSetup
     {
         protected T _sut;
+        protected abstract string AssertionClassPrefixAddedByGenerator { get; }
 
         // these control what writers are used.
         protected bool _debugOutput = true;
@@ -52,7 +53,7 @@ namespace CustomerTestsExcel
 
             if (_debugOutput) writers.Add(new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()));
             if (_htmlOutput) writers.Add(new HTMLTestOutputWriter(new HumanFriendlyFormatter()));
-            if (ExcelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(), Environment.GetEnvironmentVariable("CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS") ?? @"..\..\ExcelTests"));
+            if (ExcelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(AssertionClassPrefixAddedByGenerator), Environment.GetEnvironmentVariable("CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS") ?? @"..\..\ExcelTests"));
 
             if (writers.Count > 1)
             {

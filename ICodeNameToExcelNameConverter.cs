@@ -36,8 +36,11 @@ namespace CustomerTestsExcel
         object AssertValueCodeNameToExcelName(object cSharpAssertValue);
         string AssertValueExcelNameToCodeName(string excelPropertyName, object excelAssertValue);
 
-        string AssertionSubPropertyCodeNameToExcelName(string cSharpAssertPropertyName);
-        string AssertionSubPropertyExcelNameToCodeName(string excelAssertPropertyName);
+        string AssertionSubPropertyCodePropertyNameToExcelName(string cSharpAssertPropertyName);
+        string AssertionSubPropertyExcelNameToCodeMethodName(string excelAssertPropertyName);
+
+        string AssertionSubPropertyCodeClassNameToExcelName(string cSharpAssertClassName);
+        string AssertionSubPropertyExcelNameToCodeClassName(string excelAssertClassName);
 
         object PropertyValueCodeToExcel(string csharpNameNamespace, object cSharpPropertyValue);
         string PropertyValueExcelToCode(string excelPropertyName, object excelPropertyValue);

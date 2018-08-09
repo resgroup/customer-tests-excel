@@ -38,6 +38,8 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             Output("};");
             Output("}");
+            // This is so that when writing back out to excel, the prefix can be removed. So the prefix exists in the code, but not in excel, and is round trippable
+            Output($"protected override string AssertionClassPrefixAddedByGenerator => \"{_assertionClassPrefix}\";");
             Output("}");
             Output("}");
         }
@@ -79,11 +81,6 @@ namespace CustomerTestsExcel.ExcelToCode
             Output($"return \"{ description}\";");
             Output("}");
             Output();
-            //Output("public override string TrunkRelativePath()");
-            //Output("{");
-            //Output($"return \"{projectRootNamespace.Replace('.', '\\')}\";");
-            //Output("}");
-            //Output();
             Output("// arrange");
             Output($"public override {CSharpSUTSpecificationSpecificClassName()} Given()");
             Output("{");
@@ -501,7 +498,7 @@ namespace CustomerTestsExcel.ExcelToCode
         void DoSubAssertion(int assertIndex, string excelPropertyName, string excelSubClassName, string cSharpClassName)
         {
             string cSharpSubClassName = _assertionClassPrefix + _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
-            string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeName(excelPropertyName);
+            string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
             string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
 
             Output(LeadingComma(assertIndex) + "new ParentAssertion<" + cSharpClassName + ", " + cSharpSubClassName + ">");

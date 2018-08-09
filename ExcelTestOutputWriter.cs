@@ -102,6 +102,7 @@ namespace CustomerTestsExcel
         {
             UnIndent();
         }
+
         public void GivenProperty(ReportSpecificationSetupProperty property)
         {
             SetCell(_namer.GivenPropertyNameCodeNameToExcelName(property.PropertyName, false, null));
@@ -216,13 +217,13 @@ namespace CustomerTestsExcel
 
         }
 
-        public void StartAssertionSubProperties(string cSharpMethodName, bool exists, string cSharpClassName, bool passed)
+        public void StartAssertionSubProperties(string assertPropertyName, bool exists, string cSharpClassName, bool passed)
         {
-            SetCell(_namer.AssertionSubPropertyCodeNameToExcelName(cSharpMethodName));
+            SetCell(_namer.AssertionSubPropertyCodePropertyNameToExcelName(assertPropertyName));
 
             Indent();
 
-            SetCell(_namer.AssertionSubPropertyCodeNameToExcelName(cSharpClassName));
+            SetCell(_namer.AssertionSubPropertyCodeClassNameToExcelName(cSharpClassName));
 
             MoveToNextRow();
 
