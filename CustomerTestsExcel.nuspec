@@ -3,8 +3,13 @@
     <id>$id$</id>
     <version>$version$</version>
     <authors>RES</authors>
+    <title>Customer Tests Excel</title>
+    <title>Customer Tests Excel</title>
     <description>A framework to round trip NUnit to / from Microsoft Excel customer tests</description>
-	</metadata>
+    <projectUrl>https://github.com/resgroup/customer-tests-excel</projectUrl>
+    <licenceUrl>https://raw.githubusercontent.com/resgroup/customer-tests-excel/master/LICENSE</licenceUrl>
+    <iconUrl>https://raw.githubusercontent.com/resgroup/customer-tests-excel/master/customer-tests-excel-icon-small.png</iconUrl>
+  </metadata>
   <files>
 	<file src="BuiltDlls\Release\CustomerTestsExcel.dll" target="lib\net45" />
 	<file src="BuiltDlls\Release\GenerateCodeFromExcelTest.exe" target="tools" />
