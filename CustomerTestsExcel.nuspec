@@ -4,7 +4,6 @@
     <version>$version$</version>
     <authors>RES</authors>
     <title>Customer Tests Excel</title>
-    <title>Customer Tests Excel</title>
     <description>A framework to round trip NUnit to / from Microsoft Excel customer tests</description>
     <projectUrl>https://github.com/resgroup/customer-tests-excel</projectUrl>
     <licenceUrl>https://raw.githubusercontent.com/resgroup/customer-tests-excel/master/LICENSE</licenceUrl>
