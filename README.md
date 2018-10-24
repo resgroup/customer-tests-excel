@@ -55,7 +55,7 @@ During the AppVeyor build, the SampleTests Excel spreadsheets are converted in t
 
 Click "Deploy" on the relevant AppVeyor build if you have access to it.
 
-Otherwise, `nuget pack` in root directory, then push .nupkg to a feed
+Otherwise, `nuget pack CustomerTestsExcel.csproj -build` in root directory, then push .nupkg to a feed
 
 
 
