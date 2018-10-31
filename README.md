@@ -51,11 +51,15 @@ The SampleTests project performs both documentation and End to End testing
 
 During the AppVeyor build, the SampleTests Excel spreadsheets are converted in to C# tests, these tests are then run to re-create the spreadsheets, and then the spreadsheets are converted back in to C# again. This ensures that all the conepts contained within the spreadsheets are round trippable.
 
-# Deploying
+# Deploying the Nuget Package
 
 Click "Deploy" on the relevant AppVeyor build if you have access to it.
 
-Otherwise, `nuget pack CustomerTestsExcel.csproj -build` in root directory, then push .nupkg to a feed
+Otherwise
+- `msbuild.exe CustomerTestsExcel.sln /p:Configuration=Release`
+- `nuget restore`
+- `nuget pack CustomerTestsExcel.csproj -build`
+- push .nupkg to a feed
 
 
 
