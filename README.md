@@ -14,19 +14,25 @@ Advantages
 
 # Usage
 
+The easiest way to get started is to use the [scaffolding project](https://github.com/resgroup/customer-tests-excel-scaffolding).
+
+However you can do it manually
+
+- Create a new project (.csproj) for the Customer Tests
 - Install the Nuget Package `CustomerTestsExcel`
-- Create an Excel Spreadsheet with a Test (see below for format)
+- Create an `ExcelTests` folder within the Customer Test project folder
+- Create an Excel Spreadsheet in the `ExcelTests` subfoloder, with a Test (see below for format).
 - Run `GenerateCodeFromExcelTest.exe` to create / update the C# test project
- - For example `GenerateCodeFromExcelTest.exe /folder "SampleTests" /project SampleTests.csproj /namespace SampleTests /usings "SampleSystemUnderTest" /assertionClassPrefix "I"`
+ - For example `GenerateCodeFromExcelTest.exe /folder "CustomerTests" /project CustomerTests.csproj /namespace CustomerTests /usings "SystemUnderTest" /assertionClassPrefix "I"`
  - `GenerateCodeFromExcelTest.exe` will be in the `tools` folder of the nuget package (for example `CustomerTestsExcel.1.0.1\tools`)
- - `/folder` is the desired folder of the Test project relative to the current working directory
- - `/project` is the desired name of the visual studio project
- - `/namespace' is the desired namespace for the tests
+ - `/folder` is the folder of the Customer Test project relative to the current working directory
+ - `/project` is the name of the project
+ - `/namespace' is the namespace to use for the tests
  - `/usings' is space delimited list of namespaces that will be added as `using` statements to the tests
  - `/assertionClassPrefix` is added to the Excel assertion type names when creating the C# names.
-- Open the test project in Visual Studio (For example `SampleTests\SampleTests.csproj`)
+- Open the Customer Test project in Visual Studio (For example `SampleTests\SampleTests.csproj`)
  - Put any custom code under a `IgnoreOnGeneration` folder, so that it will remain when the test project is regenerated.
-- To create the Excel Spreadsheet from the C# code
+- To create the Excel Spreadsheet from the C# code (should you need to)
   - Set a `CUSTOMER_TESTS_EXCEL_WRITE_TO_EXCEL` environment variable to `true`
   - Set a `CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS` environment variable from the Output Folder (for example `bin\debug`) to the `ExcelTests` folder
   - Run the tests
