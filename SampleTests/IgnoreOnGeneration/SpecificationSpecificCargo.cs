@@ -48,7 +48,8 @@ namespace SampleTests
         {
             legs.PropertyName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             _classTableProperties.Add(legs);
-            foreach (var row in legs.Rows) _legs.Add(row.Properties);
+            foreach (var row in legs.Rows)
+                _legs.Add(row.Properties);
             return this;
         }
 
