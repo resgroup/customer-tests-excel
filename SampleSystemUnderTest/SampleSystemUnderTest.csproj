@@ -30,8 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,12 +45,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnovaCalculator\AnovaCalculator.cs" />
+    <Compile Include="AnovaCalculator\AnovaGroupResult.cs" />
+    <Compile Include="AnovaCalculator\AnovaResult.cs" />
+    <Compile Include="AnovaCalculator\AnovaGroupCalculator.cs" />
+    <Compile Include="AnovaCalculator\IAnovaGroup.cs" />
+    <Compile Include="AnovaCalculator\IAnovaGroupResult.cs" />
+    <Compile Include="AnovaCalculator\IAnovaResult.cs" />
     <Compile Include="Cargo.cs" />
     <Compile Include="ICargo.cs" />
     <Compile Include="ILeg.cs" />
     <Compile Include="Leg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
