@@ -223,30 +223,20 @@ namespace SampleTests.Anova
             {
                  new ParentAssertion<SpecificationSpecificAnovaCalculator, IAnovaResult>
                 (
-                    returns => returns.AnovaResult,
+                    anovaResult => anovaResult.AnovaResult,
                     new List<IAssertion<IAnovaResult>>
                     {
-                         new EqualityAssertionWithPercentagePrecision<IAnovaResult>(returns => returns.SS_Between, 1956.2, 0.001)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("SS_Between", "1956.2", "1956.2")
-                        ,new EqualityAssertion<IAnovaResult>(returns => returns.DF_Between, 2)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("DF_Between", "2", "2")
-                        ,new EqualityAssertionWithPercentagePrecision<IAnovaResult>(returns => returns.MS_Between, 978.1, 0.001)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("MS_Between", "978.1", "978.1")
-                        ,new EqualityAssertionWithPercentagePrecision<IAnovaResult>(returns => returns.SS_Within, 4294.1, 0.001)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("SS_Within", "4294.1", "4294.1")
-                        ,new EqualityAssertion<IAnovaResult>(returns => returns.DF_Within, 27)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("DF_Within", "57.7159259259259", "57.7159259259259")
-                        ,new EqualityAssertionWithPercentagePrecision<IAnovaResult>(returns => returns.MS_Within, 159.04, 0.001)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("MS_Within", "74.4006083435473", "74.4006083435473")
-                        ,new EqualityAssertionWithPercentagePrecision<IAnovaResult>(returns => returns.F, 6.15, 0.001)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("F", "13.1463978827107", "13.1463978827107")
-                        ,new EqualityAssertionWithPercentagePrecision<IAnovaResult>(returns => returns.StatisticalSignificance, 0.0063, 0.001)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("StatisticalSignificance", "2.01893044311748E-05", "2.01893044311748E-05")
-                        ,new EqualityAssertionWithPercentagePrecision<IAnovaResult>(returns => returns.EffectSize, 0.312976977105099, 0.001)
-                        //,new ExcelFormulaDoesNotMatchCodeAssertion<IAnovaResult>("EffectSize", "0.312976977105099", "0.312976977105099")
+                          new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.SS_Between, 1956.2, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.DF_Between, 2, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.MS_Between, 978.1, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.SS_Within, 4294.1, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.DF_Within, 27, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.MS_Within, 159.040740740741, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.F, 6.14999650683496, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.StatisticalSignificance, 0.00629669167874152, 0.001)
+                        , new EqualityAssertionWithPercentagePrecision<IAnovaResult>(anovaResult => anovaResult.EffectSize, 0.312976977105099, 0.001)
                     }
                 )
-                //,new ExcelFormulaDoesNotMatchCodeAssertion<SpecificationSpecificAnovaCalculator>("Returns", "", "ANOVA TABLE")
             };
         }
         protected override string AssertionClassPrefixAddedByGenerator => "I";

@@ -8,6 +8,8 @@ using System.Linq.Expressions;
 using SampleTests;
 
 using SampleSystemUnderTest;
+using SampleTests.IgnoreOnGeneration.AnovaCalculator;
+using SampleSystemUnderTest.AnovaCalculator;
 
 namespace SampleTests.Rerouting
 {
