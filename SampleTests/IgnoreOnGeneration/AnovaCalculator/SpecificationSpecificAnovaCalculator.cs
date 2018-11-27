@@ -10,7 +10,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
     {
         internal string variableDescription { get; private set; }
         readonly List<SpecificationSpecificGroup> groups = new List<SpecificationSpecificGroup>();
-        public IAnovaResult Result { get; private set; }
+        public IAnovaResult AnovaResult { get; private set; }
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(string variableDescription)
         {
@@ -32,7 +32,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal void Calculate()
         {
-            Result = new SampleSystemUnderTest.AnovaCalculator.AnovaCalculator(variableDescription, groups.Select(g => g.AnovaGroup)).Calculate();
+            AnovaResult = new SampleSystemUnderTest.AnovaCalculator.AnovaCalculator(variableDescription, groups.Select(g => g.AnovaGroup)).Calculate();
         }
     }
 }

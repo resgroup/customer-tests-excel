@@ -40,7 +40,7 @@ namespace SampleSystemUnderTest.AnovaCalculator
 
             anovaResult.VariableDescription = variableDescription;
 
-            anovaResult.SS_Between = calculatedGroups.Sum(g => g.squaresBetween);
+            anovaResult.SS_Between = calculatedGroups.Sum(g => g.squaresBetween * g.group.Values.Count());
             anovaResult.DF_Between = numberOfGroups - 1;
             anovaResult.MS_Between = anovaResult.SS_Between / anovaResult.DF_Between;
 
@@ -49,7 +49,7 @@ namespace SampleSystemUnderTest.AnovaCalculator
             anovaResult.MS_Within = anovaResult.SS_Within / anovaResult.DF_Within;
 
             anovaResult.F = anovaResult.MS_Between / anovaResult.MS_Within;
-            anovaResult.StatisticalSignificance = new FisherSnedecor(anovaResult.DF_Between, anovaResult.DF_Within).CumulativeDistribution(anovaResult.F);
+            anovaResult.StatisticalSignificance = 1 - new FisherSnedecor(anovaResult.DF_Between, anovaResult.DF_Within).CumulativeDistribution(anovaResult.F);
             anovaResult.EffectSize = anovaResult.SS_Between / (anovaResult.SS_Between + anovaResult.SS_Within);
 
             return anovaResult;

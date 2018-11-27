@@ -10,10 +10,10 @@ namespace SampleSystemUnderTest.AnovaCalculator
     {
         public string VariableDescription { get; set;  }
         public double SS_Between { get; set;  }
-        public double DF_Between { get; set; }
+        public int DF_Between { get; set; }
         public double MS_Between { get; set; }
         public double SS_Within { get; set; }
-        public double DF_Within { get; set; }
+        public int DF_Within { get; set; }
         public double MS_Within { get; set; }
         public double F { get; set; }
         public double StatisticalSignificance { get; set; }
