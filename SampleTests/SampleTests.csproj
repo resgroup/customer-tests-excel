@@ -55,9 +55,9 @@
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculator.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificGroup.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificValue.cs" />
-    <Compile Include="IgnoreOnGeneration\SpecificationSpecificRoutingService.cs" />
-    <Compile Include="IgnoreOnGeneration\SpecificationSpecificItineraryLeg.cs" />
-    <Compile Include="IgnoreOnGeneration\SpecificationSpecificCargo.cs" />
+    <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingService.cs" />
+    <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificItineraryLeg.cs" />
+    <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificCargo.cs" />
     <Compile Include="Anova\One Way Anova.cs" />
     <Compile Include="Rerouting\Reroute To Sea.cs" />
   </ItemGroup>

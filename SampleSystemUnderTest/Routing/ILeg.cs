@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SampleSystemUnderTest
+namespace SampleSystemUnderTest.Routing
 {
-    public interface ICargo
+    public interface ILeg
     {
         string Origin { get; }
         string Destination { get; }
-        IEnumerable<ILeg> ItineraryLegs { get; }
     }
 }

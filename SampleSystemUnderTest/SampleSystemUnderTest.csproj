@@ -52,12 +52,12 @@
     <Compile Include="AnovaCalculator\IAnovaGroup.cs" />
     <Compile Include="AnovaCalculator\IAnovaGroupResult.cs" />
     <Compile Include="AnovaCalculator\IAnovaResult.cs" />
-    <Compile Include="Cargo.cs" />
-    <Compile Include="ICargo.cs" />
-    <Compile Include="ILeg.cs" />
-    <Compile Include="Leg.cs" />
+    <Compile Include="Routing\Cargo.cs" />
+    <Compile Include="Routing\ICargo.cs" />
+    <Compile Include="Routing\ILeg.cs" />
+    <Compile Include="Routing\Leg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoutingService.cs" />
+    <Compile Include="Routing\RoutingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

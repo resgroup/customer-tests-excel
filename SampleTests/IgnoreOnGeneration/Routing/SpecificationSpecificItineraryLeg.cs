@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SampleSystemUnderTest.Routing;
 
-namespace SampleTests
+namespace SampleTests.IgnoreOnGeneration.Routing
 {
     public class SpecificationSpecificItineraryLeg : ReportsSpecificationSetupIBlank
     {

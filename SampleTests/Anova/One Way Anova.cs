@@ -10,6 +10,8 @@ using SampleTests;
 using SampleSystemUnderTest;
 using SampleTests.IgnoreOnGeneration.AnovaCalculator;
 using SampleSystemUnderTest.AnovaCalculator;
+using SampleTests.IgnoreOnGeneration.Routing;
+using SampleSystemUnderTest.Routing;
 
 namespace SampleTests.Anova
 {

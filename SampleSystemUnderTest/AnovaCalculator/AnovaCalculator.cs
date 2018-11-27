@@ -18,8 +18,8 @@ namespace SampleSystemUnderTest.AnovaCalculator
 
         public AnovaCalculator(string variableDescription, IEnumerable<IAnovaGroup> groups)
         {
+            this.groups = groups ?? throw new ArgumentNullException(nameof(groups));
             this.variableDescription = variableDescription;
-            this.groups = groups;
         }
 
         public IAnovaResult Calculate()
