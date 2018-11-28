@@ -21,7 +21,6 @@ namespace CustomerTestsExcel
             else
             {
                 _workbook = _excel.NewBook();
-                //standlone todo _workbook.RemoveDefaultSheets();
             }
 
             string specificationFriendlyName = _namer.CodeSpecificationClassNameToExcelName(specificationName);
@@ -156,6 +155,7 @@ namespace CustomerTestsExcel
 
         public void EndClassTable()
         {
+            UnIndent();
         }
 
         public void EndGiven()

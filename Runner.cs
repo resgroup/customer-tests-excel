@@ -180,7 +180,7 @@ namespace CustomerTestsExcel
 
                     foreach (var classTableProperty in properties.ClassTableProperties)
                     {
-                        if (classTableProperty.Rows.Count() > 0)
+                        if (classTableProperty.Rows.Any())
                         {
                             _writer.StartClassTable(classTableProperty.PropertyName, ClassName(classTableProperty.Rows.First().Properties));
                             _writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
