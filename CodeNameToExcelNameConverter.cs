@@ -215,7 +215,7 @@ namespace CustomerTestsExcel
             //decimal
             if (stringValue.EndsWith("m", StringComparison.InvariantCulture) && IsNumeric(stringValue.Substring(0, stringValue.Length - 1)))
                 return stringValue;
-            //// the excel parser does not appear to return a decimal for cells formatted as "money" so this currently does not work. i am leaving it here because it could become useful if the feature is implemented somewhere else, like in RES.Excel.
+            //// the excel parser does not appear to return a decimal for cells formatted as "money" so this currently does not work. i am leaving it here because it could become useful if the feature is implemented somewhere else.
             //if (excelPropertyValue is decimal) 
             //    return string.Format(CultureInfo.InvariantCulture, "{0}m", excelPropertyValue);
 

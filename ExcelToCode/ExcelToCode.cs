@@ -7,7 +7,7 @@ using System.Text;
 namespace CustomerTestsExcel.ExcelToCode
 {
     // this clase is very much too big, split in to smaller ones
-    // easy targets would be give, when, assert.
+    // easy targets would be given, when, assert.
     // the various property types could probably also be split off quite easily as well
     // a better way of doing this would probably be to form a representation of the test in code (like the _assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
     // might be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
