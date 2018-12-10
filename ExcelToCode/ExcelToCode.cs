@@ -453,15 +453,15 @@ namespace CustomerTestsExcel.ExcelToCode
             }
             else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLowerInvariant() == "percentageprecision")
             {
-                DoEqualityWithPercentagePrecisionAssertion(assertIndex, excelPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
+                DoEqualityWithPercentagePrecisionAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
             }
             else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLowerInvariant() == "stringformat")
             {
-                DoEqualityWithStringFormatAssertion(assertIndex, excelPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
+                DoEqualityWithStringFormatAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
             }
             else if (assertionOperatorOrExcelSubClassName == "=")
             {
-                DoEqualityAssertion(assertIndex, excelPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName);
+                DoEqualityAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName);
             }
             else
             {
