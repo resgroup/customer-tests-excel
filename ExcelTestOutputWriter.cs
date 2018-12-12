@@ -78,7 +78,7 @@ namespace CustomerTestsExcel
 
         public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
         {
-            SetCell(_namer.GivenPropertyNameCodeNameToExcelName(propertyName, isChild, indexInParent));
+            SetCell( _namer.GivenPropertyNameCodeNameToExcelName(propertyName, isChild, indexInParent));
             if (isNull)
             {
                 Indent();
@@ -145,7 +145,7 @@ namespace CustomerTestsExcel
             {
                 foreach (var cell in cells)
                 {
-                    SetCell(_namer.PropertyValueCodeToExcel(cell.PropertyNamespace, cell.PropertyValue));
+                    SetCell(_namer.PropertyValueExcelToCode(_namer.AssertPropertyCodeNameToExcelName(cell.PropertyName), cell.PropertyValue), _namer.PropertyValueCodeToExcel(cell.PropertyNamespace, cell.PropertyValue));
                     Indent();
                 }
             }
@@ -193,18 +193,18 @@ namespace CustomerTestsExcel
         {
             using (SavePosition())
             {
-                SetCell(_namer.AssertPropertyCodeNameToExcelName(assertPropertyName));
+                SetCell(_namer.AssertPropertyCodeNameToExcelName(assertPropertyName), assertPropertyName);
                 Indent();
 
                 SetCell(_namer.AssertionOperatorCodeNameToExcelName(assertionOperator));
                 Indent();
 
-                SetCell(_namer.AssertValueCodeNameToExcelName(assertPropertyExpectedValue));
+                SetCell(_namer.PropertyValueExcelToCode(_namer.AssertPropertyCodeNameToExcelName(assertPropertyName), assertPropertyExpectedValue), _namer.AssertValueCodeNameToExcelName(assertPropertyExpectedValue));
                 Indent();
 
                 foreach (var assertionSpecific in assertionSpecifics)
                 {
-                    SetCell(assertionSpecific);
+                    SetCell(assertionSpecific, assertionSpecific);
                     Indent();
                 }
             }
@@ -244,7 +244,6 @@ namespace CustomerTestsExcel
 
             _workbook.SaveAs(GetFilename(specificationNamespace));
 
-            // standlone todo _workbook.Dispose();
             _workbook = null;
         }
 
@@ -267,7 +266,6 @@ namespace CustomerTestsExcel
 
         private string GetFilename(string assemblyName)
         {
-            // executing directory is expected to be svn\builtsdlls\debug, you need to make sure that the build path for your test projects are set to build here.
             return Path.Combine(_excelFolder, _namer.CodeNamespaceToExcelFileName(assemblyName) + "." + _excel.DefaultExtension);
         }
 

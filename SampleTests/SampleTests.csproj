@@ -86,4 +86,7 @@
     <None Include="ExcelTests\Anova.xlsx" />
     <None Include="ExcelTests\Rerouting.xlsx" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Anova\" />
+  </ItemGroup>
 </Project>

@@ -24,21 +24,25 @@ namespace CustomerTestsExcel
             _namer = namer;
         }
 
-        protected void SetCell(uint row, uint column, object value)
+        protected void SetCell(uint row, uint column, string cSharpValue, object excelValue)
         {
             var cell = _worksheet.GetCell(row, column);
-            if (cell.Value == null || cell.Value.Equals(value) == false)
+            if (cell.Value == null || (cell.Value.Equals(excelValue) == false && cell.Value.ToString() != cSharpValue))
             {
                 if (!cell.IsFormula)
                 {
-                    _worksheet.SetCell(row, column, value);
+                    _worksheet.SetCell(row, column, excelValue);
                 }
                 else
                 {
-                    AddSkippedCellWarning(row, column, value);
-                    _worksheet.SetCell(row, column + 1, value);
+                    AddSkippedCellWarning(row, column, excelValue);
                 }
             }
+        }
+
+        protected void SetCell(uint row, uint column, object value)
+        {
+            SetCell(row, column, "", value);
         }
 
         protected void ClearSkippedCellWarnings()
@@ -54,7 +58,12 @@ namespace CustomerTestsExcel
 
         protected void SetCell(object value)
         {
-            SetCell(_row, _column, value);
+            SetCell(_row, _column, "", value);
+        }
+
+        protected void SetCell(string cSharpValue, object value)
+        {
+            SetCell(_row, _column, cSharpValue, value);
         }
 
         protected void SetPosition(uint row, uint column)
