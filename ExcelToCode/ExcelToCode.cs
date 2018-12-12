@@ -197,7 +197,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             var headers = ReadHeaders();
 
-            uint lastColumn = (uint)headers.Max(h => h.Value.EndColumn);
+            uint lastColumn = headers.Max(h => h.Value.EndColumn);
             uint propertiesEndColumn = lastColumn;
 
             Output($"var {cSharpVariableName} = new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>();");
@@ -205,7 +205,7 @@ namespace CustomerTestsExcel.ExcelToCode
             int row = 0;
             uint moveDown = 1 + (headers.Max(h => h.Value.EndRow) - _row);
             MoveDown(moveDown);
-            while (TableHasMoreRows())
+            while (TableHasMoreRows(lastColumn))
             {
                 using (SavePosition())
                 {
@@ -303,9 +303,9 @@ namespace CustomerTestsExcel.ExcelToCode
             Output($"var {cSharpVariableName} = new {cSharpSpecificationSpecificClassName}();");
 
         // This should work when there are sub classes in the table
-        bool TableHasMoreRows()
+        bool TableHasMoreRows(uint lastColumn)
         {
-            if (AllColumnsAreEmpty()) return false;
+            if (RowToColumnIsEmpty(lastColumn)) return false;
             if (AnyPrecedingColumnHasAValue()) return false;
 
             return true;

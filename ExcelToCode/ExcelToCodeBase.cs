@@ -81,25 +81,24 @@ namespace CustomerTestsExcel.ExcelToCode
             return (index == 0) ? " " : ",";
         }
 
-        protected bool RowToCurrentColumnIsEmpty()
+        protected bool RowToColumnIsEmpty(uint column)
         {
-            for (uint column = 1; column <= _column; column++)
+            for (uint columnToCheck = 1; columnToCheck <= column; columnToCheck++)
             {
-                if (!string.IsNullOrWhiteSpace(Cell(_row, column))) return false;
+                if (!string.IsNullOrWhiteSpace(Cell(_row, columnToCheck))) return false;
             }
 
             return true;
         }
 
-        protected bool AnyPrecedingColumnHasAValue()
-        {
-            for (uint column = 1; column < _column; column++)
-            {
-                if (!string.IsNullOrWhiteSpace(Cell(_row, column))) return true;
-            }
+        protected bool RowToCurrentColumnIsEmpty() =>
+            RowToColumnIsEmpty(_column);
 
-            return false;
-        }
+        protected bool AllColumnsAreEmpty() =>
+            RowToColumnIsEmpty(GetLastColumn());
+
+        protected bool AnyPrecedingColumnHasAValue() =>
+            !RowToColumnIsEmpty(_column - 1);
 
         protected bool AnyFollowingColumnHasAValue(int rowOffset = 0)
         {
@@ -110,16 +109,6 @@ namespace CustomerTestsExcel.ExcelToCode
             }
 
             return false;
-        }
-
-        protected bool AllColumnsAreEmpty()
-        {
-            for (uint column = 1; column <= GetLastColumn(); column++)
-            {
-                if (!string.IsNullOrWhiteSpace(Cell(_row, column))) return false;
-            }
-
-            return true;
         }
 
         protected void MoveDown(uint by = 1)
