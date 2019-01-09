@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.IO;
 using System.Linq;
+using static System.Reflection.Assembly;
 
 namespace CustomerTestsExcel
 {
@@ -218,28 +219,14 @@ namespace CustomerTestsExcel
             return element;
         }
 
-        private string GetCreatingApplicationName()
+        string GetCreatingApplicationName()
         {
-            string creatingApplicationName = "Unknown";
-            try
-            {
-                string[] splitString = GetCreatingApplicationFullNameSplitByCommas();
-                if (splitString.Length > 0)
-                {
-                    creatingApplicationName = splitString[0];
-                }
-            }
-            catch
-            {
-            }
-            return creatingApplicationName;
+            var splitString = GetCreatingApplicationFullNameSplitByCommas();
+            return (splitString.Length > 0) ? splitString[0] : "Unknown";
         }
 
-        private string[] GetCreatingApplicationFullNameSplitByCommas()
-        {
-            string fullApplicationName = System.Reflection.Assembly.GetEntryAssembly().FullName;
-            return fullApplicationName.Split(',');
-        }
+        string[] GetCreatingApplicationFullNameSplitByCommas() =>
+            GetEntryAssembly()?.FullName?.Split(',') ?? new string[] { };
 
         public bool DeleteWorkSheet(string nameOfWorkSheetToDelete)
         {
