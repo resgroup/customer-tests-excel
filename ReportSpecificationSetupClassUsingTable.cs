@@ -8,7 +8,7 @@ namespace CustomerTestsExcel
     public interface IReportSpecificationSetupClassUsingTable<out T>
         where T : IReportsSpecificationSetup
     {
-        string PropertyName { get; }
+        string PropertyName { get; set; }
         IEnumerable<IReportSpecificationSetupClassUsingTableRow<T>> Rows { get; }
     }
 
