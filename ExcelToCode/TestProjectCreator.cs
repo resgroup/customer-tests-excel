@@ -146,10 +146,8 @@ namespace CustomerTestsExcel.ExcelToCode
             return templateStream;
         }
 
-        private static bool IsTestSheet(ITabularPage excelSheet)
-        {
-            return excelSheet.GetCell(1, 1).Value != null ? (excelSheet.GetCell(1, 1).Value.ToString() == "Specification") : false;
-        }
+        static bool IsTestSheet(ITabularPage excelSheet) =>
+            excelSheet.GetCell(1, 1).Value != null && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
 
         private static string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, string projectRootNamespace)
         {
