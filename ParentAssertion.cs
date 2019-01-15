@@ -60,8 +60,6 @@ namespace CustomerTestsExcel
             }
         }
 
-        private object Index => new ParseAssertionProperty(Property).Index;
-
         private string PropertyName => new ParseAssertionProperty(Property).PropertyName;
 
         private IEnumerable<IAssertion<Child>> ChildAssertions { get; set; }
