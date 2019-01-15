@@ -181,7 +181,7 @@ namespace CustomerTestsExcel.ExcelToCode
             return new TidyUp(() => { _row = row; _column = column; });
         }
 
-        protected TidyUp AutoCloseIndent(uint by = 1)
+        protected TidyUp AutoRestoreExcelMoveRight(uint by = 1)
         {
             Indent();
             return new TidyUp(() => UnIndent(by));

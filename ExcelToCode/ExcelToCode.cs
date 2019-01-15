@@ -90,7 +90,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             MoveDownToToken(_converter.Given);
 
-            using (AutoCloseIndent())
+            using (AutoRestoreExcelMoveRight())
             {
                 _sutName = CurrentCell();
 
@@ -120,7 +120,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             if (CurrentCell() == markAtBeginningOfProperties)
             {
-                using (AutoCloseIndent())
+                using (AutoRestoreExcelMoveRight())
                 {
                     MoveDown();
                     while (!string.IsNullOrEmpty(CurrentCell()))
@@ -140,7 +140,7 @@ namespace CustomerTestsExcel.ExcelToCode
             // variable name = instrumentCalibration
             // we actually don't need the index any more now that each item in the list has its own scope, so we could remove it from the excel definition
             var excelGivenLeft = CurrentCell();
-            using (AutoCloseIndent())
+            using (AutoRestoreExcelMoveRight())
             {
                 var excelGivenRight = CurrentCellRaw();
                 var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
@@ -366,7 +366,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             MoveDownToToken(_converter.When);
 
-            using (AutoCloseIndent())
+            using (AutoRestoreExcelMoveRight())
             {
                 Output();
                 Output("// act");
@@ -521,7 +521,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output(LeadingComma(assertIndex) + $"new TableAssertion<{cSharpClassName}, {cSharpSubClassName}>");
             using (AutoCloseBracket())
             {
-                using (AutoCloseIndent())
+                using (AutoRestoreExcelMoveRight())
                 {
                     Output($"{cSharpVariableName} => {cSharpVariableName}.{cSharpSubMethodName},");
                     Output($"new List<List<IAssertion<{cSharpSubClassName}>>>");
@@ -665,7 +665,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output(LeadingComma(assertIndex) + $"new ParentAssertion<{cSharpClassName}, {cSharpSubClassName}>");
             using (AutoCloseBracket())
             {
-                using (AutoCloseIndent())
+                using (AutoRestoreExcelMoveRight())
                 {
                     Output($"{cSharpVariableName} => {cSharpVariableName}.{cSharpSubMethodName},");
                     Output($"new List<IAssertion<{cSharpSubClassName}>>");
