@@ -113,6 +113,7 @@
     <Compile Include="ITestOutputWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner.cs" />
+    <Compile Include="TableAssertion.cs" />
     <Compile Include="TabularCell.cs" />
     <Compile Include="ExcelToCode\TestProjectCreator.cs" />
     <Compile Include="Indentation\TidyUp.cs" />
