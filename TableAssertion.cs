@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using CustomerTestsExcel;
 
-namespace RES.Energy.Gross.CustomerTestsExcel.BlockageLossFactorInputsCalculator
+namespace CustomerTestsExcel
 {
     public class TableAssertion<Parent, Child> : IAssertion<Parent> where Child : class
     {
