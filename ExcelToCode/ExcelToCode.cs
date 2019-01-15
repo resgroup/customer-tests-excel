@@ -214,10 +214,10 @@ namespace CustomerTestsExcel.ExcelToCode
                     using (Scope())
                     {
                         SetAllPropertiesOnTableRowVariable(
-                            indexedCSharpVariableName, 
-                            cSharpSpecificationSpecificClassName, 
-                            propertiesStartColumn, 
-                            propertiesEndColumn, 
+                            indexedCSharpVariableName,
+                            cSharpSpecificationSpecificClassName,
+                            propertiesStartColumn,
+                            propertiesEndColumn,
                             headers);
 
                         Output($"{cSharpVariableName}.Add({indexedCSharpVariableName});");
@@ -430,15 +430,21 @@ namespace CustomerTestsExcel.ExcelToCode
         // IllustrativeFoundationCost|=|2479680|PercentagePrecision|0.001 
         // CFDCalculator|CFDCalulator (this starts off a class which contains sub properties to be asserted)
         //              |TotalCost|=|0 (this is a property of CFDCalculator to assert)  
+        // TurbineLocationAndDimensions|table of|TurbineLocationAndDimension (this starts off a list property which contains rows to be asserted) 
+        //           |easterly_m              |northerly_m (these column headers can define assertion properties, but vertically instead of horizontally
+        //           |=                       |=
+        //           |WithPercentagePrecision |WithPercentagePrecision
+        //           |0.001                   |0.001
+        //           |2                       |3 (these rows assert the properties for an item in the list)
         void DoAssertion(int assertIndex, string cSharpClassName, string cSharpVariableName)
         {
             string excelPropertyName = CurrentCell();
             string simpleCSharpPropertyName = _converter.AssertPropertyExcelNameToCodeName(excelPropertyName);
             Indent();
-            string assertionOperatorOrExcelSubClassName = CurrentCell();
+            string assertionOperatorOrExcelSubClassNameOrTableOf = CurrentCell();
             Indent();
             string excelPropertyValue = CurrentCell();
-            string cSharpPropertyValue = _converter.AssertValueExcelNameToCodeName(excelPropertyName, CurrentCellRaw());
+            string cSharpPropertyValue = _converter.AssertValueExcelNameToCodeName(excelPropertyValue, CurrentCellRaw());
             Indent();
             string assertionSpecificKey = CurrentCell();
             Indent();
@@ -449,23 +455,27 @@ namespace CustomerTestsExcel.ExcelToCode
 
             if (string.IsNullOrWhiteSpace(excelPropertyValue))
             {
-                DoSubAssertion(assertIndex, simpleCSharpPropertyName, assertionOperatorOrExcelSubClassName, cSharpClassName);
+                DoSubAssertion(assertIndex, simpleCSharpPropertyName, assertionOperatorOrExcelSubClassNameOrTableOf, cSharpClassName);
             }
-            else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLowerInvariant() == "percentageprecision")
+            else if (assertionOperatorOrExcelSubClassNameOrTableOf == "table of")
+            {
+                DoTableAssertion(assertIndex, simpleCSharpPropertyName, excelPropertyValue, cSharpClassName);
+            }
+            else if (assertionOperatorOrExcelSubClassNameOrTableOf == "=" && assertionSpecificKey.ToLowerInvariant() == "percentageprecision")
             {
                 DoEqualityWithPercentagePrecisionAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
             }
-            else if (assertionOperatorOrExcelSubClassName == "=" && assertionSpecificKey.ToLowerInvariant() == "stringformat")
+            else if (assertionOperatorOrExcelSubClassNameOrTableOf == "=" && assertionSpecificKey.ToLowerInvariant() == "stringformat")
             {
                 DoEqualityWithStringFormatAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionSpecificValue);
             }
-            else if (assertionOperatorOrExcelSubClassName == "=")
+            else if (assertionOperatorOrExcelSubClassNameOrTableOf == "=")
             {
                 DoEqualityAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName);
             }
             else
             {
-                throw new Exception("Invalid assertion operator found in excel file: " + assertionOperatorOrExcelSubClassName);
+                throw new Exception("Invalid assertion operator found in excel file: " + assertionOperatorOrExcelSubClassNameOrTableOf);
             }
 
             if (!string.IsNullOrWhiteSpace(roundTripValue))
@@ -473,6 +483,157 @@ namespace CustomerTestsExcel.ExcelToCode
                 assertIndex++;
                 DoExcelFormulaDoesNotMatchCodeAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, roundTripValue, cSharpClassName);
             }
+        }
+
+        // wants to look something like this
+        /*
+            , new TableAssertion<BlockageLossFactorInputs, TurbineLocationAndDimension>(
+            inputs => inputs.turbineLocationAndDimensions,
+            new List<List<IAssertion<TurbineLocationAndDimension>>>
+            {
+                new List<IAssertion<TurbineLocationAndDimension>>
+                {
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.easterly_m, 2, 0.001),
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.northerly_m, 3, 0.001),
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.hubHeight_m, 4, 0.001),
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.rotorDiameter_m, 5, 0.001)
+                },
+                new List<IAssertion<TurbineLocationAndDimension>>
+                {
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.easterly_m, 7, 0.001),
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.northerly_m, 8, 0.001),
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.hubHeight_m, 9, 0.001),
+                new EqualityAssertionWithPercentagePrecision<TurbineLocationAndDimension>(turbineLocationAndDimensions => turbineLocationAndDimensions.rotorDiameter_m, 10, 0.001)
+                },
+            }
+            )
+         */
+        void DoTableAssertion(int assertIndex, string excelPropertyName, string excelSubClassName, string cSharpClassName)
+        {
+            string cSharpSubClassName = _assertionClassPrefix + _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
+            string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
+            string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
+
+            // first row is property name, "table of" and property type, the headers start on the row below that
+            MoveDown();
+            var assertionTableHeaders = ReadAssertionTableHeaders();
+
+            Output(LeadingComma(assertIndex) + $"new TableAssertion<{cSharpClassName}, {cSharpSubClassName}>");
+            using (AutoCloseBracket())
+            {
+                using (AutoCloseIndent())
+                {
+                    Output($"{cSharpVariableName} => {cSharpVariableName}.{cSharpSubMethodName},");
+                    Output($"new List<List<IAssertion<{cSharpSubClassName}>>>");
+                    using (AutoCloseCurlyBracket())
+                    {
+                        int tableRowIndex = 0;
+                        while (_row <= GetLastRow() && !RowToCurrentColumnIsEmpty() && !AnyPrecedingColumnHasAValue()) // should encapsulate this conditional
+                        {
+                            Output($"{LeadingComma(tableRowIndex)}new List<IAssertion<{cSharpSubClassName}>>");
+                            tableRowIndex++;
+                            using (AutoCloseCurlyBracket())
+                            {
+                                using (_code.AutoCloseIndent())
+                                {
+                                    using (SavePosition())
+                                    {
+                                        int tableColumnIndex = 0;
+                                        foreach (var assertionTableHeader in assertionTableHeaders)
+                                        {
+                                            DoTableCellAssertion(tableColumnIndex, cSharpSubClassName, cSharpVariableName, assertionTableHeader);
+                                            Indent();
+                                            tableColumnIndex++;
+                                        }
+                                    }
+                                }
+                            }
+
+                            MoveDown();
+                        }
+                    }
+                }
+            }
+
+            // we should leave the row at the last row of the TABLE assertions. The calling DoAssertions (it is recursive) calls MoveDown to move on to the next assertion row after this method.
+            // This seems like a bad pattern though, we should probably fix it up. Assertions should be responsible for moving the cursor on themselves.
+            MoveUp();
+        }
+
+        IEnumerable<AssertionTableHeader> ReadAssertionTableHeaders()
+        {
+            var assertionTableHeaders = new List<AssertionTableHeader>();
+
+            using (SavePosition())
+            {
+                // headers are indented one to the right, this makes it visually easier to pick them out, and makes it easier to detect the end of the table in code
+                MoveRight();
+
+                while (string.IsNullOrWhiteSpace(CurrentCell()) == false)
+                {
+                    using (SavePosition())
+                    {
+                        var propertyName = CurrentCell();
+
+                        MoveDown();
+                        var assertionOperator = CurrentCell();
+
+                        MoveDown();
+                        string assertionSpecificKey = "";
+                        string assertionSpecificValue = "";
+                        if (CurrentCell().ToLowerInvariant() == "percentageprecision" || CurrentCell().ToLowerInvariant() == "stringformat")
+                        {
+                            assertionSpecificKey = CurrentCell();
+                            MoveDown();
+                            assertionSpecificValue = CurrentCell();
+                        }
+
+                        assertionTableHeaders.Add(
+                            new AssertionTableHeader(
+                                propertyName,
+                                assertionOperator,
+                                assertionSpecificKey,
+                                assertionSpecificValue));
+                    }
+
+                    MoveRight();
+                }
+            }
+
+            // there can be 2 or 4 rows in the header
+            MoveDown(assertionTableHeaders.Max(a => a.Rows()));
+
+            return assertionTableHeaders;
+        }
+
+        void DoTableCellAssertion(int assertIndex, string cSharpClassName, string cSharpVariableName, AssertionTableHeader assertionTableHeader)
+        {
+            string excelPropertyValue = CurrentCell();
+            string cSharpPropertyValue = _converter.AssertValueExcelNameToCodeName(excelPropertyValue, CurrentCellRaw());
+
+            if (assertionTableHeader.AssertionOperator == "=" && assertionTableHeader.AssertionSpecificKey.ToLowerInvariant() == "percentageprecision")
+            {
+                DoEqualityWithPercentagePrecisionAssertion(assertIndex, assertionTableHeader.PropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionTableHeader.AssertionSpecificValue);
+            }
+            else if (assertionTableHeader.AssertionOperator == "=" && assertionTableHeader.AssertionSpecificKey.ToLowerInvariant() == "stringformat")
+            {
+                DoEqualityWithStringFormatAssertion(assertIndex, assertionTableHeader.PropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName, assertionTableHeader.AssertionSpecificValue);
+            }
+            else if (assertionTableHeader.AssertionOperator == "=")
+            {
+                DoEqualityAssertion(assertIndex, assertionTableHeader.PropertyName, cSharpPropertyValue, cSharpClassName, cSharpVariableName);
+            }
+            else
+            {
+                throw new Exception("Invalid assertion operator found in excel file: " + assertionTableHeader.AssertionOperator);
+            }
+
+            // When the excel is created from the code, it won't overwrite any calculations, unless there is important stuff in them.
+            // In this case it adds some text to reserved cell a3 to indicate this, and writes out the value it would have written
+            // in the column next to the assertion (assuming there is no calculation there). If these values are in an excel 
+            // sheet, the code which generates the c# outputs an error, telling you to fix it up. This logic isn't done for assertion
+            // tables, which at the moment isn't a problem as the tables can't convert themselves from c# to excel anyway.
+
         }
 
         void DoEqualityWithStringFormatAssertion(int assertIndex, string cSharpPropertyName, string cSharpPropertyValue, string cSharpClassName, string cSharpVariableName, string assertionSpecificValue)
@@ -492,7 +653,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void DoEqualityAssertion(int assertIndex, string cSharpPropertyName, string cSharpPropertyValue, string cSharpClassName, string cSharpVariableName)
         {
-            Output(LeadingComma(assertIndex) + "new EqualityAssertion<" + cSharpClassName + ">(" + cSharpVariableName + " => " + cSharpVariableName + "." + cSharpPropertyName + ", " + cSharpPropertyValue + ")");
+            Output($"{LeadingComma(assertIndex)} new EqualityAssertion<{cSharpClassName}>({cSharpVariableName} => {cSharpVariableName}.{cSharpPropertyName}, {cSharpPropertyValue})");
         }
 
         void DoSubAssertion(int assertIndex, string excelPropertyName, string excelSubClassName, string cSharpClassName)
@@ -501,23 +662,28 @@ namespace CustomerTestsExcel.ExcelToCode
             string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
             string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
 
-            Output(LeadingComma(assertIndex) + "new ParentAssertion<" + cSharpClassName + ", " + cSharpSubClassName + ">");
-            Output("(");
-            using (_code.AutoCloseIndent())
+            Output(LeadingComma(assertIndex) + $"new ParentAssertion<{cSharpClassName}, {cSharpSubClassName}>");
+            using (AutoCloseBracket())
             {
-                Output(cSharpVariableName + " => " + cSharpVariableName + "." + cSharpSubMethodName + ",");
-                Output("new List<IAssertion<" + cSharpSubClassName + ">>");
-
-                Output("{");
                 using (AutoCloseIndent())
                 {
-                    DoAssertions(cSharpSubClassName, cSharpVariableName);
+                    Output($"{cSharpVariableName} => {cSharpVariableName}.{cSharpSubMethodName},");
+                    Output($"new List<IAssertion<{cSharpSubClassName}>>");
 
-                    MoveUp(); // we should leave the row at the last row of the sub assertions. The calling DoAssertions (it is recursive) calls MoveDown to move on to the next assertion row after this method.
+                    using (AutoCloseCurlyBracket())
+                    {
+                        using (_code.AutoCloseIndent())
+                        {
+                            DoAssertions(cSharpSubClassName, cSharpVariableName);
+
+                            // we should leave the row at the last row of the sub assertions. The calling DoAssertions (it is recursive) calls MoveDown to move on to the next assertion row after this method.
+                            // This seems like a bad pattern though, we should probably fix it up. Assertions should be responsible for moving the cursor on themselves.
+                            MoveUp();
+                        }
+                    }
+
                 }
-                Output("}");
             }
-            Output(")");
         }
 
     }

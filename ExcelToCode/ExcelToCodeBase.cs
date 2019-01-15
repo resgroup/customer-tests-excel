@@ -152,11 +152,26 @@ namespace CustomerTestsExcel.ExcelToCode
             return column;
         }
 
-        protected TidyUp Scope()
-        {
+        protected void OpenCurlyBracket() =>
             Output("{");
-            return new TidyUp(() => Output("}"));
-        }
+
+        protected void CloseCurlyBracket() =>
+            Output("}");
+
+        protected TidyUp Scope() =>
+            AutoCloseCurlyBracket();
+
+        protected TidyUp AutoCloseCurlyBracket() =>
+            new TidyUp(OpenCurlyBracket, CloseCurlyBracket);
+
+        protected void OpenBracket() =>
+            Output("(");
+
+        protected void CloseBracket() =>
+            Output(")");
+
+        protected TidyUp AutoCloseBracket() =>
+            new TidyUp(OpenBracket, CloseBracket);
 
         protected TidyUp SavePosition()
         {
