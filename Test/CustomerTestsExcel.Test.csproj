@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
-    <Compile Include="NoBlankLineBetweenGivenAndWhen.cs" />
     <Compile Include="CreateTableHeadersTest.cs" />
     <Compile Include="EqualityAssertionWithStringFormatTest.cs" />
     <Compile Include="EqualityAssertionWithPercentagePrecisionTest.cs" />
@@ -84,7 +83,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="TestExcelFiles\NoBlankLineBetweenGivenAndWhen.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
