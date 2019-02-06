@@ -1,0 +1,11 @@
+<NUnitProject>
+  <Settings activeconfig="Debug"/>
+  <Config name="Debug">
+    <assembly path="BuiltDlls\Debug\CustomerTestsExcel.Test.dll"/>
+    <assembly path="BuiltDlls\Debug\SampleTests.dll"/>
+  </Config>
+  <Config name="Release">
+    <assembly path="BuiltDlls\Release\CustomerTestsExcel.Test.dll"/>
+    <assembly path="BuiltDlls\Release\SampleTests.dll"/>
+  </Config>
+</NUnitProject>
