@@ -1,5 +1,5 @@
 <NUnitProject>
-  <Settings activeconfig="Debug"/>
+  <Settings activeconfig="Release"/>
   <Config name="Debug">
     <assembly path="BuiltDlls\Debug\CustomerTestsExcel.Test.dll"/>
     <assembly path="BuiltDlls\Debug\SampleTests.dll"/>
