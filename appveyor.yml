@@ -31,7 +31,7 @@ build_script:
  - OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"CustomerTestsExcel.nunit" -output:"coverage.xml" -returntargetcode
  - SonarQube.Scanner.MSBuild.exe end /d:"sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2"
  # create the nuget package
- - msbuild CustomerTestsExcel.csproj /t:pack /p:IncludeSymbols=true /nowarn:1125 /verbosity:quiet
+ - nuget pack CustomerTestsExcel.csproj -Symbols
 test_script:
   # upload the code coverage to codcov.io
   - ps: |
