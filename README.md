@@ -2,6 +2,11 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/wv0th0n4xknitplp?svg=true)](https://ci.appveyor.com/project/RESSoftwareTeam/customer-tests-excel)
 
+[![codecov](https://codecov.io/gh/resgroup/customer-tests-excel/branch/master/graph/badge.svg)](https://codecov.io/gh/resgroup/customer-tests-excel)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CustomerTestsExcel&metric=alert_status)](https://sonarcloud.io/dashboard?id=CustomerTestsExcel)
+
+
 A framework to round trip NUnit to / from Microsoft Excel customer tests.
 
 Created as a replacment for Fitnesse. RES is primarily a science and engineering company, and due to the calculation heavy nature of the work, none of the existing customer test frameworks are a good fit.
@@ -20,12 +25,13 @@ However you can do it manually
 
 - Create a new project (.csproj) for the Customer Tests
 - Install the Nuget Package `CustomerTestsExcel`
+- Install the Nuget Package `CustomerTestsExcel`
 - Create an `ExcelTests` folder within the Customer Test project folder
 - Create an Excel Spreadsheet in the `ExcelTests` subfoloder, with a Test (see below for format).
 - Run `GenerateCodeFromExcelTest.exe` to create / update the C# test project
  - For example `GenerateCodeFromExcelTest.exe /folder "CustomerTests" /project CustomerTests.csproj /namespace CustomerTests /usings "SystemUnderTest" /assertionClassPrefix "I"`
  - `GenerateCodeFromExcelTest.exe` will be in the `tools` folder of the nuget package (for example `CustomerTestsExcel.1.0.1\tools`)
- - `/folder` is the folder of the Customer Test project relative to the current working directory
+ - `/folder` is the folder of the Customer Test project relative to the current working directory 
  - `/project` is the name of the project
  - `/namespace' is the namespace to use for the tests
  - `/usings' is space delimited list of namespaces that will be added as `using` statements to the tests
