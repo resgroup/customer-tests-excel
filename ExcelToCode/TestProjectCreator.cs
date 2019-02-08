@@ -33,7 +33,7 @@ namespace CustomerTestsExcel.ExcelToCode
             SaveProjectFile(projectFilePath, project);
         }
 
-        private static IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
+        static IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
         {
             var combinedList = new List<string>();
             combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsx"));
@@ -42,7 +42,7 @@ namespace CustomerTestsExcel.ExcelToCode
             return combinedList;
         }
 
-        private static XDocument OpenProjectFile(string projectPath)
+        static XDocument OpenProjectFile(string projectPath)
         {
             XDocument projectFile;
             using (var projectStreamReader = new StreamReader(projectPath))
@@ -52,7 +52,7 @@ namespace CustomerTestsExcel.ExcelToCode
             return projectFile;
         }
 
-        private static void SaveProjectFile(string projectPath, XDocument projectFile)
+        static void SaveProjectFile(string projectPath, XDocument projectFile)
         {
             using (var projectStreamWriter = new StreamWriter(projectPath))
             {
@@ -60,17 +60,17 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        private static XElement GetItemGroupForCompileNodes(XDocument projectFile)
+        static XElement GetItemGroupForCompileNodes(XDocument projectFile)
         {
             return GetItemGroupForNodeTypes(projectFile, "Compile");
         }
 
-        private static XElement GetItemGroupForExcelNodes(XDocument projectFile)
+        static XElement GetItemGroupForExcelNodes(XDocument projectFile)
         {
             return GetItemGroupForNodeTypes(projectFile, "None");
         }
 
-        private static XElement GetItemGroupForNodeTypes(XDocument projectFile, string nodeName)
+        static XElement GetItemGroupForNodeTypes(XDocument projectFile, string nodeName)
         {
             var compileNodes = projectFile.Descendants().Where(n => n.Name.LocalName == nodeName);
             XElement compileItemGroupNode;
@@ -88,12 +88,12 @@ namespace CustomerTestsExcel.ExcelToCode
             return compileItemGroupNode;
         }
 
-        private static XElement MakeFileElement(string xmlNamespace, string nodeName, string relativeFilePath)
+        static XElement MakeFileElement(string xmlNamespace, string nodeName, string relativeFilePath)
         {
             return new XElement(XName.Get(nodeName, xmlNamespace), new XAttribute("Include", relativeFilePath));
         }
 
-        private static void OutputWorkbook(
+        static void OutputWorkbook(
             string specificationFolder, 
             string projectRootNamespace, 
             IEnumerable<string> usings, 
@@ -149,7 +149,7 @@ namespace CustomerTestsExcel.ExcelToCode
         static bool IsTestSheet(ITabularPage excelSheet) =>
             excelSheet.GetCell(1, 1).Value != null && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
 
-        private static string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, string projectRootNamespace)
+        static string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, string projectRootNamespace)
         {
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
 
@@ -160,7 +160,7 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 try
                 {
-                    outputFile.Write(sheetConverter.GenerateCSharpTestCode(usings, assertionClassPrefix, sheet, projectRootNamespace, workBookName));
+                    outputFile.Write(sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName));
                 }
                 catch (Exception ex)
                 {

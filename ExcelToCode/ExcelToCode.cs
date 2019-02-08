@@ -1,4 +1,5 @@
 ﻿using CustomerTestsExcel.Indentation;
+using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,23 +7,26 @@ using System.Text;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    // this clase is very much too big, split in to smaller ones
+    // this class is very much too big, split in to smaller ones
     // easy targets would be given, when, assert.
     // the various property types could probably also be split off quite easily as well
     // a better way of doing this would probably be to form a representation of the test in code (like the _assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
     // might be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
-        string _assertionClassPrefix;
-        public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter) { }
+        readonly List<string> issuesPreventingRoundTrip;
 
-        public string GenerateCSharpTestCode(IEnumerable<string> usings, string assertionClassPrefix, ITabularPage worksheet, string projectRootNamespace, string workBookName)
+        public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter)
         {
-            _worksheet = worksheet;
+            issuesPreventingRoundTrip = new List<string>();
+        }
+
+        public string GenerateCSharpTestCode(IEnumerable<string> usings, ITabularPage worksheet, string projectRootNamespace, string workBookName)
+        {
+            base.worksheet = worksheet;
             _code = new AutoIndentingStringBuilder("    ");
-            _column = 1;
-            _row = 1;
-            _assertionClassPrefix = assertionClassPrefix ?? "";
+            column = 1;
+            row = 1;
 
             var description = DoSpecification();
             DoGiven(usings, description, projectRootNamespace, workBookName);
@@ -39,20 +43,40 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("};");
             Output("}");
             // This is so that when writing back out to excel, the prefix can be removed. So the prefix exists in the code, but not in excel, and is round trippable
-            Output($"protected override string AssertionClassPrefixAddedByGenerator => \"{_assertionClassPrefix}\";");
+            Output();
+            Output($"protected override string AssertionClassPrefixAddedByGenerator => \"{_converter.AssertionClassPrefixAddedByGenerator}\";");
+            OutputRoundTripIssues();
             Output("}");
             Output("}");
         }
 
+        void OutputRoundTripIssues()
+        {
+            if (issuesPreventingRoundTrip.Any())
+            {
+                Output();
+                Output($"protected override string RoundTrippable() => false;");
+                Output();
+                Output("protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {");
+                Output(
+                    string.Join(
+                        "," + Environment.NewLine,
+                        issuesPreventingRoundTrip.Select(issue => "\"" + issue + "\"")
+                    )
+                );
+                Output("};");
+            }
+        }
+
         string DoSpecification()
         {
-            MoveDownToToken(_converter.Specification);
+            ExcelMoveDownToToken(_converter.Specification);
 
-            Indent();
+            ExcelIndent();
             var description = CurrentCell();
-            UnIndent();
+            ExcelUnIndent();
 
-            MoveDown();
+            ExcelMoveDown();
 
             return description;
         }
@@ -74,7 +98,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output($"namespace {projectRootNamespace}.{_converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
             Output("{");
             Output("[TestFixture]");
-            Output($"public class {_converter.ExcelSpecificationNameToCodeSpecificationClassName(_worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName()}>, ISpecification<{CSharpSUTSpecificationSpecificClassName()}>");
+            Output($"public class {_converter.ExcelSpecificationNameToCodeSpecificationClassName(worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName()}>, ISpecification<{CSharpSUTSpecificationSpecificClassName()}>");
             Output("{");
             Output("public override string Description()");
             Output("{");
@@ -88,7 +112,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void DoGiven(IEnumerable<string> usings, string description, string projectRootNamespace, string workBookName)
         {
-            MoveDownToToken(_converter.Given);
+            ExcelMoveDownToToken(_converter.Given);
 
             using (AutoRestoreExcelMoveRight())
             {
@@ -100,17 +124,36 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 EndGiven();
             }
+
+            CheckExactlyOneBlankLineBetweenGivenAndWhen();
+        }
+
+        void CheckExactlyOneBlankLineBetweenGivenAndWhen()
+        {
+            uint endOfGiven = row;
+            uint startOfWhen;
+
+            using (SavePosition())
+            {
+                ExcelMoveDownToToken(_converter.When);
+                startOfWhen = row;
+            }
+
+            if (startOfWhen - endOfGiven <= 1)
+                issuesPreventingRoundTrip.Add($"There is no blank line between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, tab '{worksheet.Name}'");
+            else if (startOfWhen - endOfGiven > 2)
+                issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, tab '{worksheet.Name}'");
         }
 
         void CreateObject(string cSharpVariableName, string cSharpClassName)
         {
-            MoveDown(); // this is a bit mysterious
+            ExcelMoveDown(); // this is a bit mysterious
 
             DeclareVariable(cSharpVariableName, cSharpClassName);
 
             SetVariableProperties(cSharpVariableName, _converter.Properties, "");
 
-            MoveUp(); // this is a bit mysterious
+            ExcelMoveUp(); // this is a bit mysterious
         }
 
         void DeclareVariable(string cSharpVariableName, string cSharpClassName) =>
@@ -122,11 +165,11 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 using (AutoRestoreExcelMoveRight())
                 {
-                    MoveDown();
+                    ExcelMoveDown();
                     while (!string.IsNullOrEmpty(CurrentCell()))
                     {
                         DoProperty(cSharpVariableName, cSharpVariableNamePostfix);
-                        MoveDown();
+                        ExcelMoveDown();
                     }
                 }
             }
@@ -192,7 +235,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             // read token that speficy the start of the properties
             //todo: this should always be the first column now that we don't have creational properties to worry about
-            MoveDown();
+            ExcelMoveDown();
             uint? propertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Properties);
 
             var headers = ReadHeaders();
@@ -203,8 +246,8 @@ namespace CustomerTestsExcel.ExcelToCode
             Output($"var {cSharpVariableName} = new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>();");
 
             int row = 0;
-            uint moveDown = 1 + (headers.Max(h => h.Value.EndRow) - _row);
-            MoveDown(moveDown);
+            uint moveDown = 1 + (headers.Max((KeyValuePair<uint, TableHeader> h) => h.Value.EndRow) - base.row);
+            ExcelMoveDown(moveDown);
             while (TableHasMoreRows(lastColumn))
             {
                 using (SavePosition())
@@ -225,23 +268,23 @@ namespace CustomerTestsExcel.ExcelToCode
                     row++;
                 }
 
-                MoveDown();
+                ExcelMoveDown();
             }
 
-            MoveUp();
+            ExcelMoveUp();
         }
 
         private Dictionary<uint, TableHeader> ReadHeaders()
         {
             var headers = new Dictionary<uint, TableHeader>();
-            MoveDown();
+            ExcelMoveDown();
             using (SavePosition())
             {
                 while (CurrentCell() != "")
                 {
                     var test = CurrentCell();
-                    headers.Add(_column, CreatePropertyHeader());
-                    MoveRight();
+                    headers.Add(column, CreatePropertyHeader());
+                    ExcelMoveRight();
                 }
             }
 
@@ -253,7 +296,7 @@ namespace CustomerTestsExcel.ExcelToCode
             if (PeekBelow(2) == _converter.Properties)
                 return CreateSubClassHeader();
 
-            return new PropertyTableHeader(CurrentCell(), _row, _column);
+            return new PropertyTableHeader(CurrentCell(), row, column);
         }
 
         SubClassTableHeader CreateSubClassHeader()
@@ -267,27 +310,27 @@ namespace CustomerTestsExcel.ExcelToCode
             var headers = new Dictionary<uint, TableHeader>();
 
             // this is a almost a straight copy of the original read proeprty headers code so we will be able to reuse it (the detection of the end of the properties is different, and the positioning is different, other than that its identical I think)
-            startRow = _row;
+            startRow = row;
             using (SavePosition())
             {
                 propertyName = _converter.GivenPropertyNameExcelNameToCodeName(CurrentCell());
-                MoveDown();
+                ExcelMoveDown();
                 subClassName = CurrentCell();
-                MoveDown();
+                ExcelMoveDown();
                 propertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Properties);
 
-                MoveDown();
+                ExcelMoveDown();
                 do
                 {
-                    headers.Add(_column, CreatePropertyHeader());
-                    MoveRight();
+                    headers.Add(column, CreatePropertyHeader());
+                    ExcelMoveRight();
                 } while (PeekAbove(3) == "" && AnyFollowingColumnHasAValue(-3) == true); // Need to detect end of the sub property. This is by the existence of a property name in the parent proeprty header row, which is 3 rows up, so peek for this. The other condition is when there is no more data in the parent property header row
 
-                propertiesEndColumn = _column - 1;
-                endRow = _row;
+                propertiesEndColumn = column - 1;
+                endRow = row;
             }
 
-            MoveRight((uint)headers.Count - 1);
+            ExcelMoveRight((uint)headers.Count - 1);
 
             return new SubClassTableHeader(propertyName, subClassName, _converter.ExcelClassNameToCodeName(subClassName), startRow, endRow, propertiesStartColumn, propertiesEndColumn, headers);
         }
@@ -315,32 +358,32 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             if (propertiesStartColumn.HasValue)
             {
-                if (_column != propertiesStartColumn.Value) throw new ExcelToCodeException("Table must have a 'With Properties' token, which must be on the first column of the table.");
+                if (column != propertiesStartColumn.Value) throw new ExcelToCodeException("Table must have a 'With Properties' token, which must be on the first column of the table.");
 
-                while (_column <= propertiesEndColumn)
+                while (column <= propertiesEndColumn)
                 {
                     SetPropertyOnTableRowVariable(headers, cSharpVariableName);
-                    MoveRight();
+                    ExcelMoveRight();
                 }
             }
         }
 
         void SetPropertyOnTableRowVariable(Dictionary<uint, TableHeader> headers, string cSharpVariableName)
         {
-            if (headers[_column] is SubClassTableHeader)
+            if (headers[column] is SubClassTableHeader)
             {
-                var subClassHeader = headers[_column] as SubClassTableHeader;
+                var subClassHeader = headers[column] as SubClassTableHeader;
                 string subClassCSharpVariableName = $"{cSharpVariableName}_{subClassHeader.SubClassName.Replace(".", "")}"; // this <.Replace(".", "")> is shared with DoProperty, we should move in into the _converter
 
                 SetAllPropertiesOnTableRowVariable(subClassCSharpVariableName, subClassHeader.FullSubClassName, subClassHeader.PropertiesStartColumn, subClassHeader.PropertiesEndColumn, subClassHeader.Headers);
 
-                MoveLeft();
+                ExcelMoveLeft();
 
                 Output($"{cSharpVariableName}.{_converter.GivenPropertyNameExcelNameToCodeName(subClassHeader.PropertyName)}({subClassCSharpVariableName});");
             }
-            else if (headers[_column] is PropertyTableHeader)
+            else if (headers[column] is PropertyTableHeader)
             {
-                var propertyHeader = headers[_column] as PropertyTableHeader;
+                var propertyHeader = headers[column] as PropertyTableHeader;
 
                 Output($"{cSharpVariableName}.{_converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.PropertyName)}({_converter.PropertyValueExcelToCode(propertyHeader.PropertyName, CurrentCellRaw())});");
             }
@@ -364,7 +407,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected void DoWhen()
         {
-            MoveDownToToken(_converter.When);
+            ExcelMoveDownToToken(_converter.When);
 
             using (AutoRestoreExcelMoveRight())
             {
@@ -393,19 +436,19 @@ namespace CustomerTestsExcel.ExcelToCode
                 Output();
             }
 
-            MoveDown();
+            ExcelMoveDown();
         }
 
         void DoAssert()
         {
-            MoveDownToToken(_converter.Assert);
+            ExcelMoveDownToToken(_converter.Assert);
 
             Output("public override IEnumerable<IAssertion<" + CSharpSUTSpecificationSpecificClassName() + ">> Assertions()");
             Output("{");
             Output("return new List<IAssertion<" + CSharpSUTSpecificationSpecificClassName() + ">>");
             Output("{");
 
-            Indent();
+            ExcelIndent();
 
             DoAssertions(CSharpSUTSpecificationSpecificClassName(), VariableCase(CSharpSUTVariableName()));
         }
@@ -414,15 +457,15 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             int assertIndex = 0;
 
-            MoveDown();
+            ExcelMoveDown();
 
-            while (_row <= GetLastRow() && !RowToCurrentColumnIsEmpty() && !AnyPrecedingColumnHasAValue())
+            while (row <= GetLastRow() && !RowToCurrentColumnIsEmpty() && !AnyPrecedingColumnHasAValue())
             {
                 DoAssertion(assertIndex, cSharpClassName, cSharpVariableName);
 
                 assertIndex++;
 
-                MoveDown();
+                ExcelMoveDown();
             }
         }
 
@@ -440,18 +483,18 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             string excelPropertyName = CurrentCell();
             string simpleCSharpPropertyName = _converter.AssertPropertyExcelNameToCodeName(excelPropertyName);
-            Indent();
+            ExcelIndent();
             string assertionOperatorOrExcelSubClassNameOrTableOf = CurrentCell();
-            Indent();
+            ExcelIndent();
             string excelPropertyValue = CurrentCell();
             string cSharpPropertyValue = _converter.AssertValueExcelNameToCodeName(excelPropertyValue, CurrentCellRaw());
-            Indent();
+            ExcelIndent();
             string assertionSpecificKey = CurrentCell();
-            Indent();
+            ExcelIndent();
             string assertionSpecificValue = CurrentCell();
-            Indent();
+            ExcelIndent();
             string roundTripValue = CurrentCell();
-            UnIndent(5);
+            ExcelUnIndent(5);
 
             if (string.IsNullOrWhiteSpace(excelPropertyValue))
             {
@@ -510,16 +553,16 @@ namespace CustomerTestsExcel.ExcelToCode
          */
         void DoTableAssertion(int assertIndex, string excelPropertyName, string excelSubClassName, string cSharpClassName)
         {
-            string cSharpSubClassName = _assertionClassPrefix + _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
+            string cSharpSubClassName = _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
             string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
             string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
 
             // first row is property name, "table of" and property type, the headers start on the row below that
-            MoveDown();
+            ExcelMoveDown();
             var assertionTableHeaders = ReadAssertionTableHeaders();
 
             Output(LeadingComma(assertIndex) + $"new TableAssertion<{cSharpClassName}, {cSharpSubClassName}>");
-            using (AutoCloseBracket())
+            using (AutoCloseBracketAndIndent())
             {
                 using (AutoRestoreExcelMoveRight())
                 {
@@ -528,7 +571,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     using (AutoCloseCurlyBracket())
                     {
                         int tableRowIndex = 0;
-                        while (_row <= GetLastRow() && !RowToCurrentColumnIsEmpty() && !AnyPrecedingColumnHasAValue()) // should encapsulate this conditional
+                        while (row <= GetLastRow() && !RowToCurrentColumnIsEmpty() && !AnyPrecedingColumnHasAValue()) // should encapsulate this conditional
                         {
                             Output($"{LeadingComma(tableRowIndex)}new List<IAssertion<{cSharpSubClassName}>>");
                             tableRowIndex++;
@@ -542,14 +585,14 @@ namespace CustomerTestsExcel.ExcelToCode
                                         foreach (var assertionTableHeader in assertionTableHeaders)
                                         {
                                             DoTableCellAssertion(tableColumnIndex, cSharpSubClassName, cSharpVariableName, assertionTableHeader);
-                                            Indent();
+                                            ExcelIndent();
                                             tableColumnIndex++;
                                         }
                                     }
                                 }
                             }
 
-                            MoveDown();
+                            ExcelMoveDown();
                         }
                     }
                 }
@@ -557,7 +600,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             // we should leave the row at the last row of the TABLE assertions. The calling DoAssertions (it is recursive) calls MoveDown to move on to the next assertion row after this method.
             // This seems like a bad pattern though, we should probably fix it up. Assertions should be responsible for moving the cursor on themselves.
-            MoveUp();
+            ExcelMoveUp();
         }
 
         IEnumerable<AssertionTableHeader> ReadAssertionTableHeaders()
@@ -567,7 +610,7 @@ namespace CustomerTestsExcel.ExcelToCode
             using (SavePosition())
             {
                 // headers are indented one to the right, this makes it visually easier to pick them out, and makes it easier to detect the end of the table in code
-                MoveRight();
+                ExcelMoveRight();
 
                 while (string.IsNullOrWhiteSpace(CurrentCell()) == false)
                 {
@@ -575,16 +618,16 @@ namespace CustomerTestsExcel.ExcelToCode
                     {
                         var propertyName = CurrentCell();
 
-                        MoveDown();
+                        ExcelMoveDown();
                         var assertionOperator = CurrentCell();
 
-                        MoveDown();
+                        ExcelMoveDown();
                         string assertionSpecificKey = "";
                         string assertionSpecificValue = "";
                         if (CurrentCell().ToLowerInvariant() == "percentageprecision" || CurrentCell().ToLowerInvariant() == "stringformat")
                         {
                             assertionSpecificKey = CurrentCell();
-                            MoveDown();
+                            ExcelMoveDown();
                             assertionSpecificValue = CurrentCell();
                         }
 
@@ -596,12 +639,12 @@ namespace CustomerTestsExcel.ExcelToCode
                                 assertionSpecificValue));
                     }
 
-                    MoveRight();
+                    ExcelMoveRight();
                 }
             }
 
             // there can be 2 or 4 rows in the header
-            MoveDown(assertionTableHeaders.Max(a => a.Rows()));
+            ExcelMoveDown(assertionTableHeaders.Max(a => a.Rows()));
 
             return assertionTableHeaders;
         }
@@ -658,12 +701,12 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void DoSubAssertion(int assertIndex, string excelPropertyName, string excelSubClassName, string cSharpClassName)
         {
-            string cSharpSubClassName = _assertionClassPrefix + _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
+            string cSharpSubClassName = _converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
             string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
             string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
 
             Output(LeadingComma(assertIndex) + $"new ParentAssertion<{cSharpClassName}, {cSharpSubClassName}>");
-            using (AutoCloseBracket())
+            using (AutoCloseBracketAndIndent())
             {
                 using (AutoRestoreExcelMoveRight())
                 {
@@ -672,14 +715,11 @@ namespace CustomerTestsExcel.ExcelToCode
 
                     using (AutoCloseCurlyBracket())
                     {
-                        using (_code.AutoCloseIndent())
-                        {
-                            DoAssertions(cSharpSubClassName, cSharpVariableName);
+                        DoAssertions(cSharpSubClassName, cSharpVariableName);
 
-                            // we should leave the row at the last row of the sub assertions. The calling DoAssertions (it is recursive) calls MoveDown to move on to the next assertion row after this method.
-                            // This seems like a bad pattern though, we should probably fix it up. Assertions should be responsible for moving the cursor on themselves.
-                            MoveUp();
-                        }
+                        // we should leave the row at the last row of the sub assertions. The calling DoAssertions (it is recursive) calls MoveDown to move on to the next assertion row after this method.
+                        // This seems like a bad pattern though, we should probably fix it up. Assertions should be responsible for moving the cursor on themselves.
+                        ExcelMoveUp();
                     }
 
                 }

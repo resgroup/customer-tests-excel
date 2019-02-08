@@ -22,13 +22,13 @@ namespace SampleTests.Anova
         {
             return "Calculate One Way Anova";
         }
-
+        
         // arrange
         public override SpecificationSpecificAnovaCalculator Given()
         {
             var anovaCalculator = new SpecificationSpecificAnovaCalculator();
             anovaCalculator.VariableDescription_of("IQ");
-
+            
             {
                 var group = new SpecificationSpecificGroup();
                 group.Name_of("Langley School");
@@ -88,7 +88,7 @@ namespace SampleTests.Anova
                 }
                 anovaCalculator.Groups_of(group);
             }
-
+            
             {
                 var group = new SpecificationSpecificGroup();
                 group.Name_of("Ninestiles School");
@@ -148,7 +148,7 @@ namespace SampleTests.Anova
                 }
                 anovaCalculator.Groups_of(group);
             }
-
+            
             {
                 var group = new SpecificationSpecificGroup();
                 group.Name_of("Alderbrook School");
@@ -208,17 +208,17 @@ namespace SampleTests.Anova
                 }
                 anovaCalculator.Groups_of(group);
             }
-
+            
             return anovaCalculator;
         }
-
+        
         // act
         public override string When(SpecificationSpecificAnovaCalculator anovaCalculator)
         {
             anovaCalculator.Calculate();
             return "Calculate";
         }
-
+        
         public override IEnumerable<IAssertion<SpecificationSpecificAnovaCalculator>> Assertions()
         {
             return new List<IAssertion<SpecificationSpecificAnovaCalculator>>
@@ -241,6 +241,7 @@ namespace SampleTests.Anova
                 )
             };
         }
+        
         protected override string AssertionClassPrefixAddedByGenerator => "I";
     }
 }

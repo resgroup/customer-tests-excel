@@ -16,12 +16,12 @@ namespace CustomerTestsExcel
         public const string WHEN_CALCULATING = "Calculating";
         public const string ASSERT = "Assert";
 
-        readonly string assertionClassPrefixAddedByGenerator;
+        public string AssertionClassPrefixAddedByGenerator { get; }
 
         public CodeNameToExcelNameConverter(string assertionClassPrefixAddedByGenerator)
         {
-            this.assertionClassPrefixAddedByGenerator = assertionClassPrefixAddedByGenerator;
-    }
+            AssertionClassPrefixAddedByGenerator = assertionClassPrefixAddedByGenerator;
+        }
 
         public string CodeSpecificationClassNameToExcelName(string cSharpClassName)
         {
@@ -115,7 +115,7 @@ namespace CustomerTestsExcel
             return RemoveAssertionClassPrefixAddedByGenerator(cSharpAssertClassName);
         }
         string RemoveAssertionClassPrefixAddedByGenerator(string cSharpAssertName) =>
-            cSharpAssertName.StartsWith(assertionClassPrefixAddedByGenerator) ? cSharpAssertName.Substring(assertionClassPrefixAddedByGenerator.Length) : cSharpAssertName;
+            cSharpAssertName.StartsWith(AssertionClassPrefixAddedByGenerator) ? cSharpAssertName.Substring(AssertionClassPrefixAddedByGenerator.Length) : cSharpAssertName;
         // It seems like this should include the AssertionClassPrefixAddedByGenerator, being as the matching method above removes it
         // It must be added somewhere else, but we should move it here instead.
         public string AssertionSubPropertyExcelNameToCodeClassName(string excelAssertClassName)
@@ -123,11 +123,8 @@ namespace CustomerTestsExcel
             return excelAssertClassName;
         }
 
-        public string AssertionSubClassExcelNameToCodeName(string excelClassName)
-        {
-            return excelClassName;
-        }
-
+        public string AssertionSubClassExcelNameToCodeName(string excelClassName) =>
+            AssertionClassPrefixAddedByGenerator + excelClassName;
 
 
         // the property name side of an assertion (ig the "IsValid" bit of "IsValid == true"

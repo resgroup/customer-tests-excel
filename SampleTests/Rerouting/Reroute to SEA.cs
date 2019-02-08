@@ -22,14 +22,14 @@ namespace SampleTests.Rerouting
         {
             return "Reroute Cargo from HKG - DAL to HKG - SEA";
         }
-
+        
         // arrange
         public override SpecificationSpecificRoutingService Given()
         {
             var routingService = new SpecificationSpecificRoutingService();
             routingService.RerouteFrom_of("DAL");
             routingService.RerouteTo_of("SEA");
-
+            
             {
                 var cargo = new SpecificationSpecificCargo();
                 cargo.Origin_of("HKG");
@@ -52,17 +52,17 @@ namespace SampleTests.Rerouting
                 }
                 routingService.Cargo_of(cargo);
             }
-
+            
             return routingService;
         }
-
+        
         // act
         public override string When(SpecificationSpecificRoutingService routingService)
         {
             routingService.Reroute();
             return "Reroute";
         }
-
+        
         public override IEnumerable<IAssertion<SpecificationSpecificRoutingService>> Assertions()
         {
             return new List<IAssertion<SpecificationSpecificRoutingService>>
@@ -72,12 +72,13 @@ namespace SampleTests.Rerouting
                     returns => returns.Returns,
                     new List<IAssertion<ICargo>>
                     {
-                         new EqualityAssertion<ICargo>(returns => returns.Origin, "HKG")
-                        ,new EqualityAssertion<ICargo>(returns => returns.Destination, "SEA")
+                          new EqualityAssertion<ICargo>(returns => returns.Origin, "HKG")
+                        , new EqualityAssertion<ICargo>(returns => returns.Destination, "SEA")
                     }
                 )
             };
         }
+        
         protected override string AssertionClassPrefixAddedByGenerator => "I";
     }
 }
