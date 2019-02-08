@@ -7,7 +7,6 @@ namespace CustomerTestsExcel.Test
     [TestFixture]
     public class NoBlankLineBetweenGivenAndWhen : TestBase
     {
-
         [Test]
         public void SheetConverterAddsWarningCommentIfNoBlankLineBetweenGivenAndWhen()
         {
