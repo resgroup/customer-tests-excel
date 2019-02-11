@@ -15,6 +15,7 @@ namespace CustomerTestsExcel.ExcelToCode
     public class ExcelToCode : ExcelToCodeBase
     {
         readonly List<string> issuesPreventingRoundTrip;
+        public IReadOnlyList<string> IssuesPreventingRoundTrip => issuesPreventingRoundTrip;
 
         public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter)
         {
@@ -24,9 +25,10 @@ namespace CustomerTestsExcel.ExcelToCode
         public string GenerateCSharpTestCode(IEnumerable<string> usings, ITabularPage worksheet, string projectRootNamespace, string workBookName)
         {
             base.worksheet = worksheet;
-            _code = new AutoIndentingStringBuilder("    ");
+            code = new AutoIndentingStringBuilder("    ");
             column = 1;
             row = 1;
+            issuesPreventingRoundTrip.Clear();
 
             var description = DoSpecification();
             DoGiven(usings, description, projectRootNamespace, workBookName);
@@ -35,7 +37,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             EndSpecification();
 
-            return _code.ToString();
+            return code.ToString();
         }
 
         void EndSpecification()
@@ -52,7 +54,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void OutputRoundTripIssues()
         {
-            if (issuesPreventingRoundTrip.Any())
+            if (IssuesPreventingRoundTrip.Any())
             {
                 Output();
                 Output($"protected override string RoundTrippable() => false;");
@@ -61,7 +63,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 Output(
                     string.Join(
                         "," + Environment.NewLine,
-                        issuesPreventingRoundTrip.Select(issue => "\"" + issue + "\"")
+                        IssuesPreventingRoundTrip.Select(issue => "\"" + issue + "\"")
                     )
                 );
                 Output("};");
@@ -142,7 +144,7 @@ namespace CustomerTestsExcel.ExcelToCode
             if (startOfWhen - endOfGiven <= 1)
                 issuesPreventingRoundTrip.Add($"There is no blank line between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, tab '{worksheet.Name}'");
             else if (startOfWhen - endOfGiven > 2)
-                issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, tab '{worksheet.Name}'");
+                issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, tab '{worksheet.Name}'");
         }
 
         void CreateObject(string cSharpVariableName, string cSharpClassName)
@@ -577,7 +579,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             tableRowIndex++;
                             using (AutoCloseCurlyBracket())
                             {
-                                using (_code.AutoCloseIndent())
+                                using (code.AutoCloseIndent())
                                 {
                                     using (SavePosition())
                                     {

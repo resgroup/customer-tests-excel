@@ -7,15 +7,19 @@ using System.Xml.Linq;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
+    // This class looks like it would be better if it wasn't static. There are a lot of variables being passed around that could be made instance variables.
+    // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public static class TestProjectCreator
     {
         public static void Create(
             string specificationFolder, 
             string specificationProject, 
+            string excelTestsFolder,
             string projectRootNamespace, 
             IEnumerable<string> usings, 
             string assertionClassPrefix, 
-            ITabularLibrary excel)
+            ITabularLibrary excel,
+            ILogger logger)
         {
             var projectFilePath = Path.Combine(specificationFolder, specificationProject);
 
@@ -23,11 +27,11 @@ namespace CustomerTestsExcel.ExcelToCode
             var compileItemGroupNode = GetItemGroupForCompileNodes(project);
             var excelItemGroupNode = GetItemGroupForExcelNodes(project);
 
-            string excelFolder = Path.Combine(specificationFolder, "ExcelTests");
+            string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
             foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
             {
-                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None",Path.Combine("ExcelTests", Path.GetFileName(excelFileName))));
-                OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, compileItemGroupNode, excelFileName);
+                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None",Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
+                OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
             }
 
             SaveProjectFile(projectFilePath, project);
@@ -98,7 +102,8 @@ namespace CustomerTestsExcel.ExcelToCode
             string projectRootNamespace, 
             IEnumerable<string> usings, 
             string assertionClassPrefix, 
-            ITabularLibrary excel, 
+            ITabularLibrary excel,
+            ILogger logger, 
             XElement compileItemGroupNode, 
             string excelFileName)
         {
@@ -110,7 +115,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     for (int i = 0; i < workbook.NumberOfPages; i++)
                         if (IsTestSheet(workbook.GetPage(i)))
                         {
-                            compileItemGroupNode.Add(MakeFileElement(compileItemGroupNode.Name.Namespace.NamespaceName, "Compile", OutputWorkSheet(specificationFolder, usings, assertionClassPrefix, workBookName, workbook.GetPage(i), projectRootNamespace)));
+                            compileItemGroupNode.Add(MakeFileElement(compileItemGroupNode.Name.Namespace.NamespaceName, "Compile", OutputWorkSheet(specificationFolder, usings, assertionClassPrefix, workBookName, workbook.GetPage(i), logger, projectRootNamespace)));
                         }
                 }
             }
@@ -149,10 +154,17 @@ namespace CustomerTestsExcel.ExcelToCode
         static bool IsTestSheet(ITabularPage excelSheet) =>
             excelSheet.GetCell(1, 1).Value != null && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
 
-        static string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, string projectRootNamespace)
+        static string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, ILogger logger, string projectRootNamespace)
         {
+            // generate test code
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
+            var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName);
 
+            // log any issues preventing round trip
+            if (sheetConverter.IssuesPreventingRoundTrip.Any())
+                sheetConverter.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
+
+            // save test code to file
             var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
             var outputPath = Path.Combine(outputFolder, projectRelativePath);
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
@@ -160,13 +172,15 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 try
                 {
-                    outputFile.Write(sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName));
+                    outputFile.Write(cSharpTestCode);
                 }
                 catch (Exception ex)
                 {
                     outputFile.Write(string.Format("Error creating c# from Excel: {0}", ex.Message));
                 }
             }
+
+            // stupidly return the relative path
             return projectRelativePath;
         }
     }

@@ -13,7 +13,7 @@ namespace CustomerTestsExcel.ExcelToCode
         protected uint row;
         protected uint column;
         protected string _sutName;
-        protected AutoIndentingStringBuilder _code;
+        protected AutoIndentingStringBuilder code;
 
         public ExcelToCodeBase(ICodeNameToExcelNameConverter converter)
         {
@@ -21,7 +21,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         protected void Output(string lineOfCSharpCode) =>
-            _code.AppendLine(lineOfCSharpCode);
+            code.AppendLine(lineOfCSharpCode);
 
         protected void Output() =>
             Output("");
@@ -145,12 +145,12 @@ namespace CustomerTestsExcel.ExcelToCode
         protected void OpenBracketAndIndent()
         {
             Output("(");
-            _code.Indent();
+            code.Indent();
         }
 
         protected void CloseBracketAndOutdent()
         {
-            _code.Outdent();
+            code.Outdent();
             Output(")");
         }
 

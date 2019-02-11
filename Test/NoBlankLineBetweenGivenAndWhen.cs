@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CustomerTestsExcel.ExcelToCode;
 using NUnit.Framework;
 
 namespace CustomerTestsExcel.Test
@@ -12,7 +13,7 @@ namespace CustomerTestsExcel.Test
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen.xlsx");
+            var worksheet = FirstWorksheet(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen\NoBlankLineBetweenGivenAndWhen.xlsx");
 
             string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
@@ -23,12 +24,15 @@ namespace CustomerTestsExcel.Test
                 generatedCode);
         }
 
-        [Test, Ignore("need to do")]
+        [Test]
         public void TestProjectCreatorReturnsWarningIfNoBlankLineBetweenGivenAndWhen()
         {
-            // this looks at all excel files in folder: Path.Combine(specificationFolder, "ExcelTests")
-            // might want to change this a little, maybe give it a list of filenames
-            // this pushes some complexity a bit higher, but only a little bit, and the class does too much already anyway.
+            var logger = GenerateTestsAndReturnLog(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen\");
+
+            StringAssert.Contains("NoBlankLineBetweenGivenAndWhen", logger.Log);
+            StringAssert.Contains(
+                "There is no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6) in the Excel test, tab 'NoBlankLineBetweenGivenAndWhen'",
+                logger.Log);
         }
     }
 }

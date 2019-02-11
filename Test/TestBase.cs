@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
 using System.IO;
+using CustomerTestsExcel.ExcelToCode;
 
 namespace CustomerTestsExcel.Test
 {
@@ -62,5 +63,21 @@ namespace CustomerTestsExcel.Test
             return templateStream;
         }
 
+        protected TestLogger GenerateTestsAndReturnLog(string specificationFolder)
+        {
+            var logger = new TestLogger();
+
+            TestProjectCreator.Create(
+                specificationFolder,
+                "DummyProject.csproj",
+                "",
+                ANY_ROOT_NAMESPACE,
+                NO_USINGS,
+                ANY_STRING,
+                new ExcelTabularLibrary(),
+                logger);
+
+            return logger;
+        }
     }
 }
