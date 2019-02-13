@@ -20,11 +20,11 @@ namespace CustomerTestsExcel.Test
         {
         }
 
-        protected ITabularPage FirstWorksheet(string excelFileName)
+        protected ITabularPage FirstWorksheet(string excelFileNameRelativeToOutputFolder)
         {
             var excel = new ExcelTabularLibrary();
 
-            using (var workbookFile = GetExcelFileStream(excelFileName))
+            using (var workbookFile = GetExcelFileStream(Path.Combine(TestContext.CurrentContext.TestDirectory, excelFileNameRelativeToOutputFolder)))
             {
                 using (var workbook = excel.OpenBook(workbookFile))
                 {
@@ -63,12 +63,12 @@ namespace CustomerTestsExcel.Test
             return templateStream;
         }
 
-        protected TestLogger GenerateTestsAndReturnLog(string specificationFolder)
+        protected TestLogger GenerateTestsAndReturnLog(string specificationFolderRelativeToOutputFolder)
         {
             var logger = new TestLogger();
 
             TestProjectCreator.Create(
-                specificationFolder,
+                Path.Combine(TestContext.CurrentContext.TestDirectory, specificationFolderRelativeToOutputFolder),
                 "DummyProject.csproj",
                 "",
                 ANY_ROOT_NAMESPACE,
