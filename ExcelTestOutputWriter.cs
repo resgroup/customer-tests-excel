@@ -8,34 +8,24 @@ namespace CustomerTestsExcel
 {
     public class ExcelTestOutputWriter : ExcelTestOutputWriterBase, ITestOutputWriter
     {
-        readonly string _excelFolder;
-        public ExcelTestOutputWriter(ITabularLibrary excel, ICodeNameToExcelNameConverter namer, string excelFolder) : base(excel, namer) { _excelFolder = excelFolder; }
+        public ExcelTestOutputWriter(
+            ITabularLibrary excel,
+            ICodeNameToExcelNameConverter namer,
+            string excelFolder)
+            : base(
+                  excel,
+                  namer,
+                  excelFolder)
+        {
+        }
 
         public void StartSpecification(string specificationNamespace, string specificationName, string specificationDescription)
         {
-            var fileName = GetFilename(specificationNamespace);
-            if (File.Exists(fileName))
-            {
-                _workbook = _excel.NewBook(fileName);
-            }
-            else
-            {
-                _workbook = _excel.NewBook();
-            }
+            Initialise(
+                specificationNamespace,
+                specificationName);
 
-            string specificationFriendlyName = _namer.CodeSpecificationClassNameToExcelName(specificationName);
-
-            if (_workbook.GetPageNames().Contains(specificationFriendlyName))
-            {
-                _worksheet = _workbook.GetPage(specificationFriendlyName);
-            }
-            else
-            {
-                _worksheet = _workbook.AddPageBefore(0);
-                _worksheet.Name = specificationFriendlyName;
-            }
-
-            SetCell(1, 1, _namer.Specification);
+            SetCell(1, 1, namer.Specification);
             SetCell(1, 2, specificationDescription);
             ClearSkippedCellWarnings();
         }
@@ -45,14 +35,14 @@ namespace CustomerTestsExcel
         {
             SetPosition(3, 1);
 
-            SetCell(_namer.Given);
+            SetCell(namer.Given);
 
             Indent();
         }
 
         public void StartClass(string className)
         {
-            SetCell(_namer.CodeClassNameToExcelName(className));
+            SetCell(namer.CodeClassNameToExcelName(className));
 
             MoveToNextRow();
         }
@@ -78,7 +68,7 @@ namespace CustomerTestsExcel
 
         public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
         {
-            SetCell( _namer.GivenPropertyNameCodeNameToExcelName(propertyName, isChild, indexInParent));
+            SetCell( namer.GivenPropertyNameCodeNameToExcelName(propertyName, isChild, indexInParent));
             if (isNull)
             {
                 Indent();
@@ -92,7 +82,7 @@ namespace CustomerTestsExcel
         {
             Indent();
 
-            SetCell(_namer.CodeClassNameToExcelName(className));
+            SetCell(namer.CodeClassNameToExcelName(className));
 
             MoveToNextRow();
         }
@@ -104,25 +94,25 @@ namespace CustomerTestsExcel
 
         public void GivenProperty(ReportSpecificationSetupProperty property)
         {
-            SetCell(_namer.GivenPropertyNameCodeNameToExcelName(property.PropertyName, false, null));
+            SetCell(namer.GivenPropertyNameCodeNameToExcelName(property.PropertyName, false, null));
             Indent();
-            SetCell(_namer.PropertyValueCodeToExcel(property.PropertyNamespace, property.PropertyValue));
+            SetCell(namer.PropertyValueCodeToExcel(property.PropertyNamespace, property.PropertyValue));
             MoveToNextRow();
             UnIndent();
         }
 
         public void StartClassTable(string propertyName, string className)
         {
-            SetCell(_namer.GivenPropertyNameCodeNameToExcelName(propertyName, false, null));
+            SetCell(namer.GivenPropertyNameCodeNameToExcelName(propertyName, false, null));
             Indent();
-            SetCell(_namer.CodeClassNameToExcelName(className));
+            SetCell(namer.CodeClassNameToExcelName(className));
             MoveToNextRow();
         }
 
         public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames)
         {
             // write out the "withproperties" row
-            SetCell(_namer.Properties);
+            SetCell(namer.Properties);
 
             MoveToNextRow();
 
@@ -131,7 +121,7 @@ namespace CustomerTestsExcel
             {
                 foreach (var property in propertyNames)
                 {
-                    SetCell(_namer.GivenPropertyNameCodeNameToExcelName(property, false, null));
+                    SetCell(namer.GivenPropertyNameCodeNameToExcelName(property, false, null));
                     Indent();
                 }
             }
@@ -145,7 +135,7 @@ namespace CustomerTestsExcel
             {
                 foreach (var cell in cells)
                 {
-                    SetCell(_namer.PropertyValueExcelToCode(_namer.AssertPropertyCodeNameToExcelName(cell.PropertyName), cell.PropertyValue), _namer.PropertyValueCodeToExcel(cell.PropertyNamespace, cell.PropertyValue));
+                    SetCell(namer.PropertyValueExcelToCode(namer.AssertPropertyCodeNameToExcelName(cell.PropertyName), cell.PropertyValue), namer.PropertyValueCodeToExcel(cell.PropertyNamespace, cell.PropertyValue));
                     Indent();
                 }
             }
@@ -167,11 +157,11 @@ namespace CustomerTestsExcel
         {
             SetColumn(1);
 
-            SetCell(_namer.When);
+            SetCell(namer.When);
 
             Indent();
 
-            SetCell(_namer.ActionCodeNameToExcelName(actionName));
+            SetCell(namer.ActionCodeNameToExcelName(actionName));
 
             MoveToNextRow();
         }
@@ -182,7 +172,7 @@ namespace CustomerTestsExcel
 
             SetColumn(1);
 
-            SetCell(_namer.Assert);
+            SetCell(namer.Assert);
 
             MoveToNextRow();
 
@@ -193,13 +183,13 @@ namespace CustomerTestsExcel
         {
             using (SavePosition())
             {
-                SetCell(_namer.AssertPropertyCodeNameToExcelName(assertPropertyName), assertPropertyName);
+                SetCell(namer.AssertPropertyCodeNameToExcelName(assertPropertyName), assertPropertyName);
                 Indent();
 
-                SetCell(_namer.AssertionOperatorCodeNameToExcelName(assertionOperator));
+                SetCell(namer.AssertionOperatorCodeNameToExcelName(assertionOperator));
                 Indent();
 
-                SetCell(_namer.PropertyValueExcelToCode(_namer.AssertPropertyCodeNameToExcelName(assertPropertyName), assertPropertyExpectedValue), _namer.AssertValueCodeNameToExcelName(assertPropertyExpectedValue));
+                SetCell(namer.PropertyValueExcelToCode(namer.AssertPropertyCodeNameToExcelName(assertPropertyName), assertPropertyExpectedValue), namer.AssertValueCodeNameToExcelName(assertPropertyExpectedValue));
                 Indent();
 
                 foreach (var assertionSpecific in assertionSpecifics)
@@ -219,11 +209,11 @@ namespace CustomerTestsExcel
 
         public void StartAssertionSubProperties(string assertPropertyName, bool exists, string cSharpClassName, bool passed)
         {
-            SetCell(_namer.AssertionSubPropertyCodePropertyNameToExcelName(assertPropertyName));
+            SetCell(namer.AssertionSubPropertyCodePropertyNameToExcelName(assertPropertyName));
 
             Indent();
 
-            SetCell(_namer.AssertionSubPropertyCodeClassNameToExcelName(cSharpClassName));
+            SetCell(namer.AssertionSubPropertyCodeClassNameToExcelName(cSharpClassName));
 
             MoveToNextRow();
 
@@ -240,11 +230,11 @@ namespace CustomerTestsExcel
 
         public void EndSpecification(string specificationNamespace, bool passed)
         {
-            _worksheet = null;
+            worksheet = null;
 
-            _workbook.SaveAs(GetFilename(specificationNamespace));
+            workbook.SaveAs(GetFilename(specificationNamespace));
 
-            _workbook = null;
+            workbook = null;
         }
 
         public void Exception(string exception)
@@ -263,11 +253,5 @@ namespace CustomerTestsExcel
 
             //exceptionWorksheet.GetCell(_exceptionRow, 1).Value = "Exception: " + exception;
         }
-
-        private string GetFilename(string assemblyName)
-        {
-            return Path.Combine(_excelFolder, _namer.CodeNamespaceToExcelFileName(assemblyName) + "." + _excel.DefaultExtension);
-        }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -8,30 +9,67 @@ namespace CustomerTestsExcel
 {
     public class ExcelTestOutputWriterBase
     {
-        protected readonly ITabularLibrary _excel;
-        protected readonly ICodeNameToExcelNameConverter _namer;
-        protected ITabularBook _workbook;
-        protected ITabularPage _worksheet;
-        protected uint _row;
-        protected uint _column;
+        readonly string excelFolder;
+        protected readonly ITabularLibrary excel;
+        protected readonly ICodeNameToExcelNameConverter namer;
+        protected ITabularBook workbook;
+        protected ITabularPage worksheet;
+        protected uint row;
+        protected uint column;
 
-        public ExcelTestOutputWriterBase(ITabularLibrary excel, ICodeNameToExcelNameConverter namer)
+        public ExcelTestOutputWriterBase(
+            ITabularLibrary excel, 
+            ICodeNameToExcelNameConverter namer,
+            string excelFolder)
         {
-            if (excel == null) throw new ArgumentNullException(nameof(excel));
-            if (namer == null) throw new ArgumentNullException(nameof(namer));
+            this.excel = excel ?? throw new ArgumentNullException(nameof(excel));
+            this.namer = namer ?? throw new ArgumentNullException(nameof(namer));
+            this.excelFolder = excelFolder ?? throw new ArgumentNullException(nameof(excelFolder));
+        }
 
-            _excel = excel;
-            _namer = namer;
+        protected void Initialise(
+            string specificationNamespace,
+            string specificationName)
+        {
+            workbook = Workbook(specificationNamespace);
+
+            worksheet = Worksheet(specificationName);
+        }
+
+        ITabularBook Workbook(string specificationNamespace)
+        {
+            var fileName = GetFilename(specificationNamespace);
+
+            if (File.Exists(fileName))
+                return excel.NewBook(fileName);
+            else
+                return excel.NewBook();
+        }
+
+        ITabularPage Worksheet(string specificationName)
+        {
+            string specificationFriendlyName = namer.CodeSpecificationClassNameToExcelName(specificationName);
+
+            if (workbook.GetPageNames().Contains(specificationFriendlyName))
+            {
+                return workbook.GetPage(specificationFriendlyName);
+            }
+            else
+            {
+                var worksheet = workbook.AddPageBefore(0);
+                worksheet.Name = specificationFriendlyName;
+                return worksheet;
+            }
         }
 
         protected void SetCell(uint row, uint column, string cSharpValue, object excelValue)
         {
-            var cell = _worksheet.GetCell(row, column);
+            var cell = worksheet.GetCell(row, column);
             if (cell.Value == null || (cell.Value.Equals(excelValue) == false && cell.Value.ToString() != cSharpValue))
             {
                 if (!cell.IsFormula)
                 {
-                    _worksheet.SetCell(row, column, excelValue);
+                    worksheet.SetCell(row, column, excelValue);
                 }
                 else
                 {
@@ -47,57 +85,67 @@ namespace CustomerTestsExcel
 
         protected void ClearSkippedCellWarnings()
         {
-            _worksheet.SetCell(1, 3, "");
+            worksheet.SetCell(1, 3, "");
         }
 
         void AddSkippedCellWarning(uint row, uint column, object value)
         {
+            AddWarning($"{worksheet.GetCell(1, 3).Value} Skipped updating Cell R{row}C{column} to '{value}' as it has a formula in it. Please fix this value by hand, or remove the formula and re run the test.\r\n");
+        }
+
+        protected void AddWarning(string warning)
+        {
             // put all warnings in cell 1, 3, which is reserved for this purpose
-            _worksheet.SetCell(1, 3, $"{_worksheet.GetCell(1, 3).Value} Skipped updating Cell R{row}C{column} to '{value}' as it has a formula in it. Please fix this value by hand, or remove the formula and re run the test.\r\n");
+            worksheet.SetCell(1, 3, warning);
         }
 
         protected void SetCell(object value)
         {
-            SetCell(_row, _column, "", value);
+            SetCell(row, column, "", value);
         }
 
         protected void SetCell(string cSharpValue, object value)
         {
-            SetCell(_row, _column, cSharpValue, value);
+            SetCell(row, column, cSharpValue, value);
         }
 
         protected void SetPosition(uint row, uint column)
         {
-            _row = row;
-            _column = column;
+            this.row = row;
+            this.column = column;
         }
 
         protected void SetColumn(uint column)
         {
-            SetPosition(_row, column);
+            SetPosition(row, column);
         }
 
         protected void MoveToNextRow()
         {
-            _row++;
+            row++;
         }
 
         protected void Indent(uint by = 1)
         {
-            _column += by;
+            column += by;
         }
 
         protected void UnIndent(uint by = 1)
         {
-            _column -= by;
+            column -= by;
         }
 
         protected TidyUp SavePosition()
         {
-            uint savedColumn = _column;
-            uint savedRow = _row;
+            uint savedColumn = column;
+            uint savedRow = row;
 
             return new TidyUp(() => SetPosition(savedRow, savedColumn));
+        }
+
+        protected string GetFilename(string assemblyName)
+        {
+            return Path.Combine(excelFolder, namer.CodeNamespaceToExcelFileName(assemblyName) + "." + excel.DefaultExtension);
         }
 
     }

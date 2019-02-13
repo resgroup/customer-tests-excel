@@ -53,9 +53,33 @@ namespace CustomerTestsExcel
         {
             var writers = new List<ITestOutputWriter>();
 
-            if (_debugOutput) writers.Add(new StringTestOutputWriter(new HumanFriendlyFormatter(), new DebugTextLineWriter()));
-            if (_htmlOutput) writers.Add(new HTMLTestOutputWriter(new HumanFriendlyFormatter()));
-            if (ExcelOutput) writers.Add(new ExcelTestOutputWriter(new ExcelTabularLibrary(), new CodeNameToExcelNameConverter(AssertionClassPrefixAddedByGenerator), Environment.GetEnvironmentVariable("CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS") ?? @"..\..\ExcelTests"));
+            if (_debugOutput)
+                writers.Add(
+                    new StringTestOutputWriter(
+                        new HumanFriendlyFormatter(), 
+                        new DebugTextLineWriter()));
+
+            if (_htmlOutput)
+                writers.Add(
+                    new HTMLTestOutputWriter(
+                        new HumanFriendlyFormatter()));
+
+            if (ExcelOutput)
+            {
+                if (RoundTrippable())
+                    writers.Add(
+                        new ExcelTestOutputWriter(
+                            new ExcelTabularLibrary(), 
+                            new CodeNameToExcelNameConverter(AssertionClassPrefixAddedByGenerator), 
+                            Environment.GetEnvironmentVariable("CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS") ?? @"..\..\ExcelTests"));
+                else
+                    writers.Add(
+                        new ExcelUnRoundTrippableTestOutputWriter(
+                            new ExcelTabularLibrary(),
+                            new CodeNameToExcelNameConverter(AssertionClassPrefixAddedByGenerator),
+                            Environment.GetEnvironmentVariable("CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS") ?? @"..\..\ExcelTests",
+                            IssuesPreventingRoundTrip()));
+            }
 
             if (writers.Count > 1)
             {

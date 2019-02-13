@@ -55,6 +55,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcelUnRoundTrippableTestOutputWriter.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeException.cs" />
     <Compile Include="ExcelToCode\ConsoleLogger.cs" />
     <Compile Include="ExcelToCode\ILogger.cs" />
