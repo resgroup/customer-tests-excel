@@ -558,14 +558,17 @@ namespace CustomerTestsExcel.ExcelToCode
             string cSharpSubMethodName = _converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
             string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
 
-            // first row is property name, "table of" and property type, the headers start on the row below that
+            // first row is property name, "table of" and property type
+            // then With Properties
+            // then the headers 
+            ExcelMoveDown();
             ExcelMoveDown();
             var assertionTableHeaders = ReadAssertionTableHeaders();
 
             Output(LeadingComma(assertIndex) + $"new TableAssertion<{cSharpClassName}, {cSharpSubClassName}>");
             using (AutoCloseBracketAndIndent())
             {
-                using (AutoRestoreExcelMoveRight())
+                using (AutoRestoreExcelMoveRight(2))
                 {
                     Output($"{cSharpVariableName} => {cSharpVariableName}.{cSharpSubMethodName},");
                     Output($"new List<List<IAssertion<{cSharpSubClassName}>>>");

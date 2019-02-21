@@ -12,5 +12,10 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             throw new NotImplementedException();
         }
+
+        internal void Diameter_of(int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -2,5 +2,6 @@
 {
     public interface IVermeulenNearWakeLength
     {
+        double VermeulenNearWakeLength_m { get; }
     }
 }

@@ -39,6 +39,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs.Thrust_Coefficient_of(0.7);
                     var vermeulenNearWakeLengthInputs_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
                     vermeulenNearWakeLengthInputs_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs.TurbineGeometry_of(vermeulenNearWakeLengthInputs_TurbineGeometry);
                     vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInputs);
                 }
@@ -50,6 +51,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs.Thrust_Coefficient_of(0.7);
                     var vermeulenNearWakeLengthInputs_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
                     vermeulenNearWakeLengthInputs_TurbineGeometry.NumberOfBlades_of(2);
+                    vermeulenNearWakeLengthInputs_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs.TurbineGeometry_of(vermeulenNearWakeLengthInputs_TurbineGeometry);
                     vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInputs);
                 }
@@ -61,6 +63,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs.Thrust_Coefficient_of(0.7);
                     var vermeulenNearWakeLengthInputs_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
                     vermeulenNearWakeLengthInputs_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs.TurbineGeometry_of(vermeulenNearWakeLengthInputs_TurbineGeometry);
                     vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInputs);
                 }
@@ -72,6 +75,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs.Thrust_Coefficient_of(0.7);
                     var vermeulenNearWakeLengthInputs_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
                     vermeulenNearWakeLengthInputs_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs.TurbineGeometry_of(vermeulenNearWakeLengthInputs_TurbineGeometry);
                     vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInputs);
                 }
@@ -83,6 +87,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs.Thrust_Coefficient_of(0.7);
                     var vermeulenNearWakeLengthInputs_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
                     vermeulenNearWakeLengthInputs_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_TurbineGeometry.Diameter_of(60);
                     vermeulenNearWakeLengthInputs.TurbineGeometry_of(vermeulenNearWakeLengthInputs_TurbineGeometry);
                     vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInputs);
                 }
@@ -94,6 +99,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs.Thrust_Coefficient_of(0.7);
                     var vermeulenNearWakeLengthInputs_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
                     vermeulenNearWakeLengthInputs_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs.TurbineGeometry_of(vermeulenNearWakeLengthInputs_TurbineGeometry);
                     vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInputs);
                 }
@@ -105,6 +111,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs.Thrust_Coefficient_of(0.6);
                     var vermeulenNearWakeLengthInputs_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
                     vermeulenNearWakeLengthInputs_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs.TurbineGeometry_of(vermeulenNearWakeLengthInputs_TurbineGeometry);
                     vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInputs);
                 }
@@ -130,6 +137,34 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLengths,
                     new List<List<IAssertion<IVermeulenNearWakeLength>>>
                     {
+                         new List<IAssertion<IVermeulenNearWakeLength>>
+                        {
+                                  new EqualityAssertionWithPercentagePrecision<IVermeulenNearWakeLength>(vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLength_m, 140.01601451312, 0.001)
+                        }
+                        ,new List<IAssertion<IVermeulenNearWakeLength>>
+                        {
+                                  new EqualityAssertionWithPercentagePrecision<IVermeulenNearWakeLength>(vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLength_m, 148.554057802943, 0.001)
+                        }
+                        ,new List<IAssertion<IVermeulenNearWakeLength>>
+                        {
+                                  new EqualityAssertionWithPercentagePrecision<IVermeulenNearWakeLength>(vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLength_m, 120.183645217439, 0.001)
+                        }
+                        ,new List<IAssertion<IVermeulenNearWakeLength>>
+                        {
+                                  new EqualityAssertionWithPercentagePrecision<IVermeulenNearWakeLength>(vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLength_m, 179.923866116264, 0.001)
+                        }
+                        ,new List<IAssertion<IVermeulenNearWakeLength>>
+                        {
+                                  new EqualityAssertionWithPercentagePrecision<IVermeulenNearWakeLength>(vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLength_m, 114.976979961318, 0.001)
+                        }
+                        ,new List<IAssertion<IVermeulenNearWakeLength>>
+                        {
+                                  new EqualityAssertionWithPercentagePrecision<IVermeulenNearWakeLength>(vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLength_m, 130.209237531055, 0.001)
+                        }
+                        ,new List<IAssertion<IVermeulenNearWakeLength>>
+                        {
+                                  new EqualityAssertionWithPercentagePrecision<IVermeulenNearWakeLength>(vermeulenNearWakeLengths => vermeulenNearWakeLengths.VermeulenNearWakeLength_m, 132.546880858023, 0.001)
+                        }
                     }
                 )
             };
