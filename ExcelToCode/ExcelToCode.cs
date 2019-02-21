@@ -276,7 +276,7 @@ namespace CustomerTestsExcel.ExcelToCode
             ExcelMoveUp();
         }
 
-        private Dictionary<uint, TableHeader> ReadHeaders()
+        Dictionary<uint, TableHeader> ReadHeaders()
         {
             var headers = new Dictionary<uint, TableHeader>();
             ExcelMoveDown();
@@ -284,7 +284,6 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 while (CurrentCell() != "")
                 {
-                    var test = CurrentCell();
                     headers.Add(column, CreatePropertyHeader());
                     ExcelMoveRight();
                 }
