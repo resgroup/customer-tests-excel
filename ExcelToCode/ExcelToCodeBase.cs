@@ -167,7 +167,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected TidyUp AutoRestoreExcelMoveRight(uint by = 1)
         {
-            ExcelIndent();
+            ExcelIndent(by);
             return new TidyUp(() => ExcelUnIndent(by));
         }
 
