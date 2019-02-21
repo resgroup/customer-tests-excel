@@ -60,6 +60,10 @@
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificCargo.cs" />
     <Compile Include="Anova\One Way Anova.cs" />
     <Compile Include="Rerouting\Reroute To Sea.cs" />
+    <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthCalculator.cs" />
+    <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthInputs.cs" />
+    <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\IVermeulenNearWakeLength.cs" />
+    <Compile Include="Vermeulen Near Wake Length\VermeulenNearWakeLength.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -85,8 +89,7 @@
   <ItemGroup>
     <None Include="ExcelTests\Anova.xlsx" />
     <None Include="ExcelTests\Rerouting.xlsx" />
+    <None Include="ExcelTests\Vermeulen Near Wake Length.xlsx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Anova\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
