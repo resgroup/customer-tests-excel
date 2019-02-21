@@ -611,8 +611,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
             using (SavePosition())
             {
-                // headers are indented one to the right, this makes it visually easier to pick them out, and makes it easier to detect the end of the table in code
-                ExcelMoveRight();
+                // table assertions are formatted in the same way that table set properties are
+                ExcelMoveRight(2);
 
                 while (string.IsNullOrWhiteSpace(CurrentCell()) == false)
                 {
