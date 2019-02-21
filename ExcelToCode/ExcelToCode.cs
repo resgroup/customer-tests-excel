@@ -318,14 +318,14 @@ namespace CustomerTestsExcel.ExcelToCode
                 ExcelMoveDown();
                 subClassName = CurrentCell();
                 ExcelMoveDown();
-                propertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Properties);
+                propertiesStartColumn = column;
 
                 ExcelMoveDown();
                 do
                 {
                     headers.Add(column, CreatePropertyHeader());
                     ExcelMoveRight();
-                } while (PeekAbove(3) == "" && AnyFollowingColumnHasAValue(-3) == true); // Need to detect end of the sub property. This is by the existence of a property name in the parent proeprty header row, which is 3 rows up, so peek for this. The other condition is when there is no more data in the parent property header row
+                } while (PeekAbove(3) == "" && CurrentCell() != "");// Need to detect end of the sub property. This is by the existence of a property name in the parent proeprty header row, which is 3 rows up, or by when there are no columns left in the table
 
                 propertiesEndColumn = column - 1;
                 endRow = row;
