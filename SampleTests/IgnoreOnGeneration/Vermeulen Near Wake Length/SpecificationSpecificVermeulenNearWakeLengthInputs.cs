@@ -6,29 +6,55 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {
     internal class SpecificationSpecificVermeulenNearWakeLengthInputs : ReportsSpecificationSetup
     {
-        internal void Velocity_of(int v)
+        internal double velocity_mps { get; private set; }
+        internal double ambientTurbuluence { get; private set; }
+        internal double revolutionsPerMinute { get; private set; }
+        internal double thrustCoefficient { get; private set; }
+        internal SpecificationSpecificTurbineGeometry turbineGeometry { get; private set; }
+
+        internal SpecificationSpecificVermeulenNearWakeLengthInputs Velocity_of(int velocity_mps)
         {
-            throw new NotImplementedException();
+            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, velocity_mps);
+
+            this.velocity_mps = velocity_mps;
+
+            return this;
         }
 
-        internal void Ambient_Turbulence_of(double v)
+        internal SpecificationSpecificVermeulenNearWakeLengthInputs Ambient_Turbulence_of(double ambientTurbuluence)
         {
-            throw new NotImplementedException();
+            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, ambientTurbuluence);
+
+            this.ambientTurbuluence = ambientTurbuluence;
+
+            return this;
         }
 
-        internal void RevolutionsPerMinute_of(int v)
+        internal SpecificationSpecificVermeulenNearWakeLengthInputs RevolutionsPerMinute_of(double revolutionsPerMinute)
         {
-            throw new NotImplementedException();
+            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, revolutionsPerMinute);
+
+            this.revolutionsPerMinute = revolutionsPerMinute;
+
+            return this;
         }
 
-        internal void Thrust_Coefficient_of(double v)
+        internal SpecificationSpecificVermeulenNearWakeLengthInputs Thrust_Coefficient_of(double thrustCoefficient)
         {
-            throw new NotImplementedException();
+            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, thrustCoefficient);
+
+            this.thrustCoefficient = thrustCoefficient;
+
+            return this;
         }
 
-        internal void TurbineGeometry_of(SpecificationSpecificTurbineGeometry vermeulenNearWakeLengthInputs_TurbineGeometry)
+        internal SpecificationSpecificVermeulenNearWakeLengthInputs TurbineGeometry_of(SpecificationSpecificTurbineGeometry turbineGeometry)
         {
-            throw new NotImplementedException();
+            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, turbineGeometry);
+
+            this.turbineGeometry = turbineGeometry;
+
+            return this;
         }
     }
 }

@@ -1,21 +1,29 @@
-﻿using System;
+﻿using CustomerTestsExcel;
+using System;
 
 namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {
-    internal class SpecificationSpecificTurbineGeometry
+    internal class SpecificationSpecificTurbineGeometry : ReportsSpecificationSetup
     {
-        public SpecificationSpecificTurbineGeometry()
+        internal int numberOfBlades { get; private set; }
+        internal double diameter_m { get; private set; }
+
+        internal SpecificationSpecificTurbineGeometry NumberOfBlades_of(int numberOfBlades)
         {
+            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, numberOfBlades);
+
+            this.numberOfBlades = numberOfBlades;
+
+            return this;
         }
 
-        internal void NumberOfBlades_of(int v)
+        internal SpecificationSpecificTurbineGeometry Diameter_of(double diameter_m)
         {
-            throw new NotImplementedException();
-        }
+            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, diameter_m);
 
-        internal void Diameter_of(int v)
-        {
-            throw new NotImplementedException();
+            this.diameter_m = diameter_m;
+
+            return this;
         }
     }
 }
