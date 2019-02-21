@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using CustomerTestsExcel;
+using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.Vermeulen_Near_Wake_Length;
 
 namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {

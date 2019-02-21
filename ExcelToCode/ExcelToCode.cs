@@ -247,8 +247,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
             Output($"var {cSharpVariableName} = new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>();");
 
-            int row = 0;
-            uint moveDown = 1 + (headers.Max((KeyValuePair<uint, TableHeader> h) => h.Value.EndRow) - base.row);
+            int tableRow = 0;
+            uint moveDown = 1 + (headers.Max((KeyValuePair<uint, TableHeader> h) => h.Value.EndRow) - row);
             ExcelMoveDown(moveDown);
             while (TableHasMoreRows(lastColumn))
             {
@@ -267,7 +267,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                         Output($"{cSharpVariableName}.Add({indexedCSharpVariableName});");
                     }
-                    row++;
+                    tableRow++;
                 }
 
                 ExcelMoveDown();
