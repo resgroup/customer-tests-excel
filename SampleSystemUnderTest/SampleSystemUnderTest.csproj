@@ -58,7 +58,11 @@
     <Compile Include="Routing\Leg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\RoutingService.cs" />
+    <Compile Include="VermeulenNearWakeLength\ITurbineGeometry.cs" />
+    <Compile Include="VermeulenNearWakeLength\VermeulenNearWakeLength.cs" />
     <Compile Include="VermeulenNearWakeLength\IVermeulenNearWakeLength.cs" />
+    <Compile Include="VermeulenNearWakeLength\IVermeulenNearWakeLengthInput.cs" />
+    <Compile Include="VermeulenNearWakeLength\VermeulenNearWakeLengthCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

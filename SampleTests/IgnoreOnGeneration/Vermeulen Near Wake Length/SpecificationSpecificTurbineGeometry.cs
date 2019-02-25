@@ -1,18 +1,19 @@
 ﻿using CustomerTestsExcel;
+using SampleSystemUnderTest.VermeulenNearWakeLength;
 using System;
 
 namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {
-    internal class SpecificationSpecificTurbineGeometry : ReportsSpecificationSetup
+    internal class SpecificationSpecificTurbineGeometry : ReportsSpecificationSetup, ITurbineGeometry
     {
-        internal int numberOfBlades { get; private set; }
-        internal double diameter_m { get; private set; }
+        public int NumberOfBlades { get; private set; }
+        public double Diameter_m { get; private set; }
 
         internal SpecificationSpecificTurbineGeometry NumberOfBlades_of(int numberOfBlades)
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, numberOfBlades);
 
-            this.numberOfBlades = numberOfBlades;
+            this.NumberOfBlades = numberOfBlades;
 
             return this;
         }
@@ -21,7 +22,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, diameter_m);
 
-            this.diameter_m = diameter_m;
+            this.Diameter_m = diameter_m;
 
             return this;
         }

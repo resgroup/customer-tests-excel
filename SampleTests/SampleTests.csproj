@@ -59,7 +59,7 @@
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificItineraryLeg.cs" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificCargo.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthCalculator.cs" />
-    <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthInputs.cs" />
+    <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthInput.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificTurbineGeometry.cs" />
     <Compile Include="Anova\One Way Anova.cs" />
     <Compile Include="Rerouting\Reroute To Sea.cs" />

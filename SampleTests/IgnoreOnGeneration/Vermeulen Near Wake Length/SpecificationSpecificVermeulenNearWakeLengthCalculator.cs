@@ -8,11 +8,11 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {
     public class SpecificationSpecificVermeulenNearWakeLengthCalculator : ReportsSpecificationSetup
     {
-        internal IEnumerable<IVermeulenNearWakeLength> VermeulenNearWakeLengths { get; }
+        internal IEnumerable<IVermeulenNearWakeLength> VermeulenNearWakeLengths { get; private set; }
 
-        readonly List<SpecificationSpecificVermeulenNearWakeLengthInputs> vermeulenNearWakeLengthInputs = new List<SpecificationSpecificVermeulenNearWakeLengthInputs>();
+        readonly List<IVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputs = new List<IVermeulenNearWakeLengthInput>();
 
-        internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInputs> vermeulenNearWakeLengthInputs)
+        internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputs)
         {
             vermeulenNearWakeLengthInputs.PropertyName = System.Reflection.MethodBase.GetCurrentMethod().Name;
 
@@ -26,7 +26,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal void Calculate()
         {
-            throw new NotImplementedException();
+            VermeulenNearWakeLengths = new VermeulenNearWakeLengthCalculator(vermeulenNearWakeLengthInputs).Calculate();
         }
     }
 }
