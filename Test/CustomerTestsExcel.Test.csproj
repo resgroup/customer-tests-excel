@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="TestLogger.cs" />
+    <Compile Include="ComplexObjectWithinTable.cs" />
     <Compile Include="TwoBlankLinesBetweenGivenAndWhen.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="NoBlankLineBetweenGivenAndWhen.cs" />
@@ -90,7 +91,13 @@
     <Content Include="TestExcelFiles\NoBlankLineBetweenGivenAndWhen\NoBlankLineBetweenGivenAndWhen.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestExcelFiles\ComplexObjectWithinTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\TwoBlankLinesBetweenGivenAndWhen.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\ComplexObjectWithinTable\ComplexObjectWithinTable.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
