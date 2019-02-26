@@ -15,34 +15,33 @@ build_script:
  
  - nuget restore "CustomerTestsExcel.sln" -verbosity quiet
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
- - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
+ #- msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
  # Ensure that the Excel tests can round trip to C#
  # Regenerate the sample tests from the excel (requires GenerateCodeFromExcelTest.exe)
- - GenerateTests.bat
- - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
+ #- GenerateTests.bat
+ #- msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
  # run the tests, so that they re create the Excel Spreadsheets (requires some environment variables to be set)
  #- nunit3-console.exe Builtdlls\Release\SampleTests.dll 
  # Regenerate the sample tests again. 
  #- GenerateTests.bat
  # for final build and test, run code coverage and quality analysis
- #- ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER) { SonarQube.Scanner.MSBuild.exe begin /k:"CustomerTestsExcel"  /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.organization=res" #/d:sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2 /d:sonar.verbose=false /d:"sonar.analysis.mode=preview" /d:"sonar.github.pullRequest=$env:APPVEYOR_PULL_REQUEST_NUMBER" /d:"sonar.github.repository=resgroup/configuration" #/d:"sonar.github.oauth=$env:github_token" /d:sonar.cs.opencover.it.reportsPaths=coverage.xml }
- #- ps: if (-Not $env:APPVEYOR_PULL_REQUEST_NUMBER) { SonarQube.Scanner.MSBuild.exe begin /k:"CustomerTestsExcel"  /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.organization=res" #/d:sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2 /d:sonar.verbose=false /d:sonar.cs.opencover.it.reportsPaths=coverage.xml }
- #- msbuild CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet
- #- OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"CustomerTestsExcel.nunit" -output:"coverage.xml" -returntargetcode
- #- SonarQube.Scanner.MSBuild.exe end /d:"sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2"
+ - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER) { SonarQube.Scanner.MSBuild.exe begin /k:"CustomerTestsExcel"  /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.organization=res" /d:sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2 /d:sonar.verbose=false /d:"sonar.analysis.mode=preview" /d:"sonar.github.pullRequest=$env:APPVEYOR_PULL_REQUEST_NUMBER" /d:"sonar.github.repository=resgroup/configuration" #/d:"sonar.github.oauth=$env:github_token" /d:sonar.cs.opencover.it.reportsPaths=coverage.xml }
+ - ps: if (-Not $env:APPVEYOR_PULL_REQUEST_NUMBER) { SonarQube.Scanner.MSBuild.exe begin /k:"CustomerTestsExcel"  /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.organization=res" /d:sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2 /d:sonar.verbose=false /d:sonar.cs.opencover.it.reportsPaths=coverage.xml }
+ - msbuild CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet
+ - OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"CustomerTestsExcel.nunit" -output:"coverage.xml" -returntargetcode
+ - SonarQube.Scanner.MSBuild.exe end /d:"sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2"
  # create the nuget package
  - nuget pack CustomerTestsExcel.csproj -Symbols
 test_script:
- - echo tests
   # upload the code coverage to codcov.io
-  #- ps: |
-  #    $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
-  #    Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh
-  #    bash codecov.sh -f "coverage.xml"
+  - ps: |
+      $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
+      Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh
+      bash codecov.sh -f "coverage.xml"
   # code cov token not required for public repos     -t %code_cov_token%
 artifacts:
- - path: '**\*.cs'
- #- path: BuiltDLLs\Debug\*.nupkg 
+ #- path: '**\*.cs'
+ - path: BuiltDLLs\Debug\*.nupkg 
 notifications:
   - provider: Email
     to:
