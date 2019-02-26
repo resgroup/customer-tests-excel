@@ -104,7 +104,7 @@ namespace CustomerTestsExcel
             catch (Exception ex)
             {
                 passed = false;
-                _writer.Exception(ex.Message);
+                _writer.Exception(ex.ToString());
             }
 
             return passed;
