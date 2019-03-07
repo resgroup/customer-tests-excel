@@ -18,9 +18,10 @@ namespace CustomerTestsExcel.Test
 
             StringAssert.Contains("RoundTrippable() => false", generatedCode);
 
-            // todo
+            StringAssert.Contains("tab 'ComplexObjectWithinTable'", generatedCode); // worksheet name
+
             StringAssert.Contains(
-                "There should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8) in the Excel test, tab 'TwoBlankLinesBetweenGivenWhen'",
+                "complex property ('ComplexObject_of', Row 7, Column 4) within a table",
                 generatedCode);
         }
 
@@ -29,11 +30,12 @@ namespace CustomerTestsExcel.Test
         {
             var logger = GenerateTestsAndReturnLog(@"TestExcelFiles\ComplexObjectWithinTable\");
 
-            StringAssert.Contains("ComplexObjectWithinTable", logger.Log);
-            StringAssert.Contains("ComplexObjectWithinTable", logger.Log); // worksheet name
-            //todo
+            StringAssert.Contains("ComplexObjectWithinTable", logger.Log); // workbook name
+
+            StringAssert.Contains("tab 'ComplexObjectWithinTable'", logger.Log); // worksheet
+
             StringAssert.Contains(
-                "There should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8) in the Excel test, tab 'TwoBlankLinesBetweenGivenWhen'",
+                "complex property ('ComplexObject_of', Row 7, Column 4) within a table",
                 logger.Log);
         }
     }

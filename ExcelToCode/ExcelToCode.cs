@@ -235,12 +235,14 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void CreateObjectsFromTable(string cSharpVariableName, string cSharpClassName, string cSharpSpecificationSpecificClassName)
         {
+            ExcelMoveDown();
             // read token that speficy the start of the properties
             //todo: this should always be the first column now that we don't have creational properties to worry about
-            ExcelMoveDown();
             uint? propertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Properties);
 
             var headers = ReadHeaders();
+
+            CheckTableIsRoundTrippable(row, headers.Values);
 
             uint lastColumn = headers.Max(h => h.Value.EndColumn);
             uint propertiesEndColumn = lastColumn;
@@ -274,6 +276,19 @@ namespace CustomerTestsExcel.ExcelToCode
             }
 
             ExcelMoveUp();
+        }
+
+        void CheckTableIsRoundTrippable(uint row, IEnumerable<TableHeader> tableHeaders)
+        {
+            if (tableHeaders.All(h => h.IsRoundTrippable))
+                return;
+
+            tableHeaders
+                .Where(h => !h.IsRoundTrippable)
+                .ToList()
+                .ForEach(h =>
+                    issuesPreventingRoundTrip.Add($"There is a complex property ('{h.PropertyName}', Row {row}, Column {h.EndColumn}) within a table in the Excel test, tab '{worksheet.Name}'")
+                );
         }
 
         Dictionary<uint, TableHeader> ReadHeaders()
