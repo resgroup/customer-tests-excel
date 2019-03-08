@@ -4,17 +4,13 @@ using System.Text;
 
 namespace CustomerTestsExcel.Test
 {
-    public class TestLogger : ILogger
+    public class TestLogger : LoggerBase
     {
-        readonly StringBuilder log = new StringBuilder(); 
+        readonly StringBuilder logMessages = new StringBuilder();
 
-        public void LogIssuePreventingRoundTrip(string workbookName, string worksheetName, string issue)
-        {
-            log.AppendLine(workbookName);
-            log.AppendLine(worksheetName);
-            log.AppendLine(issue);
-        }
+        protected override void Log(string message) =>
+            logMessages.AppendLine(message);
 
-        public string Log => log.ToString();
+        public string LogMessages => logMessages.ToString();
     }
 }

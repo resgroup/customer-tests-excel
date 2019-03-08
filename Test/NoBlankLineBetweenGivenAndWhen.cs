@@ -20,7 +20,7 @@ namespace CustomerTestsExcel.Test
             StringAssert.Contains("RoundTrippable() => false", generatedCode);
 
             StringAssert.Contains(
-                "There is no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6) in the Excel test, tab 'NoBlankLineBetweenGivenAndWhen'",
+                "no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6)",
                 generatedCode);
         }
 
@@ -29,10 +29,13 @@ namespace CustomerTestsExcel.Test
         {
             var logger = GenerateTestsAndReturnLog(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen\");
 
-            StringAssert.Contains("NoBlankLineBetweenGivenAndWhen", logger.Log);
+            StringAssert.Contains("Workbook 'NoBlankLineBetweenGivenAndWhen'", logger.LogMessages);
+
+            StringAssert.Contains("Worksheet 'NoBlankLineBetweenGivenAndWhen'", logger.LogMessages);
+
             StringAssert.Contains(
-                "There is no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6) in the Excel test, tab 'NoBlankLineBetweenGivenAndWhen'",
-                logger.Log);
+                "no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6)",
+                logger.LogMessages);
         }
     }
 }

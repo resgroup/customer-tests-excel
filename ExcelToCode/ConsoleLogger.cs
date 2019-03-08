@@ -2,11 +2,9 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public class ConsoleLogger : ILogger
+    public class ConsoleLogger : LoggerBase
     {
-        public void LogIssuePreventingRoundTrip(string workbookName, string worksheetName, string issue)
-        {
-            Console.WriteLine($"Warning: Workbook '{workbookName}', Worksheet '{worksheetName}' will not be able to round trip to Excel. {issue}");
-        }
+        protected override void Log(string message) =>
+            Console.WriteLine(message);
     }
 }

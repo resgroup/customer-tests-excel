@@ -142,9 +142,9 @@ namespace CustomerTestsExcel.ExcelToCode
             }
 
             if (startOfWhen - endOfGiven <= 1)
-                issuesPreventingRoundTrip.Add($"There is no blank line between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, tab '{worksheet.Name}'");
+                issuesPreventingRoundTrip.Add($"There is no blank line between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{worksheet.Name}'");
             else if (startOfWhen - endOfGiven > 2)
-                issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, tab '{worksheet.Name}'");
+                issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{worksheet.Name}'");
         }
 
         void CreateObject(string cSharpVariableName, string cSharpClassName)
@@ -287,7 +287,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 .Where(h => !h.IsRoundTrippable)
                 .ToList()
                 .ForEach(h =>
-                    issuesPreventingRoundTrip.Add($"There is a complex property ('{h.PropertyName}', Row {row}, Column {h.EndColumn}) within a table in the Excel test, tab '{worksheet.Name}'")
+                    issuesPreventingRoundTrip.Add($"There is a complex property ('{h.PropertyName}', Row {row}, Column {h.EndColumn}) within a table in the Excel test, worksheet '{worksheet.Name}'")
                 );
         }
 

@@ -19,7 +19,7 @@ namespace CustomerTestsExcel.Test
             StringAssert.Contains("RoundTrippable() => false", generatedCode);
 
             StringAssert.Contains(
-                "There should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8) in the Excel test, tab 'TwoBlankLinesBetweenGivenWhen'",
+                "should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8)",
                 generatedCode);
         }
 
@@ -28,11 +28,13 @@ namespace CustomerTestsExcel.Test
         {
             var logger = GenerateTestsAndReturnLog(@"TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\");
 
-            StringAssert.Contains("TwoBlankLinesBetweenGivenAndWhen", logger.Log);
-            StringAssert.Contains("TwoBlankLinesBetweenGivenWhen", logger.Log); // worksheet name
+            StringAssert.Contains("Workbook 'TwoBlankLinesBetweenGivenAndWhen'", logger.LogMessages);
+
+            StringAssert.Contains("Worksheet 'TwoBlankLinesBetweenGivenWhen'", logger.LogMessages);
+
             StringAssert.Contains(
-                "There should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8) in the Excel test, tab 'TwoBlankLinesBetweenGivenWhen'",
-                logger.Log);
+                "should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8)",
+                logger.LogMessages);
         }
     }
 }
