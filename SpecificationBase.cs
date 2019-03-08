@@ -15,8 +15,8 @@ namespace CustomerTestsExcel
     {
         protected T _sut;
         protected abstract string AssertionClassPrefixAddedByGenerator { get; }
-        protected bool RoundTrippable() => true;
-        protected IEnumerable<string> IssuesPreventingRoundTrip() => new List<string>();
+        protected virtual bool RoundTrippable() => true;
+        protected virtual IEnumerable<string> IssuesPreventingRoundTrip() => new List<string>();
 
         // these control what writers are used.
         protected bool _debugOutput = true;

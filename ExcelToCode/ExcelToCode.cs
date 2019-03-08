@@ -57,7 +57,7 @@ namespace CustomerTestsExcel.ExcelToCode
             if (IssuesPreventingRoundTrip.Any())
             {
                 Output();
-                Output($"protected override string RoundTrippable() => false;");
+                Output($"protected override bool RoundTrippable() => false;");
                 Output();
                 Output("protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {");
                 Output(
