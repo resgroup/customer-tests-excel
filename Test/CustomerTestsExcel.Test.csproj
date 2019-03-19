@@ -66,6 +66,7 @@
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="TestLogger.cs" />
     <Compile Include="ComplexObjectWithinTable.cs" />
+    <Compile Include="LeadingTrailingSpaces.cs" />
     <Compile Include="TwoBlankLinesBetweenGivenAndWhen.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="NoBlankLineBetweenGivenAndWhen.cs" />
@@ -98,6 +99,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\ComplexObjectWithinTable\ComplexObjectWithinTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\Leading Trailing Spaces .xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

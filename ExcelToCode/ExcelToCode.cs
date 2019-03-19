@@ -190,21 +190,23 @@ namespace CustomerTestsExcel.ExcelToCode
                 var excelGivenRight = CurrentCellRaw();
                 var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
 
-                var cSharpMethodName = _converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
-
                 if (IsTable(excelGivenLeft))
                 {
+                    var cSharpMethodName = _converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft);
+
                     using (Scope())
                     {
                         string cSharpClassName = _converter.ExcelClassNameToCodeName(excelGivenRightString);
                         string cSharpChildVariableName = TableVariableNameFromMethodName(cSharpMethodName);
 
-                        CreateObjectsFromTable(cSharpChildVariableName, excelGivenRightString, cSharpClassName);
+                        CreateObjectsFromTable(cSharpChildVariableName, cSharpChildVariableName + "_Row", cSharpClassName);
                         Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
                 else if (HasGivenSubProperties())
                 {
+                    var cSharpMethodName = _converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+
                     Output();
                     using (Scope())
                     {
@@ -217,6 +219,8 @@ namespace CustomerTestsExcel.ExcelToCode
                 }
                 else
                 {
+                    var cSharpMethodName = _converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+
                     Output($"{cSharpVariableName}{cSharpVariableNamePostfix}.{cSharpMethodName}({_converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
                 }
             }
@@ -224,8 +228,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
         string TableVariableNameFromMethodName(string cSharpMethodName)
         {
-            // change "Cargo table_of" (method name from Excel) to "cargoTable (c# variable name)"
-            return VariableCase(cSharpMethodName.Substring(0, cSharpMethodName.Length - 3));
+            // change "Cargo table_of" (method name from Excel) to "cargo (c# variable name)"
+            return VariableCase(cSharpMethodName.Substring(0, cSharpMethodName.Length - 9));
         }
 
         bool IsTable(string excelGivenLeft)
@@ -428,7 +432,6 @@ namespace CustomerTestsExcel.ExcelToCode
             using (AutoRestoreExcelMoveRight())
             {
                 Output();
-                Output("// act");
                 Output("public override string When(" + CSharpSUTSpecificationSpecificClassName() + " " + CSharpSUTVariableName() + ")");
                 Output("{");
 
@@ -444,7 +447,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 }
                 else
                 {
-                    Output(CSharpSUTVariableName() + "." + CurrentCell() + "();");
+                    Output(CSharpSUTVariableName() + "." + _converter.ActionExcelNameToCodeName(CurrentCell()) + "();");
                     Output("return \"" + CurrentCell() + "\";");
                 }
 

@@ -47,7 +47,7 @@ namespace CustomerTestsExcel
                 nameSpace = excelSpecificationName.Substring(0, lastIndex + 1) + "Specification.Setup.";
             }
 
-            return nameSpace + "SpecificationSpecific" + className;
+            return nameSpace + "SpecificationSpecific" + className.Trim().Replace(" ", "_");
         }
 
         // the property names (not values) of the "Given" part of the test
@@ -55,6 +55,7 @@ namespace CustomerTestsExcel
         {
             if (isChild)
             {
+                // todo: This looks strange and like it won't work when there are spaces in a name, add a test
                 return cSharpPropertyName.Replace("_", "(" + indexInParent.ToString() + ") ");
             }
             else
@@ -62,7 +63,22 @@ namespace CustomerTestsExcel
                 return cSharpPropertyName.Replace("_", " ");
             }
         }
+        // Change "Calibrations(0)     of" to "Calibrations_of"
         public string GivenPropertyNameExcelNameToCodeName(string excelPropertyName)
+        {
+            string withoutIndex = RemoveArrayIndex(excelPropertyName);
+
+            string withoutOf = RemoveOfPostfix(withoutIndex);
+
+            return withoutOf.Trim().Replace(" ", "_") + "_of";
+        }
+
+        // Change "Calibrations of" to "Calibrations"
+        string RemoveOfPostfix(string excelPropertyName) =>
+            excelPropertyName.Substring(0, excelPropertyName.Length - 3);
+
+        // Change "Calibrations(0) of" to "Calibrations of"
+        string RemoveArrayIndex(string excelPropertyName)
         {
             int start = excelPropertyName.IndexOf("(", StringComparison.InvariantCulture);
             int end = excelPropertyName.IndexOf(")", StringComparison.InvariantCulture);
@@ -71,13 +87,36 @@ namespace CustomerTestsExcel
             {
                 excelPropertyName = excelPropertyName.Substring(0, start) + excelPropertyName.Substring(end + 1);
             }
-
-            return excelPropertyName.Replace(" ", "_");
+            return excelPropertyName;
         }
 
+        // the property names (not values) of the "Given" part of the test
+        public string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
+        {
+            // hmmm, I should prbably call this from somewhere
+            throw new NotImplementedException();
+        }
+        // Change "Calibrations    table of" to "Calibrations_table_of"
+        public string GivenTablePropertyNameExcelNameToCodeName(string excelPropertyName)
+        {
+            string withoutIndex = RemoveArrayIndex(excelPropertyName);
+
+            string withoutTableOf = RemoveTableOfPostfix(withoutIndex);
+
+            return withoutTableOf.Trim().Replace(" ", "_") + "_table_of";
+        }
+
+        // Change "Calibrations of" to "Calibrations"
+        string RemoveTableOfPostfix(string excelPropertyName) =>
+            excelPropertyName.Substring(0, excelPropertyName.Length - 9);
+
+        public string ActionExcelNameToCodeName(string excelActionName)
+        {
+            return excelActionName.Trim().Replace(" ", "_");
+        }
         public string ActionCodeNameToExcelName(string actionName)
         {
-            return actionName.Replace("_", " ");
+            return actionName.Trim().Replace("_", " ");
         }
 
 
@@ -107,7 +146,7 @@ namespace CustomerTestsExcel
         }
         public string AssertionSubPropertyExcelNameToCodeMethodName(string excelAssertPropertyName)
         {
-            return excelAssertPropertyName;
+            return excelAssertPropertyName.Trim();
         }
 
         public string AssertionSubPropertyCodeClassNameToExcelName(string cSharpAssertClassName)
@@ -135,7 +174,7 @@ namespace CustomerTestsExcel
 
         public string AssertPropertyExcelNameToCodeName(string excelAssertName)
         {
-            return excelAssertName.Replace(" ", "_");
+            return excelAssertName.Trim().Replace(" ", "_");
         }
 
         // the operator part of an assertion (ig the "==" bit of "IsValid == true")
