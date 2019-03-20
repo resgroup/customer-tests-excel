@@ -289,8 +289,10 @@ namespace CustomerTestsExcel
 
         static bool IsNumeric(object value)
         {
-            double parsedDouble;
-            return Double.TryParse(Convert.ToString(value), System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out parsedDouble);
+            return Double.TryParse(
+                Convert.ToString(value), 
+                System.Globalization.NumberStyles.Any, 
+                System.Globalization.NumberFormatInfo.InvariantInfo, out double parsedDouble);
         }
 
         static bool IsEnum(string value)

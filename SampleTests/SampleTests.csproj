@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IgnoreOnGeneration\Calculator\SpecificationSpecificCalculator.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculator.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificGroup.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificValue.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthInput.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificTurbineGeometry.cs" />
     <Compile Include="Anova\One Way Anova.cs" />
+    <Compile Include="Calculator\Adding Up.cs" />
     <Compile Include="Rerouting\Reroute To Sea.cs" />
     <Compile Include="Vermeulen Near Wake Length\VermeulenNearWakeLength.cs" />
   </ItemGroup>
@@ -88,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ExcelTests\Anova.xlsx" />
+    <None Include="ExcelTests\Calculator.xlsx" />
     <None Include="ExcelTests\Rerouting.xlsx" />
     <None Include="ExcelTests\Vermeulen Near Wake Length.xlsx" />
   </ItemGroup>

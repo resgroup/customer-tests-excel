@@ -13,7 +13,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, numberOfBlades);
 
-            this.NumberOfBlades = numberOfBlades;
+            NumberOfBlades = numberOfBlades;
 
             return this;
         }
@@ -22,7 +22,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, diameter_m);
 
-            this.Diameter_m = diameter_m;
+            Diameter_m = diameter_m;
 
             return this;
         }

@@ -14,6 +14,8 @@ using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
 using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.IgnoreOnGeneration.Calculator;
+using SampleSystemUnderTest.Calculator;
 
 namespace SampleTests.Rerouting
 {
@@ -37,20 +39,20 @@ namespace SampleTests.Rerouting
                 cargo.Origin_of("HKG");
                 cargo.Destination_of("DAL");
                 {
-                    var itineraryLeg_table = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
+                    var itineraryLeg = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
                     {
-                        var itineraryLeg = new SpecificationSpecificItineraryLeg();
-                        itineraryLeg.Origin_of("HKG");
-                        itineraryLeg.Destination_of("LGB");
-                        itineraryLeg_table.Add(itineraryLeg);
+                        var itineraryLeg_Row = new SpecificationSpecificItineraryLeg();
+                        itineraryLeg_Row.Origin_of("HKG");
+                        itineraryLeg_Row.Destination_of("LGB");
+                        itineraryLeg.Add(itineraryLeg_Row);
                     }
                     {
-                        var itineraryLeg = new SpecificationSpecificItineraryLeg();
-                        itineraryLeg.Origin_of("LGB");
-                        itineraryLeg.Destination_of("DAL");
-                        itineraryLeg_table.Add(itineraryLeg);
+                        var itineraryLeg_Row = new SpecificationSpecificItineraryLeg();
+                        itineraryLeg_Row.Origin_of("LGB");
+                        itineraryLeg_Row.Destination_of("DAL");
+                        itineraryLeg.Add(itineraryLeg_Row);
                     }
-                    cargo.ItineraryLeg_table_of(itineraryLeg_table);
+                    cargo.ItineraryLeg_table_of(itineraryLeg);
                 }
                 routingService.Cargo_of(cargo);
             }
@@ -58,7 +60,6 @@ namespace SampleTests.Rerouting
             return routingService;
         }
         
-        // act
         public override string When(SpecificationSpecificRoutingService routingService)
         {
             routingService.Reroute();

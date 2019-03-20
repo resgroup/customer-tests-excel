@@ -14,6 +14,8 @@ using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
 using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.IgnoreOnGeneration.Calculator;
+using SampleSystemUnderTest.Calculator;
 
 namespace SampleTests.Vermeulen_Near_Wake_Length
 {
@@ -30,98 +32,97 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
         {
             var vermeulenNearWakeLengthCalculator = new SpecificationSpecificVermeulenNearWakeLengthCalculator();
             {
-                var vermeulenNearWakeLengthInputs_table = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput>();
+                var vermeulenNearWakeLengthInputs = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput>();
                 {
-                    var vermeulenNearWakeLengthInput = new SpecificationSpecificVermeulenNearWakeLengthInput();
-                    vermeulenNearWakeLengthInput.Velocity_of(10);
-                    vermeulenNearWakeLengthInput.Ambient_Turbulence_of(0.15);
-                    vermeulenNearWakeLengthInput.RevolutionsPerMinute_of(15);
-                    vermeulenNearWakeLengthInput.Thrust_Coefficient_of(0.7);
-                    var vermeulenNearWakeLengthInput_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
-                    vermeulenNearWakeLengthInput_TurbineGeometry.NumberOfBlades_of(3);
-                    vermeulenNearWakeLengthInput_TurbineGeometry.Diameter_of(76);
-                    vermeulenNearWakeLengthInput.TurbineGeometry_of(vermeulenNearWakeLengthInput_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInput);
+                    var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
+                    vermeulenNearWakeLengthInputs_Row.Velocity_of(10);
+                    vermeulenNearWakeLengthInputs_Row.Ambient_Turbulence_of(0.15);
+                    vermeulenNearWakeLengthInputs_Row.RevolutionsPerMinute_of(15);
+                    vermeulenNearWakeLengthInputs_Row.Thrust_Coefficient_of(0.7);
+                    var vermeulenNearWakeLengthInputs_Row_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
+                    vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
+                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
-                    var vermeulenNearWakeLengthInput = new SpecificationSpecificVermeulenNearWakeLengthInput();
-                    vermeulenNearWakeLengthInput.Velocity_of(10);
-                    vermeulenNearWakeLengthInput.Ambient_Turbulence_of(0.15);
-                    vermeulenNearWakeLengthInput.RevolutionsPerMinute_of(15);
-                    vermeulenNearWakeLengthInput.Thrust_Coefficient_of(0.7);
-                    var vermeulenNearWakeLengthInput_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
-                    vermeulenNearWakeLengthInput_TurbineGeometry.NumberOfBlades_of(2);
-                    vermeulenNearWakeLengthInput_TurbineGeometry.Diameter_of(76);
-                    vermeulenNearWakeLengthInput.TurbineGeometry_of(vermeulenNearWakeLengthInput_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInput);
+                    var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
+                    vermeulenNearWakeLengthInputs_Row.Velocity_of(10);
+                    vermeulenNearWakeLengthInputs_Row.Ambient_Turbulence_of(0.15);
+                    vermeulenNearWakeLengthInputs_Row.RevolutionsPerMinute_of(15);
+                    vermeulenNearWakeLengthInputs_Row.Thrust_Coefficient_of(0.7);
+                    var vermeulenNearWakeLengthInputs_Row_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(2);
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
+                    vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
+                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
-                    var vermeulenNearWakeLengthInput = new SpecificationSpecificVermeulenNearWakeLengthInput();
-                    vermeulenNearWakeLengthInput.Velocity_of(6);
-                    vermeulenNearWakeLengthInput.Ambient_Turbulence_of(0.15);
-                    vermeulenNearWakeLengthInput.RevolutionsPerMinute_of(15);
-                    vermeulenNearWakeLengthInput.Thrust_Coefficient_of(0.7);
-                    var vermeulenNearWakeLengthInput_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
-                    vermeulenNearWakeLengthInput_TurbineGeometry.NumberOfBlades_of(3);
-                    vermeulenNearWakeLengthInput_TurbineGeometry.Diameter_of(76);
-                    vermeulenNearWakeLengthInput.TurbineGeometry_of(vermeulenNearWakeLengthInput_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInput);
+                    var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
+                    vermeulenNearWakeLengthInputs_Row.Velocity_of(6);
+                    vermeulenNearWakeLengthInputs_Row.Ambient_Turbulence_of(0.15);
+                    vermeulenNearWakeLengthInputs_Row.RevolutionsPerMinute_of(15);
+                    vermeulenNearWakeLengthInputs_Row.Thrust_Coefficient_of(0.7);
+                    var vermeulenNearWakeLengthInputs_Row_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
+                    vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
+                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
-                    var vermeulenNearWakeLengthInput = new SpecificationSpecificVermeulenNearWakeLengthInput();
-                    vermeulenNearWakeLengthInput.Velocity_of(10);
-                    vermeulenNearWakeLengthInput.Ambient_Turbulence_of(0.1);
-                    vermeulenNearWakeLengthInput.RevolutionsPerMinute_of(15);
-                    vermeulenNearWakeLengthInput.Thrust_Coefficient_of(0.7);
-                    var vermeulenNearWakeLengthInput_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
-                    vermeulenNearWakeLengthInput_TurbineGeometry.NumberOfBlades_of(3);
-                    vermeulenNearWakeLengthInput_TurbineGeometry.Diameter_of(76);
-                    vermeulenNearWakeLengthInput.TurbineGeometry_of(vermeulenNearWakeLengthInput_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInput);
+                    var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
+                    vermeulenNearWakeLengthInputs_Row.Velocity_of(10);
+                    vermeulenNearWakeLengthInputs_Row.Ambient_Turbulence_of(0.1);
+                    vermeulenNearWakeLengthInputs_Row.RevolutionsPerMinute_of(15);
+                    vermeulenNearWakeLengthInputs_Row.Thrust_Coefficient_of(0.7);
+                    var vermeulenNearWakeLengthInputs_Row_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
+                    vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
+                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
-                    var vermeulenNearWakeLengthInput = new SpecificationSpecificVermeulenNearWakeLengthInput();
-                    vermeulenNearWakeLengthInput.Velocity_of(10);
-                    vermeulenNearWakeLengthInput.Ambient_Turbulence_of(0.15);
-                    vermeulenNearWakeLengthInput.RevolutionsPerMinute_of(15);
-                    vermeulenNearWakeLengthInput.Thrust_Coefficient_of(0.7);
-                    var vermeulenNearWakeLengthInput_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
-                    vermeulenNearWakeLengthInput_TurbineGeometry.NumberOfBlades_of(3);
-                    vermeulenNearWakeLengthInput_TurbineGeometry.Diameter_of(60);
-                    vermeulenNearWakeLengthInput.TurbineGeometry_of(vermeulenNearWakeLengthInput_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInput);
+                    var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
+                    vermeulenNearWakeLengthInputs_Row.Velocity_of(10);
+                    vermeulenNearWakeLengthInputs_Row.Ambient_Turbulence_of(0.15);
+                    vermeulenNearWakeLengthInputs_Row.RevolutionsPerMinute_of(15);
+                    vermeulenNearWakeLengthInputs_Row.Thrust_Coefficient_of(0.7);
+                    var vermeulenNearWakeLengthInputs_Row_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(60);
+                    vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
+                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
-                    var vermeulenNearWakeLengthInput = new SpecificationSpecificVermeulenNearWakeLengthInput();
-                    vermeulenNearWakeLengthInput.Velocity_of(10);
-                    vermeulenNearWakeLengthInput.Ambient_Turbulence_of(0.15);
-                    vermeulenNearWakeLengthInput.RevolutionsPerMinute_of(20);
-                    vermeulenNearWakeLengthInput.Thrust_Coefficient_of(0.7);
-                    var vermeulenNearWakeLengthInput_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
-                    vermeulenNearWakeLengthInput_TurbineGeometry.NumberOfBlades_of(3);
-                    vermeulenNearWakeLengthInput_TurbineGeometry.Diameter_of(76);
-                    vermeulenNearWakeLengthInput.TurbineGeometry_of(vermeulenNearWakeLengthInput_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInput);
+                    var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
+                    vermeulenNearWakeLengthInputs_Row.Velocity_of(10);
+                    vermeulenNearWakeLengthInputs_Row.Ambient_Turbulence_of(0.15);
+                    vermeulenNearWakeLengthInputs_Row.RevolutionsPerMinute_of(20);
+                    vermeulenNearWakeLengthInputs_Row.Thrust_Coefficient_of(0.7);
+                    var vermeulenNearWakeLengthInputs_Row_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
+                    vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
+                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
-                    var vermeulenNearWakeLengthInput = new SpecificationSpecificVermeulenNearWakeLengthInput();
-                    vermeulenNearWakeLengthInput.Velocity_of(10);
-                    vermeulenNearWakeLengthInput.Ambient_Turbulence_of(0.15);
-                    vermeulenNearWakeLengthInput.RevolutionsPerMinute_of(15);
-                    vermeulenNearWakeLengthInput.Thrust_Coefficient_of(0.6);
-                    var vermeulenNearWakeLengthInput_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
-                    vermeulenNearWakeLengthInput_TurbineGeometry.NumberOfBlades_of(3);
-                    vermeulenNearWakeLengthInput_TurbineGeometry.Diameter_of(76);
-                    vermeulenNearWakeLengthInput.TurbineGeometry_of(vermeulenNearWakeLengthInput_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs_table.Add(vermeulenNearWakeLengthInput);
+                    var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
+                    vermeulenNearWakeLengthInputs_Row.Velocity_of(10);
+                    vermeulenNearWakeLengthInputs_Row.Ambient_Turbulence_of(0.15);
+                    vermeulenNearWakeLengthInputs_Row.RevolutionsPerMinute_of(15);
+                    vermeulenNearWakeLengthInputs_Row.Thrust_Coefficient_of(0.6);
+                    var vermeulenNearWakeLengthInputs_Row_TurbineGeometry = new SpecificationSpecificTurbineGeometry();
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
+                    vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
+                    vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
+                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
-                vermeulenNearWakeLengthCalculator.VermeulenNearWakeLengthInputs_table_of(vermeulenNearWakeLengthInputs_table);
+                vermeulenNearWakeLengthCalculator.VermeulenNearWakeLengthInputs_table_of(vermeulenNearWakeLengthInputs);
             }
             
             return vermeulenNearWakeLengthCalculator;
         }
         
-        // act
         public override string When(SpecificationSpecificVermeulenNearWakeLengthCalculator vermeulenNearWakeLengthCalculator)
         {
             vermeulenNearWakeLengthCalculator.Calculate();
@@ -238,7 +239,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
         protected override bool RoundTrippable() => false;
         
         protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {
-            "There is a complex property ('TurbineGeometry_of', Row 7, Column 9) within a table, which is not supported"
+            "There is a complex property ('TurbineGeometry_of', Row 7, Column 9) within a table in the Excel test, worksheet 'VermeulenNearWakeLength'"
         };
     }
 }
