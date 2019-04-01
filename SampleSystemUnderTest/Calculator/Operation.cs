@@ -8,6 +8,7 @@ namespace SampleSystemUnderTest.Calculator
 {
     public enum Operation
     {
-        Add
+        Add,
+        Subtract
     }
 }
