@@ -9,7 +9,7 @@ namespace CustomerTestsExcel.ExcelToCode
     public class ExcelToCodeBase
     {
         protected ITabularPage worksheet;
-        protected readonly ICodeNameToExcelNameConverter _converter;
+        protected readonly ICodeNameToExcelNameConverter converter;
         protected uint row;
         protected uint column;
         protected string _sutName;
@@ -17,7 +17,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         public ExcelToCodeBase(ICodeNameToExcelNameConverter converter)
         {
-            _converter = converter ?? throw new ArgumentNullException(nameof(converter));
+            this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
         }
 
         protected void Output(string lineOfCSharpCode) =>
@@ -54,7 +54,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         protected string CSharpSUTSpecificationSpecificClassName() =>
-            _converter.ExcelClassNameToCodeName(SUTClassName());
+            converter.ExcelClassNameToCodeName(SUTClassName());
 
         protected string CSharpSUTVariableName() =>
             VariableCase(SUTClassName());
@@ -208,5 +208,27 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected object CellRaw(uint row, uint column) =>
             worksheet.GetCell(row, column).Value;
+
+        protected string CellReferenceA1Style() =>
+            CellReferenceA1Style(row, column);
+
+        protected string CellReferenceA1Style(uint row, uint column)
+        {
+            const uint A = 65;
+            const uint NUMBER_OF_LETTERS_IN_ALPHABET = 26;
+            uint dividend = column;
+            string columnName = String.Empty;
+            uint modulo;
+
+            // this works because the int representation of all capital letters starts at 65, is continuous and in alphabetical order
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % NUMBER_OF_LETTERS_IN_ALPHABET;
+                columnName = Convert.ToChar(A + modulo).ToString() + columnName;
+                dividend = (dividend - modulo) / NUMBER_OF_LETTERS_IN_ALPHABET;
+            }
+
+            return $"{columnName}{row}";
+        }
     }
 }

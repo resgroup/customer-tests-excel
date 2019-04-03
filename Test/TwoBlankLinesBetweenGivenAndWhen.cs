@@ -26,15 +26,15 @@ namespace CustomerTestsExcel.Test
         [Test]
         public void TestProjectCreatorReturnsWarningIfMultipleBlankLinesBetweenGivenAndWhen()
         {
-            var logger = GenerateTestsAndReturnLog(@"TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\");
+            var results = GenerateTestsAndReturnResults(@"TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\");
 
-            StringAssert.Contains("Workbook 'TwoBlankLinesBetweenGivenAndWhen'", logger.LogMessages);
+            StringAssert.Contains("Workbook 'TwoBlankLinesBetweenGivenAndWhen'", results.LogMessages);
 
-            StringAssert.Contains("Worksheet 'TwoBlankLinesBetweenGivenWhen'", logger.LogMessages);
+            StringAssert.Contains("Worksheet 'TwoBlankLinesBetweenGivenWhen'", results.LogMessages);
 
             StringAssert.Contains(
                 "should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8)",
-                logger.LogMessages);
+                results.LogMessages);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace GenerateCodeFromExcelTest
 
                 var usings = GetSetting(args, "usings").Split(' ').ToList();
 
-                TestProjectCreator.Create(folder, specificationProject, "ExcelTests", rootNamespace, usings, assertionClassPrefix, new ExcelTabularLibrary(), new ConsoleLogger());
+                new TestProjectCreator().Create(folder, specificationProject, "ExcelTests", rootNamespace, usings, assertionClassPrefix, new ExcelTabularLibrary(), new ConsoleLogger());
 
                 return 0;
             }

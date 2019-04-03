@@ -4,13 +4,15 @@ using System.Text;
 
 namespace CustomerTestsExcel.Test
 {
-    public class TestLogger : LoggerBase
+    public class TestProjectCreatorResults : LoggerBase
     {
         readonly StringBuilder logMessages = new StringBuilder();
+        public string LogMessages => logMessages.ToString();
+
+        public int ErrorCode { get; set; }
 
         protected override void Log(string message) =>
             logMessages.AppendLine(message);
 
-        public string LogMessages => logMessages.ToString();
     }
 }

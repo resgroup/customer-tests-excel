@@ -63,11 +63,11 @@ namespace CustomerTestsExcel.Test
             return templateStream;
         }
 
-        protected TestLogger GenerateTestsAndReturnLog(string specificationFolderRelativeToOutputFolder)
+        protected TestProjectCreatorResults GenerateTestsAndReturnResults(string specificationFolderRelativeToOutputFolder)
         {
-            var logger = new TestLogger();
+            var logger = new TestProjectCreatorResults();
 
-            TestProjectCreator.Create(
+            logger.ErrorCode = new TestProjectCreator().Create(
                 Path.Combine(TestContext.CurrentContext.TestDirectory, specificationFolderRelativeToOutputFolder),
                 "DummyProject.csproj",
                 "",

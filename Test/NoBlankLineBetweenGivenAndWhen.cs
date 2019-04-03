@@ -27,15 +27,15 @@ namespace CustomerTestsExcel.Test
         [Test]
         public void TestProjectCreatorReturnsWarningIfNoBlankLineBetweenGivenAndWhen()
         {
-            var logger = GenerateTestsAndReturnLog(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen\");
+            var results = GenerateTestsAndReturnResults(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen\");
 
-            StringAssert.Contains("Workbook 'NoBlankLineBetweenGivenAndWhen'", logger.LogMessages);
+            StringAssert.Contains("Workbook 'NoBlankLineBetweenGivenAndWhen'", results.LogMessages);
 
-            StringAssert.Contains("Worksheet 'NoBlankLineBetweenGivenAndWhen'", logger.LogMessages);
+            StringAssert.Contains("Worksheet 'NoBlankLineBetweenGivenAndWhen'", results.LogMessages);
 
             StringAssert.Contains(
                 "no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6)",
-                logger.LogMessages);
+                results.LogMessages);
         }
     }
 }
