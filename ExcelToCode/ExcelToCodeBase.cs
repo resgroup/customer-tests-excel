@@ -193,6 +193,9 @@ namespace CustomerTestsExcel.ExcelToCode
         protected string PeekBelow(uint by = 1) =>
             Cell(row + by, column);
 
+        protected string PeekRight(uint by = 1) =>
+            Cell(row, column + by);
+
         protected string CurrentCell() =>
             Cell(row, column);
 
@@ -212,7 +215,13 @@ namespace CustomerTestsExcel.ExcelToCode
         protected string CellReferenceA1Style() =>
             CellReferenceA1Style(row, column);
 
-        protected string CellReferenceA1Style(uint row, uint column)
+        protected string CellReferenceA1Style(uint row, uint column) =>
+            $"{ColumnReferenceA1Style(column)}{row}";
+
+        protected string ColumnReferenceA1Style()
+            => ColumnReferenceA1Style(column);
+
+        protected string ColumnReferenceA1Style(uint column)
         {
             const uint A = 65;
             const uint NUMBER_OF_LETTERS_IN_ALPHABET = 26;
@@ -228,7 +237,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 dividend = (dividend - modulo) / NUMBER_OF_LETTERS_IN_ALPHABET;
             }
 
-            return $"{columnName}{row}";
+            return columnName;
         }
     }
 }

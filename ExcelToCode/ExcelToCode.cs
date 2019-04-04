@@ -341,6 +341,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
             ExcelMoveDown();
 
+            CheckTableHeaderIndentation();
+
             var headers = new Dictionary<uint, TableHeader>();
 
             using (SavePosition())
@@ -353,6 +355,12 @@ namespace CustomerTestsExcel.ExcelToCode
             }
 
             return headers;
+        }
+
+        void CheckTableHeaderIndentation()
+        {
+            if (CurrentCell() == "" && PeekRight() != "")
+                throw new ExcelToCodeException($"Unable to convert table, it looks like the properties start on column {ColumnReferenceA1Style(column + 1)}, whereas they should start start one to the left, on column {ColumnReferenceA1Style()}");
         }
 
         TableHeader CreatePropertyHeader()
