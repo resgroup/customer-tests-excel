@@ -10,7 +10,7 @@ namespace CustomerTestsExcel
     {
         public const string SPECIFICATION = "Specification";
         public const string GIVEN = "Given a";
-        public const string PROPERTIES = "With Properties";
+        public const string WITH_PROPERTIES = "With Properties";
         public const string WHEN = "When";
         public const string WHEN_VALIDATING = "Validating";
         public const string WHEN_CALCULATING = "Calculating";
@@ -313,9 +313,9 @@ namespace CustomerTestsExcel
             get { return GIVEN; }
         }
 
-        public string Properties
+        public string WithProperties
         {
-            get { return PROPERTIES; }
+            get { return WITH_PROPERTIES; }
         }
 
         public string When
@@ -338,7 +338,8 @@ namespace CustomerTestsExcel
             get { return WHEN_CALCULATING; }
         }
 
-
+        public string TableOf =>
+            "table of";
 
     }
 }

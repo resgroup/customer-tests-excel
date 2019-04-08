@@ -112,7 +112,7 @@ namespace CustomerTestsExcel
         public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames)
         {
             // write out the "withproperties" row
-            SetCell(namer.Properties);
+            SetCell(namer.WithProperties);
 
             MoveToNextRow();
 

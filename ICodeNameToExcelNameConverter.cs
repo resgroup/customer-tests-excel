@@ -10,12 +10,13 @@ namespace CustomerTestsExcel
     {
         string Specification { get; }
         string Given { get; }
-        string Properties { get; }
+        string WithProperties { get; }
         string When { get; }
         string WhenValidating { get; }
         string WhenCalculating { get; }
         string Assert { get; }
         string AssertionClassPrefixAddedByGenerator { get; }
+        string TableOf { get; }
 
         string ExcelFileNameToCodeNamespacePart(string workBookName);
         string CodeNamespaceToExcelFileName(string cSharpAssemblyName);

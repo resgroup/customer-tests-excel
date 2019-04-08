@@ -196,6 +196,9 @@ namespace CustomerTestsExcel.ExcelToCode
         protected string PeekRight(uint by = 1) =>
             Cell(row, column + by);
 
+        protected string PeekBelowRight(uint belowBy = 1, uint rightBy = 1) =>
+            Cell(row + belowBy, column + rightBy);
+
         protected string CurrentCell() =>
             Cell(row, column);
 

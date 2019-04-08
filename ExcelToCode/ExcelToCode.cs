@@ -17,12 +17,16 @@ namespace CustomerTestsExcel.ExcelToCode
         readonly List<string> issuesPreventingRoundTrip;
         public IReadOnlyList<string> IssuesPreventingRoundTrip => issuesPreventingRoundTrip;
 
+        readonly List<string> warnings;
+        public IReadOnlyList<string> Warnings => warnings;
+
         readonly List<string> errors;
         public IReadOnlyList<string> Errors => errors;
 
         public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter)
         {
             issuesPreventingRoundTrip = new List<string>();
+            warnings = new List<string>();
             errors = new List<string>();
         }
 
@@ -82,9 +86,29 @@ namespace CustomerTestsExcel.ExcelToCode
             // This is so that when writing back out to excel, the prefix can be removed. So the prefix exists in the code, but not in excel, and is round trippable
             Output();
             Output($"protected override string AssertionClassPrefixAddedByGenerator => \"{converter.AssertionClassPrefixAddedByGenerator}\";");
+            OutputErrors();
+            OutputWarnings();
             OutputRoundTripIssues();
             Output("}");
             Output("}");
+        }
+
+        void OutputErrors()
+        {
+            if (Errors.Any())
+            {
+                Output();
+                errors.ForEach(error => Output($"// {error}"));
+            }
+        }
+
+        void OutputWarnings()
+        {
+            if (Warnings.Any())
+            {
+                Output();
+                warnings.ForEach(warning => Output($"// {warning}"));
+            }
         }
 
         void OutputRoundTripIssues()
@@ -188,7 +212,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             DeclareVariable(cSharpVariableName, cSharpClassName);
 
-            SetVariableProperties(cSharpVariableName, converter.Properties, "");
+            SetVariableProperties(cSharpVariableName, "");
 
             ExcelMoveUp(); // this is a bit mysterious
         }
@@ -196,9 +220,9 @@ namespace CustomerTestsExcel.ExcelToCode
         void DeclareVariable(string cSharpVariableName, string cSharpClassName) =>
             Output($"var {cSharpVariableName} = new {cSharpClassName}();");
 
-        void SetVariableProperties(string cSharpVariableName, string markAtBeginningOfProperties, string cSharpVariableNamePostfix)
+        void SetVariableProperties(string cSharpVariableName, string cSharpVariableNamePostfix)
         {
-            if (CurrentCell() == markAtBeginningOfProperties)
+            if (CurrentCell() == converter.WithProperties)
             {
                 using (AutoRestoreExcelMoveRight())
                 {
@@ -219,6 +243,9 @@ namespace CustomerTestsExcel.ExcelToCode
             // index = 0;
             // variable name = instrumentCalibration
             // we actually don't need the index any more now that each item in the list has its own scope, so we could remove it from the excel definition
+
+            CheckMissingTableOf();
+
             var excelGivenLeft = CurrentCell();
             using (AutoRestoreExcelMoveRight())
             {
@@ -261,29 +288,45 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
+        // check to see if it looks like a table, but does not end with converter.TableOf
+        void CheckMissingTableOf()
+        {
+            if (LooksLikeATableButIsnt())
+            {
+                var message = $"It looks like you might be trying to set up a table, starting at cell {CellReferenceA1Style()}. If this is the case, please make sure that cell {CellReferenceA1Style()} ends with '{converter.TableOf}'";
+
+                // this will appear at the relevant point in the generated code
+                Output($"// {message}");
+
+                // this can be used elsewhere, such as in the console output of the test generation
+                errors.Add(message);
+            }
+        }
+
+        bool LooksLikeATableButIsnt() =>
+            (
+            IsTable(CurrentCell()) == false
+            && PeekBelowRight() == converter.WithProperties
+            && (PeekBelowRight(2, 1) != "" && PeekBelow(2) == "")
+            );
+
+        bool IsTable(string excelGivenLeft) =>
+            excelGivenLeft.EndsWith(converter.TableOf, StringComparison.InvariantCultureIgnoreCase);
+
         string TableVariableNameFromMethodName(string cSharpMethodName)
         {
             // change "Cargo table_of" (method name from Excel) to "cargo (c# variable name)"
             return VariableCase(cSharpMethodName.Substring(0, cSharpMethodName.Length - 9));
         }
 
-        bool IsTable(string excelGivenLeft)
-        {
-            return excelGivenLeft.EndsWith("table of", StringComparison.InvariantCultureIgnoreCase);
-        }
-
         void CreateObjectsFromTable(string cSharpVariableName, string cSharpClassName, string cSharpSpecificationSpecificClassName)
         {
-            // read token that speficy the start of the properties
-            //todo: this should always be the first column now that we don't have creational properties to worry about
-            //uint? propertiesStartColumn = FindTokenInCurrentRowFromCurrentColumn(_converter.Properties);
-
             var headers = ReadHeaders();
 
             if (!headers.Any())
                 throw new ExcelToCodeException($"No headers found for table at {CellReferenceA1Style()}");
 
-            CheckTableIsRoundTrippable(row, headers.Values);
+            CheckTableIsRoundTrippable(headers.Values);
 
             uint lastColumn = headers.Max(h => h.Value.EndColumn);
             uint propertiesEndColumn = lastColumn;
@@ -319,7 +362,7 @@ namespace CustomerTestsExcel.ExcelToCode
             ExcelMoveUp();
         }
 
-        void CheckTableIsRoundTrippable(uint row, IEnumerable<TableHeader> tableHeaders)
+        void CheckTableIsRoundTrippable(IEnumerable<TableHeader> tableHeaders)
         {
             if (tableHeaders.All(h => h.IsRoundTrippable))
                 return;
@@ -336,8 +379,8 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             ExcelMoveDown();
 
-            if (CurrentCell() != converter.Properties)
-                 throw new ExcelToCodeException($"The Excel test is not formmated correctly. Cell {CellReferenceA1Style()} should be '{converter.Properties}', but is '{CurrentCell()}'");
+            if (CurrentCell() != converter.WithProperties)
+                 throw new ExcelToCodeException($"The Excel test is not formmated correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
 
             ExcelMoveDown();
 
@@ -365,7 +408,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         TableHeader CreatePropertyHeader()
         {
-            if (PeekBelow(2) == converter.Properties)
+            if (PeekBelow(2) == converter.WithProperties)
                 return CreateSubClassHeader();
 
             return new PropertyTableHeader(CurrentCell(), row, column);
@@ -474,7 +517,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         bool HasGivenSubProperties()
         {
-            return (PeekBelow() == converter.Properties);
+            return (PeekBelow() == converter.WithProperties);
         }
 
         protected void DoWhen()

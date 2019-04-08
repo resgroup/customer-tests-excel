@@ -170,8 +170,12 @@ namespace CustomerTestsExcel.ExcelToCode
             if (sheetConverter.Errors.Any())
             {
                 Success = false;
-                sheetConverter.Errors.ToList().ForEach(error => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, error));
+                sheetConverter.Errors.ToList().ForEach(error => logger.LogError(workBookName, sheet.Name, error));
             }
+
+            // log any warnings
+            if (sheetConverter.Warnings.Any())
+                sheetConverter.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
 
             // log any issues preventing round trip
             if (sheetConverter.IssuesPreventingRoundTrip.Any())
