@@ -1,5 +1,6 @@
 ﻿using CustomerTestsExcel.Indentation;
 using CustomerTestsExcel.Indentation;
+using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -528,25 +529,13 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 Output();
                 Output("public override string When(" + CSharpSUTSpecificationSpecificClassName() + " " + CSharpSUTVariableName() + ")");
-                Output("{");
 
-                if (CurrentCell() == converter.WhenValidating)
-                {
-                    Output("// no action required here, the business object should have updated its validation in response to property change events");
-                    Output("return \"" + converter.WhenValidating + "\";");
-                }
-                else if (CurrentCell() == converter.WhenCalculating)
-                {
-                    Output(CSharpSUTVariableName() + ".Calculate();");
-                    Output("return \"" + converter.WhenCalculating + "\";");
-                }
-                else
+                using (Scope())
                 {
                     Output(CSharpSUTVariableName() + "." + converter.ActionExcelNameToCodeName(CurrentCell()) + "();");
                     Output("return \"" + CurrentCell() + "\";");
                 }
 
-                Output("}");
                 Output();
             }
 

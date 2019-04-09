@@ -12,8 +12,6 @@ namespace CustomerTestsExcel
         public const string GIVEN = "Given a";
         public const string WITH_PROPERTIES = "With Properties";
         public const string WHEN = "When";
-        public const string WHEN_VALIDATING = "Validating";
-        public const string WHEN_CALCULATING = "Calculating";
         public const string ASSERT = "Assert";
 
         public string AssertionClassPrefixAddedByGenerator { get; }
@@ -326,16 +324,6 @@ namespace CustomerTestsExcel
         public string Assert
         {
             get { return ASSERT; }
-        }
-
-        public string WhenValidating
-        {
-            get { return WHEN_VALIDATING; }
-        }
-
-        public string WhenCalculating
-        {
-            get { return WHEN_CALCULATING; }
         }
 
         public string TableOf =>
