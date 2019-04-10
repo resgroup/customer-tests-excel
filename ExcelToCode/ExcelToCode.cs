@@ -246,6 +246,7 @@ namespace CustomerTestsExcel.ExcelToCode
             // we actually don't need the index any more now that each item in the list has its own scope, so we could remove it from the excel definition
 
             CheckMissingTableOf();
+            var startCellReference = CellReferenceA1Style();
 
             var excelGivenLeft = CurrentCell();
             using (AutoRestoreExcelMoveRight())
@@ -262,7 +263,7 @@ namespace CustomerTestsExcel.ExcelToCode
                         string cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
                         string cSharpChildVariableName = TableVariableNameFromMethodName(cSharpMethodName);
 
-                        CreateObjectsFromTable(cSharpChildVariableName, cSharpChildVariableName + "_Row", cSharpClassName);
+                        CreateObjectsFromTable(startCellReference, cSharpChildVariableName, cSharpChildVariableName + "_Row", cSharpClassName);
                         Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
@@ -320,12 +321,16 @@ namespace CustomerTestsExcel.ExcelToCode
             return VariableCase(cSharpMethodName.Substring(0, cSharpMethodName.Length - 9));
         }
 
-        void CreateObjectsFromTable(string cSharpVariableName, string cSharpClassName, string cSharpSpecificationSpecificClassName)
+        void CreateObjectsFromTable(
+            string tableStartCellReference, 
+            string cSharpVariableName, 
+            string cSharpClassName, 
+            string cSharpSpecificationSpecificClassName)
         {
             var headers = ReadHeaders();
 
             if (!headers.Any())
-                throw new ExcelToCodeException($"No headers found for table at {CellReferenceA1Style()}");
+                throw new ExcelToCodeException($"The table starting at cell {tableStartCellReference} has no headers. There should be a row of Property Names starting at {CellReferenceA1Style()}, with rows of Property Values below.");
 
             CheckTableIsRoundTrippable(headers.Values);
 

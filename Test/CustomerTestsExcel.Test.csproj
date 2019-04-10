@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
+    <Compile Include="NoHeadersForTable.cs" />
     <Compile Include="MissingTableOfForTable.cs" />
     <Compile Include="BadIndentationForTable.cs" />
     <Compile Include="MissingWithPropertiesForTable.cs" />
@@ -92,6 +93,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="TestExcelFiles\NoHeadersForTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestExcelFiles\MissingTableOfForTable\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -125,6 +129,9 @@
     <Content Include="TestExcelFiles\MissingTableOfForTable\MissingTableOfForTable.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestExcelFiles\NoHeadersForTable\NoHeadersForTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -136,6 +143,9 @@
     <Content Include="TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestExcelFiles\GivenClasses\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
