@@ -16,6 +16,8 @@ namespace CustomerTestsExcel.Test
 
             string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
+            StringAssert.Contains("table starting at C5", generatedCode);
+
             StringAssert.Contains("D6 should be 'With Properties', but is 'AnyProperty of'", generatedCode);
         }
 
@@ -26,12 +28,13 @@ namespace CustomerTestsExcel.Test
 
             Assert.AreNotEqual(0, results.ErrorCode);
 
-            StringAssert.Contains("Workbook 'MissingWithPropertiesForTable'", results.LogMessages); 
+            StringAssert.Contains("Workbook 'MissingWithPropertiesForTable'", results.LogMessages);
 
-            StringAssert.Contains("Worksheet 'MissingWithPropertiesForTable'", results.LogMessages); 
+            StringAssert.Contains("Worksheet 'MissingWithPropertiesForTable'", results.LogMessages);
+
+            StringAssert.Contains("table starting at C5", results.LogMessages);
 
             StringAssert.Contains("D6 should be 'With Properties', but is 'AnyProperty of'", results.LogMessages);
-            
         }
     }
 }

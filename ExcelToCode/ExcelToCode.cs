@@ -11,7 +11,7 @@ namespace CustomerTestsExcel.ExcelToCode
     // this class is very much too big, split in to smaller ones
     // easy targets would be given, when, assert.
     // the various property types could probably also be split off quite easily as well
-    // a better way of doing this would probably be to form a representation of the test in code (like the _assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
+    // a better way of doing this would probably be to form a representation of the test in code (like the assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
     // might be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
@@ -327,10 +327,11 @@ namespace CustomerTestsExcel.ExcelToCode
             string cSharpClassName, 
             string cSharpSpecificationSpecificClassName)
         {
+            CheckMissingWithPropertiesForTable(tableStartCellReference);
+
             var headers = ReadHeaders();
 
-            if (!headers.Any())
-                throw new ExcelToCodeException($"The table starting at cell {tableStartCellReference} has no headers. There should be a row of Property Names starting at {CellReferenceA1Style()}, with rows of Property Values below.");
+            CheckMissingHeadersForTable(tableStartCellReference, headers);
 
             CheckTableIsRoundTrippable(headers.Values);
 
@@ -368,6 +369,21 @@ namespace CustomerTestsExcel.ExcelToCode
             ExcelMoveUp();
         }
 
+        void CheckMissingHeadersForTable(string tableStartCellReference, Dictionary<uint, TableHeader> headers)
+        {
+            if (!headers.Any())
+                throw new ExcelToCodeException($"The table starting at cell {tableStartCellReference} has no headers. There should be a row of Property Names starting at {CellReferenceA1Style()}, with rows of Property Values below.");
+        }
+
+        void CheckMissingWithPropertiesForTable(string tableStartCellReference)
+        {
+            using (AutoRestoreExcelMoveDown(1))
+            {
+                if (CurrentCell() != converter.WithProperties)
+                    throw new ExcelToCodeException($"The table starting at {tableStartCellReference} is not formmated correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
+            }
+        }
+
         void CheckTableIsRoundTrippable(IEnumerable<TableHeader> tableHeaders)
         {
             if (tableHeaders.All(h => h.IsRoundTrippable))
@@ -384,9 +400,6 @@ namespace CustomerTestsExcel.ExcelToCode
         Dictionary<uint, TableHeader> ReadHeaders()
         {
             ExcelMoveDown();
-
-            if (CurrentCell() != converter.WithProperties)
-                 throw new ExcelToCodeException($"The Excel test is not formmated correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
 
             ExcelMoveDown();
 
@@ -665,6 +678,10 @@ namespace CustomerTestsExcel.ExcelToCode
             string cSharpSubMethodName = converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
             string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
 
+            var startCellReference = CellReferenceA1Style();
+
+            CheckMissingWithPropertiesInAssertionTable(startCellReference);
+
             // first row is property name, "table of" and property type
             // then With Properties
             // then the headers 
@@ -712,6 +729,15 @@ namespace CustomerTestsExcel.ExcelToCode
             // we should leave the row at the last row of the TABLE assertions. The calling DoAssertions (it is recursive) calls MoveDown to move on to the next assertion row after this method.
             // This seems like a bad pattern though, we should probably fix it up. Assertions should be responsible for moving the cursor on themselves.
             ExcelMoveUp();
+        }
+
+        void CheckMissingWithPropertiesInAssertionTable(string startCellReference)
+        {
+            using (AutoRestoreExcelMoveDownRight(1, 2))
+            {
+                if (CurrentCell() != converter.WithProperties)
+                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formmated correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
+            }
         }
 
         IEnumerable<AssertionTableHeader> ReadAssertionTableHeaders()

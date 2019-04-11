@@ -97,6 +97,9 @@ namespace CustomerTestsExcel.ExcelToCode
             return false;
         }
 
+        protected void ExcelMoveUp(uint by = 1) =>
+            row -= by;
+
         protected void ExcelMoveDown(uint by = 1) =>
             row += by;
 
@@ -108,9 +111,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 ExcelMoveDown();
             }
         }
-
-        protected void ExcelMoveUp() =>
-            row--;
 
         protected void ExcelMoveRight(uint by = 1) =>
             column += by;
@@ -165,10 +165,28 @@ namespace CustomerTestsExcel.ExcelToCode
             return new TidyUp(() => { row = savedRow; column = savedColumn; });
         }
 
+        protected TidyUp AutoRestoreExcelMoveDown(uint by = 1)
+        {
+            ExcelMoveDown(by);
+            return new TidyUp(() => ExcelMoveUp(by));
+        }
+
         protected TidyUp AutoRestoreExcelMoveRight(uint by = 1)
         {
             ExcelIndent(by);
             return new TidyUp(() => ExcelUnIndent(by));
+        }
+
+        protected TidyUp AutoRestoreExcelMoveDownRight(uint downBy = 1, uint rightBy = 1)
+        {
+            ExcelIndent(rightBy);
+            ExcelMoveDown(downBy);
+
+            return new TidyUp(() => 
+            {
+                ExcelUnIndent(rightBy);
+                ExcelMoveUp(downBy);
+            });
         }
 
         protected void ExcelIndent(uint by = 1) =>

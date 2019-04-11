@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
+    <Compile Include="MissingWithPropertiesForAssertionTable.cs" />
     <Compile Include="NoHeadersForTable.cs" />
     <Compile Include="MissingTableOfForTable.cs" />
     <Compile Include="BadIndentationForTable.cs" />
@@ -93,6 +94,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestExcelFiles\NoHeadersForTable\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -130,6 +134,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\NoHeadersForTable\NoHeadersForTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\MissingWithPropertiesForAssertionTable.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
