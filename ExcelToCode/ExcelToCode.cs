@@ -1,6 +1,4 @@
 ﻿using CustomerTestsExcel.Indentation;
-using CustomerTestsExcel.Indentation;
-using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -329,6 +327,8 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             CheckMissingWithPropertiesForTable(tableStartCellReference);
 
+            CheckBadIndentationInTable(tableStartCellReference);
+
             var headers = ReadHeaders();
 
             CheckMissingHeadersForTable(tableStartCellReference, headers);
@@ -403,8 +403,6 @@ namespace CustomerTestsExcel.ExcelToCode
 
             ExcelMoveDown();
 
-            CheckTableHeaderIndentation();
-
             var headers = new Dictionary<uint, TableHeader>();
 
             using (SavePosition())
@@ -419,10 +417,13 @@ namespace CustomerTestsExcel.ExcelToCode
             return headers;
         }
 
-        void CheckTableHeaderIndentation()
+        void CheckBadIndentationInTable(string startCellReference)
         {
-            if (CurrentCell() == "" && PeekRight() != "")
-                throw new ExcelToCodeException($"Unable to convert table, it looks like the properties start on column {ColumnReferenceA1Style(column + 1)}, whereas they should start start one to the left, on column {ColumnReferenceA1Style()}");
+            using (AutoRestoreExcelMoveDown(2))
+            {
+                if (CurrentCell() == "" && PeekRight() != "")
+                    throw new ExcelToCodeException($"The table starting at {startCellReference} is not formatted correctly. The properties start on column {ColumnReferenceA1Style(column + 1)}, but they should start start one to the left, on column {ColumnReferenceA1Style()}");
+            }
         }
 
         TableHeader CreatePropertyHeader()
@@ -681,6 +682,7 @@ namespace CustomerTestsExcel.ExcelToCode
             var startCellReference = CellReferenceA1Style();
 
             CheckMissingWithPropertiesInAssertionTable(startCellReference);
+            CheckBadIndentationInAssertionTable(startCellReference);
 
             // first row is property name, "table of" and property type
             // then With Properties
@@ -731,6 +733,15 @@ namespace CustomerTestsExcel.ExcelToCode
             ExcelMoveUp();
         }
 
+        void CheckBadIndentationInAssertionTable(string startCellReference)
+        {
+            using (AutoRestoreExcelMoveDownRight(2, 2))
+            {
+                if (CurrentCell() == "" && PeekRight() != "")
+                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formmated correctly. The properties start on column {ColumnReferenceA1Style(column + 1)}, but they should start one to the left, on column {ColumnReferenceA1Style()}");
+            }
+        }
+
         void CheckMissingWithPropertiesInAssertionTable(string startCellReference)
         {
             using (AutoRestoreExcelMoveDownRight(1, 2))
@@ -746,7 +757,6 @@ namespace CustomerTestsExcel.ExcelToCode
 
             using (SavePosition())
             {
-                // table assertions are formatted in the same way that table set properties are
                 ExcelMoveRight(2);
 
                 while (string.IsNullOrWhiteSpace(CurrentCell()) == false)

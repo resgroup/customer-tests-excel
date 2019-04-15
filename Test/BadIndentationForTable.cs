@@ -16,7 +16,9 @@ namespace CustomerTestsExcel.Test
 
             string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-            StringAssert.Contains("properties start on column E, whereas they should start start one to the left, on column D", generatedCode);
+            StringAssert.Contains("table starting at C5", generatedCode);
+
+            StringAssert.Contains("properties start on column E, but they should start start one to the left, on column D", generatedCode);
         }
 
         [Test]
@@ -30,7 +32,9 @@ namespace CustomerTestsExcel.Test
 
             StringAssert.Contains("Worksheet 'BadIndentationForTable'", results.LogMessages);
 
-            StringAssert.Contains("properties start on column E, whereas they should start start one to the left, on column D", results.LogMessages);
+            StringAssert.Contains("table starting at C5", results.LogMessages);
+
+            StringAssert.Contains("properties start on column E, but they should start start one to the left, on column D", results.LogMessages);
         }
     }
 }

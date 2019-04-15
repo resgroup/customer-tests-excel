@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
+    <Compile Include="BadIndentationForAssertionTable.cs" />
     <Compile Include="MissingWithPropertiesForAssertionTable.cs" />
     <Compile Include="NoHeadersForTable.cs" />
     <Compile Include="MissingTableOfForTable.cs" />
@@ -94,6 +95,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="TestExcelFiles\BadIndentationForAssertionTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -137,6 +141,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\MissingWithPropertiesForAssertionTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\BadIndentationForAssertionTable\BadIndentationForAssertionTable.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
