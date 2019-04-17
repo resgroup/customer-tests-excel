@@ -64,7 +64,7 @@ namespace CustomerTestsExcel
 
         string _path;
         Stream _outputStream;
-        SpreadsheetDocument _package;
+        readonly SpreadsheetDocument _package;
         WorkbookPart _workbookPart;
         Workbook _workbook;
         string _tempFilePath;

@@ -132,9 +132,9 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             ExcelMoveDownToToken(converter.Specification);
 
-            ExcelIndent();
+            ExcelMoveRight();
             var description = CurrentCell();
-            ExcelUnIndent();
+            ExcelMoveLeft();
 
             ExcelMoveDown();
 
@@ -570,7 +570,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("return new List<IAssertion<" + CSharpSUTSpecificationSpecificClassName() + ">>");
             Output("{");
 
-            ExcelIndent();
+            ExcelMoveRight();
 
             DoAssertions(CSharpSUTSpecificationSpecificClassName(), VariableCase(CSharpSUTVariableName()));
         }
@@ -605,24 +605,26 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             string excelPropertyName = CurrentCell();
             string simpleCSharpPropertyName = converter.AssertPropertyExcelNameToCodeName(excelPropertyName);
-            ExcelIndent();
+            ExcelMoveRight();
             string assertionOperatorOrExcelSubClassNameOrTableOf = CurrentCell();
-            ExcelIndent();
+            ExcelMoveRight();
             string excelPropertyValue = CurrentCell();
             string cSharpPropertyValue = converter.AssertValueExcelNameToCodeName(excelPropertyValue, CurrentCellRaw());
-            ExcelIndent();
+            ExcelMoveRight();
             string assertionSpecificKey = CurrentCell();
-            ExcelIndent();
+            ExcelMoveRight();
             string assertionSpecificValue = CurrentCell();
-            ExcelIndent();
+            ExcelMoveRight();
             string roundTripValue = CurrentCell();
-            ExcelUnIndent(5);
+            ExcelMoveLeft(5);
+
+            CheckMissingTableOfForAssertion();
 
             if (string.IsNullOrWhiteSpace(excelPropertyValue))
             {
                 DoSubAssertion(assertIndex, simpleCSharpPropertyName, assertionOperatorOrExcelSubClassNameOrTableOf, cSharpClassName);
             }
-            else if (assertionOperatorOrExcelSubClassNameOrTableOf == "table of")
+            else if (assertionOperatorOrExcelSubClassNameOrTableOf == converter.TableOf)
             {
                 DoTableAssertion(assertIndex, simpleCSharpPropertyName, excelPropertyValue, cSharpClassName);
             }
@@ -640,7 +642,7 @@ namespace CustomerTestsExcel.ExcelToCode
             }
             else
             {
-                throw new Exception("Invalid assertion operator found in excel file: " + assertionOperatorOrExcelSubClassNameOrTableOf);
+                DoInvalidAssertion(assertionOperatorOrExcelSubClassNameOrTableOf);
             }
 
             if (!string.IsNullOrWhiteSpace(roundTripValue))
@@ -649,6 +651,37 @@ namespace CustomerTestsExcel.ExcelToCode
                 DoExcelFormulaDoesNotMatchCodeAssertion(assertIndex, simpleCSharpPropertyName, cSharpPropertyValue, roundTripValue, cSharpClassName);
             }
         }
+
+        void DoInvalidAssertion(string assertionOperatorOrExcelSubClassNameOrTableOf)
+        {
+            AddError($"Invalid assertion operator ('{assertionOperatorOrExcelSubClassNameOrTableOf}') found at cell {CellReferenceA1Style()}. Valid operators are '=' and '{converter.TableOf}'");
+        }
+
+        void AddError(string message)
+        {
+            // this will appear at the relevant point in the generated code
+            Output($"// {message}");
+
+            // this can be used elsewhere, such as in the console output of the test generation
+            errors.Add(message);
+        }
+
+        // check to see if it looks like a table, but does not end with converter.TableOf
+        void CheckMissingTableOfForAssertion()
+        {
+            if (LooksLikeAnAssertionTableButIsnt())
+                AddError($"It looks like you might be trying to set up a table assertion, starting at cell {CellReferenceA1Style()}. If this is the case, please make sure that cell {CellReferenceA1Style(row, column + 1)} is '{converter.TableOf}', and that the table itself (the bit with the class name, 'With Properties' etc) starts on column {ColumnReferenceA1Style(column + 2)}");
+        }
+
+        bool LooksLikeAnAssertionTableButIsnt() =>
+            (
+            PeekRight() != converter.TableOf
+            && 
+                (
+                PeekBelowRight() == converter.WithProperties && PeekBelow() == ""
+                || PeekBelowRight(1, 2) == converter.WithProperties && PeekBelowRight() == ""
+                )
+            );
 
         // wants to look something like this
         /*
@@ -715,7 +748,7 @@ namespace CustomerTestsExcel.ExcelToCode
                                         foreach (var assertionTableHeader in assertionTableHeaders)
                                         {
                                             DoTableCellAssertion(tableColumnIndex, cSharpSubClassName, cSharpVariableName, assertionTableHeader);
-                                            ExcelIndent();
+                                            ExcelMoveRight();
                                             tableColumnIndex++;
                                         }
                                     }

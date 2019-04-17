@@ -12,15 +12,16 @@ namespace CustomerTestsExcel.Test
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\ComplexObjectWithinTable\ComplexObjectWithinTable.xlsx");
+            using (var workbook = Workbook(@"TestExcelFiles\ComplexObjectWithinTable\ComplexObjectWithinTable.xlsx"))
+            {
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-            string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                StringAssert.Contains("RoundTrippable() => false", generatedCode);
 
-            StringAssert.Contains("RoundTrippable() => false", generatedCode);
-
-            StringAssert.Contains(
-                "complex property ('ComplexObject_of', cell D7) within a table",
-                generatedCode);
+                StringAssert.Contains(
+                    "complex property ('ComplexObject_of', cell D7) within a table",
+                    generatedCode);
+            }
         }
 
         [Test]

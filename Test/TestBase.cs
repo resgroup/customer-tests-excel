@@ -20,17 +20,14 @@ namespace CustomerTestsExcel.Test
         {
         }
 
-        protected ITabularPage FirstWorksheet(string excelFileNameRelativeToOutputFolder)
+        protected ITabularBook Workbook(string excelFileNameRelativeToOutputFolder)
         {
             var excel = new ExcelTabularLibrary();
 
-            using (var workbookFile = GetExcelFileStream(Path.Combine(TestContext.CurrentContext.TestDirectory, excelFileNameRelativeToOutputFolder)))
-            {
-                using (var workbook = excel.OpenBook(workbookFile))
-                {
-                    return workbook.GetPage(0);
-                }
-            }
+            var workbookFile = GetExcelFileStream(Path.Combine(TestContext.CurrentContext.TestDirectory, excelFileNameRelativeToOutputFolder));
+            
+            // the workbook owns the stream, implements IDisposable and disposes of the stream
+            return excel.OpenBook(workbookFile);
         }
 
         Stream GetExcelFileStream(string excelFile, string temporaryFolder = null)

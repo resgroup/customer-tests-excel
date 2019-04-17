@@ -15,7 +15,7 @@ namespace CustomerTestsExcel
         WorksheetPart _worksheetPart;
         ChartsheetPart _chartsheetPart;
         Sheet _sheet;
-        SpreadsheetDocument _package;
+        readonly SpreadsheetDocument _package;
         ExcelTabularBook _parent;
 
         // this is for GetRow etc

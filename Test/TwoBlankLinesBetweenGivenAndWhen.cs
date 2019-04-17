@@ -12,15 +12,16 @@ namespace CustomerTestsExcel.Test
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\TwoBlankLinesBetweenGivenAndWhen.xlsx");
+            using (var workbook = Workbook(@"TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\TwoBlankLinesBetweenGivenAndWhen.xlsx"))
+            {
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-            string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                StringAssert.Contains("RoundTrippable() => false", generatedCode);
 
-            StringAssert.Contains("RoundTrippable() => false", generatedCode);
-
-            StringAssert.Contains(
-                "should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8)",
-                generatedCode);
+                StringAssert.Contains(
+                    "should be exactly one blank line, but there are 2, between the end of the Given section (Row 5) and the start of the When section (Row 8)",
+                    generatedCode);
+            }
         }
 
         [Test]

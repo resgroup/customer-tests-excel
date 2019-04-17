@@ -12,13 +12,14 @@ namespace CustomerTestsExcel.Test
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\MissingWithPropertiesForAssertionTable\MissingWithPropertiesForAssertionTable.xlsx");
+            using (var workbook = Workbook(@"TestExcelFiles\MissingWithPropertiesForAssertionTable\MissingWithPropertiesForAssertionTable.xlsx"))
+            {
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-            string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                StringAssert.Contains("assertion table starting at B8", generatedCode);
 
-            StringAssert.Contains("assertion table starting at B8", generatedCode);
-
-            StringAssert.Contains("D9 should be 'With Properties', but is 'AnyProperty'", generatedCode);
+                StringAssert.Contains("D9 should be 'With Properties', but is 'AnyProperty'", generatedCode);
+            }
         }
 
         [Test]

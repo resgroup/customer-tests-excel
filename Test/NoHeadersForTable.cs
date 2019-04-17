@@ -12,11 +12,12 @@ namespace CustomerTestsExcel.Test
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\NoHeadersForTable\NoHeadersForTable.xlsx");
+            using (var workbook = Workbook(@"TestExcelFiles\NoHeadersForTable\NoHeadersForTable.xlsx"))
+            {
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-            string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
-
-            StringAssert.Contains("table starting at cell C5 has no headers", generatedCode);
+                StringAssert.Contains("table starting at cell C5 has no headers", generatedCode);
+            }
         }
 
         [Test]

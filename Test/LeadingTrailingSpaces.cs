@@ -8,15 +8,23 @@ namespace CustomerTestsExcel.Test
     public class LeadingTrailingSpaces : TestBase
     {
         string generatedCode;
+        ITabularBook workbook;
 
         [SetUp]
-        public void SeUup()
+        public void SetUp()
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\Leading Trailing Spaces .xlsx");
+            workbook = Workbook(@"TestExcelFiles\Leading Trailing Spaces .xlsx");
 
-            generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+            generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+        }
+
+
+        [TearDown]
+        public void TearDown()
+        {
+            workbook.Dispose();
         }
 
         [Test]

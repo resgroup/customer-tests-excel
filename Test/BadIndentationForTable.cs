@@ -12,13 +12,14 @@ namespace CustomerTestsExcel.Test
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\BadIndentationForTable\BadIndentationForTable.xlsx");
+            using (var workbook = Workbook(@"TestExcelFiles\BadIndentationForTable\BadIndentationForTable.xlsx"))
+            {
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-            string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                StringAssert.Contains("table starting at C5", generatedCode);
 
-            StringAssert.Contains("table starting at C5", generatedCode);
-
-            StringAssert.Contains("properties start on column E, but they should start start one to the left, on column D", generatedCode);
+                StringAssert.Contains("properties start on column E, but they should start start one to the left, on column D", generatedCode);
+            }
         }
 
         [Test]

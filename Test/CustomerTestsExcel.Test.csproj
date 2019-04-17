@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="BadIndentationForAssertionTable.cs" />
+    <Compile Include="MispeltTableOfForAssertionTable.cs" />
+    <Compile Include="MissingTableOfForAssertionTable.cs" />
     <Compile Include="MissingWithPropertiesForAssertionTable.cs" />
     <Compile Include="NoHeadersForTable.cs" />
     <Compile Include="MissingTableOfForTable.cs" />
@@ -96,6 +98,12 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="TestExcelFiles\BadIndentationForAssertionTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\MispeltTableOfForAssertionTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\MissingTableOfForAssertionTable\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\DummyProject.csproj">
@@ -144,6 +152,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\BadIndentationForAssertionTable\BadIndentationForAssertionTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\MispeltTableOfForAssertionTable\MispeltTableOfForAssertionTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\MissingTableOfForAssertionTable\MissingTableOfForAssertionTable.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

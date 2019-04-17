@@ -173,30 +173,20 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected TidyUp AutoRestoreExcelMoveRight(uint by = 1)
         {
-            ExcelIndent(by);
-            return new TidyUp(() => ExcelUnIndent(by));
+            ExcelMoveRight(by);
+            return new TidyUp(() => ExcelMoveLeft(by));
         }
 
         protected TidyUp AutoRestoreExcelMoveDownRight(uint downBy = 1, uint rightBy = 1)
         {
-            ExcelIndent(rightBy);
+            ExcelMoveRight(rightBy);
             ExcelMoveDown(downBy);
 
             return new TidyUp(() => 
             {
-                ExcelUnIndent(rightBy);
+                ExcelMoveLeft(rightBy);
                 ExcelMoveUp(downBy);
             });
-        }
-
-        protected void ExcelIndent(uint by = 1) =>
-            column += by;
-
-        protected void ExcelUnIndent(uint by = 1)
-        {
-            column -= by;
-            if (column <= 0)
-                throw new Exception("UnIndent without matching Indent");
         }
 
         protected uint GetLastRow() =>

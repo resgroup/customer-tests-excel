@@ -13,15 +13,16 @@ namespace CustomerTestsExcel.Test
         {
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
 
-            var worksheet = FirstWorksheet(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen\NoBlankLineBetweenGivenAndWhen.xlsx");
+            using (var workbook = Workbook(@"TestExcelFiles\NoBlankLineBetweenGivenAndWhen\NoBlankLineBetweenGivenAndWhen.xlsx"))
+            {
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-            string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, worksheet, ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                StringAssert.Contains("RoundTrippable() => false", generatedCode);
 
-            StringAssert.Contains("RoundTrippable() => false", generatedCode);
-
-            StringAssert.Contains(
-                "no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6)",
-                generatedCode);
+                StringAssert.Contains(
+                    "no blank line between the end of the Given section (Row 5) and the start of the When section (Row 6)",
+                    generatedCode);
+            }
         }
 
         [Test]
