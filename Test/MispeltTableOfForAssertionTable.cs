@@ -5,6 +5,9 @@ using NUnit.Framework;
 namespace CustomerTestsExcel.Test
 {
     [TestFixture]
+    // This case is fairly easy to test for Assertion Tables, as one of the cells should be "table of".
+    // There is no corresponding test for setup / given tables, as "table of" doesn't have its own cell,
+    // and the MissingTableOfForTable test covers the situation. 
     public class MispeltTableOfForAssertionTable : TestBase
     {
         [Test]
