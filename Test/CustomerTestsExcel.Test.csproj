@@ -68,6 +68,7 @@
     <Compile Include="MispeltTableOfForAssertionTable.cs" />
     <Compile Include="MissingTableOfForAssertionTable.cs" />
     <Compile Include="MissingWithPropertiesForAssertionTable.cs" />
+    <Compile Include="NoHeadersForAssertionTable.cs" />
     <Compile Include="NoHeadersForTable.cs" />
     <Compile Include="MissingTableOfForTable.cs" />
     <Compile Include="BadIndentationForTable.cs" />
@@ -107,6 +108,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\NoHeadersForAssertionTable\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\NoHeadersForTable\DummyProject.csproj">
@@ -158,6 +162,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingTableOfForAssertionTable\MissingTableOfForAssertionTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\NoHeadersForAssertionTable\NoHeadersForAssertionTable.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

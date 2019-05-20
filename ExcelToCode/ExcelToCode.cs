@@ -380,7 +380,7 @@ namespace CustomerTestsExcel.ExcelToCode
             using (AutoRestoreExcelMoveDown(1))
             {
                 if (CurrentCell() != converter.WithProperties)
-                    throw new ExcelToCodeException($"The table starting at {tableStartCellReference} is not formmated correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
+                    throw new ExcelToCodeException($"The table starting at {tableStartCellReference} is not formatted correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
             }
         }
 
@@ -724,6 +724,11 @@ namespace CustomerTestsExcel.ExcelToCode
             ExcelMoveDown();
             var assertionTableHeaders = ReadAssertionTableHeaders();
 
+            CheckMissingHeadersInAssertionTable(startCellReference, assertionTableHeaders);
+
+            // there can be 2 or 4 rows in the header
+            ExcelMoveDown(assertionTableHeaders.Max(a => a.Rows()));
+
             Output(LeadingComma(assertIndex) + $"new TableAssertion<{cSharpClassName}, {cSharpSubClassName}>");
             using (AutoCloseBracketAndIndent())
             {
@@ -771,7 +776,7 @@ namespace CustomerTestsExcel.ExcelToCode
             using (AutoRestoreExcelMoveDownRight(2, 2))
             {
                 if (CurrentCell() == "" && PeekRight() != "")
-                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formmated correctly. The properties start on column {ColumnReferenceA1Style(column + 1)}, but they should start one to the left, on column {ColumnReferenceA1Style()}");
+                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formatted correctly. The properties start on column {ColumnReferenceA1Style(column + 1)}, but they should start one to the left, on column {ColumnReferenceA1Style()}");
             }
         }
 
@@ -780,9 +785,16 @@ namespace CustomerTestsExcel.ExcelToCode
             using (AutoRestoreExcelMoveDownRight(1, 2))
             {
                 if (CurrentCell() != converter.WithProperties)
-                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formmated correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
+                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formatted correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
             }
         }
+
+        void CheckMissingHeadersInAssertionTable(string tableStartCellReference, IEnumerable<AssertionTableHeader> headers)
+        {
+            if (!headers.Any())
+                throw new ExcelToCodeException($"The assertion table starting at cell {tableStartCellReference} has no headers. There should be a row of Property Names starting at {CellReferenceA1Style()}, with rows of Property Values below.");
+        }
+
 
         IEnumerable<AssertionTableHeader> ReadAssertionTableHeaders()
         {
@@ -822,9 +834,6 @@ namespace CustomerTestsExcel.ExcelToCode
                     ExcelMoveRight();
                 }
             }
-
-            // there can be 2 or 4 rows in the header
-            ExcelMoveDown(assertionTableHeaders.Max(a => a.Rows()));
 
             return assertionTableHeaders;
         }
