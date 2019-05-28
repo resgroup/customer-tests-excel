@@ -40,7 +40,7 @@ test_script:
       bash codecov.sh -f "coverage.xml"
   # code cov token not required for public repos     -t %code_cov_token%
 artifacts:
- - path: BuiltDLLs\Release\*.nupkg 
+ - path: .\*.nupkg 
  - path: coverage.xml
 notifications:
   - provider: Email
