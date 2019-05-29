@@ -366,6 +366,8 @@ namespace CustomerTestsExcel.ExcelToCode
                 ExcelMoveDown();
             }
 
+            CheckNoRowsInTable(tableStartCellReference, CellReferenceA1Style(), tableRow);
+
             ExcelMoveUp();
         }
 
@@ -395,6 +397,12 @@ namespace CustomerTestsExcel.ExcelToCode
                 .ForEach(h =>
                     issuesPreventingRoundTrip.Add($"There is a complex property ('{h.PropertyName}', cell {CellReferenceA1Style()}) within a table in the Excel test, worksheet '{worksheet.Name}'")
                 );
+        }
+
+        void CheckNoRowsInTable(string tableStartCellReference, string rowsStartCellReference, int numberOfRows)
+        {
+            if (numberOfRows == 0)
+                throw new ExcelToCodeException($"The table starting at cell {tableStartCellReference} has no rows. There should be at least one row of Property Values starting at {rowsStartCellReference}.");
         }
 
         Dictionary<uint, TableHeader> ReadHeaders()
@@ -762,6 +770,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
                             ExcelMoveDown();
                         }
+
+                        CheckNoRowsInAssertionTable(startCellReference, CellReferenceA1Style(), tableRowIndex);
                     }
                 }
             }
@@ -771,21 +781,21 @@ namespace CustomerTestsExcel.ExcelToCode
             ExcelMoveUp();
         }
 
-        void CheckBadIndentationInAssertionTable(string startCellReference)
+        void CheckBadIndentationInAssertionTable(string tableStartCellReference)
         {
             using (AutoRestoreExcelMoveDownRight(2, 2))
             {
                 if (CurrentCell() == "" && PeekRight() != "")
-                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formatted correctly. The properties start on column {ColumnReferenceA1Style(column + 1)}, but they should start one to the left, on column {ColumnReferenceA1Style()}");
+                    throw new ExcelToCodeException($"The assertion table starting at {tableStartCellReference} is not formatted correctly. The properties start on column {ColumnReferenceA1Style(column + 1)}, but they should start one to the left, on column {ColumnReferenceA1Style()}");
             }
         }
 
-        void CheckMissingWithPropertiesInAssertionTable(string startCellReference)
+        void CheckMissingWithPropertiesInAssertionTable(string tableStartCellReference)
         {
             using (AutoRestoreExcelMoveDownRight(1, 2))
             {
                 if (CurrentCell() != converter.WithProperties)
-                    throw new ExcelToCodeException($"The assertion table starting at {startCellReference} is not formatted correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
+                    throw new ExcelToCodeException($"The assertion table starting at {tableStartCellReference} is not formatted correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
             }
         }
 
@@ -795,6 +805,11 @@ namespace CustomerTestsExcel.ExcelToCode
                 throw new ExcelToCodeException($"The assertion table starting at cell {tableStartCellReference} has no headers. There should be a row of Property Names starting at {CellReferenceA1Style()}, with rows of Property Values below.");
         }
 
+        void CheckNoRowsInAssertionTable(string tableStartCellReference, string rowsStartCellReference, int numberOfRows)
+        {
+            if (numberOfRows == 0)
+                throw new ExcelToCodeException($"The assertion table starting at cell {tableStartCellReference} has no rows. There should be at least one row of Property Values starting at {rowsStartCellReference}.");
+        }
 
         IEnumerable<AssertionTableHeader> ReadAssertionTableHeaders()
         {

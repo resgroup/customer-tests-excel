@@ -68,6 +68,8 @@
     <Compile Include="MispeltTableOfForAssertionTable.cs" />
     <Compile Include="MissingTableOfForAssertionTable.cs" />
     <Compile Include="MissingWithPropertiesForAssertionTable.cs" />
+    <Compile Include="NoRowsForTable.cs" />
+    <Compile Include="NoRowsForAssertionTable.cs" />
     <Compile Include="NoHeadersForAssertionTable.cs" />
     <Compile Include="NoHeadersForTable.cs" />
     <Compile Include="MissingTableOfForTable.cs" />
@@ -79,7 +81,7 @@
     <Compile Include="TwoBlankLinesBetweenGivenAndWhen.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="NoBlankLineBetweenGivenAndWhen.cs" />
-    <Compile Include="CreateTableHeadersTest.cs" />
+    <Compile Include="CreateTableHeaders.cs" />
     <Compile Include="EqualityAssertionWithStringFormatTest.cs" />
     <Compile Include="EqualityAssertionWithPercentagePrecisionTest.cs" />
     <Compile Include="EqualityAssertionTest.cs" />
@@ -108,6 +110,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\NoRowsForTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\NoRowsForAssertionTable\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\NoHeadersForAssertionTable\DummyProject.csproj">
@@ -167,6 +175,12 @@
     <Content Include="TestExcelFiles\NoHeadersForAssertionTable\NoHeadersForAssertionTable.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestExcelFiles\NoRowsForAssertionTable\NoRowsForAssertionTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\NoRowsForTable\NoRowsForTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -179,9 +193,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TestExcelFiles\GivenClasses\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
