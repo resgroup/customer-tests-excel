@@ -8,7 +8,7 @@ using CustomerTestsExcel;
 namespace CustomerTestsExcel.Test
 {
     [TestFixture]
-    class CreateTableHeadersTest
+    class CreateTableHeaders
     {
         [Test]
         public void SimpleProperties()
@@ -19,7 +19,7 @@ namespace CustomerTestsExcel.Test
 
             var expected = CreateHeaders(CreateHeader("Cedd"), CreateHeader("Chad"));
 
-            var calculated = new CreateTableHeaders(simpleProperties).Calculate();
+            var calculated = new CustomerTestsExcel.CreateTableHeaders(simpleProperties).Calculate();
 
             AssertEqualHeaders(expected, calculated);
         }
