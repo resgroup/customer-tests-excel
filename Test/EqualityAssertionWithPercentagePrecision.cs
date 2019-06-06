@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace CustomerTestsExcel.Test
 {
     [TestFixture]
-    class EqualityAssertionWithPercentagePrecisionTest
+    class EqualityAssertionWithPercentagePrecision
     {
         private void Check(bool shouldPass, double expected, double actual, double precision, string message)
         {

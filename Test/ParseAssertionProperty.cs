@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 namespace CustomerTestsExcel.Test
 {
     [TestFixture]
-    public class ParseAssertionPropertyTest
+    public class ParseAssertionProperty
     {
 
         interface AssertionInterface
@@ -23,7 +23,7 @@ namespace CustomerTestsExcel.Test
         {
             Expression<Func<AssertionInterface, int>> expression = assertionClass => assertionClass.SimpleProperty;
 
-            var sut = new ParseAssertionProperty(expression);
+            var sut = new CustomerTestsExcel.ParseAssertionProperty(expression);
 
             Assert.AreEqual("SimpleProperty", sut.PropertyName);
         }
@@ -33,7 +33,7 @@ namespace CustomerTestsExcel.Test
         {
             Expression<Func<AssertionInterface, int>> expression = assertionClass => assertionClass.ParameterlessMethod();
 
-            var sut = new ParseAssertionProperty(expression);
+            var sut = new CustomerTestsExcel.ParseAssertionProperty(expression);
 
             Assert.AreEqual("ParameterlessMethod()", sut.PropertyName);
         }
@@ -43,7 +43,7 @@ namespace CustomerTestsExcel.Test
         {
             Expression<Func<AssertionInterface, int>> expression = assertionClass => assertionClass.OneIntParameterMethod(0);
 
-            var sut = new ParseAssertionProperty(expression);
+            var sut = new CustomerTestsExcel.ParseAssertionProperty(expression);
 
             Assert.AreEqual("OneIntParameterMethod(0)", sut.PropertyName);
         }
