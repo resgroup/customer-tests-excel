@@ -49,19 +49,19 @@ namespace CustomerTestsExcel
         }
 
         // the property names (not values) of the "Given" part of the test
+        // do we need ischild here? will indexInParent cover it?
+        // Change "Calibrations_of" to "Calibrations of", or "Calibrations(0) of"
         public string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
         {
-            if (isChild)
-            {
-                // todo: This looks strange and like it won't work when there are spaces in a name, add a test
-                return cSharpPropertyName.Replace("_", "(" + indexInParent.ToString() + ") ");
-            }
-            else
-            {
-                return cSharpPropertyName.Replace("_", " ");
-            }
+            var withoutOfPostfix = RemoveOfPostfix(cSharpPropertyName);
+
+            var withIndex = withoutOfPostfix + (isChild ? $"({indexInParent})" : "");
+
+            var withOf = withIndex + " of";
+
+            return withOf;
         }
-        // Change "Calibrations(0)     of" to "Calibrations_of"
+        // Change "Calibrations(0)     of" or "Calibrations   of  " to "Calibrations_of"
         public string GivenPropertyNameExcelNameToCodeName(string excelPropertyName)
         {
             string withoutIndex = RemoveArrayIndex(excelPropertyName);
@@ -71,9 +71,13 @@ namespace CustomerTestsExcel
             return withoutOf.Trim().Replace(" ", "_") + "_of";
         }
 
-        // Change "Calibrations of" to "Calibrations"
-        string RemoveOfPostfix(string excelPropertyName) =>
-            excelPropertyName.Substring(0, excelPropertyName.Length - 3);
+        // Change "Calibrations of" or "Calibrations_of" to "Calibrations"
+        string RemoveOfPostfix(string excelPropertyName)
+        {
+            const int ofPostfixLength = 3;
+
+            return excelPropertyName.Substring(0, excelPropertyName.Length - ofPostfixLength);
+        }
 
         // Change "Calibrations(0) of" to "Calibrations of"
         string RemoveArrayIndex(string excelPropertyName)
@@ -287,10 +291,10 @@ namespace CustomerTestsExcel
 
         static bool IsNumeric(object value)
         {
-            return Double.TryParse(
-                Convert.ToString(value), 
-                System.Globalization.NumberStyles.Any, 
-                System.Globalization.NumberFormatInfo.InvariantInfo, out double parsedDouble);
+            return double.TryParse(
+                Convert.ToString(value),
+                NumberStyles.Any, 
+                NumberFormatInfo.InvariantInfo, out double _);
         }
 
         static bool IsEnum(string value)

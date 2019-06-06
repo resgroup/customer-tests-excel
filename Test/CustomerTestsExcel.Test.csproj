@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="BadIndentationForAssertionTable.cs" />
+    <Compile Include="PropertyNamesWithUnderscores.cs" />
     <Compile Include="MispeltTableOfForAssertionTable.cs" />
     <Compile Include="MissingTableOfForAssertionTable.cs" />
     <Compile Include="MissingWithPropertiesForAssertionTable.cs" />
@@ -83,9 +84,9 @@
     <Compile Include="NoBlankLineBetweenGivenAndWhen.cs" />
     <Compile Include="CreateTableHeaders.cs" />
     <Compile Include="EqualityAssertionWithStringFormatTest.cs" />
-    <Compile Include="EqualityAssertionWithPercentagePrecisionTest.cs" />
+    <Compile Include="EqualityAssertionWithPercentagePrecision.cs" />
     <Compile Include="EqualityAssertionTest.cs" />
-    <Compile Include="ParseAssertionPropertyTest.cs" />
+    <Compile Include="ParseAssertionProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestReportsSpecificationSetup.cs" />
   </ItemGroup>
