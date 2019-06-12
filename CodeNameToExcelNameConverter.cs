@@ -51,7 +51,7 @@ namespace CustomerTestsExcel
         // the property names (not values) of the "Given" part of the test
         // do we need ischild here? will indexInParent cover it?
         // Change "Calibrations_of" to "Calibrations of", or "Calibrations(0) of"
-        public string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
+        public string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, int? indexInParent)
         {
             var withoutOfPostfix = RemoveOfPostfix(cSharpPropertyName);
 

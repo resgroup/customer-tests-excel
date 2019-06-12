@@ -68,7 +68,7 @@ namespace CustomerTestsExcel
 
         public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
         {
-            SetCell( namer.GivenPropertyNameCodeNameToExcelName(propertyName, isChild, indexInParent));
+            SetCell( namer.GivenPropertyNameCodeNameToExcelName(propertyName, indexInParent));
             if (isNull)
             {
                 Indent();
@@ -94,7 +94,7 @@ namespace CustomerTestsExcel
 
         public void GivenProperty(ReportSpecificationSetupProperty property)
         {
-            SetCell(namer.GivenPropertyNameCodeNameToExcelName(property.PropertyName, false, null));
+            SetCell(namer.GivenPropertyNameCodeNameToExcelName(property.PropertyName, null));
             Indent();
             SetCell(namer.PropertyValueCodeToExcel(property.PropertyNamespace, property.PropertyValue));
             MoveToNextRow();
@@ -103,7 +103,7 @@ namespace CustomerTestsExcel
 
         public void StartClassTable(string propertyName, string className)
         {
-            SetCell(namer.GivenPropertyNameCodeNameToExcelName(propertyName, false, null));
+            SetCell(namer.GivenPropertyNameCodeNameToExcelName(propertyName, null));
             Indent();
             SetCell(namer.CodeClassNameToExcelName(className));
             MoveToNextRow();
@@ -121,7 +121,7 @@ namespace CustomerTestsExcel
             {
                 foreach (var property in propertyNames)
                 {
-                    SetCell(namer.GivenPropertyNameCodeNameToExcelName(property, false, null));
+                    SetCell(namer.GivenPropertyNameCodeNameToExcelName(property, null));
                     Indent();
                 }
             }

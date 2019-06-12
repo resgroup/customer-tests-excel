@@ -15,7 +15,7 @@ namespace CustomerTestsExcel.Test
         {
             const string csharpPropertyNameWithUnderscores = "Example_Property_Name_of";
 
-            var excelPropertyName = new CodeNameToExcelNameConverter(ANY_STRING).GivenPropertyNameCodeNameToExcelName(csharpPropertyNameWithUnderscores, false, null);
+            var excelPropertyName = new CodeNameToExcelNameConverter(ANY_STRING).GivenPropertyNameCodeNameToExcelName(csharpPropertyNameWithUnderscores, null);
 
             Assert.AreEqual("Example_Property_Name of", excelPropertyName);
         }
@@ -26,7 +26,7 @@ namespace CustomerTestsExcel.Test
             const string csharpPropertyNameWithUnderscores = "Example_Property_Name_of";
             const int childIndex = 1;
 
-            var excelPropertyName = new CodeNameToExcelNameConverter(ANY_STRING).GivenPropertyNameCodeNameToExcelName(csharpPropertyNameWithUnderscores, true, childIndex);
+            var excelPropertyName = new CodeNameToExcelNameConverter(ANY_STRING).GivenPropertyNameCodeNameToExcelName(csharpPropertyNameWithUnderscores, childIndex);
 
             Assert.AreEqual($"Example_Property_Name({childIndex}) of", excelPropertyName);
         }
@@ -40,7 +40,7 @@ namespace CustomerTestsExcel.Test
             
             var csharpPropertyName = converter.GivenPropertyNameExcelNameToCodeName(excelPropertyNameWithUnderscores);
 
-            var convertedExcelPropertyName = converter.GivenPropertyNameCodeNameToExcelName(csharpPropertyName, false, null);
+            var convertedExcelPropertyName = converter.GivenPropertyNameCodeNameToExcelName(csharpPropertyName, null);
 
             Assert.AreEqual(excelPropertyNameWithUnderscores, convertedExcelPropertyName);
         }
@@ -55,7 +55,7 @@ namespace CustomerTestsExcel.Test
 
             var csharpPropertyName = converter.GivenPropertyNameExcelNameToCodeName(excelPropertyNameWithUnderscores);
 
-            var convertedExcelPropertyName = converter.GivenPropertyNameCodeNameToExcelName(csharpPropertyName, true, childIndex);
+            var convertedExcelPropertyName = converter.GivenPropertyNameCodeNameToExcelName(csharpPropertyName, childIndex);
 
             Assert.AreEqual(excelPropertyNameWithUnderscores, convertedExcelPropertyName);
         }

@@ -25,7 +25,7 @@ namespace CustomerTestsExcel
         string CodeSpecificationClassNameToExcelName(string cSharpClassName);
         string ExcelSpecificationNameToCodeSpecificationClassName(string excelSpecificationName);
 
-        string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent);
+        string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, int? indexInParent);
         string GivenPropertyNameExcelNameToCodeName(string excelPropertyName);
 
         string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent);
