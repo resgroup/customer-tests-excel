@@ -55,7 +55,7 @@ namespace CustomerTestsExcel
         {
             var withoutOfPostfix = RemoveOfPostfix(cSharpPropertyName);
 
-            var withIndex = withoutOfPostfix + (isChild ? $"({indexInParent})" : "");
+            var withIndex = withoutOfPostfix + (indexInParent.HasValue ? $"({indexInParent})" : "");
 
             var withOf = withIndex + " of";
 
