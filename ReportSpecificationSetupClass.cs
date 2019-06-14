@@ -1,13 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace CustomerTestsExcel
 {
     public class ReportSpecificationSetupClass
     {
-        public ReportSpecificationSetupClass(string propertyName, IReportsSpecificationSetup properties, bool isChild = false, int? indexInParent = null)
+        public ReportSpecificationSetupClass(
+            MethodBase setupMethod,
+            IReportsSpecificationSetup properties,
+            bool isChild = false,
+            int? indexInParent = null)
+            : this(
+                  setupMethod.Name,
+                  properties,
+                  isChild,
+                  indexInParent)
+        {
+        }
+
+        public ReportSpecificationSetupClass(
+            string propertyName,
+            IReportsSpecificationSetup properties,
+            bool isChild = false,
+            int? indexInParent = null)
         {
             PropertyName = propertyName;
             Properties = properties;

@@ -1,4 +1,5 @@
-﻿using CustomerTestsExcel;
+﻿using static System.Reflection.MethodBase;
+using CustomerTestsExcel;
 using SampleSystemUnderTest.Calculator;
 using System;
 
@@ -13,21 +14,21 @@ namespace SampleTests.IgnoreOnGeneration.Calculator
 
         internal void FirstValue_of(double firstValue)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, firstValue);
+            _valueProperties.Add(GetCurrentMethod(), firstValue);
 
             FirstValue = firstValue;
         }
 
         internal void SecondValue_of(double secondValue)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, secondValue);
+            _valueProperties.Add(GetCurrentMethod(), secondValue);
 
             SecondValue = secondValue;
         }
 
         internal void Operation_of(Operation operation)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, operation);
+            _valueProperties.Add(GetCurrentMethod(), operation);
 
             Operation = operation;
         }

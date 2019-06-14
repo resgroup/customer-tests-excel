@@ -1,4 +1,5 @@
-﻿using System;
+﻿using static System.Reflection.MethodBase;
+using System;
 using System.Collections.Generic;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
@@ -14,7 +15,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputs)
         {
-            vermeulenNearWakeLengthInputs.PropertyName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            vermeulenNearWakeLengthInputs.PropertyName = GetCurrentMethod().Name;
 
             _classTableProperties.Add(vermeulenNearWakeLengthInputs);
 

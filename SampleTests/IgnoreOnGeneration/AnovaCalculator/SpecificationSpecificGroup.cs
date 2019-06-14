@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Reflection.MethodBase;
 using CustomerTestsExcel;
 using Moq;
 using SampleSystemUnderTest.AnovaCalculator;
@@ -23,7 +24,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificGroup Name_of(string name)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, name);
+            _valueProperties.Add(GetCurrentMethod(), name);
 
             anovaGroup.Setup(m => m.Name).Returns(name);
 
@@ -32,7 +33,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificGroup Values_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue> values)
         {
-            values.PropertyName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            values.PropertyName = GetCurrentMethod().Name;
 
             _classTableProperties.Add(values);
 

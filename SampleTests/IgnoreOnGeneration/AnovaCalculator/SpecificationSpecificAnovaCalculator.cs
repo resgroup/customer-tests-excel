@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Reflection.MethodBase;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.AnovaCalculator;
 
@@ -14,7 +15,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(string variableDescription)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, variableDescription);
+            _valueProperties.Add(GetCurrentMethod(), variableDescription);
 
             this.variableDescription = variableDescription;
 
@@ -23,7 +24,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificAnovaCalculator Groups_of(SpecificationSpecificGroup group)
         {
-            _classProperties.Add(new ReportSpecificationSetupClass(System.Reflection.MethodBase.GetCurrentMethod().Name, group, true, groups.Count));
+            _classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), group, true, groups.Count));
 
             groups.Add(group);
 

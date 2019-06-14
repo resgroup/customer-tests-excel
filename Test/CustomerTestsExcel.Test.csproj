@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="BadIndentationForAssertionTable.cs" />
+    <Compile Include="FunctionNames.cs" />
     <Compile Include="PropertyNamesWithUnderscores.cs" />
     <Compile Include="MispeltTableOfForAssertionTable.cs" />
     <Compile Include="MissingTableOfForAssertionTable.cs" />

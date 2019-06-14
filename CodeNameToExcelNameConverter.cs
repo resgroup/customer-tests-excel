@@ -53,30 +53,56 @@ namespace CustomerTestsExcel
         // Change "Calibrations_of" to "Calibrations of", or "Calibrations(0) of"
         public string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, int? indexInParent)
         {
-            var withoutOfPostfix = RemoveOfPostfix(cSharpPropertyName);
+            if (indexInParent.HasValue && !CsharpPropertyNameHasOfPostfix(cSharpPropertyName))
+                throw new CodeToExcelException($"Only properties are allowed as 'Given' setup list items (functions are not supported / do not make sense). Properties are idenitified as ending in '_of', which is not the case for the discovered variable name ('{cSharpPropertyName}')");
+
+            var withoutOfPostfix = RemoveCsharpOfPostfix(cSharpPropertyName);
 
             var withIndex = withoutOfPostfix + (indexInParent.HasValue ? $"({indexInParent})" : "");
 
-            var withOf = withIndex + " of";
+            var withOf = withIndex + (CsharpPropertyNameHasOfPostfix(cSharpPropertyName) ? " of" : "");
 
             return withOf;
         }
         // Change "Calibrations(0)     of" or "Calibrations   of  " to "Calibrations_of"
         public string GivenPropertyNameExcelNameToCodeName(string excelPropertyName)
         {
-            string withoutIndex = RemoveArrayIndex(excelPropertyName);
+            var withoutIndex = RemoveArrayIndex(excelPropertyName);
 
-            string withoutOf = RemoveOfPostfix(withoutIndex);
+            var withoutOf = RemoveExcelOfPostfix(withoutIndex);
 
-            return withoutOf.Trim().Replace(" ", "_") + "_of";
+            var trimmedAndUnderscores = withoutOf.Trim().Replace(" ", "_");
+
+            var withOf = trimmedAndUnderscores + (ExcelPropertyNameHasOfPostfix(excelPropertyName) ? "_of" : "");
+
+            return withOf;
         }
 
+        bool ExcelPropertyNameHasOfPostfix(string excelPropertyName) =>
+            excelPropertyName.EndsWith(" of");
+
+        bool CsharpPropertyNameHasOfPostfix(string cSharpPropertyName) =>
+            cSharpPropertyName.EndsWith("_of");
+
         // Change "Calibrations of" or "Calibrations_of" to "Calibrations"
-        string RemoveOfPostfix(string excelPropertyName)
+        string RemoveExcelOfPostfix(string excelPropertyName)
         {
             const int ofPostfixLength = 3;
 
-            return excelPropertyName.Substring(0, excelPropertyName.Length - ofPostfixLength);
+            return
+                ExcelPropertyNameHasOfPostfix(excelPropertyName)
+                ? excelPropertyName.Substring(0, excelPropertyName.Length - ofPostfixLength)
+                : excelPropertyName;
+        }
+        // Change "Calibrations of" or "Calibrations_of" to "Calibrations"
+        string RemoveCsharpOfPostfix(string cSharpPropertyName)
+        {
+            const int ofPostfixLength = 3;
+
+            return
+                CsharpPropertyNameHasOfPostfix(cSharpPropertyName)
+                ? cSharpPropertyName.Substring(0, cSharpPropertyName.Length - ofPostfixLength)
+                : cSharpPropertyName;
         }
 
         // Change "Calibrations(0) of" to "Calibrations of"
@@ -293,7 +319,7 @@ namespace CustomerTestsExcel
         {
             return double.TryParse(
                 Convert.ToString(value),
-                NumberStyles.Any, 
+                NumberStyles.Any,
                 NumberFormatInfo.InvariantInfo, out double _);
         }
 

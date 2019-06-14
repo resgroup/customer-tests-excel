@@ -18,38 +18,36 @@ using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
 using SampleTests.IgnoreOnGeneration.NameConversions;
 
-namespace SampleTests.Calculator
+namespace SampleTests.NameConversions
 {
     [TestFixture]
-    public class Taking_Away : SpecificationBase<SpecificationSpecificCalculator>, ISpecification<SpecificationSpecificCalculator>
+    public class Functions : SpecificationBase<SpecificationSpecificValidator>, ISpecification<SpecificationSpecificValidator>
     {
         public override string Description()
         {
-            return "Add";
+            return "Functions";
         }
         
         // arrange
-        public override SpecificationSpecificCalculator Given()
+        public override SpecificationSpecificValidator Given()
         {
-            var calculator = new SpecificationSpecificCalculator();
-            calculator.FirstValue_of(3);
-            calculator.SecondValue_of(4);
-            calculator.Operation_of(Operation.Subtract);
+            var validator = new SpecificationSpecificValidator();
+            validator.WithValidProperties();
             
-            return calculator;
+            return validator;
         }
         
-        public override string When(SpecificationSpecificCalculator calculator)
+        public override string When(SpecificationSpecificValidator validator)
         {
-            calculator.Perform_Operation();
-            return "Perform Operation";
+            validator.Validate();
+            return "Validate";
         }
         
-        public override IEnumerable<IAssertion<SpecificationSpecificCalculator>> Assertions()
+        public override IEnumerable<IAssertion<SpecificationSpecificValidator>> Assertions()
         {
-            return new List<IAssertion<SpecificationSpecificCalculator>>
+            return new List<IAssertion<SpecificationSpecificValidator>>
             {
-                  new EqualityAssertionWithPercentagePrecision<SpecificationSpecificCalculator>(calculator => calculator.Result, -1, 0.0001)
+                  new EqualityAssertion<SpecificationSpecificValidator>(validator => validator.Valid, true)
             };
         }
         

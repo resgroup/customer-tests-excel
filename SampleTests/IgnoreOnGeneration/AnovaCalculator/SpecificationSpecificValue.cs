@@ -1,4 +1,5 @@
 ﻿using System;
+using static System.Reflection.MethodBase;
 using CustomerTestsExcel;
 
 namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
@@ -9,7 +10,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificValue Value_of(float value)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, value);
+            _valueProperties.Add(GetCurrentMethod(), value);
 
             this.value = value;
 

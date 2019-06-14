@@ -19,5 +19,12 @@ namespace CustomerTestsExcel
         {
             Add(new ReportSpecificationSetupProperty(propertyName, propertyValue));
         }
+
+        // use when there is no value
+        public void Add(MethodBase setupMethod)
+        {
+            Add(new ReportSpecificationSetupProperty(setupMethod, new NoValue()));
+        }
+
     }
 }

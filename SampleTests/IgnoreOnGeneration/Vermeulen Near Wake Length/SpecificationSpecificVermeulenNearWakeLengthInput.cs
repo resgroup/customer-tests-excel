@@ -1,4 +1,5 @@
-﻿using System;
+﻿using static System.Reflection.MethodBase;
+using System;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 
@@ -14,7 +15,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Velocity_of(int velocity_mps)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, velocity_mps);
+            _valueProperties.Add(GetCurrentMethod(), velocity_mps);
 
             this.Velocity_mps = velocity_mps;
 
@@ -23,7 +24,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Ambient_Turbulence_of(double ambientTurbuluence)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, ambientTurbuluence);
+            _valueProperties.Add(GetCurrentMethod(), ambientTurbuluence);
 
             this.AmbientTurbuluence = ambientTurbuluence;
 
@@ -32,7 +33,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput RevolutionsPerMinute_of(double revolutionsPerMinute)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, revolutionsPerMinute);
+            _valueProperties.Add(GetCurrentMethod(), revolutionsPerMinute);
 
             this.RevolutionsPerMinute = revolutionsPerMinute;
 
@@ -41,7 +42,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Thrust_Coefficient_of(double thrustCoefficient)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, thrustCoefficient);
+            _valueProperties.Add(GetCurrentMethod(), thrustCoefficient);
 
             this.ThrustCoefficient = thrustCoefficient;
 
@@ -50,7 +51,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput TurbineGeometry_of(SpecificationSpecificTurbineGeometry turbineGeometry)
         {
-            _valueProperties.Add(System.Reflection.MethodBase.GetCurrentMethod().Name, turbineGeometry);
+            _valueProperties.Add(GetCurrentMethod(), turbineGeometry);
 
             this.TurbineGeometry = turbineGeometry;
 

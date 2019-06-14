@@ -16,6 +16,7 @@ using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
+using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.Vermeulen_Near_Wake_Length
 {
@@ -239,7 +240,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
         protected override bool RoundTrippable() => false;
         
         protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {
-            "There is a complex property ('TurbineGeometry_of', Row 7, Column 9) within a table in the Excel test, worksheet 'VermeulenNearWakeLength'"
+            "There is a complex property ('TurbineGeometry_of', cell D7) within a table in the Excel test, worksheet 'VermeulenNearWakeLength'"
         };
     }
 }
