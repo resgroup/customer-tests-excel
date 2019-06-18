@@ -18,12 +18,12 @@ build_script:
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
  # Ensure that the Excel tests can round trip to C#
  # Regenerate the sample tests from the excel (requires GenerateCodeFromExcelTest.exe)
- - GenerateTests.bat        
+ - .\SampleTests\IgnoreOnGeneration\GenerateTests.bat        
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
  # run the tests, so that they re create the Excel Spreadsheets (requires some environment variables to be set)
  - nunit3-console.exe Builtdlls\Release\SampleTests.dll 
  # Regenerate the sample tests again. 
- - GenerateTests.bat
+ - .\SampleTests\IgnoreOnGeneration\GenerateTests.bat
  # for final build and test, run code coverage and quality analysis
  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER) { SonarQube.Scanner.MSBuild.exe begin /k:"CustomerTestsExcel"  /d:"sonar.host.url=https://sonarcloud.io" /o:"res" /d:sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2 /d:sonar.verbose=false /d:"sonar.analysis.mode=preview" /d:"sonar.github.pullRequest=$env:APPVEYOR_PULL_REQUEST_NUMBER" /d:"sonar.github.repository=resgroup/configuration" /d:"sonar.github.oauth=$env:github_token" /d:sonar.cs.opencover.it.reportsPaths=coverage.xml }
  - ps: if (-Not $env:APPVEYOR_PULL_REQUEST_NUMBER) { SonarQube.Scanner.MSBuild.exe begin /k:"CustomerTestsExcel"  /d:"sonar.host.url=https://sonarcloud.io" /o:"res" /d:sonar.login=6b7d65b9395a55cc9b9193035d9411836c4c56d2 /d:sonar.verbose=false /d:sonar.cs.opencover.it.reportsPaths=coverage.xml }
