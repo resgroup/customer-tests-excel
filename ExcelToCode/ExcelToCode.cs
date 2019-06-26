@@ -30,9 +30,9 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         public string GenerateCSharpTestCode(
-            IEnumerable<string> usings, 
-            ITabularPage worksheet, 
-            string projectRootNamespace, 
+            IEnumerable<string> usings,
+            ITabularPage worksheet,
+            string projectRootNamespace,
             string workBookName)
         {
             try
@@ -61,8 +61,8 @@ namespace CustomerTestsExcel.ExcelToCode
             ITabularPage worksheet,
             string projectRootNamespace,
             string workBookName)
-            {
-                base.worksheet = worksheet;
+        {
+            base.worksheet = worksheet;
             code = new AutoIndentingStringBuilder("    ");
             column = 1;
             row = 1;
@@ -83,7 +83,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("};");
             Output("}");
             // This is so that when writing back out to excel, the prefix can be removed. So the prefix exists in the code, but not in excel, and is round trippable
-            Output();
+            OutputBlankLine();
             Output($"protected override string AssertionClassPrefixAddedByGenerator => \"{converter.AssertionClassPrefixAddedByGenerator}\";");
             OutputErrors();
             OutputWarnings();
@@ -96,7 +96,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             if (Errors.Any())
             {
-                Output();
+                OutputBlankLine();
                 errors.ForEach(error => Output($"// {error}"));
             }
         }
@@ -105,7 +105,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             if (Warnings.Any())
             {
-                Output();
+                OutputBlankLine();
                 warnings.ForEach(warning => Output($"// {warning}"));
             }
         }
@@ -114,9 +114,9 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             if (IssuesPreventingRoundTrip.Any())
             {
-                Output();
+                OutputBlankLine();
                 Output($"protected override bool RoundTrippable() => false;");
-                Output();
+                OutputBlankLine();
                 Output("protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {");
                 Output(
                     string.Join(
@@ -151,10 +151,10 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("using CustomerTestsExcel;");
             Output("using System.Linq.Expressions;");
             Output($"using {projectRootNamespace};");
-            Output();
+            OutputBlankLine();
             foreach (var usingNamespace in usings)
                 Output($"using {usingNamespace};");
-            Output();
+            OutputBlankLine();
             Output($"namespace {projectRootNamespace}.{converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
             Output("{");
             Output("[TestFixture]");
@@ -164,7 +164,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("{");
             Output($"return \"{ description}\";");
             Output("}");
-            Output();
+            OutputBlankLine();
             Output("// arrange");
             Output($"public override {CSharpSUTSpecificationSpecificClassName()} Given()");
             Output("{");
@@ -259,17 +259,51 @@ namespace CustomerTestsExcel.ExcelToCode
                     using (Scope())
                     {
                         string cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-                        string cSharpChildVariableName = TableVariableNameFromMethodName(cSharpMethodName);
+                        string cSharpChildVariableName = converter.GivenTablePropertyNameExcelNameToCodeVariableName(excelGivenLeft);
 
                         CreateObjectsFromTable(startCellReference, cSharpChildVariableName, cSharpChildVariableName + "_Row", cSharpClassName);
                         Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                    }
+                }
+                if (IsList(excelGivenLeft))
+                {
+                    var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
+                    var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
+                    string cSharpChildVariableName = ListVariableNameFromMethodName(excelGivenLeft);
+
+                    OutputBlankLine();
+                    using (Scope())
+                    {
+                        using (AutoRestoreExcelMoveDown())
+                        {
+                            while (CurrentCell() == "With Item")
+                            {
+                                ExcelMoveDown();
+
+                                using (Scope())
+                                {
+                                    using (AutoRestoreExcelMoveRight())
+                                    {
+                                        DeclareVariable(cSharpChildVariableName, cSharpClassName);
+
+                                        while (!string.IsNullOrEmpty(CurrentCell()))
+                                        {
+                                            DoProperty(cSharpChildVariableName, cSharpVariableNamePostfix);
+                                            ExcelMoveDown();
+                                        }
+
+                                        Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 else if (HasGivenSubProperties())
                 {
                     var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-                    Output();
+                    OutputBlankLine();
                     using (Scope())
                     {
                         string cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
@@ -287,6 +321,15 @@ namespace CustomerTestsExcel.ExcelToCode
                 }
             }
         }
+
+        bool IsList(string excelGivenLeft) =>
+            excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
+
+        string ListVariableNameFromMethodName(string excelGivenLeft) =>
+            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft));
+
+        bool IsTable(string excelGivenLeft) =>
+            excelGivenLeft.EndsWith(converter.TableOf, StringComparison.InvariantCultureIgnoreCase);
 
         // check to see if it looks like a table, but does not end with converter.TableOf
         void CheckMissingTableOf()
@@ -310,19 +353,13 @@ namespace CustomerTestsExcel.ExcelToCode
             && (PeekBelowRight(2, 1) != "" && PeekBelow(2) == "")
             );
 
-        bool IsTable(string excelGivenLeft) =>
-            excelGivenLeft.EndsWith(converter.TableOf, StringComparison.InvariantCultureIgnoreCase);
-
-        string TableVariableNameFromMethodName(string cSharpMethodName)
-        {
-            // change "Cargo table_of" (method name from Excel) to "cargo (c# variable name)"
-            return VariableCase(cSharpMethodName.Substring(0, cSharpMethodName.Length - 9));
-        }
+        string TableVariableNameFromMethodName(string excelGivenLeft) =>
+            VariableCase(converter.GivenTablePropertyNameExcelNameToCodeVariableName(excelGivenLeft));
 
         void CreateObjectsFromTable(
-            string tableStartCellReference, 
-            string cSharpVariableName, 
-            string cSharpClassName, 
+            string tableStartCellReference,
+            string cSharpVariableName,
+            string cSharpClassName,
             string cSharpSpecificationSpecificClassName)
         {
             CheckMissingWithPropertiesForTable(tableStartCellReference);
@@ -538,7 +575,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void EndGiven()
         {
-            Output();
+            OutputBlankLine();
             Output("return " + CSharpSUTVariableName() + ";");
             Output("}");
         }
@@ -554,7 +591,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             using (AutoRestoreExcelMoveRight())
             {
-                Output();
+                OutputBlankLine();
                 Output("public override string When(" + CSharpSUTSpecificationSpecificClassName() + " " + CSharpSUTVariableName() + ")");
 
                 using (Scope())
@@ -563,7 +600,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     Output("return \"" + CurrentCell() + "\";");
                 }
 
-                Output();
+                OutputBlankLine();
             }
 
             ExcelMoveDown();
@@ -684,7 +721,7 @@ namespace CustomerTestsExcel.ExcelToCode
         bool LooksLikeAnAssertionTableButIsnt() =>
             (
             PeekRight() != converter.TableOf
-            && 
+            &&
                 (
                 PeekBelowRight() == converter.WithProperties && PeekBelow() == ""
                 || PeekBelowRight(1, 2) == converter.WithProperties && PeekBelowRight() == ""

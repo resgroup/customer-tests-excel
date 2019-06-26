@@ -66,6 +66,7 @@
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="BadIndentationForAssertionTable.cs" />
     <Compile Include="FunctionNames.cs" />
+    <Compile Include="VerticallySetupListProperties.cs" />
     <Compile Include="PropertyNamesWithUnderscores.cs" />
     <Compile Include="MispeltTableOfForAssertionTable.cs" />
     <Compile Include="MissingTableOfForAssertionTable.cs" />
@@ -181,6 +182,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\NoRowsForTable\NoRowsForTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\VerticallySetupListProperties.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

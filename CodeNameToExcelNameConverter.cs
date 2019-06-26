@@ -133,10 +133,42 @@ namespace CustomerTestsExcel
 
             return withoutTableOf.Trim().Replace(" ", "_") + "_table_of";
         }
+        // Change "Calibrations    table of" to "Calibrations" (potentially this should also lower case the first character, but it doesn't at the moment, and ExcelToCode does it instead. I guess if other languages are supported in the future, this class shouldn't do the casing, so maybe its best not being done here.)
+        public string GivenTablePropertyNameExcelNameToCodeVariableName(string excelPropertyName)
+        {
+            var methodName = GivenTablePropertyNameExcelNameToCodeName(excelPropertyName);
 
-        // Change "Calibrations of" to "Calibrations"
+            return methodName.Substring(0, methodName.Length - TableOf.Length - 1);
+        }
+
+        // Change "Calibrations table of" to "Calibrations"
         string RemoveTableOfPostfix(string excelPropertyName) =>
             excelPropertyName.Substring(0, excelPropertyName.Length - 9);
+
+        // the property names (not values) of the "Given" part of the test
+        public string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
+        {
+            // hmmm, I should prbably call this from somewhere
+            throw new NotImplementedException();
+        }
+        // Change "Calibrations    table of" to "Calibrations_table_of"
+        public string GivenListPropertyNameExcelNameToCodeName(string excelPropertyName)
+        {
+            string withoutTableOf = RemoveListOfPostfix(excelPropertyName);
+
+            return withoutTableOf.Trim().Replace(" ", "_") + "_list_of";
+        }
+
+        public string GivenListPropertyNameExcelNameToCodeVariableName(string excelPropertyName)
+        {
+            var methodName = GivenListPropertyNameExcelNameToCodeName(excelPropertyName);
+
+            return methodName.Substring(0, methodName.Length - ListOf.Length - 1);
+        }
+
+        // Change "Calibrations list of" to "Calibrations"
+        string RemoveListOfPostfix(string excelPropertyName) =>
+            excelPropertyName.Substring(0, excelPropertyName.Length - 8);
 
         public string ActionExcelNameToCodeName(string excelActionName)
         {
@@ -359,5 +391,7 @@ namespace CustomerTestsExcel
         public string TableOf =>
             "table of";
 
+        public string ListOf =>
+            "list of";
     }
 }

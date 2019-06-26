@@ -23,7 +23,7 @@ namespace CustomerTestsExcel.ExcelToCode
         protected void Output(string lineOfCSharpCode) =>
             code.AppendLine(lineOfCSharpCode);
 
-        protected void Output() =>
+        protected void OutputBlankLine() =>
             Output("");
 
         protected string UnIndex(string propertyName)
@@ -182,7 +182,7 @@ namespace CustomerTestsExcel.ExcelToCode
             ExcelMoveRight(rightBy);
             ExcelMoveDown(downBy);
 
-            return new TidyUp(() => 
+            return new TidyUp(() =>
             {
                 ExcelMoveLeft(rightBy);
                 ExcelMoveUp(downBy);

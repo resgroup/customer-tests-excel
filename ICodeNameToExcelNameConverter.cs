@@ -15,6 +15,7 @@ namespace CustomerTestsExcel
         string Assert { get; }
         string AssertionClassPrefixAddedByGenerator { get; }
         string TableOf { get; }
+        string ListOf { get; }
 
         string ExcelFileNameToCodeNamespacePart(string workBookName);
         string CodeNamespaceToExcelFileName(string cSharpAssemblyName);
@@ -30,6 +31,11 @@ namespace CustomerTestsExcel
 
         string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent);
         string GivenTablePropertyNameExcelNameToCodeName(string excelPropertyName);
+        string GivenTablePropertyNameExcelNameToCodeVariableName(string excelPropertyName);
+
+        string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent);
+        string GivenListPropertyNameExcelNameToCodeName(string excelPropertyName);
+        string GivenListPropertyNameExcelNameToCodeVariableName(string excelPropertyName);
 
         string ActionCodeNameToExcelName(string actionName);
         string ActionExcelNameToCodeName(string excelActionName);
