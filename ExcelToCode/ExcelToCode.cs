@@ -211,7 +211,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             DeclareVariable(cSharpVariableName, cSharpClassName);
 
-            SetVariableProperties(cSharpVariableName, "");
+            SetVariableProperties(cSharpVariableName);
 
             ExcelMoveUp(); // this is a bit mysterious
         }
@@ -222,7 +222,7 @@ namespace CustomerTestsExcel.ExcelToCode
         void DeclareListVariable(string cSharpVariableName, string cSharpClassName) =>
             Output($"var {cSharpVariableName} = new List<{cSharpClassName}>();");
 
-        void SetVariableProperties(string cSharpVariableName, string cSharpVariableNamePostfix)
+        void SetVariableProperties(string cSharpVariableName)
         {
             if (CurrentCell() == converter.WithProperties)
             {
@@ -231,14 +231,14 @@ namespace CustomerTestsExcel.ExcelToCode
                     ExcelMoveDown();
                     while (!string.IsNullOrEmpty(CurrentCell()))
                     {
-                        DoProperty(cSharpVariableName, cSharpVariableNamePostfix);
+                        DoProperty(cSharpVariableName);
                         ExcelMoveDown();
                     }
                 }
             }
         }
 
-        void DoProperty(string cSharpVariableName, string cSharpVariableNamePostfix)
+        void DoProperty(string cSharpVariableName)
         {
             // "Calibrations(0) of", "InstrumentCalibration"
             // methodname = "Calibrations_of"
@@ -265,7 +265,7 @@ namespace CustomerTestsExcel.ExcelToCode
                         string cSharpChildVariableName = converter.GivenTablePropertyNameExcelNameToCodeVariableName(excelGivenLeft);
 
                         CreateObjectsFromTable(startCellReference, cSharpChildVariableName, cSharpChildVariableName + "_Row", cSharpClassName);
-                        Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                        Output(cSharpVariableName + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
                 if (IsList(excelGivenLeft))
@@ -296,7 +296,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                                         while (!string.IsNullOrEmpty(CurrentCell()))
                                         {
-                                            DoProperty(cSharpListVariableName, cSharpVariableNamePostfix);
+                                            DoProperty(cSharpListVariableName);
                                             ExcelMoveDown();
                                         }
 
@@ -306,7 +306,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             }
 
                             // Add the list of the parent object
-                            Output($"{cSharpVariableName}{cSharpVariableNamePostfix}.{cSharpMethodName}({cSharpListVariableName});");
+                            Output($"{cSharpVariableName}.{cSharpMethodName}({cSharpListVariableName});");
                         }
                     }
                 }
@@ -321,14 +321,14 @@ namespace CustomerTestsExcel.ExcelToCode
                         string cSharpChildVariableName = VariableCase(excelGivenRightString.Replace(".", ""));
 
                         CreateObject(cSharpChildVariableName, cSharpClassName);
-                        Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                        Output(cSharpVariableName + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
                 else
                 {
                     var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-                    Output($"{cSharpVariableName}{cSharpVariableNamePostfix}.{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
+                    Output($"{cSharpVariableName}.{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
                 }
             }
         }
