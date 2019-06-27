@@ -268,7 +268,7 @@ namespace CustomerTestsExcel.ExcelToCode
                         Output(cSharpVariableName + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
-                if (IsList(excelGivenLeft))
+                else if (IsList(excelGivenLeft))
                 {
                     var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
                     var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
