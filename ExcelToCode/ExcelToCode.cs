@@ -219,6 +219,9 @@ namespace CustomerTestsExcel.ExcelToCode
         void DeclareVariable(string cSharpVariableName, string cSharpClassName) =>
             Output($"var {cSharpVariableName} = new {cSharpClassName}();");
 
+        void DeclareListVariable(string cSharpVariableName, string cSharpClassName) =>
+            Output($"var {cSharpVariableName} = new List<{cSharpClassName}>();");
+
         void SetVariableProperties(string cSharpVariableName, string cSharpVariableNamePostfix)
         {
             if (CurrentCell() == converter.WithProperties)
@@ -269,33 +272,41 @@ namespace CustomerTestsExcel.ExcelToCode
                 {
                     var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
                     var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-                    string cSharpChildVariableName = ListVariableNameFromMethodName(excelGivenLeft);
+                    string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
+                    string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
 
                     OutputBlankLine();
                     using (Scope())
                     {
                         using (AutoRestoreExcelMoveDown())
                         {
+                            // Declare a list variable to hold the items
+                            DeclareListVariable(cSharpListVariableName, cSharpClassName);
+
                             while (CurrentCell() == "With Item")
                             {
                                 ExcelMoveDown();
 
                                 using (Scope())
                                 {
+                                    // Add an item to the list
                                     using (AutoRestoreExcelMoveRight())
                                     {
-                                        DeclareVariable(cSharpChildVariableName, cSharpClassName);
+                                        DeclareVariable(cSharpListItemVariableName, cSharpClassName);
 
                                         while (!string.IsNullOrEmpty(CurrentCell()))
                                         {
-                                            DoProperty(cSharpChildVariableName, cSharpVariableNamePostfix);
+                                            DoProperty(cSharpListVariableName, cSharpVariableNamePostfix);
                                             ExcelMoveDown();
                                         }
 
-                                        Output(cSharpVariableName + cSharpVariableNamePostfix + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                                        OutputListAdd(cSharpListVariableName, cSharpListItemVariableName);
                                     }
                                 }
                             }
+
+                            // Add the list of the parent object
+                            Output($"{cSharpVariableName}{cSharpVariableNamePostfix}.{cSharpMethodName}({cSharpListVariableName});");
                         }
                     }
                 }
@@ -322,10 +333,16 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
+        void OutputListAdd(string cSharpListVariableName, string cSharpListItemVariableName) =>
+            Output($"{cSharpListVariableName}.Add({cSharpListItemVariableName});");
+
         bool IsList(string excelGivenLeft) =>
             excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
 
         string ListVariableNameFromMethodName(string excelGivenLeft) =>
+            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft)) + "List";
+
+        string ListItemVariableNameFromMethodName(string excelGivenLeft) =>
             VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft));
 
         bool IsTable(string excelGivenLeft) =>
