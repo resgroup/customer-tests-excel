@@ -6,11 +6,13 @@ using NUnit.Framework;
 using System.Linq.Expressions;
 using System.IO;
 using System.Reflection;
+using CustomerTestsExcel.CodeOutputWriters;
+using CustomerTestsExcel.Assertions;
 
 namespace CustomerTestsExcel
 {
     [TestFixture]
-    public abstract class SpecificationBase<T> : ISpecification<T> 
+    public abstract class SpecificationBase<T> : ISpecification<T>
         where T : IReportsSpecificationSetup
     {
         protected T _sut;
@@ -56,7 +58,7 @@ namespace CustomerTestsExcel
             if (_debugOutput)
                 writers.Add(
                     new StringTestOutputWriter(
-                        new HumanFriendlyFormatter(), 
+                        new HumanFriendlyFormatter(),
                         new DebugTextLineWriter()));
 
             if (_htmlOutput)
@@ -69,8 +71,8 @@ namespace CustomerTestsExcel
                 if (RoundTrippable())
                     writers.Add(
                         new ExcelTestOutputWriter(
-                            new ExcelTabularLibrary(), 
-                            new CodeNameToExcelNameConverter(AssertionClassPrefixAddedByGenerator), 
+                            new ExcelTabularLibrary(),
+                            new CodeNameToExcelNameConverter(AssertionClassPrefixAddedByGenerator),
                             Environment.GetEnvironmentVariable("CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS") ?? @"..\..\ExcelTests"));
                 else
                     writers.Add(
@@ -96,7 +98,7 @@ namespace CustomerTestsExcel
         }
 
         bool ExcelOutput =>
-            _excelOutput || 
+            _excelOutput ||
             Environment.GetEnvironmentVariable("CUSTOMER_TESTS_EXCEL_WRITE_TO_EXCEL")?.ToLowerInvariant() == "true";
 
     }

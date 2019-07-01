@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.CodeOutputWriters
 {
     public class StringTestOutputWriterBase
     {
@@ -20,7 +20,7 @@ namespace CustomerTestsExcel
 
             _formatter = formatter;
             _writer = writer;
-            
+
             SetIndentLevel(0);
         }
 
@@ -44,14 +44,14 @@ namespace CustomerTestsExcel
             _writer.EndLine(text);
         }
 
-        protected void Indent() 
-        { 
-            SetIndentLevel(_indentLevel + 1); 
+        protected void Indent()
+        {
+            SetIndentLevel(_indentLevel + 1);
         }
 
-        protected void Outdent() 
-        { 
-            SetIndentLevel(_indentLevel - 1); 
+        protected void Outdent()
+        {
+            SetIndentLevel(_indentLevel - 1);
         }
 
         private void SetIndentLevel(int indentLevel)

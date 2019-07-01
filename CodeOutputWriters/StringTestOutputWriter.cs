@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using CustomerTestsExcel.Assertions;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.CodeOutputWriters
 {
     public class StringTestOutputWriter : StringTestOutputWriterBase, ITestOutputWriter
     {

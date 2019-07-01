@@ -1,5 +1,5 @@
 ﻿using System;
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.CodeOutputWriters
 {
     public interface IHumanFriendlyFormatter
     {

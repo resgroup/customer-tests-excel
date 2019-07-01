@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CustomerTestsExcel.CodeOutputWriters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.Assertions
 {
     public interface IAssertion<T>
     {

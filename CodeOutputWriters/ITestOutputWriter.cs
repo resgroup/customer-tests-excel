@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.CodeOutputWriters
 {
     public interface ITestOutputWriter
     {

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.CodeOutputWriters
 {
     public class ExcelTestOutputWriterBase
     {
@@ -18,7 +18,7 @@ namespace CustomerTestsExcel
         protected uint column;
 
         public ExcelTestOutputWriterBase(
-            ITabularLibrary excel, 
+            ITabularLibrary excel,
             ICodeNameToExcelNameConverter namer,
             string excelFolder)
         {

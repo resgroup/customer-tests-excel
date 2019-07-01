@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using CustomerTestsExcel.Assertions;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.CodeOutputWriters
 {
     public class ExcelUnRoundTrippableTestOutputWriter : ExcelTestOutputWriterBase, ITestOutputWriter
     {
