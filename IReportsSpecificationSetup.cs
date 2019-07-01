@@ -11,9 +11,4 @@ namespace CustomerTestsExcel
         IEnumerable<ReportSpecificationSetupClass> ClassProperties { get; }
         IEnumerable<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties { get; }
     }
-
-    public interface IReportsSpecificationSetup<IBusiness> : IReportsSpecificationSetup
-    {
-        IBusiness BusinessInterface { get; }
-    }
 }
