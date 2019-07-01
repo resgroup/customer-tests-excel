@@ -29,7 +29,7 @@ namespace CustomerTestsExcel
             bool passed;
             try
             {
-                passed = RunOne(specification);
+                passed = TryRun(specification);
             }
             catch (Exception ex)
             {
@@ -40,7 +40,7 @@ namespace CustomerTestsExcel
             return passed;
         }
 
-        protected bool RunOne(ISpecification<T> specification)
+        protected bool TryRun(ISpecification<T> specification)
         {
             T sut;
             var specificationNamespace = specification.GetType().Namespace;
