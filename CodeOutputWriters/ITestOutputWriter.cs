@@ -14,6 +14,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
 
         void StartGiven();
 
+        // should probably add "Given" to these names so that they all follow the same convention
         void StartClass(string className);
         void StartSubClass(string className);
         void EndSubClass();
