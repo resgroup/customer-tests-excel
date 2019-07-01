@@ -11,7 +11,7 @@ using SampleSystemUnderTest.Routing;
 
 namespace SampleTests.IgnoreOnGeneration.Routing
 {
-    public class SpecificationSpecificItineraryLeg : ReportsSpecificationSetupIBlank
+    public class SpecificationSpecificItineraryLeg : ReportsSpecificationSetup
     {
         readonly Mock<ILeg> _leg;
 
