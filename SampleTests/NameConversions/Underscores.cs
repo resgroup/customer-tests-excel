@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
+using CustomerTestsExcel.Assertions;
 using System.Linq.Expressions;
 using SampleTests;
 
@@ -40,13 +41,13 @@ namespace SampleTests.NameConversions
                 underscore.List_Property_of(a_Table);
             }
             {
-                var table_Property = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();
+                var Table_Property = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();
                 {
                     var table_Property_Row = new SpecificationSpecificA_Table();
                     table_Property_Row.A_Property_of("Anything");
-                    table_Property.Add(table_Property_Row);
+                    Table_Property.Add(table_Property_Row);
                 }
-                underscore.Table_Property_table_of(table_Property);
+                underscore.Table_Property_table_of(Table_Property);
             }
             
             return underscore;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.Assertions
 {
     public class TableAssertion<Parent, Child> : IAssertion<Parent> where Child : class
     {
@@ -26,14 +26,14 @@ namespace CustomerTestsExcel
 
             bool passed = true;
             var childEnumerator = child.GetEnumerator();
-            
+
             foreach (var tableRow in TableRows)
             {
                 childEnumerator.MoveNext();
 
                 if (childEnumerator.Current == null)
                     return false;
-                
+
                 foreach (var tableCell in tableRow)
                 {
                     passed = passed && tableCell.Passed(childEnumerator.Current);

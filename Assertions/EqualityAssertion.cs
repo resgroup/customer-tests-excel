@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.Assertions
 {
     public class EqualityAssertion<T> : BaseAssertion<T>
     {
@@ -30,7 +30,7 @@ namespace CustomerTestsExcel
                 // the comparisons should all be on primitives, but we have no control over what the system under test returns.
                 return false;
             }
-            
+
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.Assertions
 {
     public enum AssertionOperator
     {
@@ -15,7 +15,7 @@ namespace CustomerTestsExcel
     {
         // can we replace this something clever that uses the description attribute on the enum itself?
         public static string ToDescription(this AssertionOperator en)
-        {  
+        {
             switch (en)
             {
                 case AssertionOperator.Equality: return "=";

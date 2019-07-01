@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using CustomerTestsExcel.Assertions;
 
 namespace CustomerTestsExcel
 {
@@ -110,7 +111,13 @@ namespace CustomerTestsExcel
             Indent();
         }
 
-        public void Assert(string assertPropertyName, object assertPropertyExpectedValue, AssertionOperator assertionOperator, object assertPropertyActualValue, bool passed, IEnumerable<string> assertionSpecifics)
+        public void Assert(
+            string assertPropertyName,
+            object assertPropertyExpectedValue,
+            AssertionOperator assertionOperator,
+            object assertPropertyActualValue,
+            bool passed,
+            IEnumerable<string> assertionSpecifics)
         {
             StartLine(assertPropertyName + " " + assertionOperator.ToDescription() + " " + _formatter.FormatValue(assertPropertyExpectedValue) + '\t' + (passed ? "(Passed)" : "(Failed, Actual value: " + _formatter.FormatValue(assertPropertyActualValue) + ")"));
 

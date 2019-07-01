@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerTestsExcel.Assertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -113,7 +114,13 @@ namespace CustomerTestsExcel
             }
         }
 
-        public void Assert(string assertPropertyName, object assertPropertyExpectedValue, AssertionOperator assertionOperator, object assertPropertyActualValue, bool passed, IEnumerable<string> assertionSpecifics)
+        public void Assert(
+            string assertPropertyName,
+            object assertPropertyExpectedValue,
+            AssertionOperator assertionOperator,
+            object assertPropertyActualValue,
+            bool passed,
+            IEnumerable<string> assertionSpecifics)
         {
             foreach (var writer in _writers)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CustomerTestsExcel.Assertions;
 using NUnit.Framework;
 
 namespace CustomerTestsExcel.Test

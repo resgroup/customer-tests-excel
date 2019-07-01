@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using CustomerTestsExcel.Assertions;
 
 namespace CustomerTestsExcel
 {
@@ -11,12 +12,12 @@ namespace CustomerTestsExcel
         readonly IEnumerable<string> issuesPreventingRoundTrip;
 
         public ExcelUnRoundTrippableTestOutputWriter(
-            ITabularLibrary excel, 
-            ICodeNameToExcelNameConverter namer, 
+            ITabularLibrary excel,
+            ICodeNameToExcelNameConverter namer,
             string excelFolder,
-            IEnumerable<string> issuesPreventingRoundTrip) 
+            IEnumerable<string> issuesPreventingRoundTrip)
             : base(
-                  excel, 
+                  excel,
                   namer,
                   excelFolder)
         {
@@ -24,8 +25,8 @@ namespace CustomerTestsExcel
         }
 
         public void StartSpecification(
-            string specificationNamespace, 
-            string specificationName, 
+            string specificationNamespace,
+            string specificationName,
             string specificationDescription)
         {
             Initialise(

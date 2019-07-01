@@ -8,13 +8,13 @@ namespace CustomerTestsExcel
 {
     public class ReportSpecificationSetupPropertyList : List<ReportSpecificationSetupProperty>
     {
-        // use when the property value might need namespacing (eg enums can be external etc etc)
+        // This function could be removed now, but it will cause trouble for things that are using it
+        // Should probably mark it as deprecated somehow
         public void Add(MethodBase setupMethod, object propertyValue)
         {
             Add(new ReportSpecificationSetupProperty(setupMethod, propertyValue));
         }
 
-        // use when the property value wll not need namespacing (eg is null, a clr base type etc etc)
         public void Add(string propertyName, object propertyValue)
         {
             Add(new ReportSpecificationSetupProperty(propertyName, propertyValue));

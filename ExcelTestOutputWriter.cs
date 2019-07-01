@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using CustomerTestsExcel.Assertions;
 
 namespace CustomerTestsExcel
 {
@@ -68,7 +69,7 @@ namespace CustomerTestsExcel
 
         public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
         {
-            SetCell( namer.GivenPropertyNameCodeNameToExcelName(propertyName, indexInParent));
+            SetCell(namer.GivenPropertyNameCodeNameToExcelName(propertyName, indexInParent));
             if (isNull)
             {
                 Indent();
@@ -179,7 +180,13 @@ namespace CustomerTestsExcel
             SetColumn(2);
         }
 
-        public void Assert(string assertPropertyName, object assertPropertyExpectedValue, AssertionOperator assertionOperator, object assertPropertyActualValue, bool passed, IEnumerable<string> assertionSpecifics)
+        public void Assert(
+            string assertPropertyName,
+            object assertPropertyExpectedValue,
+            AssertionOperator assertionOperator,
+            object assertPropertyActualValue,
+            bool passed,
+            IEnumerable<string> assertionSpecifics)
         {
             using (SavePosition())
             {

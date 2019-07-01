@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerTestsExcel.Assertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +35,13 @@ namespace CustomerTestsExcel
 
         void When(string actionName);
 
-        void Assert(string assertPropertyName, object assertPropertyExpectedValue, AssertionOperator assertionOperator, object assertPropertyActualValue, bool passed, IEnumerable<string> assertionSpecifics);
+        void Assert(
+            string assertPropertyName,
+            object assertPropertyExpectedValue,
+            AssertionOperator assertionOperator,
+            object assertPropertyActualValue,
+            bool passed,
+            IEnumerable<string> assertionSpecifics);
 
         void CodeValueDoesNotMatchExcelFormula(string assertPropertyName, string excelValue, string csharpValue);
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 
-namespace CustomerTestsExcel
+namespace CustomerTestsExcel.Assertions
 {
     public class ParentAssertion<Parent, Child> : IAssertion<Parent> where Child : class
     {

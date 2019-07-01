@@ -23,7 +23,7 @@ namespace CustomerTestsExcel.Test
         {
             Expression<Func<AssertionInterface, int>> expression = assertionClass => assertionClass.SimpleProperty;
 
-            var sut = new CustomerTestsExcel.ParseAssertionProperty(expression);
+            var sut = new Assertions.ParseAssertionProperty(expression);
 
             Assert.AreEqual("SimpleProperty", sut.PropertyName);
         }
@@ -33,7 +33,7 @@ namespace CustomerTestsExcel.Test
         {
             Expression<Func<AssertionInterface, int>> expression = assertionClass => assertionClass.ParameterlessMethod();
 
-            var sut = new CustomerTestsExcel.ParseAssertionProperty(expression);
+            var sut = new Assertions.ParseAssertionProperty(expression);
 
             Assert.AreEqual("ParameterlessMethod()", sut.PropertyName);
         }
@@ -43,7 +43,7 @@ namespace CustomerTestsExcel.Test
         {
             Expression<Func<AssertionInterface, int>> expression = assertionClass => assertionClass.OneIntParameterMethod(0);
 
-            var sut = new CustomerTestsExcel.ParseAssertionProperty(expression);
+            var sut = new Assertions.ParseAssertionProperty(expression);
 
             Assert.AreEqual("OneIntParameterMethod(0)", sut.PropertyName);
         }

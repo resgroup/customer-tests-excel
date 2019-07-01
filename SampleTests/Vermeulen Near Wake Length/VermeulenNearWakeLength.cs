@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
+using CustomerTestsExcel.Assertions;
 using System.Linq.Expressions;
 using SampleTests;
 
@@ -33,7 +34,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
         {
             var vermeulenNearWakeLengthCalculator = new SpecificationSpecificVermeulenNearWakeLengthCalculator();
             {
-                var vermeulenNearWakeLengthInputs = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput>();
+                var VermeulenNearWakeLengthInputs = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput>();
                 {
                     var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
                     vermeulenNearWakeLengthInputs_Row.Velocity_of(10);
@@ -44,7 +45,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
+                    VermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
                     var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
@@ -56,7 +57,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(2);
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
+                    VermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
                     var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
@@ -68,7 +69,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
+                    VermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
                     var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
@@ -80,7 +81,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
+                    VermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
                     var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
@@ -92,7 +93,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(60);
                     vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
+                    VermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
                     var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
@@ -104,7 +105,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
+                    VermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
                 {
                     var vermeulenNearWakeLengthInputs_Row = new SpecificationSpecificVermeulenNearWakeLengthInput();
@@ -116,9 +117,9 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.NumberOfBlades_of(3);
                     vermeulenNearWakeLengthInputs_Row_TurbineGeometry.Diameter_of(76);
                     vermeulenNearWakeLengthInputs_Row.TurbineGeometry_of(vermeulenNearWakeLengthInputs_Row_TurbineGeometry);
-                    vermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
+                    VermeulenNearWakeLengthInputs.Add(vermeulenNearWakeLengthInputs_Row);
                 }
-                vermeulenNearWakeLengthCalculator.VermeulenNearWakeLengthInputs_table_of(vermeulenNearWakeLengthInputs);
+                vermeulenNearWakeLengthCalculator.VermeulenNearWakeLengthInputs_table_of(VermeulenNearWakeLengthInputs);
             }
             
             return vermeulenNearWakeLengthCalculator;

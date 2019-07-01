@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
+using CustomerTestsExcel.Assertions;
 using System.Linq.Expressions;
 using SampleTests;
 
@@ -38,58 +39,58 @@ namespace SampleTests.Anova
                 var group = new SpecificationSpecificGroup();
                 group.Name_of("Langley School");
                 {
-                    var values = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
+                    var Values = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(90);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(87);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(93);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(115);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(97);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(85);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(102);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(110);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(111);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(102);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
-                    group.Values_table_of(values);
+                    group.Values_table_of(Values);
                 }
                 anovaCalculator.Groups_of(group);
             }
@@ -98,58 +99,58 @@ namespace SampleTests.Anova
                 var group = new SpecificationSpecificGroup();
                 group.Name_of("Ninestiles School");
                 {
-                    var values = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
+                    var Values = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(135);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(125);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(107);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(96);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(114);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(125);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(94);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(123);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(111);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(96);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
-                    group.Values_table_of(values);
+                    group.Values_table_of(Values);
                 }
                 anovaCalculator.Groups_of(group);
             }
@@ -158,58 +159,58 @@ namespace SampleTests.Anova
                 var group = new SpecificationSpecificGroup();
                 group.Name_of("Alderbrook School");
                 {
-                    var values = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
+                    var Values = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(93);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(101);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(74);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(87);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(76);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(87);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(98);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(108);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(113);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
                     {
                         var values_Row = new SpecificationSpecificValue();
                         values_Row.Value_of(96);
-                        values.Add(values_Row);
+                        Values.Add(values_Row);
                     }
-                    group.Values_table_of(values);
+                    group.Values_table_of(Values);
                 }
                 anovaCalculator.Groups_of(group);
             }

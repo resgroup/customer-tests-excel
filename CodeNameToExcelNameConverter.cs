@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using CustomerTestsExcel.Assertions;
 
 namespace CustomerTestsExcel
 {

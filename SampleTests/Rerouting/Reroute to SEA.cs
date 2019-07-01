@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
+using CustomerTestsExcel.Assertions;
 using System.Linq.Expressions;
 using SampleTests;
 
@@ -40,20 +41,20 @@ namespace SampleTests.Rerouting
                 cargo.Origin_of("HKG");
                 cargo.Destination_of("DAL");
                 {
-                    var itineraryLeg = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
+                    var ItineraryLeg = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
                     {
                         var itineraryLeg_Row = new SpecificationSpecificItineraryLeg();
                         itineraryLeg_Row.Origin_of("HKG");
                         itineraryLeg_Row.Destination_of("LGB");
-                        itineraryLeg.Add(itineraryLeg_Row);
+                        ItineraryLeg.Add(itineraryLeg_Row);
                     }
                     {
                         var itineraryLeg_Row = new SpecificationSpecificItineraryLeg();
                         itineraryLeg_Row.Origin_of("LGB");
                         itineraryLeg_Row.Destination_of("DAL");
-                        itineraryLeg.Add(itineraryLeg_Row);
+                        ItineraryLeg.Add(itineraryLeg_Row);
                     }
-                    cargo.ItineraryLeg_table_of(itineraryLeg);
+                    cargo.ItineraryLeg_table_of(ItineraryLeg);
                 }
                 routingService.Cargo_of(cargo);
             }

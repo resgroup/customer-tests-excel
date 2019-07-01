@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
+using CustomerTestsExcel.Assertions;
 using System.Linq.Expressions;
 using SampleTests;
 

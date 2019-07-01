@@ -149,6 +149,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("using System.Text;");
             Output("using NUnit.Framework;");
             Output("using CustomerTestsExcel;");
+            Output("using CustomerTestsExcel.Assertions;");
             Output("using System.Linq.Expressions;");
             Output($"using {projectRootNamespace};");
             OutputBlankLine();

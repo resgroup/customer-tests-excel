@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CustomerTestsExcel.Assertions;
 using NUnit.Framework;
 
 namespace CustomerTestsExcel.Test
@@ -20,11 +21,11 @@ namespace CustomerTestsExcel.Test
         [Test]
         public void Precision()
         {
-            Check(shouldPass: true,     expected: 1,        actual: 1,      message: "integer 1 should equal integer 1");
-            Check(shouldPass: true,     expected: "cedd",   actual: "cedd", message: "'cedd' should equal 'cedd'");
-            Check(shouldPass: false,    expected: "Cedd",   actual: "cedd", message: "string comparison should be case sensitive");
-            Check(shouldPass: false,    expected: "1",      actual: 1,      message: "'1' should not equal integer 1");
+            Check(shouldPass: true, expected: 1, actual: 1, message: "integer 1 should equal integer 1");
+            Check(shouldPass: true, expected: "cedd", actual: "cedd", message: "'cedd' should equal 'cedd'");
+            Check(shouldPass: false, expected: "Cedd", actual: "cedd", message: "string comparison should be case sensitive");
+            Check(shouldPass: false, expected: "1", actual: 1, message: "'1' should not equal integer 1");
         }
-        
+
     }
 }

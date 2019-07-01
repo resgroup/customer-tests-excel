@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using CustomerTestsExcel.Assertions;
 
 namespace CustomerTestsExcel
 {
@@ -23,13 +24,13 @@ namespace CustomerTestsExcel
 
         private void WriteHeader(string specificationNamespace)
         {
-            _writer = new StringBuilder(); 
+            _writer = new StringBuilder();
 
             _writer.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             _writer.AppendLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
             _writer.AppendLine("<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>");
             _writer.AppendLine(@"<head>");
-    		_writer.Append(@"<link rel='stylesheet' type='text/css' href='");
+            _writer.Append(@"<link rel='stylesheet' type='text/css' href='");
             for (int i = 0; i < GetDirectoryStructure(specificationNamespace).Count(); i++) _writer.Append(@"..\");
             _writer.Append(@"Specification.css' media='screen'/>");
             _writer.AppendLine();
@@ -39,7 +40,7 @@ namespace CustomerTestsExcel
             _writer.AppendLine(@"</head>");
             _writer.AppendLine(@"<body>");
             _writer.Append(@"<div class='assembly ");
-            assemblyDivClassIndex = _writer.Length; 
+            assemblyDivClassIndex = _writer.Length;
             _writer.AppendLine(@"'>");
             _writer.AppendLine(@"<div class='assemblyName'><h1>Testing Assembly " + specificationNamespace + "</h1></div>");
             _writer.AppendLine(@"<div class='dateStarted'>Tests started at " + DateTime.Now.ToString() + "</div>");
@@ -50,7 +51,7 @@ namespace CustomerTestsExcel
         {
             WriteHeader(specificationNamespace);
 
-            _specificationName = specificationName; 
+            _specificationName = specificationName;
 
             _writer.Append(@"<div class='specification ");
             specificationDivClassIndex = _writer.Length;
@@ -153,7 +154,13 @@ namespace CustomerTestsExcel
             _writer.AppendLine(@"</div>");
         }
 
-        public void Assert(string assertPropertyName, object assertPropertyExpectedValue, AssertionOperator assertionOperator, object assertPropertyActualValue, bool passed, IEnumerable<string> assertionSpecifics)
+        public void Assert(
+            string assertPropertyName,
+            object assertPropertyExpectedValue,
+            AssertionOperator assertionOperator,
+            object assertPropertyActualValue,
+            bool passed,
+            IEnumerable<string> assertionSpecifics)
         {
             _writer.AppendLine(@"<div class='assertion " + (passed ? "assertionPassed" : "assertionFailed") + "'>");
             _writer.AppendLine(@"<span class='assertionProperty'>" + assertPropertyName + "</span>");
@@ -214,16 +221,16 @@ namespace CustomerTestsExcel
             {
                 fileWriter.Write(_writer.ToString());
             }
- 
+
         }
 
         private string CreateFileName(string assemblyName, string specificationName)
         {
-            return 
+            return
                 @"\\kl-web-001\CustomerTests\" +
-                assemblyName.Replace("RES.", "").Replace(".Specification", "").Replace('.', '\\') + 
-                @"\" + 
-                specificationName + 
+                assemblyName.Replace("RES.", "").Replace(".Specification", "").Replace('.', '\\') +
+                @"\" +
+                specificationName +
                 ".html";
         }
 
