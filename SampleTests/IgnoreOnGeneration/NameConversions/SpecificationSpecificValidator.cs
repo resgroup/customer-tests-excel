@@ -17,7 +17,7 @@ namespace SampleTests.IgnoreOnGeneration.NameConversions
 
         internal void WithValidProperties()
         {
-            _valueProperties.Add(GetCurrentMethod());
+            valueProperties.Add(GetCurrentMethod());
 
             Valid = true;
         }

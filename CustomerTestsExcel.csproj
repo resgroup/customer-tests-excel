@@ -70,6 +70,7 @@
     <Compile Include="ExcelToCode\AssertionTableHeader.cs" />
     <Compile Include="ExcelToCode\TableHeader.cs" />
     <Compile Include="Indentation\AutoIndentingStringBuilder.cs" />
+    <Compile Include="ReportsSpecificationSetupList.cs" />
     <Compile Include="ITableHeader.cs" />
     <Compile Include="NavigationHTML\AddNavigationToHTMLOutput.cs" />
     <Compile Include="Assertions\AssertionOperator.cs" />

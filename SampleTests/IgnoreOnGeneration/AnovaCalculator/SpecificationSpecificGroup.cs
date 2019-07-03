@@ -24,7 +24,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificGroup Name_of(string name)
         {
-            _valueProperties.Add(GetCurrentMethod(), name);
+            valueProperties.Add(GetCurrentMethod(), name);
 
             anovaGroup.Setup(m => m.Name).Returns(name);
 
@@ -35,7 +35,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
         {
             values.PropertyName = GetCurrentMethod().Name;
 
-            _classTableProperties.Add(values);
+            classTableProperties.Add(values);
 
             foreach (var row in values.Rows)
                 this.values.Add(row.Properties);

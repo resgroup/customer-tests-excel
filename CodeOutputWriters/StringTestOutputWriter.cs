@@ -93,6 +93,29 @@ namespace CustomerTestsExcel.CodeOutputWriters
             Outdent();
         }
 
+        public void StartGivenListProperty(ReportSpecificationSetupList list)
+        {
+            WriteLine($"{_formatter.FormatMethodName(list.PropertyName)} list of  {_formatter.FormatSpecificationSpecificClassName(list.PropertyType)}");
+            Indent();
+
+        }
+
+        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem)
+        {
+            WriteLine("With Item");
+            Indent();
+        }
+
+        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem)
+        {
+            Outdent();
+        }
+
+        public void EndGivenListProperty(ReportSpecificationSetupList list)
+        {
+            Outdent();
+        }
+
         public void EndGiven()
         {
 

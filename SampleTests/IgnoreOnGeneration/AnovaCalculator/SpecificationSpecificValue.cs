@@ -10,7 +10,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificValue Value_of(float value)
         {
-            _valueProperties.Add(GetCurrentMethod(), value);
+            valueProperties.Add(GetCurrentMethod(), value);
 
             this.value = value;
 

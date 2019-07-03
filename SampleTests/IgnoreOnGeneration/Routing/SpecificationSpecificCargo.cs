@@ -26,14 +26,14 @@ namespace SampleTests.IgnoreOnGeneration.Routing
 
         public SpecificationSpecificCargo Origin_of(string origin)
         {
-            _valueProperties.Add(GetCurrentMethod(), origin);
+            valueProperties.Add(GetCurrentMethod(), origin);
             _cargo.Setup(m => m.Origin).Returns(origin);
             return this;
         }
 
         public SpecificationSpecificCargo Destination_of(string destination)
         {
-            _valueProperties.Add(GetCurrentMethod(), destination);
+            valueProperties.Add(GetCurrentMethod(), destination);
             _cargo.Setup(m => m.Destination).Returns(destination);
             return this;
         }
@@ -41,7 +41,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
         readonly List<SpecificationSpecificItineraryLeg> _legs = new List<SpecificationSpecificItineraryLeg>();
         public SpecificationSpecificCargo ItineraryLeg_of(SpecificationSpecificItineraryLeg leg)
         {
-            _classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), leg, true, _legs.Count));
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), leg, true, _legs.Count));
 
             _legs.Add(leg);
 
@@ -52,7 +52,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
         {
             legs.PropertyName = GetCurrentMethod().Name;
 
-            _classTableProperties.Add(legs);
+            classTableProperties.Add(legs);
 
             foreach (var row in legs.Rows)
                 _legs.Add(row.Properties);

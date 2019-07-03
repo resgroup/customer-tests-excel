@@ -11,14 +11,14 @@ namespace SampleTests.IgnoreOnGeneration.NameConversions
 
         internal void A_Property_of(string anything)
         {
-            _valueProperties.Add(GetCurrentMethod(), anything);
+            valueProperties.Add(GetCurrentMethod(), anything);
         }
 
         internal void Table_Property_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table> table_Property)
         {
             table_Property.PropertyName = GetCurrentMethod().Name;
 
-            _classTableProperties.Add(table_Property);
+            classTableProperties.Add(table_Property);
 
             //return this;
         }
@@ -26,7 +26,7 @@ namespace SampleTests.IgnoreOnGeneration.NameConversions
         internal void List_Property_of(SpecificationSpecificA_Table list_Property)
         {
             // always passing in 0 as indexInParent, as we aren't setting up anything
-            _classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property, true, 0));
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property, true, 0));
 
             //return this;
 

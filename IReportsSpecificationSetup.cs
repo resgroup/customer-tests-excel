@@ -10,5 +10,6 @@ namespace CustomerTestsExcel
         IEnumerable<ReportSpecificationSetupProperty> ValueProperties { get; }
         IEnumerable<ReportSpecificationSetupClass> ClassProperties { get; }
         IEnumerable<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties { get; }
+        IEnumerable<ReportSpecificationSetupList> ListProperties { get; }
     }
 }

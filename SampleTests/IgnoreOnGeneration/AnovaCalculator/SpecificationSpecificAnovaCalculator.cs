@@ -15,7 +15,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(string variableDescription)
         {
-            _valueProperties.Add(GetCurrentMethod(), variableDescription);
+            valueProperties.Add(GetCurrentMethod(), variableDescription);
 
             this.variableDescription = variableDescription;
 
@@ -24,7 +24,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificAnovaCalculator Groups_of(SpecificationSpecificGroup group)
         {
-            _classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), group, true, groups.Count));
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), group, true, groups.Count));
 
             groups.Add(group);
 

@@ -17,7 +17,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             vermeulenNearWakeLengthInputs.PropertyName = GetCurrentMethod().Name;
 
-            _classTableProperties.Add(vermeulenNearWakeLengthInputs);
+            classTableProperties.Add(vermeulenNearWakeLengthInputs);
 
             foreach (var row in vermeulenNearWakeLengthInputs.Rows)
                 this.vermeulenNearWakeLengthInputs.Add(row.Properties);

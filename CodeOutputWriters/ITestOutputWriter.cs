@@ -25,6 +25,11 @@ namespace CustomerTestsExcel.CodeOutputWriters
         void ClassTablePropertyRow(IEnumerable<ReportSpecificationSetupProperty> cells);
         void EndClassTable();
 
+        void StartGivenListProperty(ReportSpecificationSetupList list);
+        void StartGivenListPropertyItem(IReportsSpecificationSetup listItem);
+        void EndGivenListPropertyItem(IReportsSpecificationSetup listItem);
+        void EndGivenListProperty(ReportSpecificationSetupList list);
+
         void StartGivenProperties();
         void EndGivenProperties();
 

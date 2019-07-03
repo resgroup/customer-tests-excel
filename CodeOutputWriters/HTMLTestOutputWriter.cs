@@ -244,5 +244,9 @@ namespace CustomerTestsExcel.CodeOutputWriters
             _writer.AppendLine(@"<div class='exception'>Exception " + exception + "</div>");
         }
 
+        public void StartGivenListProperty(ReportSpecificationSetupList list) => throw new NotImplementedException();
+        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem) => throw new NotImplementedException();
+        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem) => throw new NotImplementedException();
+        public void EndGivenListProperty(ReportSpecificationSetupList list) => throw new NotImplementedException();
     }
 }

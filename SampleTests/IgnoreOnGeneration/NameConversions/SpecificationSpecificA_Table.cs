@@ -8,7 +8,7 @@ namespace SampleTests.IgnoreOnGeneration.NameConversions
     {
         internal void A_Property_of(string a_Property)
         {
-            _valueProperties.Add(GetCurrentMethod(), a_Property);
+            valueProperties.Add(GetCurrentMethod(), a_Property);
         }
     }
 }

@@ -14,21 +14,21 @@ namespace SampleTests.IgnoreOnGeneration.Calculator
 
         internal void FirstValue_of(double firstValue)
         {
-            _valueProperties.Add(GetCurrentMethod(), firstValue);
+            valueProperties.Add(GetCurrentMethod(), firstValue);
 
             FirstValue = firstValue;
         }
 
         internal void SecondValue_of(double secondValue)
         {
-            _valueProperties.Add(GetCurrentMethod(), secondValue);
+            valueProperties.Add(GetCurrentMethod(), secondValue);
 
             SecondValue = secondValue;
         }
 
         internal void Operation_of(Operation operation)
         {
-            _valueProperties.Add(GetCurrentMethod(), operation);
+            valueProperties.Add(GetCurrentMethod(), operation);
 
             Operation = operation;
         }

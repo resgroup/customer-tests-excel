@@ -7,20 +7,28 @@ namespace CustomerTestsExcel
 {
     public class ReportsSpecificationSetup : IReportsSpecificationSetup
     {
-        protected readonly ReportSpecificationSetupPropertyList _valueProperties;
-        public IEnumerable<ReportSpecificationSetupProperty> ValueProperties { get { return _valueProperties; } }
+        protected readonly ReportSpecificationSetupPropertyList valueProperties;
+        public IEnumerable<ReportSpecificationSetupProperty> ValueProperties =>
+            valueProperties;
 
-        protected readonly List<ReportSpecificationSetupClass> _classProperties;
-        public IEnumerable<ReportSpecificationSetupClass> ClassProperties { get { return _classProperties; } }
+        protected readonly List<ReportSpecificationSetupClass> classProperties;
+        public IEnumerable<ReportSpecificationSetupClass> ClassProperties =>
+            classProperties;
 
-        protected readonly List<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> _classTableProperties;
-        public IEnumerable<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties { get { return _classTableProperties; } }
+        protected readonly List<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> classTableProperties;
+        public IEnumerable<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties =>
+            classTableProperties;
+
+        protected readonly List<ReportSpecificationSetupList> listProperties;
+        public IEnumerable<ReportSpecificationSetupList> ListProperties =>
+            listProperties;
 
         public ReportsSpecificationSetup()
         {
-            _valueProperties = new ReportSpecificationSetupPropertyList();
-            _classProperties = new List<ReportSpecificationSetupClass>();
-            _classTableProperties = new List<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>>();
+            valueProperties = new ReportSpecificationSetupPropertyList();
+            classProperties = new List<ReportSpecificationSetupClass>();
+            classTableProperties = new List<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>>();
+            listProperties = new List<ReportSpecificationSetupList>();
         }
     }
 }

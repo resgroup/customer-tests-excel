@@ -25,14 +25,14 @@ namespace SampleTests.IgnoreOnGeneration.Routing
 
         public SpecificationSpecificItineraryLeg Origin_of(string origin)
         {
-            _valueProperties.Add(GetCurrentMethod(), origin);
+            valueProperties.Add(GetCurrentMethod(), origin);
             _leg.Setup(m => m.Origin).Returns(origin);
             return this;
         }
 
         public SpecificationSpecificItineraryLeg Destination_of(string destination)
         {
-            _valueProperties.Add(GetCurrentMethod(), destination);
+            valueProperties.Add(GetCurrentMethod(), destination);
             _leg.Setup(m => m.Destination).Returns(destination);
             return this;
         }

@@ -68,6 +68,10 @@ namespace CustomerTestsExcel.CodeOutputWriters
         public void EndAssertions() { }
         public void EndSpecification(string specificationNamespace, bool passed) { }
         public void Exception(string exception) { }
+        public void StartGivenListProperty(ReportSpecificationSetupList list) { }
+        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem) { }
+        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem) { }
+        public void EndGivenListProperty(ReportSpecificationSetupList list) { }
 #pragma warning restore S1186 // Methods should not be empty
     }
 }

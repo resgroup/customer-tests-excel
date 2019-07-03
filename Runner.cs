@@ -11,17 +11,17 @@ namespace CustomerTestsExcel
     public class RunSpecification<T>
         where T : IReportsSpecificationSetup
     {
-        public string Message { get { return _message.StringBuilder.ToString(); } }
+        public string Message { get { return message.StringBuilder.ToString(); } }
 
-        protected readonly ITestOutputWriter _writer;
-        protected readonly StringBuilderTextLineWriter _message;
+        protected readonly ITestOutputWriter writer;
+        protected readonly StringBuilderTextLineWriter message;
 
         public RunSpecification(ITestOutputWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            _message = new StringBuilderTextLineWriter();
-            _writer = new CombinedTestOutputWriter(new List<ITestOutputWriter>() { writer, new StringTestOutputWriter(new HumanFriendlyFormatter(), _message) });
+            message = new StringBuilderTextLineWriter();
+            this.writer = new CombinedTestOutputWriter(new List<ITestOutputWriter>() { writer, new StringTestOutputWriter(new HumanFriendlyFormatter(), message) });
         }
 
         public bool Run(ISpecification<T> specification)
@@ -34,7 +34,7 @@ namespace CustomerTestsExcel
             catch (Exception ex)
             {
                 passed = false;
-                _writer.Exception(ex.ToString());
+                writer.Exception(ex.ToString());
             }
 
             return passed;
@@ -46,50 +46,50 @@ namespace CustomerTestsExcel
             var specificationNamespace = specification.GetType().Namespace;
 
             // arrange
-            _writer.StartSpecification(specificationNamespace, specification.GetType().Name, specification.Description());
+            writer.StartSpecification(specificationNamespace, specification.GetType().Name, specification.Description());
 
-            _writer.StartGiven();
+            writer.StartGiven();
             sut = specification.Given();
             WriteRootClass(sut);
-            _writer.EndGiven();
+            writer.EndGiven();
 
             // act (it is also possible for this to return an Expression and for us to write out a string representation of this to ensure that the code and the text do not diverge)
-            _writer.When(specification.When(sut));
+            writer.When(specification.When(sut));
 
             // assert, write out a string representation of the Expressions's
-            _writer.StartAssertions();
+            writer.StartAssertions();
 
             bool allPassed = true;
             foreach (var assertion in specification.Assertions())
             {
                 bool passed = assertion.Passed(sut);
                 allPassed = allPassed && passed;
-                assertion.Write(sut, passed, _writer);
+                assertion.Write(sut, passed, writer);
             }
 
-            _writer.EndAssertions();
+            writer.EndAssertions();
 
-            _writer.EndSpecification(specificationNamespace, allPassed);
+            writer.EndSpecification(specificationNamespace, allPassed);
 
             return allPassed;
         }
 
         void WriteRootClass(IReportsSpecificationSetup properties)
         {
-            _writer.StartClass(ClassName(properties));
+            writer.StartClass(ClassName(properties));
 
             WriteClass(properties);
 
-            _writer.EndClass();
+            writer.EndClass();
         }
 
         void WriteSubClass(IReportsSpecificationSetup properties)
         {
-            _writer.StartSubClass(ClassName(properties));
+            writer.StartSubClass(ClassName(properties));
 
             WriteClass(properties);
 
-            _writer.EndSubClass();
+            writer.EndSubClass();
         }
 
         void WriteClass(IReportsSpecificationSetup properties)
@@ -97,13 +97,13 @@ namespace CustomerTestsExcel
             // TODO: let properties class decide if it needs doing
             if (properties.ValueProperties.Any() || properties.ClassProperties.Any() || properties.ClassTableProperties.Any())
             {
-                using (new TidyUp(_writer.StartGivenProperties, _writer.EndGivenProperties))
+                using (new TidyUp(writer.StartGivenProperties, writer.EndGivenProperties))
                 {
-                    foreach (var property in properties.ValueProperties) _writer.GivenProperty(property);
+                    foreach (var property in properties.ValueProperties) writer.GivenProperty(property);
 
                     foreach (var classProperty in properties.ClassProperties)
                     {
-                        _writer.GivenClassProperty(classProperty.PropertyName, classProperty.IsChild, classProperty.IndexInParent, classProperty.Properties == null);
+                        writer.GivenClassProperty(classProperty.PropertyName, classProperty.IsChild, classProperty.IndexInParent, classProperty.Properties == null);
 
                         if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
                     }
@@ -112,12 +112,12 @@ namespace CustomerTestsExcel
                     {
                         if (classTableProperty.Rows.Any())
                         {
-                            _writer.StartClassTable(classTableProperty.PropertyName, ClassName(classTableProperty.Rows.First().Properties));
-                            _writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
+                            writer.StartClassTable(classTableProperty.PropertyName, ClassName(classTableProperty.Rows.First().Properties));
+                            writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
 
-                            foreach (var row in classTableProperty.Rows) _writer.ClassTablePropertyRow(row.Properties.ValueProperties);
+                            foreach (var row in classTableProperty.Rows) writer.ClassTablePropertyRow(row.Properties.ValueProperties);
 
-                            _writer.EndClassTable();
+                            writer.EndClassTable();
                         }
                     }
 

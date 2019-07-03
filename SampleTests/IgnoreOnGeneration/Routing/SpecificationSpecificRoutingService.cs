@@ -22,7 +22,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
         internal string _rerouteFrom { get; private set; }
         public SpecificationSpecificRoutingService RerouteFrom_of(string rerouteFrom)
         {
-            _valueProperties.Add(GetCurrentMethod(), rerouteFrom);
+            valueProperties.Add(GetCurrentMethod(), rerouteFrom);
             _rerouteFrom = rerouteFrom;
             return this;
         }
@@ -30,7 +30,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
         internal string _rerouteTo { get; private set; }
         public SpecificationSpecificRoutingService RerouteTo_of(string rerouteTo)
         {
-            _valueProperties.Add(GetCurrentMethod(), rerouteTo);
+            valueProperties.Add(GetCurrentMethod(), rerouteTo);
             _rerouteTo = rerouteTo;
             return this;
         }
@@ -38,7 +38,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
         internal SpecificationSpecificCargo _cargo { get; private set; }
         public SpecificationSpecificRoutingService Cargo_of(SpecificationSpecificCargo cargo)
         {
-            _classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
             _cargo = cargo;
             return this;
         }
