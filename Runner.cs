@@ -99,15 +99,20 @@ namespace CustomerTestsExcel
 
             using (new TidyUp(writer.StartGivenProperties, writer.EndGivenProperties))
             {
-                WriteValueProperties(properties);
-
-                WriteClassProperties(properties);
-
-                WriteClassTableProperties(properties);
-
-                WriteListProperties(properties);
+                WriteProperties(properties);
             }
 
+        }
+
+        private void WriteProperties(IReportsSpecificationSetup properties)
+        {
+            WriteValueProperties(properties);
+
+            WriteClassProperties(properties);
+
+            WriteClassTableProperties(properties);
+
+            WriteListProperties(properties);
         }
 
         private void WriteListProperties(IReportsSpecificationSetup properties)
@@ -119,7 +124,9 @@ namespace CustomerTestsExcel
 
                 foreach (var listItem in property.Items)
                 {
-                    WriteClass(listItem);
+                    writer.StartGivenListPropertyItem(listItem);
+                    WriteProperties(listItem);
+                    writer.EndGivenListPropertyItem(listItem);
                 }
 
                 writer.EndGivenListProperty(property);

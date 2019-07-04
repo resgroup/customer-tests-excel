@@ -11,41 +11,51 @@ namespace CustomerTestsExcel.Test
         [Test]
         public void ListPropertiesOutputWritersOutputifListOfSyntax()
         {
-
-            var listPropertyItem1 = new TestReportsSpecificationSetup();
-            listPropertyItem1.AddValueProperty("School", "Langley");
-            listPropertyItem1.AddValueProperty("AverageClassSize", 30);
-
-            var listPropertyItem2 = new TestReportsSpecificationSetup();
-            listPropertyItem2.AddValueProperty("School", "Ninestiles");
-            listPropertyItem2.AddValueProperty("AverageClassSize", 20);
+            const string LIST_PROPERTY_NAME = "groups";
+            const string LIST_PROPERTY_TYPE = "AnovaGroup";
+            const string PROPERTY1_NAME = "School";
+            const string PROPERTY2_NAME = "AverageClassSize";
 
             var listPropertyItems = new List<IReportsSpecificationSetup>
             {
-                listPropertyItem1,
-                listPropertyItem2
+                new TestReportsSpecificationSetup()
+                    .AddValueProperty(PROPERTY1_NAME, "Langley")
+                    .AddValueProperty(PROPERTY2_NAME, 30),
+                new TestReportsSpecificationSetup()
+                    .AddValueProperty(PROPERTY1_NAME, "Ninestiles")
+                    .AddValueProperty(PROPERTY2_NAME, 20),
             };
 
             var givenListProperty = new ReportSpecificationSetupList(
-                "groups",
-                "AnovaGroup",
+                LIST_PROPERTY_NAME,
+                LIST_PROPERTY_TYPE,
                 listPropertyItems);
 
-            var givenObject = new TestReportsSpecificationSetup();
-            givenObject.AddListProperty(givenListProperty);
+            var setup = new TestReportsSpecificationSetup().AddListProperty(givenListProperty);
 
-            var specification = new TestSpecification(givenObject);
+            var runner = CreateRunner();
 
+            runner.Run(new TestSpecification(setup));
+
+            // This doesn't test everything is in the right order and things like that,
+            // but it is more flexible in allowing whitespace changes, so probably an
+            // ok compromise.
+            StringAssert.Contains($"{LIST_PROPERTY_NAME} list of {LIST_PROPERTY_TYPE}", runner.Message);
+            StringAssert.Contains("With Item", runner.Message);
+            StringAssert.Contains($"{PROPERTY1_NAME} \"Langley\"", runner.Message);
+            StringAssert.Contains($"{PROPERTY2_NAME} 30", runner.Message);
+            StringAssert.Contains("With Item", runner.Message);
+            StringAssert.Contains($"{PROPERTY1_NAME} \"Ninestiles\"", runner.Message);
+            StringAssert.Contains($"{PROPERTY2_NAME} 20", runner.Message);
+        }
+
+        private static RunSpecification<TestReportsSpecificationSetup> CreateRunner()
+        {
             var outputWriter = new StringBuilderTextLineWriter();
+
             var writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), outputWriter);
 
-            var runner = new RunSpecification<TestReportsSpecificationSetup>(writer);
-
-            runner.Run(specification);
-
-            var output = outputWriter.StringBuilder.ToString();
-
-            StringAssert.Contains("groups list of AnovaGroup", output);
+            return new RunSpecification<TestReportsSpecificationSetup>(writer);
         }
     }
 }

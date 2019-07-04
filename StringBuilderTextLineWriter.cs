@@ -7,32 +7,32 @@ namespace CustomerTestsExcel
 {
     public class StringBuilderTextLineWriter : ITextLineWriter
     {
-        protected readonly StringBuilder _stringBuilder;
-        public StringBuilder StringBuilder { get { return _stringBuilder; } }
+        protected readonly StringBuilder stringBuilder;
+        public StringBuilder StringBuilder { get { return stringBuilder; } }
 
         public StringBuilderTextLineWriter()
         {
-            _stringBuilder = new StringBuilder();
+            stringBuilder = new StringBuilder();
         }
 
         public void WriteLine(string text)
         {
-            _stringBuilder.AppendLine(text);
+            stringBuilder.AppendLine(text);
         }
 
         public void StartLine(string text)
         {
-            _stringBuilder.AppendLine(text);
+            stringBuilder.AppendLine(text);
         }
 
         public void ContinueLine(string text)
         {
-            _stringBuilder.Append(text);
+            stringBuilder.Append(text);
         }
 
         public void EndLine(string text)
         {
-            _stringBuilder.AppendLine(text);
+            stringBuilder.AppendLine(text);
         }
     }
 }

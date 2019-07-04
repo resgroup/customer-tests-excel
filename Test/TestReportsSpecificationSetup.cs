@@ -7,16 +7,28 @@ namespace CustomerTestsExcel.Test
 {
     public class TestReportsSpecificationSetup : ReportsSpecificationSetup
     {
-        public void AddValueProperty(ReportSpecificationSetupProperty valueProperty) =>
+        public TestReportsSpecificationSetup AddValueProperty(ReportSpecificationSetupProperty valueProperty)
+        {
             valueProperties.Add(valueProperty);
+            return this;
+        }
 
-        public void AddValueProperty(string propertyName, object propertyValue) =>
+        public TestReportsSpecificationSetup AddValueProperty(string propertyName, object propertyValue)
+        {
             valueProperties.Add(new ReportSpecificationSetupProperty(propertyName, propertyValue));
+            return this;
+        }
 
-        public void AddValueProperty(string propertyName) =>
+        public TestReportsSpecificationSetup AddValueProperty(string propertyName)
+        {
             valueProperties.Add(propertyName, null);
+            return this;
+        }
 
-        public void AddListProperty(ReportSpecificationSetupList listProperty) =>
+        public TestReportsSpecificationSetup AddListProperty(ReportSpecificationSetupList listProperty)
+        {
             listProperties.Add(listProperty);
+            return this;
+        }
     }
 }
