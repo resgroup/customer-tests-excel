@@ -31,7 +31,7 @@ namespace CustomerTestsExcel
         public abstract IEnumerable<IAssertion<T>> Assertions();
 
         [Test]
-        public void RunTests()
+        public virtual void RunTests()
         {
             var runner = new RunSpecification<T>(GetWriter());
 
