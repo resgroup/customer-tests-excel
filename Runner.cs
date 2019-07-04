@@ -94,33 +94,65 @@ namespace CustomerTestsExcel
 
         void WriteClass(IReportsSpecificationSetup properties)
         {
-            // TODO: let properties class decide if it needs doing
-            if (properties.ValueProperties.Any() || properties.ClassProperties.Any() || properties.ClassTableProperties.Any())
+            if (!properties.AnythingToSetup())
+                return;
+
+            using (new TidyUp(writer.StartGivenProperties, writer.EndGivenProperties))
             {
-                using (new TidyUp(writer.StartGivenProperties, writer.EndGivenProperties))
+                WriteValueProperties(properties);
+
+                WriteClassProperties(properties);
+
+                WriteClassTableProperties(properties);
+
+                WriteListProperties(properties);
+            }
+
+        }
+
+        private void WriteListProperties(IReportsSpecificationSetup properties)
+        {
+            foreach (var property in properties.ListProperties)
+            {
+
+                writer.StartGivenListProperty(property);
+
+                foreach (var listItem in property.Items)
                 {
-                    foreach (var property in properties.ValueProperties) writer.GivenProperty(property);
+                    WriteClass(listItem);
+                }
 
-                    foreach (var classProperty in properties.ClassProperties)
-                    {
-                        writer.GivenClassProperty(classProperty.PropertyName, classProperty.IsChild, classProperty.IndexInParent, classProperty.Properties == null);
+                writer.EndGivenListProperty(property);
+            }
+        }
 
-                        if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
-                    }
+        private void WriteValueProperties(IReportsSpecificationSetup properties)
+        {
+            foreach (var property in properties.ValueProperties) writer.GivenProperty(property);
+        }
 
-                    foreach (var classTableProperty in properties.ClassTableProperties)
-                    {
-                        if (classTableProperty.Rows.Any())
-                        {
-                            writer.StartClassTable(classTableProperty.PropertyName, ClassName(classTableProperty.Rows.First().Properties));
-                            writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
+        private void WriteClassProperties(IReportsSpecificationSetup properties)
+        {
+            foreach (var classProperty in properties.ClassProperties)
+            {
+                writer.GivenClassProperty(classProperty.PropertyName, classProperty.IsChild, classProperty.IndexInParent, classProperty.Properties == null);
 
-                            foreach (var row in classTableProperty.Rows) writer.ClassTablePropertyRow(row.Properties.ValueProperties);
+                if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
+            }
+        }
 
-                            writer.EndClassTable();
-                        }
-                    }
+        private void WriteClassTableProperties(IReportsSpecificationSetup properties)
+        {
+            foreach (var classTableProperty in properties.ClassTableProperties)
+            {
+                if (classTableProperty.Rows.Any())
+                {
+                    writer.StartClassTable(classTableProperty.PropertyName, ClassName(classTableProperty.Rows.First().Properties));
+                    writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
 
+                    foreach (var row in classTableProperty.Rows) writer.ClassTablePropertyRow(row.Properties.ValueProperties);
+
+                    writer.EndClassTable();
                 }
             }
         }

@@ -7,9 +7,11 @@ namespace CustomerTestsExcel
 {
     public interface IReportsSpecificationSetup
     {
-        IEnumerable<ReportSpecificationSetupProperty> ValueProperties { get; }
-        IEnumerable<ReportSpecificationSetupClass> ClassProperties { get; }
-        IEnumerable<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties { get; }
-        IEnumerable<ReportSpecificationSetupList> ListProperties { get; }
+        IReadOnlyList<ReportSpecificationSetupProperty> ValueProperties { get; }
+        IReadOnlyList<ReportSpecificationSetupClass> ClassProperties { get; }
+        IReadOnlyList<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties { get; }
+        IReadOnlyList<ReportSpecificationSetupList> ListProperties { get; }
+
+        bool AnythingToSetup();
     }
 }

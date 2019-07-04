@@ -8,19 +8,19 @@ namespace CustomerTestsExcel
     public class ReportsSpecificationSetup : IReportsSpecificationSetup
     {
         protected readonly ReportSpecificationSetupPropertyList valueProperties;
-        public IEnumerable<ReportSpecificationSetupProperty> ValueProperties =>
+        public IReadOnlyList<ReportSpecificationSetupProperty> ValueProperties =>
             valueProperties;
 
         protected readonly List<ReportSpecificationSetupClass> classProperties;
-        public IEnumerable<ReportSpecificationSetupClass> ClassProperties =>
+        public IReadOnlyList<ReportSpecificationSetupClass> ClassProperties =>
             classProperties;
 
         protected readonly List<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> classTableProperties;
-        public IEnumerable<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties =>
+        public IReadOnlyList<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> ClassTableProperties =>
             classTableProperties;
 
         protected readonly List<ReportSpecificationSetupList> listProperties;
-        public IEnumerable<ReportSpecificationSetupList> ListProperties =>
+        public IReadOnlyList<ReportSpecificationSetupList> ListProperties =>
             listProperties;
 
         public ReportsSpecificationSetup()
@@ -30,5 +30,12 @@ namespace CustomerTestsExcel
             classTableProperties = new List<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>>();
             listProperties = new List<ReportSpecificationSetupList>();
         }
+
+        public bool AnythingToSetup() =>
+            ValueProperties.Any()
+            || ClassProperties.Any()
+            || ClassTableProperties.Any()
+            || ListProperties.Any();
+
     }
 }

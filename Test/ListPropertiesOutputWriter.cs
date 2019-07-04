@@ -36,11 +36,16 @@ namespace CustomerTestsExcel.Test
 
             var specification = new TestSpecification(givenObject);
 
-            var writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), new StringBuilderTextLineWriter());
+            var outputWriter = new StringBuilderTextLineWriter();
+            var writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), outputWriter);
 
             var runner = new RunSpecification<TestReportsSpecificationSetup>(writer);
 
             runner.Run(specification);
+
+            var output = outputWriter.StringBuilder.ToString();
+
+            StringAssert.Contains("groups list of AnovaGroup", output);
         }
     }
 }
