@@ -9,41 +9,41 @@ namespace CustomerTestsExcel.CodeOutputWriters
 {
     public class HTMLTestOutputWriter : ITestOutputWriter
     {
-        protected StringBuilder _writer;
+        protected StringBuilder writer;
         protected int assemblyDivClassIndex;
         protected int specificationDivClassIndex;
-        protected string _specificationName;
-        protected readonly IHumanFriendlyFormatter _formatter;
+        protected string specificationName;
+        protected readonly IHumanFriendlyFormatter formatter;
+
+        public string Html => writer.ToString();
 
         public HTMLTestOutputWriter(IHumanFriendlyFormatter formatter)
         {
-            if (formatter == null) throw new ArgumentNullException("formatter");
-
-            _formatter = formatter;
+            this.formatter = formatter ?? throw new ArgumentNullException("formatter");
         }
 
         private void WriteHeader(string specificationNamespace)
         {
-            _writer = new StringBuilder();
+            writer = new StringBuilder();
 
-            _writer.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            _writer.AppendLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-            _writer.AppendLine("<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>");
-            _writer.AppendLine(@"<head>");
-            _writer.Append(@"<link rel='stylesheet' type='text/css' href='");
-            for (int i = 0; i < GetDirectoryStructure(specificationNamespace).Count(); i++) _writer.Append(@"..\");
-            _writer.Append(@"Specification.css' media='screen'/>");
-            _writer.AppendLine();
-            _writer.AppendLine(string.Format(@"<title>Test Results for {0}</title>", specificationNamespace));
-            _writer.AppendLine("<meta http-equiv='cache-control' content='no-cache' />");
-            _writer.AppendLine("<meta http-equiv='pragma' content='no-cache' />");
-            _writer.AppendLine(@"</head>");
-            _writer.AppendLine(@"<body>");
-            _writer.Append(@"<div class='assembly ");
-            assemblyDivClassIndex = _writer.Length;
-            _writer.AppendLine(@"'>");
-            _writer.AppendLine(@"<div class='assemblyName'><h1>Testing Assembly " + specificationNamespace + "</h1></div>");
-            _writer.AppendLine(@"<div class='dateStarted'>Tests started at " + DateTime.Now.ToString() + "</div>");
+            writer.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            writer.AppendLine("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+            writer.AppendLine("<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>");
+            writer.AppendLine(@"<head>");
+            writer.Append(@"<link rel='stylesheet' type='text/css' href='");
+            for (int i = 0; i < GetDirectoryStructure(specificationNamespace).Count(); i++) writer.Append(@"..\");
+            writer.Append(@"Specification.css' media='screen'/>");
+            writer.AppendLine();
+            writer.AppendLine(string.Format(@"<title>Test Results for {0}</title>", specificationNamespace));
+            writer.AppendLine("<meta http-equiv='cache-control' content='no-cache' />");
+            writer.AppendLine("<meta http-equiv='pragma' content='no-cache' />");
+            writer.AppendLine(@"</head>");
+            writer.AppendLine(@"<body>");
+            writer.Append(@"<div class='assembly ");
+            assemblyDivClassIndex = writer.Length;
+            writer.AppendLine(@"'>");
+            writer.AppendLine(@"<div class='assemblyName'><h1>Testing Assembly " + specificationNamespace + "</h1></div>");
+            writer.AppendLine(@"<div class='dateStarted'>Tests started at " + DateTime.Now.ToString() + "</div>");
 
         }
 
@@ -51,107 +51,107 @@ namespace CustomerTestsExcel.CodeOutputWriters
         {
             WriteHeader(specificationNamespace);
 
-            _specificationName = specificationName;
+            this.specificationName = specificationName;
 
-            _writer.Append(@"<div class='specification ");
-            specificationDivClassIndex = _writer.Length;
-            _writer.AppendLine(@"'>");
+            writer.Append(@"<div class='specification ");
+            specificationDivClassIndex = writer.Length;
+            writer.AppendLine(@"'>");
 
-            _writer.AppendLine(@"<div class='specificationName'><h2>Specification: " + specificationDescription + @"</h2></div>");
+            writer.AppendLine(@"<div class='specificationName'><h2>Specification: " + specificationDescription + @"</h2></div>");
         }
 
         public void StartGiven()
         {
-            _writer.AppendLine(@"<div class='given'>");
+            writer.AppendLine(@"<div class='given'>");
         }
 
         public void StartClass(string className)
         {
-            _writer.AppendLine(@"<div class='givenClassName'><h3>Given a " + _formatter.FormatSpecificationSpecificClassName(className) + "</h3></div>");
+            writer.AppendLine(@"<div class='givenClassName'><h3>Given a " + formatter.FormatSpecificationSpecificClassName(className) + "</h3></div>");
         }
 
         public void StartSubClass(string className)
         {
-            _writer.AppendLine(@"<div class='givenSubClass'>");
-            _writer.AppendLine(@"<div class='givenSubClassName'>" + _formatter.FormatSpecificationSpecificClassName(className) + "</div>");
+            writer.AppendLine(@"<div class='givenSubClass'>");
+            writer.AppendLine(@"<div class='givenSubClassName'>" + formatter.FormatSpecificationSpecificClassName(className) + "</div>");
         }
 
         public void EndSubClass()
         {
-            _writer.AppendLine(@"</div>");
-            _writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
         }
 
         public void StartGivenProperties()
         {
-            _writer.AppendLine(@"<div class='withProperties'>");
-            _writer.AppendLine(@"<div>With Properties</div>");
-            _writer.AppendLine(@"<div class='givenPropertyList'>");
+            writer.AppendLine(@"<div class='withProperties'>");
+            writer.AppendLine(@"<div>With Properties</div>");
+            writer.AppendLine(@"<div class='givenPropertyList'>");
         }
 
         public void GivenProperty(ReportSpecificationSetupProperty property)
         {
-            _writer.AppendLine(@"<div class='givenProperty'><span class='propertyName'>" + _formatter.FormatMethodName(property.PropertyName) +
-                "</span> <span class='propertyValue code'>" + _formatter.FormatValue(property.PropertyValue) + "</span></div>");
+            writer.AppendLine(@"<div class='givenProperty'><span class='propertyName'>" + formatter.FormatMethodName(property.PropertyName) +
+                "</span> <span class='propertyValue code'>" + formatter.FormatValue(property.PropertyValue) + "</span></div>");
         }
 
         public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
         {
-            _writer.Append(@"<div class='givenProperty'><span class='propertyName'>");
-            _writer.Append(_formatter.FormatMethodName(propertyName));
-            _writer.Append("</span>");
-            if (isNull) _writer.Append(@"<span>null</span>");
-            _writer.AppendLine("</div>");
+            writer.Append(@"<div class='givenProperty'><span class='propertyName'>");
+            writer.Append(formatter.FormatMethodName(propertyName));
+            writer.Append("</span>");
+            if (isNull) writer.Append(@"<span>null</span>");
+            writer.AppendLine("</div>");
         }
 
         public void EndGivenProperties()
         {
-            _writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
         }
 
         public void EndGiven()
         {
-            _writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
         }
 
         public void EndClass()
         {
-            _writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
         }
 
         public void StartClassTable(string propertyName, string className)
         {
-            _writer.AppendLine($"<div class='givenProperty'><span class='propertyName'>{_formatter.FormatMethodName(propertyName)}</span></div><div class='givenSubClass'>");
+            writer.AppendLine($"<div class='givenProperty'><span class='propertyName'>{formatter.FormatMethodName(propertyName)}</span></div><div class='givenSubClass'>");
         }
 
         public void ClassTablePropertyNamesHeaderRow(IEnumerable<string> propertyNames)
         {
-            _writer.AppendLine($"<table class='givenProperty'><thead><tr><th>{string.Join("</th><th>", propertyNames.Select(s => _formatter.FormatMethodName(s)))}</th></tr></thead><tbody>");
+            writer.AppendLine($"<table class='givenProperty'><thead><tr><th>{string.Join("</th><th>", propertyNames.Select(s => formatter.FormatMethodName(s)))}</th></tr></thead><tbody>");
         }
 
         public void ClassTablePropertyRow(IEnumerable<ReportSpecificationSetupProperty> cells)
         {
-            _writer.AppendLine($"<tr><td>{string.Join("</td><td>", cells.Select(c => _formatter.FormatValue(c.PropertyValue)))}</td></tr>");
+            writer.AppendLine($"<tr><td>{string.Join("</td><td>", cells.Select(c => formatter.FormatValue(c.PropertyValue)))}</td></tr>");
         }
 
         public void EndClassTable()
         {
-            _writer.AppendLine("</tbody></table></div>");
+            writer.AppendLine("</tbody></table></div>");
         }
 
         public void When(string actionName)
         {
-            _writer.AppendLine(@"<div class='when'><h3>When " + actionName + "</h3></div>");
+            writer.AppendLine(@"<div class='when'><h3>When " + actionName + "</h3></div>");
         }
 
         public void StartAssertions()
         {
-            _writer.AppendLine(@"<div class='assertions'>");
+            writer.AppendLine(@"<div class='assertions'>");
         }
 
         public void EndAssertions()
         {
-            _writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
         }
 
         public void Assert(
@@ -162,64 +162,64 @@ namespace CustomerTestsExcel.CodeOutputWriters
             bool passed,
             IEnumerable<string> assertionSpecifics)
         {
-            _writer.AppendLine(@"<div class='assertion " + (passed ? "assertionPassed" : "assertionFailed") + "'>");
-            _writer.AppendLine(@"<span class='assertionProperty'>" + assertPropertyName + "</span>");
-            _writer.AppendLine(@"<span class='assertionOperator'>" + assertionOperator.ToDescription() + "</span>");
-            _writer.AppendLine(@"<span class='assertionExpectedValue code'>" + _formatter.FormatValue(assertPropertyExpectedValue) + "</span>");
-            _writer.AppendLine(@"<span class='assertionActualValue code'>" + (passed ? "" : "(Actual: " + _formatter.FormatValue(assertPropertyActualValue) + ")") + "</span>");
+            writer.AppendLine(@"<div class='assertion " + (passed ? "assertionPassed" : "assertionFailed") + "'>");
+            writer.AppendLine(@"<span class='assertionProperty'>" + assertPropertyName + "</span>");
+            writer.AppendLine(@"<span class='assertionOperator'>" + assertionOperator.ToDescription() + "</span>");
+            writer.AppendLine(@"<span class='assertionExpectedValue code'>" + formatter.FormatValue(assertPropertyExpectedValue) + "</span>");
+            writer.AppendLine(@"<span class='assertionActualValue code'>" + (passed ? "" : "(Actual: " + formatter.FormatValue(assertPropertyActualValue) + ")") + "</span>");
 
             foreach (var assertionSpecific in assertionSpecifics)
             {
-                _writer.AppendLine(@"<span class='code'>" + assertionSpecific + "</span>");
+                writer.AppendLine(@"<span class='code'>" + assertionSpecific + "</span>");
             }
 
-            _writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
         }
 
         public void StartAssertionSubProperties(string assertPropertyName, bool exists, string cSharpClassName, bool passed)
         {
-            _writer.AppendLine(@"<div class='assertionSubClass " + (passed ? "assertionPassed" : "assertionFailed") + "'>");
-            _writer.AppendLine(@"<div class='assertion assertionSubClassName'>" + _formatter.FormatMethodName(assertPropertyName) + "</div>");
-            _writer.AppendLine(@"<div class='assertionSubClassProperties'>");
+            writer.AppendLine(@"<div class='assertionSubClass " + (passed ? "assertionPassed" : "assertionFailed") + "'>");
+            writer.AppendLine(@"<div class='assertion assertionSubClassName'>" + formatter.FormatMethodName(assertPropertyName) + "</div>");
+            writer.AppendLine(@"<div class='assertionSubClassProperties'>");
         }
 
         public void EndAssertionSubProperties()
         {
-            _writer.AppendLine(@"</div>");
-            _writer.AppendLine(@"</div>");
-            _writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
+            writer.AppendLine(@"</div>");
         }
 
         public void CodeValueDoesNotMatchExcelFormula(string assertPropertyName, string excelValue, string csharpValue)
         {
-            _writer.Append(@"<div>");
-            _writer.Append(string.Format("The value in the C# code ({0}) does not match the value in the Excel sheet ({1} for {2}", csharpValue, excelValue, assertPropertyName));
-            _writer.AppendLine(@"</div>");
+            writer.Append(@"<div>");
+            writer.Append(string.Format("The value in the C# code ({0}) does not match the value in the Excel sheet ({1} for {2}", csharpValue, excelValue, assertPropertyName));
+            writer.AppendLine(@"</div>");
 
         }
 
         public void EndSpecification(string specificationNamespace, bool passed)
         {
-            _writer.Insert(specificationDivClassIndex, (passed ? "specificationPassed" : "specificationFailed"));
-            _writer.AppendLine(@"</div>");
+            writer.Insert(specificationDivClassIndex, (passed ? "specificationPassed" : "specificationFailed"));
+            writer.AppendLine(@"</div>");
 
             WriteFooter(specificationNamespace, passed);
         }
 
         private void WriteFooter(string specificationNamespace, bool passed)
         {
-            _writer.Insert(assemblyDivClassIndex, (passed ? "assemblyPassed" : "assemblyFailed"));
-            _writer.AppendLine(@"</div>");
-            _writer.AppendLine(@"<div class='dateEnded'>Tests completed at " + DateTime.Now.ToString() + "</div>");
-            _writer.AppendLine(@"</body>");
-            _writer.AppendLine(@"</html>");
+            writer.Insert(assemblyDivClassIndex, (passed ? "assemblyPassed" : "assemblyFailed"));
+            writer.AppendLine(@"</div>");
+            writer.AppendLine(@"<div class='dateEnded'>Tests completed at " + DateTime.Now.ToString() + "</div>");
+            writer.AppendLine(@"</body>");
+            writer.AppendLine(@"</html>");
 
-            var filename = CreateFileName(specificationNamespace, _specificationName);
+            var filename = CreateFileName(specificationNamespace, specificationName);
             Directory.CreateDirectory(Path.GetDirectoryName(filename));
 
             using (var fileWriter = new StreamWriter(new FileStream(filename, FileMode.Create), Encoding.UTF8))
             {
-                fileWriter.Write(_writer.ToString());
+                fileWriter.Write(writer.ToString());
             }
 
         }
@@ -241,12 +241,36 @@ namespace CustomerTestsExcel.CodeOutputWriters
 
         public void Exception(string exception)
         {
-            _writer.AppendLine(@"<div class='exception'>Exception " + exception + "</div>");
+            writer.AppendLine(@"<div class='exception'>Exception " + exception + "</div>");
         }
 
-        public void StartGivenListProperty(ReportSpecificationSetupList list) => throw new NotImplementedException();
-        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem) => throw new NotImplementedException();
-        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem) => throw new NotImplementedException();
-        public void EndGivenListProperty(ReportSpecificationSetupList list) => throw new NotImplementedException();
+        public void StartGivenListProperty(ReportSpecificationSetupList list)
+        {
+            // It's a shame I can't use a TidyUp type solution to ensure elements are close
+            // I'll have a think about making this possible
+            // Maybe I could return a TidyUp from this function
+            writer.AppendLine(@"<div class='givenList'>");
+            writer.AppendLine(@"<div class='givenListProperty'>");
+            writer.AppendLine($@"<span class='propertyName'>{formatter.FormatMethodName(list.PropertyName)}</span>");
+            writer.AppendLine($@"<span class='propertyType code'>{formatter.FormatValue(list.PropertyType)}</span>");
+            writer.AppendLine(@"</div>");
+
+        }
+
+        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem)
+        {
+            writer.AppendLine(@"<div class='withItem'>");
+            writer.AppendLine(@"<div>With Item</div>");
+        }
+
+        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem)
+        {
+            writer.AppendLine(@"</div>");
+        }
+
+        public void EndGivenListProperty(ReportSpecificationSetupList list)
+        {
+            writer.AppendLine(@"</div>");
+        }
     }
 }

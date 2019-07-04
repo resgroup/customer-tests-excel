@@ -8,14 +8,15 @@ namespace CustomerTestsExcel.Test
     [TestFixture]
     public class ListPropertiesOutputWriter : TestBase
     {
-        [Test]
-        public void ListPropertiesOutputWritersOutputifListOfSyntax()
-        {
-            const string LIST_PROPERTY_NAME = "groups";
-            const string LIST_PROPERTY_TYPE = "AnovaGroup";
-            const string PROPERTY1_NAME = "School";
-            const string PROPERTY2_NAME = "AverageClassSize";
+        const string LIST_PROPERTY_NAME = "groups";
+        const string LIST_PROPERTY_TYPE = "AnovaGroup";
+        const string PROPERTY1_NAME = "School";
+        const string PROPERTY2_NAME = "AverageClassSize";
+        TestReportsSpecificationSetup setupWithListProperty;
 
+        [SetUp]
+        public void SetUp()
+        {
             var listPropertyItems = new List<IReportsSpecificationSetup>
             {
                 new TestReportsSpecificationSetup()
@@ -31,31 +32,50 @@ namespace CustomerTestsExcel.Test
                 LIST_PROPERTY_TYPE,
                 listPropertyItems);
 
-            var setup = new TestReportsSpecificationSetup().AddListProperty(givenListProperty);
+            setupWithListProperty = new TestReportsSpecificationSetup().AddListProperty(givenListProperty);
+        }
 
-            var runner = CreateRunner();
+        [Test]
+        public void RunSpecificationWithHtmlTestOutputWriterReturnsCorrectOutputForListProperties()
+        {
+            var htmlTestOutputWriter = new HTMLTestOutputWriter(new TestHumanFriendlyFormatter());
 
-            runner.Run(new TestSpecification(setup));
+            var runSpecification = new RunSpecification<TestReportsSpecificationSetup>(htmlTestOutputWriter);
+
+            runSpecification.Run(new TestSpecification(setupWithListProperty));
 
             // This doesn't test everything is in the right order and things like that,
             // but it is more flexible in allowing whitespace changes, so probably an
             // ok compromise.
-            StringAssert.Contains($"{LIST_PROPERTY_NAME} list of {LIST_PROPERTY_TYPE}", runner.Message);
-            StringAssert.Contains("With Item", runner.Message);
-            StringAssert.Contains($"{PROPERTY1_NAME} \"Langley\"", runner.Message);
-            StringAssert.Contains($"{PROPERTY2_NAME} 30", runner.Message);
-            StringAssert.Contains("With Item", runner.Message);
-            StringAssert.Contains($"{PROPERTY1_NAME} \"Ninestiles\"", runner.Message);
-            StringAssert.Contains($"{PROPERTY2_NAME} 20", runner.Message);
+            StringAssert.Contains($"<div class='givenListProperty'>", htmlTestOutputWriter.Html);
+            StringAssert.Contains($@"<span class='propertyName'>{LIST_PROPERTY_NAME}</span>", htmlTestOutputWriter.Html);
+            StringAssert.Contains($@"<span class='propertyType code'>{LIST_PROPERTY_TYPE}</span>", htmlTestOutputWriter.Html);
+            StringAssert.Contains(@"<div class='withItem'>", htmlTestOutputWriter.Html);
+            StringAssert.Contains(@"<div>With Item</div>", htmlTestOutputWriter.Html);
+            StringAssert.Contains($@"<span class='propertyName'>{PROPERTY1_NAME}</span> <span class='propertyValue code'>Langley</span>", htmlTestOutputWriter.Html);
+            StringAssert.Contains($@"<span class='propertyName'>{PROPERTY2_NAME}</span> <span class='propertyValue code'>30</span>", htmlTestOutputWriter.Html);
+            StringAssert.Contains($@"<span class='propertyName'>{PROPERTY1_NAME}</span> <span class='propertyValue code'>Ninestiles</span>", htmlTestOutputWriter.Html);
+            StringAssert.Contains($@"<span class='propertyName'>{PROPERTY2_NAME}</span> <span class='propertyValue code'>20</span>", htmlTestOutputWriter.Html);
         }
 
-        private static RunSpecification<TestReportsSpecificationSetup> CreateRunner()
+        [Test]
+        public void RunSpecificationWithStringTestOutputWriterReturnsCorrectOutputForListProperties()
         {
-            var outputWriter = new StringBuilderTextLineWriter();
+            var runSpecification = new RunSpecification<TestReportsSpecificationSetup>();
 
-            var writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), outputWriter);
+            runSpecification.Run(new TestSpecification(setupWithListProperty));
 
-            return new RunSpecification<TestReportsSpecificationSetup>(writer);
+            // This doesn't test everything is in the right order and things like that,
+            // but it is more flexible in allowing whitespace changes, so probably an
+            // ok compromise.
+            StringAssert.Contains($"{LIST_PROPERTY_NAME} list of {LIST_PROPERTY_TYPE}", runSpecification.Message);
+            StringAssert.Contains("With Item", runSpecification.Message);
+            StringAssert.Contains($"{PROPERTY1_NAME} \"Langley\"", runSpecification.Message);
+            StringAssert.Contains($"{PROPERTY2_NAME} 30", runSpecification.Message);
+            StringAssert.Contains("With Item", runSpecification.Message);
+            StringAssert.Contains($"{PROPERTY1_NAME} \"Ninestiles\"", runSpecification.Message);
+            StringAssert.Contains($"{PROPERTY2_NAME} 20", runSpecification.Message);
         }
+
     }
 }

@@ -16,12 +16,18 @@ namespace CustomerTestsExcel
         protected readonly ITestOutputWriter writer;
         protected readonly StringBuilderTextLineWriter message;
 
-        public RunSpecification(ITestOutputWriter writer)
+        public RunSpecification()
+        {
+            message = new StringBuilderTextLineWriter();
+            this.writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), message);
+        }
+
+        public RunSpecification(ITestOutputWriter writer) : this()
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
             message = new StringBuilderTextLineWriter();
-            this.writer = new CombinedTestOutputWriter(new List<ITestOutputWriter>() { writer, new StringTestOutputWriter(new HumanFriendlyFormatter(), message) });
+            this.writer = new CombinedTestOutputWriter(new List<ITestOutputWriter>() { writer, this.writer });
         }
 
         public bool Run(ISpecification<T> specification)

@@ -67,6 +67,7 @@
     <Compile Include="BadIndentationForAssertionTable.cs" />
     <Compile Include="FunctionNames.cs" />
     <Compile Include="ListPropertiesOutputWriter.cs" />
+    <Compile Include="TestHumanFriendlyFormatter.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="VerticallySetupListProperties.cs" />
     <Compile Include="PropertyNamesWithUnderscores.cs" />
