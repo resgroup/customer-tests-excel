@@ -149,15 +149,14 @@ namespace CustomerTestsExcel
         // the property names (not values) of the "Given" part of the test
         public string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
         {
-            // hmmm, I should prbably call this from somewhere
-            throw new NotImplementedException();
+            return cSharpPropertyName + " list of";
         }
         // Change "Calibrations    table of" to "Calibrations_table_of"
         public string GivenListPropertyNameExcelNameToCodeName(string excelPropertyName)
         {
-            string withoutTableOf = RemoveListOfPostfix(excelPropertyName);
+            string withoutListOf = RemoveListOfPostfix(excelPropertyName);
 
-            return withoutTableOf.Trim().Replace(" ", "_") + "_list_of";
+            return withoutListOf.Trim().Replace(" ", "_") + "_list_of";
         }
 
         public string GivenListPropertyNameExcelNameToCodeVariableName(string excelPropertyName)
@@ -394,5 +393,8 @@ namespace CustomerTestsExcel
 
         public string ListOf =>
             "list of";
+
+        public string WithItem =>
+            "With Item";
     }
 }

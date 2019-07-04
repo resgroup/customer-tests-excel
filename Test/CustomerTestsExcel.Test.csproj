@@ -69,6 +69,10 @@
     <Compile Include="ListPropertiesOutputWriter.cs" />
     <Compile Include="TestHumanFriendlyFormatter.cs" />
     <Compile Include="TestSpecification.cs" />
+    <Compile Include="TestTabularBook.cs" />
+    <Compile Include="TestTabularCell.cs" />
+    <Compile Include="TestTabularLibrary.cs" />
+    <Compile Include="TestTabularPage.cs" />
     <Compile Include="VerticallySetupListProperties.cs" />
     <Compile Include="PropertyNamesWithUnderscores.cs" />
     <Compile Include="MispeltTableOfForAssertionTable.cs" />

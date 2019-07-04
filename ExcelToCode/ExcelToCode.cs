@@ -284,7 +284,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             // Declare a list variable to hold the items
                             DeclareListVariable(cSharpListVariableName, cSharpClassName);
 
-                            while (CurrentCell() == "With Item")
+                            while (CurrentCell() == converter.WithItem)
                             {
                                 ExcelMoveDown();
 

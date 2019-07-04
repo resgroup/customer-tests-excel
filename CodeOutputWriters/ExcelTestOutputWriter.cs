@@ -261,9 +261,25 @@ namespace CustomerTestsExcel.CodeOutputWriters
             //exceptionWorksheet.GetCell(_exceptionRow, 1).Value = "Exception: " + exception;
         }
 
-        public void StartGivenListProperty(ReportSpecificationSetupList list) => throw new NotImplementedException();
-        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem) => throw new NotImplementedException();
-        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem) => throw new NotImplementedException();
-        public void EndGivenListProperty(ReportSpecificationSetupList list) => throw new NotImplementedException();
+        public void StartGivenListProperty(ReportSpecificationSetupList list)
+        {
+            SetCell(namer.GivenListPropertyNameCodeNameToExcelName(list.PropertyName, false, null));
+            Indent();
+            SetCell(namer.CodeClassNameToExcelName(list.PropertyType));
+            MoveToNextRow();
+        }
+
+        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem)
+        {
+            SetCell(namer.WithItem);
+            Indent();
+            MoveToNextRow();
+        }
+
+        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem) =>
+            UnIndent();
+
+        public void EndGivenListProperty(ReportSpecificationSetupList list) =>
+            UnIndent();
     }
 }

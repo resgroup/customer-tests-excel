@@ -17,6 +17,7 @@ namespace CustomerTestsExcel
         string AssertionClassPrefixAddedByGenerator { get; }
         string TableOf { get; }
         string ListOf { get; }
+        string WithItem { get; }
 
         string ExcelFileNameToCodeNamespacePart(string workBookName);
         string CodeNamespaceToExcelFileName(string cSharpAssemblyName);
