@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CustomerTestsExcel.CodeOutputWriters;
 using NUnit.Framework;
+using static CustomerTestsExcel.Test.TabularPageAssert;
 
 namespace CustomerTestsExcel.Test
 {
@@ -49,29 +50,21 @@ namespace CustomerTestsExcel.Test
 
             runSpecification.Run(new TestSpecification(setupWithListProperty));
 
-            // This is a lot of asserts
-            // Maybe a better way would be to generate a representation and assert the whole thing at once.
-            // maybe the representation could be made to look in code a little like the tabular format of
-            // excel, so it was easy ish to understand
             var page = testTabularLibrary.Books[0].Pages[0];
 
             CollectionAssert.Contains(page.SetCells.Values, $"{LIST_PROPERTY_NAME} list of");
 
-            var startCellReference = page.FindCell($"{LIST_PROPERTY_NAME} list of");
+            var expectedCells = Table(
+                Row($"{LIST_PROPERTY_NAME} list of", LIST_PROPERTY_TYPE),
+                Row(null, "With Item"),
+                Row(null, null, PROPERTY1_NAME, $"\"{PROPERTY1_VALUE1}\""),
+                Row(null, null, PROPERTY2_NAME, PROPERTY2_VALUE1),
+                Row(null, "With Item"),
+                Row(null, null, PROPERTY1_NAME, $"\"{PROPERTY1_VALUE2}\""),
+                Row(null, null, PROPERTY2_NAME, PROPERTY2_VALUE2)
+            );
 
-            Assert.AreEqual(LIST_PROPERTY_TYPE, page.GetCell(startCellReference.Row, startCellReference.Column + 1).Value);
-
-            Assert.AreEqual("With Item", page.GetCell(startCellReference.Row + 1, startCellReference.Column + 1).Value);
-            Assert.AreEqual(PROPERTY1_NAME, page.GetCell(startCellReference.Row + 2, startCellReference.Column + 2).Value);
-            Assert.AreEqual($"\"{PROPERTY1_VALUE1}\"", page.GetCell(startCellReference.Row + 2, startCellReference.Column + 3).Value);
-            Assert.AreEqual(PROPERTY2_NAME, page.GetCell(startCellReference.Row + 3, startCellReference.Column + 2).Value);
-            Assert.AreEqual(PROPERTY2_VALUE1, page.GetCell(startCellReference.Row + 3, startCellReference.Column + 3).Value);
-
-            Assert.AreEqual("With Item", page.GetCell(startCellReference.Row + 4, startCellReference.Column + 1).Value);
-            Assert.AreEqual(PROPERTY1_NAME, page.GetCell(startCellReference.Row + 5, startCellReference.Column + 2).Value);
-            Assert.AreEqual($"\"{PROPERTY1_VALUE2}\"", page.GetCell(startCellReference.Row + 5, startCellReference.Column + 3).Value);
-            Assert.AreEqual(PROPERTY2_NAME, page.GetCell(startCellReference.Row + 6, startCellReference.Column + 2).Value);
-            Assert.AreEqual(PROPERTY2_VALUE2, page.GetCell(startCellReference.Row + 6, startCellReference.Column + 3).Value);
+            TabularPageAssert.Contains(expectedCells, page);
         }
 
         [Test]
