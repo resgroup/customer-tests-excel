@@ -147,10 +147,8 @@ namespace CustomerTestsExcel
             excelPropertyName.Substring(0, excelPropertyName.Length - 9);
 
         // the property names (not values) of the "Given" part of the test
-        public string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
-        {
-            return cSharpPropertyName + " list of";
-        }
+        public string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent) =>
+            cSharpPropertyName;
         // Change "Calibrations    table of" to "Calibrations_table_of"
         public string GivenListPropertyNameExcelNameToCodeName(string excelPropertyName)
         {

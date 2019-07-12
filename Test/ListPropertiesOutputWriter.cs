@@ -9,7 +9,7 @@ namespace CustomerTestsExcel.Test
     [TestFixture]
     public class ListPropertiesOutputWriter : TestBase
     {
-        const string LIST_PROPERTY_NAME = "groups";
+        const string LIST_PROPERTY_NAME = "groups list of";
         const string LIST_PROPERTY_TYPE = "AnovaGroup";
         const string PROPERTY1_NAME = "School";
         const string PROPERTY1_VALUE1 = "Langley";
@@ -52,10 +52,10 @@ namespace CustomerTestsExcel.Test
 
             var page = testTabularLibrary.Books[0].Pages[0];
 
-            CollectionAssert.Contains(page.SetCells.Values, $"{LIST_PROPERTY_NAME} list of");
+            CollectionAssert.Contains(page.SetCells.Values, LIST_PROPERTY_NAME);
 
             var expectedCells = Table(
-                Row($"{LIST_PROPERTY_NAME} list of", LIST_PROPERTY_TYPE),
+                Row(LIST_PROPERTY_NAME, LIST_PROPERTY_TYPE),
                 Row(null, "With Item"),
                 Row(null, null, PROPERTY1_NAME, $"\"{PROPERTY1_VALUE1}\""),
                 Row(null, null, PROPERTY2_NAME, PROPERTY2_VALUE1),
