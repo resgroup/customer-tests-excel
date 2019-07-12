@@ -36,9 +36,13 @@ namespace SampleTests.NameConversions
             underscore.A_Property_of("Anything");
             
             {
-                var a_Table = new SpecificationSpecificA_Table();
-                a_Table.A_Property_of("Anything");
-                underscore.List_Property_of(a_Table);
+                var list_PropertyList = new List<SpecificationSpecificA_Table>();
+                {
+                    var list_Property = new SpecificationSpecificA_Table();
+                    list_Property.A_Property_of("Anything");
+                    list_PropertyList.Add(list_Property);
+                }
+                underscore.List_Property_list_of(list_PropertyList);
             }
             {
                 var Table_Property = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();
