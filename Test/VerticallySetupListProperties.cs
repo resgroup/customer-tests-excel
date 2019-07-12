@@ -25,7 +25,7 @@ namespace CustomerTestsExcel.Test
                 StringAssert.Contains("listPropertyList.Add(listProperty)", generatedCode);
                 StringAssert.Contains("listProperty.Property1_of(2.1)", generatedCode);
                 StringAssert.Contains("listProperty.Property2_of(2.2)", generatedCode);
-                StringAssert.Contains("thingToSetup.ListProperty_list_of(listPropertyList)", generatedCode);
+                StringAssert.Contains("thingToSetup.ListProperty_list_of(listPropertyList, \"SpecificationSpecificListType\")", generatedCode);
             }
         }
     }

@@ -2,6 +2,7 @@
 using CustomerTestsExcel;
 using SampleSystemUnderTest.Calculator;
 using System;
+using System.Collections.Generic;
 
 namespace SampleTests.IgnoreOnGeneration.NameConversions
 {
@@ -19,21 +20,17 @@ namespace SampleTests.IgnoreOnGeneration.NameConversions
             table_Property.PropertyName = GetCurrentMethod().Name;
 
             classTableProperties.Add(table_Property);
-
-            //return this;
         }
 
-        internal void List_Property_of(SpecificationSpecificA_Table list_Property)
+        internal void List_Property_list_of(List<SpecificationSpecificA_Table> items, string listType)
         {
-            // always passing in 0 as indexInParent, as we aren't setting up anything
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property, true, 0));
-
-            //return this;
-
+            // the generated test code should do this
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, items));
         }
 
         internal void Do_Nothing()
         {
+            // this test it so checks that everything compiles / round trips, it is not trying to test the running code, so no need to do anything here.
         }
 
     }

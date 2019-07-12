@@ -42,7 +42,7 @@ namespace SampleTests.NameConversions
                     list_Property.A_Property_of("Anything");
                     list_PropertyList.Add(list_Property);
                 }
-                underscore.List_Property_list_of(list_PropertyList);
+                underscore.List_Property_list_of(list_PropertyList, "SpecificationSpecificA_Table");
             }
             {
                 var Table_Property = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();

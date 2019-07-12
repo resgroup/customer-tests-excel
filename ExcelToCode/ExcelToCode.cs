@@ -307,7 +307,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             }
 
                             // Add the list of the parent object
-                            Output($"{cSharpVariableName}.{cSharpMethodName}({cSharpListVariableName});");
+                            Output($"{cSharpVariableName}.{cSharpMethodName}({cSharpListVariableName}, \"{cSharpClassName}\");");
                         }
                     }
                 }
@@ -334,8 +334,10 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        void OutputListAdd(string cSharpListVariableName, string cSharpListItemVariableName) =>
-            Output($"{cSharpListVariableName}.Add({cSharpListItemVariableName});");
+        void OutputListAdd(
+            string cSharpListVariableName,
+            string cSharpListItemVariableName) =>
+                Output($"{cSharpListVariableName}.Add({cSharpListItemVariableName});");
 
         bool IsList(string excelGivenLeft) =>
             excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
