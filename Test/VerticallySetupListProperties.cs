@@ -20,11 +20,11 @@ namespace CustomerTestsExcel.Test
                 // The End To End tests in the SampleTests projects that get generated and run during the build should catch anything that gets through the gaps.
                 StringAssert.Contains("var listPropertyList = new List<SpecificationSpecificListType>()", generatedCode);
                 StringAssert.Contains("var listProperty = new SpecificationSpecificListType()", generatedCode);
-                StringAssert.Contains(".Property1_of(1.1)", generatedCode);
-                StringAssert.Contains(".Property2_of(1.2)", generatedCode);
+                StringAssert.Contains("listProperty.Property1_of(1.1)", generatedCode);
+                StringAssert.Contains("listProperty.Property2_of(1.2)", generatedCode);
                 StringAssert.Contains("listPropertyList.Add(listProperty)", generatedCode);
-                StringAssert.Contains(".Property1_of(2.1)", generatedCode);
-                StringAssert.Contains(".Property2_of(2.2)", generatedCode);
+                StringAssert.Contains("listProperty.Property1_of(2.1)", generatedCode);
+                StringAssert.Contains("listProperty.Property2_of(2.2)", generatedCode);
                 StringAssert.Contains("thingToSetup.ListProperty_list_of(listPropertyList)", generatedCode);
             }
         }

@@ -297,7 +297,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                                         while (!string.IsNullOrEmpty(CurrentCell()))
                                         {
-                                            DoProperty(cSharpListVariableName);
+                                            DoProperty(cSharpListItemVariableName);
                                             ExcelMoveDown();
                                         }
 
