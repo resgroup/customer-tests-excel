@@ -33,8 +33,10 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal SpecificationSpecificGroup Values_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue> values)
         {
+            // the generated test code should do this
             values.PropertyName = GetCurrentMethod().Name;
 
+            // the generated test code should do this
             classTableProperties.Add(values);
 
             foreach (var row in values.Rows)

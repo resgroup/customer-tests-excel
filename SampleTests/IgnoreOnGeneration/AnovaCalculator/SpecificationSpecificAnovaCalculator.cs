@@ -22,18 +22,17 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
             return this;
         }
 
-        internal SpecificationSpecificAnovaCalculator Groups_of(SpecificationSpecificGroup group)
+        internal void Groups_list_of(List<SpecificationSpecificGroup> groupsList, string listType)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), group, true, groups.Count));
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, groupsList));
 
-            groups.Add(group);
-
-            return this;
+            groups.AddRange(groupsList);
         }
 
         internal void Calculate()
         {
             AnovaResult = new SampleSystemUnderTest.AnovaCalculator.AnovaCalculator(variableDescription, groups.Select(g => g.AnovaGroup)).Calculate();
         }
+
     }
 }
