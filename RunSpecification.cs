@@ -148,7 +148,7 @@ namespace CustomerTestsExcel
         {
             foreach (var classProperty in properties.ClassProperties)
             {
-                writer.GivenClassProperty(classProperty.PropertyName, classProperty.IsChild, classProperty.IndexInParent, classProperty.Properties == null);
+                writer.GivenClassProperty(classProperty.PropertyName, classProperty.Properties == null);
 
                 if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
             }

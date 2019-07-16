@@ -50,7 +50,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
         public void EndClass() { }
         public void StartGivenProperties() { }
         public void EndGivenProperties() { }
-        public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull) { }
+        public void GivenClassProperty(string propertyName, bool isNull) { }
         public void StartSubClass(string className) { }
         public void EndSubClass() { }
         public void GivenProperty(ReportSpecificationSetupProperty property) { }

@@ -15,18 +15,9 @@ namespace CustomerTestsExcel.Test
         {
             const string functionNameThatDoesntEndInOf = "Example_Function";
 
-            var excelPropertyName = new CodeNameToExcelNameConverter(ANY_STRING).GivenPropertyNameCodeNameToExcelName(functionNameThatDoesntEndInOf, null);
+            var excelPropertyName = new CodeNameToExcelNameConverter(ANY_STRING).GivenPropertyNameCodeNameToExcelName(functionNameThatDoesntEndInOf);
 
             Assert.AreEqual("Example_Function", excelPropertyName);
-        }
-
-        [Test]
-        public void CodeNameToExcelNameConverterThrowsFunctionsMarkedAsChildrenWhenConvertingCsharpGivenChildPropertyNameToExcel()
-        {
-            const string functionNameThatDoesntEndInOf = "Example_Function";
-            const int childIndex = 1;
-
-            Assert.Throws<CodeToExcelException>(() => new CodeNameToExcelNameConverter(ANY_STRING).GivenPropertyNameCodeNameToExcelName(functionNameThatDoesntEndInOf, childIndex));
         }
 
         [Test]
@@ -38,7 +29,7 @@ namespace CustomerTestsExcel.Test
 
             var csharpPropertyName = converter.GivenPropertyNameExcelNameToCodeName(functionNameThatDoesntEndInOf);
 
-            var convertedExcelPropertyName = converter.GivenPropertyNameCodeNameToExcelName(csharpPropertyName, null);
+            var convertedExcelPropertyName = converter.GivenPropertyNameCodeNameToExcelName(csharpPropertyName);
 
             Assert.AreEqual(functionNameThatDoesntEndInOf, convertedExcelPropertyName);
         }

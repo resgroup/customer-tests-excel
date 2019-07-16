@@ -10,31 +10,21 @@ namespace CustomerTestsExcel
     {
         public ReportSpecificationSetupClass(
             MethodBase setupMethod,
-            IReportsSpecificationSetup properties,
-            bool isChild = false,
-            int? indexInParent = null)
+            IReportsSpecificationSetup properties)
             : this(
                   setupMethod.Name,
-                  properties,
-                  isChild,
-                  indexInParent)
+                properties)
         {
         }
 
         public ReportSpecificationSetupClass(
             string propertyName,
-            IReportsSpecificationSetup properties,
-            bool isChild = false,
-            int? indexInParent = null)
+            IReportsSpecificationSetup properties)
         {
             PropertyName = propertyName;
             Properties = properties;
-            IsChild = isChild;
-            IndexInParent = indexInParent;
         }
 
-        public int? IndexInParent { get; protected set; }
-        public bool IsChild { get; protected set; }
         public string PropertyName { get; protected set; }
         public IReportsSpecificationSetup Properties { get; protected set; }
     }

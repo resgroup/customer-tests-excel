@@ -35,7 +35,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
 
         void GivenProperty(ReportSpecificationSetupProperty property);
 
-        void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull);
+        void GivenClassProperty(string propertyName, bool isNull);
 
         void EndGiven();
 

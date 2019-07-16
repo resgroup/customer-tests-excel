@@ -45,7 +45,7 @@ namespace CustomerTestsExcel.Test
 
         [Test]
         public void SheetConverterTrimsTrailingSpacesFromListProperties() =>
-            StringAssert.Contains("ListProperty_of", generatedCode);
+            StringAssert.Contains("ListProperty_list_of", generatedCode);
 
         [Test]
         public void SheetConverterConvertsEnclosedSpacesInListPropertiesToUnderscores() =>
@@ -66,11 +66,11 @@ namespace CustomerTestsExcel.Test
         [Test]
         public void SheetConverterCreatesEllFormedCodePropertyNamesFromExcelTablePropertiesWithSpaces() =>
             StringAssert.Contains("var tableProperty-_-TableProperty_Row", generatedCode);
-        
-            
-            [Test]
+
+
+        [Test]
         public void SheetConverterTrimsLeadingSpacesFromPropertyClassNames() =>
-            StringAssert.DoesNotContain("_TableClass-", generatedCode);
+        StringAssert.DoesNotContain("_TableClass-", generatedCode);
 
         [Test]
         public void SheetConverterTrimsTrailingSpacesFromPropertyClassNames() =>

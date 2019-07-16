@@ -41,7 +41,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
         readonly List<SpecificationSpecificItineraryLeg> _legs = new List<SpecificationSpecificItineraryLeg>();
         public SpecificationSpecificCargo ItineraryLeg_of(SpecificationSpecificItineraryLeg leg)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), leg, true, _legs.Count));
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), leg));
 
             _legs.Add(leg);
 

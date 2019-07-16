@@ -44,7 +44,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
             Outdent();
         }
 
-        public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
+        public void GivenClassProperty(string propertyName, bool isNull)
         {
             WriteLine(propertyName + " " + (isNull ? "null" : ""));
         }

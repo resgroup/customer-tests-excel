@@ -30,8 +30,8 @@ namespace CustomerTestsExcel.CodeOutputWriters
         public void GivenProperty(ReportSpecificationSetupProperty property) =>
             writers.ForEach(writer => writer.GivenProperty(property));
 
-        public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull) =>
-            writers.ForEach(writer => writer.GivenClassProperty(propertyName, isChild, indexInParent, isNull));
+        public void GivenClassProperty(string propertyName, bool isNull) =>
+            writers.ForEach(writer => writer.GivenClassProperty(propertyName, isNull));
 
         public void EndGivenProperties() =>
             writers.ForEach(writer => writer.EndGivenProperties());

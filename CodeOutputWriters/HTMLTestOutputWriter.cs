@@ -95,7 +95,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
                 "</span> <span class='propertyValue code'>" + formatter.FormatValue(property.PropertyValue) + "</span></div>");
         }
 
-        public void GivenClassProperty(string propertyName, bool isChild, int? indexInParent, bool isNull)
+        public void GivenClassProperty(string propertyName, bool isNull)
         {
             writer.Append(@"<div class='givenProperty'><span class='propertyName'>");
             writer.Append(formatter.FormatMethodName(propertyName));

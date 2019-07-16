@@ -50,27 +50,17 @@ namespace CustomerTestsExcel
         }
 
         // the property names (not values) of the "Given" part of the test
-        // do we need ischild here? will indexInParent cover it?
-        // Change "Calibrations_of" to "Calibrations of", or "Calibrations(0) of"
-        public string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName, int? indexInParent)
+        // Change "Calibrations_of" to "Calibrations of"
+        public string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName)
         {
-            if (indexInParent.HasValue && !CsharpPropertyNameHasOfPostfix(cSharpPropertyName))
-                throw new CodeToExcelException($"Only properties are allowed as 'Given' setup list items (functions are not supported / do not make sense). Properties are idenitified as ending in '_of', which is not the case for the discovered variable name ('{cSharpPropertyName}')");
-
             var withoutOfPostfix = RemoveCsharpOfPostfix(cSharpPropertyName);
 
-            var withIndex = withoutOfPostfix + (indexInParent.HasValue ? $"({indexInParent})" : "");
-
-            var withOf = withIndex + (CsharpPropertyNameHasOfPostfix(cSharpPropertyName) ? " of" : "");
-
-            return withOf;
+            return withoutOfPostfix + (CsharpPropertyNameHasOfPostfix(cSharpPropertyName) ? " of" : "");
         }
-        // Change "Calibrations(0)     of" or "Calibrations   of  " to "Calibrations_of"
+        // Change "Calibrations   of  " to "Calibrations_of"
         public string GivenPropertyNameExcelNameToCodeName(string excelPropertyName)
         {
-            var withoutIndex = RemoveArrayIndex(excelPropertyName);
-
-            var withoutOf = RemoveExcelOfPostfix(withoutIndex);
+            var withoutOf = RemoveExcelOfPostfix(excelPropertyName);
 
             var trimmedAndUnderscores = withoutOf.Trim().Replace(" ", "_");
 
