@@ -137,8 +137,12 @@ namespace CustomerTestsExcel
             excelPropertyName.Substring(0, excelPropertyName.Length - 9);
 
         // the property names (not values) of the "Given" part of the test
-        public string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent) =>
-            cSharpPropertyName;
+        public string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName)
+        {
+            string withoutListOf = RemoveListOfPostfix(cSharpPropertyName);
+
+            return withoutListOf + " list of";
+        }
         // Change "Calibrations    table of" to "Calibrations_table_of"
         public string GivenListPropertyNameExcelNameToCodeName(string excelPropertyName)
         {
@@ -154,9 +158,9 @@ namespace CustomerTestsExcel
             return methodName.Substring(0, methodName.Length - ListOf.Length - 1);
         }
 
-        // Change "Calibrations list of" to "Calibrations"
-        string RemoveListOfPostfix(string excelPropertyName) =>
-            excelPropertyName.Substring(0, excelPropertyName.Length - 8);
+        // Change "Calibrations list of" or "Calibrations_list_of" to "Calibrations"
+        string RemoveListOfPostfix(string propertyName) =>
+            propertyName.Substring(0, propertyName.Length - 8);
 
         public string ActionExcelNameToCodeName(string excelActionName)
         {

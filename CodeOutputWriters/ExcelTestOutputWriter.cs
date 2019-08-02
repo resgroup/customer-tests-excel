@@ -263,7 +263,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
 
         public void StartGivenListProperty(ReportSpecificationSetupList list)
         {
-            SetCell(namer.GivenListPropertyNameCodeNameToExcelName(list.PropertyName, false, null));
+            SetCell(namer.GivenListPropertyNameCodeNameToExcelName(list.PropertyName));
             Indent();
             SetCell(namer.CodeClassNameToExcelName(list.PropertyType));
             MoveToNextRow();

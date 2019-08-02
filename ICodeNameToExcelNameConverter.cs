@@ -35,7 +35,7 @@ namespace CustomerTestsExcel
         string GivenTablePropertyNameExcelNameToCodeName(string excelPropertyName);
         string GivenTablePropertyNameExcelNameToCodeVariableName(string excelPropertyName);
 
-        string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent);
+        string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName);
         string GivenListPropertyNameExcelNameToCodeName(string excelPropertyName);
         string GivenListPropertyNameExcelNameToCodeVariableName(string excelPropertyName);
 
