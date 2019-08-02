@@ -26,7 +26,6 @@ namespace CustomerTestsExcel
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            message = new StringBuilderTextLineWriter();
             this.writer = new CombinedTestOutputWriter(new List<ITestOutputWriter>() { writer, this.writer });
         }
 
