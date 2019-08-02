@@ -95,7 +95,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
 
         public void StartGivenListProperty(ReportSpecificationSetupList list)
         {
-            WriteLine($"{_formatter.FormatMethodName(list.PropertyName)} list of {_formatter.FormatSpecificationSpecificClassName(list.PropertyType)}");
+            WriteLine($"{_formatter.FormatMethodName(list.PropertyName)} {_formatter.FormatSpecificationSpecificClassName(list.PropertyType)}");
             Indent();
 
         }
