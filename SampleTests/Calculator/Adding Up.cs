@@ -32,25 +32,25 @@ namespace SampleTests.Calculator
         // arrange
         public override SpecificationSpecificCalculator Given()
         {
-            var  Calculator  = new SpecificationSpecificCalculator();
-             Calculator .FirstValue_of(1);
-             Calculator .SecondValue_of(2);
-             Calculator .Operation_of(Operation.Add);
+            var calculator = new SpecificationSpecificCalculator();
+            calculator.FirstValue_of(1);
+            calculator.SecondValue_of(2);
+            calculator.Operation_of(Operation.Add);
             
-            return  Calculator ;
+            return calculator;
         }
         
-        public override string When(SpecificationSpecificCalculator  Calculator )
+        public override string When(SpecificationSpecificCalculator calculator)
         {
-             Calculator .Perform_Operation();
-            return " Perform Operation ";
+            calculator.Perform_Operation();
+            return "Perform Operation";
         }
         
         public override IEnumerable<IAssertion<SpecificationSpecificCalculator>> Assertions()
         {
             return new List<IAssertion<SpecificationSpecificCalculator>>
             {
-                  new EqualityAssertion<SpecificationSpecificCalculator>( Calculator  =>  Calculator .Result, 3)
+                  new EqualityAssertion<SpecificationSpecificCalculator>(calculator => calculator.Result, 3)
             };
         }
         

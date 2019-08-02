@@ -34,16 +34,6 @@ namespace SampleTests.NameConversions
         {
             var underscore = new SpecificationSpecificUnderscore();
             underscore.A_Property_of("Anything");
-            
-            {
-                var list_PropertyList = new List<SpecificationSpecificA_Table>();
-                {
-                    var list_Property = new SpecificationSpecificA_Table();
-                    list_Property.A_Property_of("Anything");
-                    list_PropertyList.Add(list_Property);
-                }
-                underscore.List_Property_list_of(list_PropertyList, "SpecificationSpecificA_Table");
-            }
             {
                 var Table_Property = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();
                 {
@@ -54,13 +44,23 @@ namespace SampleTests.NameConversions
                 underscore.Table_Property_table_of(Table_Property);
             }
             
+            {
+                var list_PropertyList = new List<SpecificationSpecificA_Table>();
+                {
+                    var list_Property = new SpecificationSpecificA_Table();
+                    list_Property.A_Property_of("Anything");
+                    list_PropertyList.Add(list_Property);
+                }
+                underscore.List_Property_list_of(list_PropertyList, "SpecificationSpecificA_Table");
+            }
+            
             return underscore;
         }
         
         public override string When(SpecificationSpecificUnderscore underscore)
         {
             underscore.Do_Nothing();
-            return "Do_Nothing";
+            return "Do Nothing";
         }
         
         public override IEnumerable<IAssertion<SpecificationSpecificUnderscore>> Assertions()
