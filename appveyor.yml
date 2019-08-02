@@ -6,8 +6,6 @@ environment:
 configuration:
   - Release
 build_script:
- - choco install opencover -y
- # install sonarqube runner
  - choco install "msbuild-sonarqube-runner" -y
  
  # round trip excel - code - excel - code, to make sure the round tripping works
