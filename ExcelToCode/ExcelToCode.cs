@@ -373,9 +373,6 @@ namespace CustomerTestsExcel.ExcelToCode
             && (PeekBelowRight(2, 1) != "" && PeekBelow(2) == "")
             );
 
-        string TableVariableNameFromMethodName(string excelGivenLeft) =>
-            VariableCase(converter.GivenTablePropertyNameExcelNameToCodeVariableName(excelGivenLeft));
-
         void CreateObjectsFromTable(
             string tableStartCellReference,
             string cSharpVariableName,
