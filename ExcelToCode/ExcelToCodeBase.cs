@@ -15,9 +15,21 @@ namespace CustomerTestsExcel.ExcelToCode
         protected string _sutName;
         protected AutoIndentingStringBuilder code;
 
+        protected readonly List<string> errors;
+        public IReadOnlyList<string> Errors => errors;
+
+        protected readonly List<string> issuesPreventingRoundTrip;
+        public IReadOnlyList<string> IssuesPreventingRoundTrip => issuesPreventingRoundTrip;
+
+        protected readonly List<string> warnings;
+        public IReadOnlyList<string> Warnings => warnings;
+
         public ExcelToCodeBase(ICodeNameToExcelNameConverter converter)
         {
             this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
+            errors = new List<string>();
+            issuesPreventingRoundTrip = new List<string>();
+            warnings = new List<string>();
         }
 
         protected void Output(string lineOfCSharpCode) =>
@@ -68,10 +80,10 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected bool AnyFollowingColumnHasAValue(int rowOffset = 0)
         {
-            for (uint column = this.column + 1; column <
-                GetLastColumn(); column++)
+            for (uint columnToCheck = column + 1; columnToCheck <
+                GetLastColumn(); columnToCheck++)
             {
-                if (!string.IsNullOrWhiteSpace(Cell((uint)(row + rowOffset), column))) return true;
+                if (!string.IsNullOrWhiteSpace(Cell((uint)(row + rowOffset), columnToCheck))) return true;
             }
 
             return false;
@@ -100,14 +112,14 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected uint? FindTokenInCurrentRowFromCurrentColumn(string token)
         {
-            uint column = this.column;
-            while (Cell(row, column) != token)
+            uint columnToCheck = column;
+            while (Cell(row, columnToCheck) != token)
             {
-                if (column > GetLastColumn()) return null;
-                column++;
+                if (columnToCheck > GetLastColumn()) return null;
+                columnToCheck++;
             }
 
-            return column;
+            return columnToCheck;
         }
 
         protected void OpenCurlyBracket() =>
@@ -229,6 +241,15 @@ namespace CustomerTestsExcel.ExcelToCode
             }
 
             return columnName;
+        }
+
+        protected void AddError(string message)
+        {
+            // this will appear at the relevant point in the generated code
+            Output($"// {message}");
+
+            // this can be used elsewhere, such as in the console output of the test generation
+            errors.Add(message);
         }
     }
 }

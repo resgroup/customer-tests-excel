@@ -67,6 +67,7 @@
     <Compile Include="BadIndentationForAssertionTable.cs" />
     <Compile Include="FunctionNames.cs" />
     <Compile Include="ListPropertiesOutputWriter.cs" />
+    <Compile Include="MissingListOfForList.cs" />
     <Compile Include="TabularPageAssert.cs" />
     <Compile Include="TestHumanFriendlyFormatter.cs" />
     <Compile Include="TestSpecification.cs" />
@@ -118,6 +119,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingTableOfForAssertionTable\DummyProject.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\MissingListOfForList\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\DummyProject.csproj">
@@ -193,6 +197,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\VerticallySetupListProperties.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\MissingListOfForList\MissingListOfForList.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

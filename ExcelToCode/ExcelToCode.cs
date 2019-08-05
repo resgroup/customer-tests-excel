@@ -13,20 +13,8 @@ namespace CustomerTestsExcel.ExcelToCode
     // might be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
-        readonly List<string> issuesPreventingRoundTrip;
-        public IReadOnlyList<string> IssuesPreventingRoundTrip => issuesPreventingRoundTrip;
-
-        readonly List<string> warnings;
-        public IReadOnlyList<string> Warnings => warnings;
-
-        readonly List<string> errors;
-        public IReadOnlyList<string> Errors => errors;
-
         public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter)
         {
-            issuesPreventingRoundTrip = new List<string>();
-            warnings = new List<string>();
-            errors = new List<string>();
         }
 
         public string GenerateCSharpTestCode(
@@ -248,6 +236,7 @@ namespace CustomerTestsExcel.ExcelToCode
             // we actually don't need the index any more now that each item in the list has its own scope, so we could remove it from the excel definition
 
             CheckMissingTableOf();
+            CheckMissingListOf();
             var startCellReference = CellReferenceA1Style();
 
             var excelGivenLeft = CurrentCell();
@@ -339,6 +328,17 @@ namespace CustomerTestsExcel.ExcelToCode
             string cSharpListItemVariableName) =>
                 Output($"{cSharpListVariableName}.Add({cSharpListItemVariableName});");
 
+        // check to see if it looks like a table, but does not end with converter.ListOf
+        void CheckMissingListOf()
+        {
+            if (LooksLikeAListButIsnt())
+                AddError($"It looks like you might be trying to set up a list property, starting at cell {CellReferenceA1Style()}. If this is the case, please make sure that cell {CellReferenceA1Style()} ends with '{converter.ListOf}'");
+        }
+
+        bool LooksLikeAListButIsnt() =>
+            IsList(CurrentCell()) == false
+            && PeekBelowRight() == converter.WithItem;
+
         bool IsList(string excelGivenLeft) =>
             excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
 
@@ -355,15 +355,7 @@ namespace CustomerTestsExcel.ExcelToCode
         void CheckMissingTableOf()
         {
             if (LooksLikeATableButIsnt())
-            {
-                var message = $"It looks like you might be trying to set up a table, starting at cell {CellReferenceA1Style()}. If this is the case, please make sure that cell {CellReferenceA1Style()} ends with '{converter.TableOf}'";
-
-                // this will appear at the relevant point in the generated code
-                Output($"// {message}");
-
-                // this can be used elsewhere, such as in the console output of the test generation
-                errors.Add(message);
-            }
+                AddError($"It looks like you might be trying to set up a table, starting at cell {CellReferenceA1Style()}. If this is the case, please make sure that cell {CellReferenceA1Style()} ends with '{converter.TableOf}'");
         }
 
         bool LooksLikeATableButIsnt() =>
@@ -717,15 +709,6 @@ namespace CustomerTestsExcel.ExcelToCode
         void DoInvalidAssertion(string assertionOperatorOrExcelSubClassNameOrTableOf)
         {
             AddError($"Invalid assertion operator ('{assertionOperatorOrExcelSubClassNameOrTableOf}') found at cell {CellReferenceA1Style()}. Valid operators are '=' and '{converter.TableOf}'");
-        }
-
-        void AddError(string message)
-        {
-            // this will appear at the relevant point in the generated code
-            Output($"// {message}");
-
-            // this can be used elsewhere, such as in the console output of the test generation
-            errors.Add(message);
         }
 
         // check to see if it looks like a table, but does not end with converter.TableOf
