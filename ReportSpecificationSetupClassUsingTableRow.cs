@@ -14,13 +14,11 @@ namespace CustomerTestsExcel
     public class ReportSpecificationSetupClassUsingTableRow<T> : IReportSpecificationSetupClassUsingTableRow<T>
         where T : IReportsSpecificationSetup
     {
-        public ReportSpecificationSetupClassUsingTableRow(T properties, int? indexInParent = null)
+        public ReportSpecificationSetupClassUsingTableRow(T properties)
         {
             Properties = properties;
-            IndexInParent = indexInParent;
         }
 
-        public int? IndexInParent { get; protected set; }
         public T Properties { get; protected set; }
     }
 }

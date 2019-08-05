@@ -110,7 +110,7 @@ namespace CustomerTestsExcel
         }
 
         // the property names (not values) of the "Given" part of the test
-        public string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName, bool isChild, int? indexInParent)
+        public string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName)
         {
             // hmmm, I should prbably call this from somewhere
             throw new NotImplementedException();
