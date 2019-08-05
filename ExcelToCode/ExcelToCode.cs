@@ -772,7 +772,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             string cSharpSubClassName = converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
             string cSharpSubMethodName = converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
-            string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
+            string cSharpVariableName = VariableCase(excelPropertyName);
 
             var startCellReference = CellReferenceA1Style();
 
@@ -961,7 +961,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             string cSharpSubClassName = converter.AssertionSubClassExcelNameToCodeName(excelSubClassName);
             string cSharpSubMethodName = converter.AssertionSubPropertyExcelNameToCodeMethodName(excelPropertyName);
-            string cSharpVariableName = VariableCase(UnIndex(excelPropertyName));
+            string cSharpVariableName = VariableCase(excelPropertyName);
 
             Output(LeadingComma(assertIndex) + $"new ParentAssertion<{cSharpClassName}, {cSharpSubClassName}>");
             using (AutoCloseBracketAndIndent())

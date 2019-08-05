@@ -26,26 +26,6 @@ namespace CustomerTestsExcel.ExcelToCode
         protected void OutputBlankLine() =>
             Output("");
 
-        protected string UnIndex(string propertyName)
-        {
-            propertyName = propertyName.Replace("s(", "(");
-
-            if (propertyName.IndexOf("(") == -1)
-            {
-                return propertyName;
-            }
-            else
-            {
-                return propertyName.Remove(propertyName.IndexOf("("));
-            }
-        }
-
-        protected string GetIndex(string variableName)
-        {
-            var splut = variableName.Split(new char[] { '(', ')' });
-            return (splut.Count() > 1) ? splut[1] : "";
-        }
-
         protected string SUTClassName()
         {
             if (_sutName == null) throw new Exception("Trying to read _sutName before it has been set");
