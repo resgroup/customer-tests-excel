@@ -260,6 +260,8 @@ namespace CustomerTestsExcel.ExcelToCode
                 }
                 else if (IsList(excelGivenLeft))
                 {
+                    CheckMissingWithItemForList(startCellReference);
+
                     var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
                     var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
                     string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
@@ -323,6 +325,9 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
+        bool IsList(string excelGivenLeft) =>
+            excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
+
         void OutputListAdd(
             string cSharpListVariableName,
             string cSharpListItemVariableName) =>
@@ -339,8 +344,14 @@ namespace CustomerTestsExcel.ExcelToCode
             IsList(CurrentCell()) == false
             && PeekBelowRight() == converter.WithItem;
 
-        bool IsList(string excelGivenLeft) =>
-            excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
+        void CheckMissingWithItemForList(string listStartCellReference)
+        {
+            using (AutoRestoreExcelMoveDown())
+            {
+                if (CurrentCell() != converter.WithItem)
+                    throw new ExcelToCodeException($"The list property starting at {listStartCellReference} is not formatted correctly. Cell {CellReferenceA1Style()} should be '{converter.WithItem}', but is '{CurrentCell()}'");
+            }
+        }
 
         string ListVariableNameFromMethodName(string excelGivenLeft) =>
             VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft)) + "List";
@@ -425,7 +436,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void CheckMissingWithPropertiesForTable(string tableStartCellReference)
         {
-            using (AutoRestoreExcelMoveDown(1))
+            using (AutoRestoreExcelMoveDown())
             {
                 if (CurrentCell() != converter.WithProperties)
                     throw new ExcelToCodeException($"The table starting at {tableStartCellReference} is not formatted correctly. Cell {CellReferenceA1Style()} should be '{converter.WithProperties}', but is '{CurrentCell()}'");
