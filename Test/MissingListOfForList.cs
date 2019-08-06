@@ -21,7 +21,7 @@ namespace CustomerTestsExcel.Test
         }
 
         [Test]
-        public void TestProjectCreatorShowsErrorIfTableOfMissingForTable()
+        public void TestProjectCreatorShowsErrorIfListOfMissingForList()
         {
             var results = GenerateTestsAndReturnResults(@"TestExcelFiles\MissingListOfForList\");
 
