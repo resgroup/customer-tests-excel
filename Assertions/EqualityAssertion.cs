@@ -11,7 +11,8 @@ namespace CustomerTestsExcel.Assertions
         public EqualityAssertion(Expression<Func<T, object>> property, object expected)
             : base(property, expected) { }
 
-        protected override AssertionOperator Operator => AssertionOperator.Equality;
+        protected override AssertionOperator Operator => 
+            AssertionOperator.Equality;
 
         protected override bool InternalPassed(object actual)
         {

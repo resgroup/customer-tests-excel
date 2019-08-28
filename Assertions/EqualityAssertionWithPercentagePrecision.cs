@@ -8,14 +8,15 @@ namespace CustomerTestsExcel.Assertions
 {
     public class EqualityAssertionWithPercentagePrecision<T> : BaseAssertion<T>
     {
-        private double _percentagePrecision;
+        double _percentagePrecision;
 
         public EqualityAssertionWithPercentagePrecision(Expression<Func<T, object>> property, double? expected, double percentagePrecision) : base(property, expected)
         {
             _percentagePrecision = percentagePrecision;
         }
 
-        protected override AssertionOperator Operator => AssertionOperator.Equality;
+        protected override AssertionOperator Operator => 
+            AssertionOperator.Equality;
 
         protected override bool InternalPassed(object actual)
         {

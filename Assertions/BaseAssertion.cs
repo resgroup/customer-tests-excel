@@ -10,7 +10,6 @@ namespace CustomerTestsExcel.Assertions
     public abstract class BaseAssertion<T> : IAssertion<T>
     {
         protected abstract AssertionOperator Operator { get; }
-
         protected object Expected { get; }
         public Expression<Func<T, object>> Property { get; }
 
@@ -20,14 +19,6 @@ namespace CustomerTestsExcel.Assertions
 
             Property = property;
             Expected = expected;
-        }
-
-        string PropertyName => new ParseAssertionProperty(Property).PropertyName;
-
-        object Actual(T sut)
-        {
-            var propertyGetter = Property.Compile();
-            return propertyGetter(sut);
         }
 
         public bool Passed(T sut)
@@ -42,9 +33,20 @@ namespace CustomerTestsExcel.Assertions
             writer.Assert(PropertyName, Expected, Operator, actual, passed, AssertionSpecifics());
         }
 
-        protected virtual IEnumerable<string> AssertionSpecifics() => new List<string>();
+        protected virtual IEnumerable<string> AssertionSpecifics() =>
+            new List<string>();
 
         protected abstract bool InternalPassed(object actual);
+
+        string PropertyName => 
+            new ParseAssertionProperty(Property).PropertyName;
+
+        object Actual(T sut)
+        {
+            var propertyGetter = Property.Compile();
+            return propertyGetter(sut);
+        }
+
     }
 
 
