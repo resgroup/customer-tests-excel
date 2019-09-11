@@ -100,20 +100,20 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void OutputRoundTripIssues()
         {
-            if (IssuesPreventingRoundTrip.Any())
-            {
-                OutputBlankLine();
-                Output($"protected override bool RoundTrippable() => false;");
-                OutputBlankLine();
-                Output("protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {");
-                Output(
-                    string.Join(
-                        "," + Environment.NewLine,
-                        IssuesPreventingRoundTrip.Select(issue => "\"" + issue + "\"")
-                    )
-                );
-                Output("};");
-            }
+            if (!IssuesPreventingRoundTrip.Any())
+                return;
+
+            OutputBlankLine();
+            Output($"protected override bool RoundTrippable() => false;");
+            OutputBlankLine();
+            Output("protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {");
+            Output(
+                string.Join(
+                    "," + Environment.NewLine,
+                    IssuesPreventingRoundTrip.Select(issue => "\"" + issue + "\"")
+                )
+            );
+            Output("};");
         }
 
         string DoSpecification()

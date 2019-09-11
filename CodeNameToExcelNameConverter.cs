@@ -327,12 +327,18 @@ namespace CustomerTestsExcel
             {
                 // by default treat values as strings and give them quotes
                 // This means we have to be able to detect all the other possible types of value, or maybe write code to convert them from a string
-                // Other possible types are currently Dates, numbers (including decimals) and enums.
-                if (stringValue.StartsWith("\"", StringComparison.InvariantCulture) && stringValue.EndsWith("\"", StringComparison.InvariantCulture))
-                    return stringValue;
-                return $"\"{stringValue}\"";
+                return EnsureSurroundedByDoubleQuotes(stringValue);
             }
         }
+
+        static string EnsureSurroundedByDoubleQuotes(string stringValue) =>
+             (IsSurroundedByDoubleQuotes(stringValue))
+                ? stringValue
+                : $"\"{stringValue}\"";
+
+        static bool IsSurroundedByDoubleQuotes(string stringValue) =>
+            stringValue.StartsWith("\"", StringComparison.InvariantCulture)
+            && stringValue.EndsWith("\"", StringComparison.InvariantCulture);
 
         string NullForPropertyNothingForMethod(string excelPropertyName)
         {
