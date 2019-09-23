@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeToExcelException.cs" />
+    <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
+    <Compile Include="ExcelToCode\IExcelToCodeVisitor.cs" />
     <Compile Include="ExcelToCode\LoggerBase.cs" />
     <Compile Include="CodeOutputWriters\ExcelUnRoundTrippableTestOutputWriter.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeException.cs" />

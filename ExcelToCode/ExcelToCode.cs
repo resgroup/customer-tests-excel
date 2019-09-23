@@ -321,6 +321,13 @@ namespace CustomerTestsExcel.ExcelToCode
                     var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
                     Output($"{cSharpVariableName}.{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
+
+                    visitors.ForEach(
+                        v =>
+                            v.VisitSimpleGivenProperty(
+                                cSharpMethodName,
+                                converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
+                                converter.ExcelPropertyTypeFromCellValue(excelGivenRight)));
                 }
             }
         }

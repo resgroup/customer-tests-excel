@@ -4,6 +4,7 @@ using System.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using CustomerTestsExcel.Assertions;
+using CustomerTestsExcel.ExcelToCode;
 
 namespace CustomerTestsExcel
 {
@@ -278,63 +279,103 @@ namespace CustomerTestsExcel
         }
         public string PropertyValueExcelToCode(string excelPropertyName, object excelPropertyValue)
         {
-            if (excelPropertyValue == null)
+            var excelPropertyType = ExcelPropertyTypeFromCellValue(excelPropertyValue);
+
+            if (excelPropertyType == ExcelPropertyType.Null)
                 return NullForPropertyNothingForMethod(excelPropertyName);
 
-            if (excelPropertyValue is DateTime)
-                return string.Format(CultureInfo.InvariantCulture, "DateTime.Parse(\"{0:s}\")", excelPropertyValue);
+            if (excelPropertyType == ExcelPropertyType.DateTime)
+                return DateTimeValueFromExcelValue(excelPropertyValue);
 
-            if (excelPropertyValue is TimeSpan)
-                return string.Format(CultureInfo.InvariantCulture, "TimeSpan.Parse(\"{0:c}\")", excelPropertyValue);
+            if (excelPropertyType == ExcelPropertyType.Timespan)
+                return TimespanValueFromExcelValue(excelPropertyValue);
 
-            if (excelPropertyValue is DateTimeOffset)
-                return string.Format(CultureInfo.InvariantCulture, "DateTimeOffset.Parse(\"{0:u}\")", excelPropertyValue);
+            if (excelPropertyType == ExcelPropertyType.DateTimeOffset)
+                return DateTimeOffsetValueFromExcelValue(excelPropertyValue);
 
-            var stringValue = string.Format(CultureInfo.InvariantCulture, "{0}", excelPropertyValue).Trim();
+            var stringValue = StringValueFromExcelValue(excelPropertyValue);
 
-            // enum
-            if (IsEnum(stringValue))
+            if (excelPropertyType == ExcelPropertyType.StringNull)
                 return stringValue;
 
-            // number
-            if (IsNumeric(excelPropertyValue))
+            if (excelPropertyType == ExcelPropertyType.Enum)
                 return stringValue;
 
-            //decimal
-            if (stringValue.EndsWith("m", StringComparison.InvariantCulture) && IsNumeric(stringValue.Substring(0, stringValue.Length - 1)))
+            if (excelPropertyType == ExcelPropertyType.Number)
                 return stringValue;
-            //// the excel parser does not appear to return a decimal for cells formatted as "money" so this currently does not work. i am leaving it here because it could become useful if the feature is implemented somewhere else.
-            //if (excelPropertyValue is decimal) 
-            //    return string.Format(CultureInfo.InvariantCulture, "{0}m", excelPropertyValue);
 
-            if (stringValue.ToLower() == "false")
-            {
-                return "false";
-            }
-            else if (stringValue.ToLower() == "true")
-            {
-                return "true";
-            }
-            else if (stringValue.ToLower() == "null")
-            {
-                return "null";
-            }
-            else if (stringValue == "")
-            {
-                return NullForPropertyNothingForMethod(excelPropertyName);
-            }
-            else
-            {
-                // by default treat values as strings and give them quotes
-                // This means we have to be able to detect all the other possible types of value, or maybe write code to convert them from a string
+            if (excelPropertyType == ExcelPropertyType.Decimal)
+                return stringValue;
+
+            if (excelPropertyType == ExcelPropertyType.Boolean)
+                return stringValue.ToLower();
+
+            // make sure strings are quoted (which is optional in excel)
+            if (excelPropertyType == ExcelPropertyType.String)
                 return EnsureSurroundedByDoubleQuotes(stringValue);
-            }
+
+            throw new ExcelToCodeException($"Unrecognised ExcelPropertyType: {excelPropertyType}");
         }
 
+        public ExcelPropertyType ExcelPropertyTypeFromCellValue(object excelPropertyValue)
+        {
+            if (excelPropertyValue == null)
+                return ExcelPropertyType.Null;
+
+            var stringValue = StringValueFromExcelValue(excelPropertyValue);
+
+            if (stringValue == "")
+                return ExcelPropertyType.Null;
+
+            if (stringValue.ToLower() == "null")
+                return ExcelPropertyType.StringNull;
+
+            if (excelPropertyValue is DateTime)
+                return ExcelPropertyType.DateTime;
+
+            if (excelPropertyValue is TimeSpan)
+                return ExcelPropertyType.Timespan;
+
+            if (excelPropertyValue is DateTimeOffset)
+                return ExcelPropertyType.DateTimeOffset;
+
+            if (IsEnum(stringValue))
+                return ExcelPropertyType.Enum;
+
+            if (IsNumeric(excelPropertyValue))
+                return ExcelPropertyType.Number;
+
+            // Its a shame that formatting numbers as "Money" in Excel does not help us here
+            if (stringValue.EndsWith("m", StringComparison.InvariantCulture) && IsNumeric(stringValue.Substring(0, stringValue.Length - 1)))
+                return ExcelPropertyType.Decimal;
+
+            if (stringValue.ToLower() == "false")
+                return ExcelPropertyType.Boolean;
+
+            if (stringValue.ToLower() == "true")
+                return ExcelPropertyType.Boolean;
+
+            // by default treat values as strings
+            // This means we have to be able to detect all the other possible types of value, or maybe write code to convert them from a string
+            return ExcelPropertyType.String;
+        }
+
+        static string StringValueFromExcelValue(object excelPropertyValue) =>
+            string.Format(CultureInfo.InvariantCulture, "{0}", excelPropertyValue).Trim();
+
+        static string DateTimeValueFromExcelValue(object excelPropertyValue) =>
+            string.Format(CultureInfo.InvariantCulture, "DateTime.Parse(\"{0:s}\")", excelPropertyValue);
+
+        static string DateTimeOffsetValueFromExcelValue(object excelPropertyValue) =>
+            string.Format(CultureInfo.InvariantCulture, "DateTimeOffset.Parse(\"{0:u}\")", excelPropertyValue);
+
+        static string TimespanValueFromExcelValue(object excelPropertyValue) =>
+            string.Format(CultureInfo.InvariantCulture, "TimeSpan.Parse(\"{0:c}\")", excelPropertyValue);
+
         static string EnsureSurroundedByDoubleQuotes(string stringValue) =>
-             (IsSurroundedByDoubleQuotes(stringValue))
-                ? stringValue
-                : $"\"{stringValue}\"";
+                 (IsSurroundedByDoubleQuotes(stringValue))
+                    ? stringValue
+                    : $"\"{stringValue}\"";
 
         static bool IsSurroundedByDoubleQuotes(string stringValue) =>
             stringValue.StartsWith("\"", StringComparison.InvariantCulture)

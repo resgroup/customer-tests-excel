@@ -1,4 +1,5 @@
 ﻿using CustomerTestsExcel.Assertions;
+using CustomerTestsExcel.ExcelToCode;
 using System;
 namespace CustomerTestsExcel
 {
@@ -56,6 +57,7 @@ namespace CustomerTestsExcel
 
         object PropertyValueCodeToExcel(string csharpNameNamespace, object cSharpPropertyValue);
         string PropertyValueExcelToCode(string excelPropertyName, object excelPropertyValue);
+        ExcelPropertyType ExcelPropertyTypeFromCellValue(object excelPropertyValue);
 
         string AssertionOperatorCodeNameToExcelName(AssertionOperator assertionOperator);
 

@@ -24,13 +24,19 @@ namespace CustomerTestsExcel.ExcelToCode
         protected readonly List<string> warnings;
         public IReadOnlyList<string> Warnings => warnings;
 
+        protected readonly List<IExcelToCodeVisitor> visitors;
+
         public ExcelToCodeBase(ICodeNameToExcelNameConverter converter)
         {
             this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
             errors = new List<string>();
             issuesPreventingRoundTrip = new List<string>();
             warnings = new List<string>();
+            visitors = new List<IExcelToCodeVisitor>();
         }
+
+        public void AddVisitor(IExcelToCodeVisitor visitor) =>
+            visitors.Add(visitor);
 
         protected void Output(string lineOfCSharpCode) =>
             code.AppendLine(lineOfCSharpCode);
