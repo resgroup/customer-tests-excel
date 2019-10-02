@@ -10,11 +10,29 @@ namespace CustomerTestsExcel
 {
     public class CodeNameToExcelNameConverter : ICodeNameToExcelNameConverter
     {
-        public const string SPECIFICATION = "Specification";
-        public const string GIVEN = "Given a";
-        public const string WITH_PROPERTIES = "With Properties";
-        public const string WHEN = "When";
-        public const string ASSERT = "Assert";
+        public string Specification =>
+            "Specification";
+
+        public string Given =>
+            "Given a";
+
+        public string WithProperties =>
+            "With Properties";
+
+        public string When =>
+            "When";
+
+        public string Assert =>
+            "Assert";
+
+        public string TableOf =>
+            "table of";
+
+        public string ListOf =>
+            "list of";
+
+        public string WithItem =>
+            "With Item";
 
         public string AssertionClassPrefixAddedByGenerator { get; }
 
@@ -290,9 +308,6 @@ namespace CustomerTestsExcel
             if (excelPropertyType == ExcelPropertyType.Timespan)
                 return TimespanValueFromExcelValue(excelPropertyValue);
 
-            if (excelPropertyType == ExcelPropertyType.DateTimeOffset)
-                return DateTimeOffsetValueFromExcelValue(excelPropertyValue);
-
             var stringValue = StringValueFromExcelValue(excelPropertyValue);
 
             if (excelPropertyType == ExcelPropertyType.StringNull)
@@ -335,9 +350,6 @@ namespace CustomerTestsExcel
 
             if (excelPropertyValue is TimeSpan)
                 return ExcelPropertyType.Timespan;
-
-            if (excelPropertyValue is DateTimeOffset)
-                return ExcelPropertyType.DateTimeOffset;
 
             if (IsEnum(stringValue))
                 return ExcelPropertyType.Enum;
@@ -401,39 +413,5 @@ namespace CustomerTestsExcel
                 || (!string.IsNullOrWhiteSpace(value) && Regex.Match(value, @"[A-Za-z0-9_]*\.[A-Za-z0-9_]*").Value == value)
             );
         }
-
-        public string Specification
-        {
-            get { return SPECIFICATION; }
-        }
-
-        public string Given
-        {
-            get { return GIVEN; }
-        }
-
-        public string WithProperties
-        {
-            get { return WITH_PROPERTIES; }
-        }
-
-        public string When
-        {
-            get { return WHEN; }
-        }
-
-        public string Assert
-        {
-            get { return ASSERT; }
-        }
-
-        public string TableOf =>
-            "table of";
-
-        public string ListOf =>
-            "list of";
-
-        public string WithItem =>
-            "With Item";
     }
 }
