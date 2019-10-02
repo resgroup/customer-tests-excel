@@ -65,6 +65,13 @@
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="BadIndentationForAssertionTable.cs" />
+    <Compile Include="GivenComplexPropertyVisitRecorder.cs" />
+    <Compile Include="GivenSimplePropertyVisitRecorder.cs" />
+    <Compile Include="GivenListPropertyVisitRecorder.cs" />
+    <Compile Include="IdentityCodeNameToExcelNameConverter.cs" />
+    <Compile Include="VisitGivenComplexPropertes.cs" />
+    <Compile Include="VisitGivenListPropertes.cs" />
+    <Compile Include="VisitGivenSimplePropertes.cs" />
     <Compile Include="FunctionNames.cs" />
     <Compile Include="ListPropertiesOutputWriter.cs" />
     <Compile Include="MissingWithItemForList.cs" />
@@ -207,6 +214,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\MissingWithItemForList\MissingWithItemForList.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\PropertyTypes.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\VisitGivenListProperties.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestExcelFiles\VisitGivenComplexProperties.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

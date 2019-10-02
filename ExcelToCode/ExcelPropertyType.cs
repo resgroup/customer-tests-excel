@@ -16,7 +16,6 @@ namespace CustomerTestsExcel.ExcelToCode
         String,
         DateTime,
         Timespan,
-        DateTimeOffset,
         Enum,
         Boolean
     }

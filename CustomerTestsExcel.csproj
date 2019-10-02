@@ -61,13 +61,19 @@
   <ItemGroup>
     <Compile Include="CodeToExcelException.cs" />
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
+    <Compile Include="ExcelToCode\GivenListProperty.cs" />
+    <Compile Include="ExcelToCode\GivenComplexProperty.cs" />
     <Compile Include="ExcelToCode\IExcelToCodeVisitor.cs" />
+    <Compile Include="ExcelToCode\IGivenComplexProperty.cs" />
+    <Compile Include="ExcelToCode\IGivenListProperty.cs" />
+    <Compile Include="ExcelToCode\IGivenSimpleProperty.cs" />
     <Compile Include="ExcelToCode\LoggerBase.cs" />
     <Compile Include="CodeOutputWriters\ExcelUnRoundTrippableTestOutputWriter.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeException.cs" />
     <Compile Include="ExcelToCode\ConsoleLogger.cs" />
     <Compile Include="ExcelToCode\ILogger.cs" />
     <Compile Include="ExcelToCode\PropertyTableHeader.cs" />
+    <Compile Include="ExcelToCode\GivenSimpleProperty.cs" />
     <Compile Include="ExcelToCode\SubClassTableHeader.cs" />
     <Compile Include="ExcelToCode\AssertionTableHeader.cs" />
     <Compile Include="ExcelToCode\TableHeader.cs" />

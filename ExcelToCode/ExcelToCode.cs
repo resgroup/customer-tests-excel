@@ -198,9 +198,13 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             ExcelMoveDown(); // this is a bit mysterious
 
+            VisitGivenComplexPropertyDeclaration(cSharpVariableName, cSharpClassName);
+
             DeclareVariable(cSharpVariableName, cSharpClassName);
 
             SetVariableProperties(cSharpVariableName);
+
+            VisitGivenComplexPropertyFinalisation();
 
             ExcelMoveUp(); // this is a bit mysterious
         }
@@ -275,6 +279,8 @@ namespace CustomerTestsExcel.ExcelToCode
                             // Declare a list variable to hold the items
                             DeclareListVariable(cSharpListVariableName, cSharpClassName);
 
+                            VisitGivenListPropertyDeclaration(cSharpListVariableName, cSharpClassName);
+
                             while (CurrentCell() == converter.WithItem)
                             {
                                 ExcelMoveDown();
@@ -299,6 +305,9 @@ namespace CustomerTestsExcel.ExcelToCode
 
                             // Add the list of the parent object
                             Output($"{cSharpVariableName}.{cSharpMethodName}({cSharpListVariableName}, \"{cSharpClassName}\");");
+
+                            VisitGivenListPropertyFinalisation();
+
                         }
                     }
                 }
@@ -322,15 +331,47 @@ namespace CustomerTestsExcel.ExcelToCode
 
                     Output($"{cSharpVariableName}.{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
 
-                    visitors.ForEach(
-                        v =>
-                            v.VisitSimpleGivenProperty(
-                                cSharpMethodName,
-                                converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
-                                converter.ExcelPropertyTypeFromCellValue(excelGivenRight)));
+                    VisitGivenSimpleProperty(excelGivenLeft, excelGivenRight, cSharpMethodName);
                 }
             }
         }
+
+        void VisitGivenSimpleProperty(string excelGivenLeft, object excelGivenRight, string cSharpMethodName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenSimpleProperty(
+                        new GivenSimpleProperty(
+                            cSharpMethodName,
+                            converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
+                            converter.ExcelPropertyTypeFromCellValue(excelGivenRight))));
+        }
+
+        void VisitGivenListPropertyDeclaration(string cSharpListVariableName, string cSharpClassName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenListPropertyDeclaration(
+                        new GivenListProperty(
+                            cSharpListVariableName,
+                            cSharpClassName)));
+        }
+
+        void VisitGivenListPropertyFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenListPropertyFinalisation());
+
+        void VisitGivenComplexPropertyDeclaration(string cSharpListVariableName, string cSharpClassName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenComplexPropertyDeclaration(
+                        new GivenComplexProperty(
+                            cSharpListVariableName,
+                            cSharpClassName)));
+        }
+
+        void VisitGivenComplexPropertyFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenComplexPropertyFinalisation());
 
         bool IsList(string excelGivenLeft) =>
             excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
