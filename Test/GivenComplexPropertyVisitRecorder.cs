@@ -32,5 +32,36 @@ namespace CustomerTestsExcel.Test
         {
             // ignore to keep test simple, just focus on the complex visits
         }
+
+        public void VisitGivenTablePropertyCellDeclaration(ExcelToCode.TableHeader tableHeader, uint row, uint column)
+        {
+            // ignore to keep test simple, just focus on the complex visits
+        }
+
+        public void VisitGivenTablePropertyCellFinalisation()
+        {
+            // ignore to keep test simple, just focus on the complex visits
+        }
+
+        public void VisitGivenTablePropertyDeclaration(IEnumerable<ExcelToCode.TableHeader> tableHeaders)
+        {
+            // ignore to keep test simple, just focus on the complex visits
+        }
+
+        public void VisitGivenTablePropertyFinalisation()
+        {
+            // ignore to keep test simple, just focus on the complex visits
+        }
+
+        public void VisitGivenTablePropertyRowDeclaration(uint row)
+        {
+            // ignore to keep test simple, just focus on the complex visits
+        }
+
+        public void VisitGivenTablePropertyRowFinalisation()
+        {
+            // ignore to keep test simple, just focus on the complex visits
+        }
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace CustomerTestsExcel.ExcelToCode
 {
-    abstract class TableHeader
+    public abstract class TableHeader
     {
         public string PropertyName { get; }
         public uint EndRow { get; }
@@ -8,8 +8,8 @@
         public bool IsRoundTrippable { get; }
 
         protected TableHeader(
-            string propertyName, 
-            uint endRow, 
+            string propertyName,
+            uint endRow,
             uint endColumn,
             bool isRoundTrippable)
         {
