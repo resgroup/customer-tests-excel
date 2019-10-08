@@ -101,7 +101,6 @@
     <Compile Include="TwoBlankLinesBetweenGivenAndWhen.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="NoBlankLineBetweenGivenAndWhen.cs" />
-    <Compile Include="CreateTableHeaders.cs" />
     <Compile Include="EqualityAssertionWithStringFormatTest.cs" />
     <Compile Include="EqualityAssertionWithPercentagePrecision.cs" />
     <Compile Include="EqualityAssertionTest.cs" />
