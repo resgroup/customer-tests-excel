@@ -65,13 +65,15 @@
   <ItemGroup>
     <Compile Include="AddNavigationtToHTMLOutputTest.cs" />
     <Compile Include="BadIndentationForAssertionTable.cs" />
-    <Compile Include="GivenComplexPropertyVisitRecorder.cs" />
-    <Compile Include="GivenSimplePropertyVisitRecorder.cs" />
-    <Compile Include="GivenListPropertyVisitRecorder.cs" />
+    <Compile Include="ExcelToCodeVisitor\GivenComplexPropertyVisitRecorder.cs" />
+    <Compile Include="ExcelToCodeVisitor\GivenTablePropertyVisitRecorder.cs" />
+    <Compile Include="ExcelToCodeVisitor\GivenSimplePropertyVisitRecorder.cs" />
+    <Compile Include="ExcelToCodeVisitor\GivenListPropertyVisitRecorder.cs" />
     <Compile Include="IdentityCodeNameToExcelNameConverter.cs" />
-    <Compile Include="VisitGivenComplexPropertes.cs" />
-    <Compile Include="VisitGivenListPropertes.cs" />
-    <Compile Include="VisitGivenSimplePropertes.cs" />
+    <Compile Include="ExcelToCodeVisitor\VisitGivenComplexPropertes.cs" />
+    <Compile Include="ExcelToCodeVisitor\VisitGivenTablePropertes.cs" />
+    <Compile Include="ExcelToCodeVisitor\VisitGivenListPropertes.cs" />
+    <Compile Include="ExcelToCodeVisitor\VisitGivenSimplePropertes.cs" />
     <Compile Include="FunctionNames.cs" />
     <Compile Include="ListPropertiesOutputWriter.cs" />
     <Compile Include="MissingWithItemForList.cs" />

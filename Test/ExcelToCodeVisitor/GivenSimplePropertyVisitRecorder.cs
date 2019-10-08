@@ -1,36 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using CustomerTestsExcel.ExcelToCode;
 using NUnit.Framework;
 
-namespace CustomerTestsExcel.Test
+namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 {
-    public class GivenListPropertyVisitRecorder : IExcelToCodeVisitor
+    public class GivenSimplePropertyVisitRecorder : IExcelToCodeVisitor
     {
-        readonly List<string> recordedListProperties = new List<string>();
-        public IReadOnlyList<string> RecordedListProperties =>
-            recordedListProperties;
+        readonly List<IGivenSimpleProperty> recordedSimpleProperties = new List<IGivenSimpleProperty>();
+        public IReadOnlyList<IGivenSimpleProperty> RecordedSimpleProperties =>
+            recordedSimpleProperties;
 
-        public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty) =>
-            recordedListProperties.Add(givenListProperty.ToString());
+        public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty) =>
+            recordedSimpleProperties.Add(givenSimpleProperty);
 
-        public void VisitGivenListPropertyFinalisation() =>
-            recordedListProperties.Add("Finalisation");
+        public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)
+        {
+            // ignore other properties to keep test simple, just focus on the simple property visits
+        }
+
+        public void VisitGivenListPropertyFinalisation()
+        {
+            // ignore other properties to keep test simple, just focus on the simple property visits
+        }
 
         public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
         {
-            // ignore simple properties to keep test simple, just focus on the list visits
+            // ignore other properties to keep test simple, just focus on the simple property visits
         }
 
         public void VisitGivenComplexPropertyFinalisation()
         {
-            // ignore simple properties to keep test simple, just focus on the list visits
-        }
-
-        public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
-        {
-            // ignore simple properties to keep test simple, just focus on the list visits
+            // ignore other properties to keep test simple, just focus on the simple property visits
         }
 
         public void VisitGivenTablePropertyCellDeclaration(ExcelToCode.TableHeader tableHeader, uint row, uint column)

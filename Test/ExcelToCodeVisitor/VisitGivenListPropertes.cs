@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using CustomerTestsExcel.ExcelToCode;
 using NUnit.Framework;
 
-namespace CustomerTestsExcel.Test
+namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 {
     [TestFixture]
-    public class VisitGivenComplexPropertes : TestBase
+    public class VisitGivenListPropertes : TestBase
     {
         [Test]
-        public void ExcelToCodeVisitsComplexProperties()
+        public void ExcelToCodeVisitsListProperties()
         {
-            var visitRecorder = new GivenComplexPropertyVisitRecorder();
+            var visitRecorder = new GivenListPropertyVisitRecorder();
 
             // The GivenListPropertyVisitRecorder outputs the IGivenListProperty for VisitGivenListPropertyDeclaration,
             // and "Finalisation" for VisitGivenListPropertyFinalisation. Everything else is ignored.
@@ -21,25 +21,22 @@ namespace CustomerTestsExcel.Test
             // test formatter, and make the assertions exactly the same as the excel.
             var expected = new List<String>
             {
-                // the indendation is just to make it read more easily
-                "thingToSetup, SpecificationSpecificThingToSetup",
-                    "root1ClassName, SpecificationSpecificRoot1ClassName",
-                        "child1ClassName, SpecificationSpecificChild1ClassName",
-                        "Finalisation",
+                "rootList1List, SpecificationSpecificRootList1ClassName",
+                    "childList1List, SpecificationSpecificChildList1ClassName", // this indendation is just to make it read more easily
                     "Finalisation",
-                    "root2ClassName, SpecificationSpecificRoot2ClassName",
-                    "Finalisation",
+                "Finalisation",
+                "rootList2List, SpecificationSpecificRootList2ClassName",
                 "Finalisation"
             };
 
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
             sheetConverter.AddVisitor(visitRecorder);
 
-            using (var workbook = Workbook(@"TestExcelFiles\VisitGivenComplexProperties.xlsx"))
+            using (var workbook = Workbook(@"TestExcelFiles\VisitGivenListProperties.xlsx"))
             {
                 sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-                CollectionAssert.AreEqual(expected, visitRecorder.RecordedComplexProperties);
+                CollectionAssert.AreEqual(expected, visitRecorder.RecordedListProperties);
             }
         }
     }

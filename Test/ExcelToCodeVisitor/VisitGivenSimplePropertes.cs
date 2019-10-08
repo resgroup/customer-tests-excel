@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CustomerTestsExcel.ExcelToCode;
 using NUnit.Framework;
 
-namespace CustomerTestsExcel.Test
+namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 {
     [TestFixture]
     public class VisitGivenSimpleProperties : TestBase
