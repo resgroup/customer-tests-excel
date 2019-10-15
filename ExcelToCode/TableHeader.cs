@@ -18,5 +18,8 @@
             EndColumn = endColumn;
             IsRoundTrippable = isRoundTrippable;
         }
+
+        public override string ToString() =>
+            $"{{ PropertyName: {PropertyName}, EndRow: {EndRow}, EndColumn: {EndColumn}, IsRoundTrippable: {IsRoundTrippable} }}";
     }
 }

@@ -21,27 +21,34 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             var expected = new List<string>
             {
                 "thingToSetup, SpecificationSpecificThingToSetup",
-                    // need to fix headers.tostring() to make it look better here
-                    "Table System.Collections.Generic.Dictionary`2+ValueCollection[System.UInt32,CustomerTestsExcel.ExcelToCode.TableHeader]",
+                    "Table [{ PropertyName: ComplexProperty_of, EndRow: 10, EndColumn: 5, IsRoundTrippable: False, SubClassName: ComplexClass, StartRow: 7, FullSubClassName: SpecificationSpecificComplexClass, PropertiesStartColumn: 4, PropertiesEndColumn: 5, Headers: [ {[4, { PropertyName: ComplexProperty1 of, EndRow: 10, EndColumn: 4, IsRoundTrippable: True }]},{[5, { PropertyName: ComplexProperty2 of, EndRow: 10, EndColumn: 5, IsRoundTrippable: True }]} ] },{ PropertyName: SimpleProperty of, EndRow: 7, EndColumn: 6, IsRoundTrippable: True }]",
                         "RowDeclaration 0",
-                            "Cell(0, 0) CustomerTestsExcel.ExcelToCode.SubClassTableHeader",
-                                "complexPropertyOf, SpecificationSpecificComplexClass",
-                                    "ComplexProperty1_of, \"ComplexProperty1Value1\", String",
-                                    "ComplexProperty2_of, \"ComplexProperty2Value1\", String",
+                            "Cell(0, 0)",
+                                "ComplexProperty_of, SpecificationSpecificComplexClass",
+                                    "Cell(0, 0)",
+                                        "ComplexProperty1_of, \"ComplexProperty1Value1\", String",
+                                    "CellFinalisation",
+                                    "Cell(0, 1)",
+                                        "ComplexProperty2_of, \"ComplexProperty2Value1\", String",
+                                    "CellFinalisation",
                                 "ComplexPropertyFinalisation",
                             "CellFinalisation",
-                            "Cell(0, 2) CustomerTestsExcel.ExcelToCode.PropertyTableHeader",
+                            "Cell(0, 2)",
                                 "SimpleProperty_of, \"SimplePropertyValue1\", String",
                             "CellFinalisation",
                         "RowFinalisation",
                         "RowDeclaration 1",
-                            "Cell(1, 0) CustomerTestsExcel.ExcelToCode.SubClassTableHeader",
-                                "complexPropertyOf, SpecificationSpecificComplexClass",
-                                    "ComplexProperty1_of, \"ComplexProperty1Value2\", String",
-                                    "ComplexProperty2_of, \"ComplexProperty2Value2\", String",
+                            "Cell(1, 0)",
+                                "ComplexProperty_of, SpecificationSpecificComplexClass",
+                                    "Cell(1, 0)",
+                                        "ComplexProperty1_of, \"ComplexProperty1Value2\", String",
+                                    "CellFinalisation",
+                                    "Cell(1, 1)",
+                                        "ComplexProperty2_of, \"ComplexProperty2Value2\", String",
+                                    "CellFinalisation",
                                 "ComplexPropertyFinalisation",
                             "CellFinalisation",
-                            "Cell(1, 2) CustomerTestsExcel.ExcelToCode.PropertyTableHeader",
+                            "Cell(1, 2)",
                                 "SimpleProperty_of, \"SimplePropertyValue2\", String",
                             "CellFinalisation",
                         "RowFinalisation",
@@ -56,7 +63,6 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             {
                 sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-                Assert.AreEqual("", string.Join("\",\n\"", visitRecorder.RecordedTableProperties));
                 CollectionAssert.AreEqual(expected, visitRecorder.RecordedTableProperties);
             }
         }

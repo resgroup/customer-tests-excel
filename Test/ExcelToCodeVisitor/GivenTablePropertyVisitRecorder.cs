@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CustomerTestsExcel.ExcelToCode;
 using NUnit.Framework;
@@ -13,13 +14,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             recordedTableProperties;
 
         public void VisitGivenTablePropertyDeclaration(IEnumerable<TableHeader> tableHeaders) =>
-            recordedTableProperties.Add($"Table {tableHeaders}");
+            recordedTableProperties.Add($"Table [{string.Join(",", tableHeaders.Select(h => h.ToString()))}]");
 
         public void VisitGivenTablePropertyRowDeclaration(uint row) =>
             recordedTableProperties.Add($"RowDeclaration {row}");
 
         public void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column) =>
-            recordedTableProperties.Add($"Cell({row}, {column}) {tableHeader}");
+            recordedTableProperties.Add($"Cell({row}, {column})");
 
         public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty) =>
             recordedTableProperties.Add(givenComplexProperty.ToString());

@@ -399,10 +399,10 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         void VisitGivenTablePropertyCellFinalisation() =>
-            visitors.ForEach(v => v.VisitGivenTablePropertyFinalisation());
+            visitors.ForEach(v => v.VisitGivenTablePropertyCellFinalisation());
 
         void VisitGivenTablePropertyRowFinalisation() =>
-            visitors.ForEach(v => v.VisitGivenTablePropertyFinalisation());
+            visitors.ForEach(v => v.VisitGivenTablePropertyRowFinalisation());
 
         void VisitGivenTablePropertyFinalisation() =>
             visitors.ForEach(v => v.VisitGivenTablePropertyFinalisation());
@@ -498,7 +498,8 @@ namespace CustomerTestsExcel.ExcelToCode
                             cSharpSpecificationSpecificClassName,
                             column,
                             propertiesEndColumn,
-                            headers);
+                            headers,
+                            tableRow);
 
                         Output($"{cSharpVariableName}.Add({indexedCSharpVariableName});");
 
@@ -624,11 +625,22 @@ namespace CustomerTestsExcel.ExcelToCode
             return new SubClassTableHeader(propertyName, subClassName, converter.ExcelClassNameToCodeName(subClassName), startRow, endRow, propertiesStartColumn, propertiesEndColumn, headers);
         }
 
-        void SetAllPropertiesOnTableRowVariable(string cSharpVariableName, string cSharpSpecificationSpecificClassName, uint? propertiesStartColumn, uint propertiesEndColumn, Dictionary<uint, TableHeader> propertyNames)
+        void SetAllPropertiesOnTableRowVariable(
+            string cSharpVariableName,
+            string cSharpSpecificationSpecificClassName,
+            uint? propertiesStartColumn,
+            uint propertiesEndColumn,
+            Dictionary<uint, TableHeader> propertyNames,
+            uint tableRow)
         {
             DeclareTableRowVariable(cSharpVariableName, cSharpSpecificationSpecificClassName);
 
-            SetPropertiesOnTableRowVariable(propertiesStartColumn, propertyNames, propertiesEndColumn, cSharpVariableName);
+            SetPropertiesOnTableRowVariable(
+                propertiesStartColumn,
+                propertyNames,
+                propertiesEndColumn,
+                cSharpVariableName,
+                tableRow);
         }
 
         void DeclareTableRowVariable(string cSharpVariableName, string cSharpSpecificationSpecificClassName) =>
@@ -643,7 +655,12 @@ namespace CustomerTestsExcel.ExcelToCode
             return true;
         }
 
-        void SetPropertiesOnTableRowVariable(uint? propertiesStartColumn, Dictionary<uint, TableHeader> headers, uint propertiesEndColumn, string cSharpVariableName)
+        void SetPropertiesOnTableRowVariable(
+            uint? propertiesStartColumn,
+            Dictionary<uint, TableHeader> headers,
+            uint propertiesEndColumn,
+            string cSharpVariableName,
+            uint tableRow)
         {
             if (propertiesStartColumn.HasValue)
             {
@@ -651,25 +668,35 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 while (column <= propertiesEndColumn)
                 {
-                    SetPropertyOnTableRowVariable(headers, cSharpVariableName);
+                    SetPropertyOnTableRowVariable(
+                        headers,
+                        cSharpVariableName,
+                        tableRow,
+                        column - propertiesStartColumn.Value);
                     ExcelMoveRight();
                 }
             }
         }
 
-        void SetPropertyOnTableRowVariable(Dictionary<uint, TableHeader> headers, string cSharpVariableName)
+        void SetPropertyOnTableRowVariable(Dictionary<uint, TableHeader> headers, string cSharpVariableName, uint tableRow, uint tableColumn)
         {
             // need to add the row and column of the table here, or just not have them
-            VisitGivenTablePropertyCellDeclaration(headers[column], 0, 0);
+            VisitGivenTablePropertyCellDeclaration(headers[column], tableRow, tableColumn);
 
             if (headers[column] is SubClassTableHeader)
             {
                 var subClassHeader = headers[column] as SubClassTableHeader;
                 string subClassCSharpVariableName = $"{cSharpVariableName}_{subClassHeader.SubClassName.Replace(".", "")}"; // this <.Replace(".", "")> is shared with DoProperty, we should move in into the _converter
 
-                VisitGivenComplexPropertyDeclaration(subClassCSharpVariableName, subClassHeader.FullSubClassName);
+                VisitGivenComplexPropertyDeclaration(subClassHeader.PropertyName, subClassHeader.FullSubClassName);
 
-                SetAllPropertiesOnTableRowVariable(subClassCSharpVariableName, subClassHeader.FullSubClassName, subClassHeader.PropertiesStartColumn, subClassHeader.PropertiesEndColumn, subClassHeader.Headers);
+                SetAllPropertiesOnTableRowVariable(
+                    subClassCSharpVariableName,
+                    subClassHeader.FullSubClassName,
+                    subClassHeader.PropertiesStartColumn,
+                    subClassHeader.PropertiesEndColumn,
+                    subClassHeader.Headers,
+                    tableRow);
 
                 VisitGivenComplexPropertyFinalisation();
 

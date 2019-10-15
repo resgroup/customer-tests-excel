@@ -16,17 +16,17 @@ namespace CustomerTestsExcel.ExcelToCode
         public Dictionary<uint, TableHeader> Headers { get; }
 
         public SubClassTableHeader(
-            string propertyName, 
-            string subClassName, 
-            string fullSubClassName, 
-            uint startRow, 
-            uint endRow, 
-            uint? propertiesStartColumn, 
-            uint propertiesEndColumn, 
+            string propertyName,
+            string subClassName,
+            string fullSubClassName,
+            uint startRow,
+            uint endRow,
+            uint? propertiesStartColumn,
+            uint propertiesEndColumn,
             Dictionary<uint, TableHeader> headers)
             : base(
-                  propertyName, 
-                  endRow, 
+                  propertyName,
+                  endRow,
                   propertiesEndColumn,
                   NOT_ROUND_TRIPPABLE)
         {
@@ -37,5 +37,12 @@ namespace CustomerTestsExcel.ExcelToCode
             PropertiesEndColumn = propertiesEndColumn;
             Headers = headers;
         }
+
+        public override string ToString() =>
+            $"{{ PropertyName: {PropertyName}, EndRow: {EndRow}, EndColumn: {EndColumn}, IsRoundTrippable: {IsRoundTrippable}, SubClassName: {SubClassName}, StartRow: {StartRow}, FullSubClassName: {FullSubClassName}, PropertiesStartColumn: {PropertiesStartColumn}, PropertiesEndColumn: {PropertiesEndColumn}, Headers: [ {HeadersToString()} ] }}";
+
+        string HeadersToString() =>
+            string.Join(",", Headers.Select(h => "{" + h.ToString() + "}"));
+
     }
 }
