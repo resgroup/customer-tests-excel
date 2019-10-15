@@ -9,7 +9,52 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
     public class VisitGivenTablePropertes : TestBase
     {
         [Test]
-        public void ExcelToCodeVisitsTableProperties()
+        public void ExcelToCodeVisitsTableSimpleProperties()
+        {
+            var visitRecorder = new GivenTablePropertyVisitRecorder();
+
+            // The GivenTablePropertyVisitRecorder outputs strings for the various visits encountered,
+            // The values aren't exactly the same as the ones in the spreadsheet, as they are formatted by both
+            // ExcelToCode and CodeNameToExcelNameConverter in to the strings that are used in the code.
+            // This is a shame, it would be good to make this more loosely coupled, so that we could use a 
+            // test formatter, and make the assertions exactly the same as the excel.
+            var expected = new List<string>
+            {
+                "thingToSetup, SpecificationSpecificThingToSetup",
+                    "Table [{ PropertyName: SimpleProperty1 of, EndRow: 7, EndColumn: 4, IsRoundTrippable: True },{ PropertyName: SimpleProperty2 of, EndRow: 7, EndColumn: 5, IsRoundTrippable: True }]",
+                        "RowDeclaration 0",
+                            "Cell(0, 0)",
+                                "SimpleProperty1_of, \"SimpleProperty1Value1\", String",
+                            "CellFinalisation",
+                            "Cell(0, 1)",
+                                "SimpleProperty2_of, \"SimpleProperty2Value1\", String",
+                            "CellFinalisation",
+                        "RowFinalisation",
+                        "RowDeclaration 1",
+                            "Cell(1, 0)",
+                                "SimpleProperty1_of, \"SimpleProperty1Value2\", String",
+                            "CellFinalisation",
+                            "Cell(1, 1)",
+                                "SimpleProperty2_of, \"SimpleProperty2Value2\", String",
+                            "CellFinalisation",
+                        "RowFinalisation",
+                    "TableFinalisation",
+                "ComplexPropertyFinalisation"
+            };
+
+            var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
+            sheetConverter.AddVisitor(visitRecorder);
+
+            using (var workbook = Workbook(@"TestExcelFiles\VisitGivenTableProperties.xlsx"))
+            {
+                sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+
+                CollectionAssert.AreEqual(expected, visitRecorder.RecordedTableProperties);
+            }
+        }
+
+        [Test]
+        public void ExcelToCodeVisitsTableComplexProperties()
         {
             var visitRecorder = new GivenTablePropertyVisitRecorder();
 
@@ -61,7 +106,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 
             using (var workbook = Workbook(@"TestExcelFiles\VisitGivenTableProperties.xlsx"))
             {
-                sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(1), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
                 CollectionAssert.AreEqual(expected, visitRecorder.RecordedTableProperties);
             }
