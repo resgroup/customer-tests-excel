@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
+    // I think it would be better for ExcelToCode to expose a tree structure with the setup, 
+    // and then other code can just perform operations on the tree to do stuff.
+    // It's a shame I only thought of this after coding up the visitor pattern solution.
     public interface IExcelToCodeVisitor
     {
         void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty);
