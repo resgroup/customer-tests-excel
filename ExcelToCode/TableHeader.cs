@@ -2,24 +2,24 @@
 {
     public abstract class TableHeader
     {
-        public string PropertyName { get; }
+        public string ExcelPropertyName { get; }
         public uint EndRow { get; }
         public uint EndColumn { get; }
         public bool IsRoundTrippable { get; }
 
         protected TableHeader(
-            string propertyName,
+            string excelPropertyName,
             uint endRow,
             uint endColumn,
             bool isRoundTrippable)
         {
-            PropertyName = propertyName;
+            ExcelPropertyName = excelPropertyName;
             EndRow = endRow;
             EndColumn = endColumn;
             IsRoundTrippable = isRoundTrippable;
         }
 
         public override string ToString() =>
-            $"{{ PropertyName: {PropertyName}, EndRow: {EndRow}, EndColumn: {EndColumn}, IsRoundTrippable: {IsRoundTrippable} }}";
+            $"{{ PropertyName: {ExcelPropertyName}, EndRow: {EndRow}, EndColumn: {EndColumn}, IsRoundTrippable: {IsRoundTrippable} }}";
     }
 }

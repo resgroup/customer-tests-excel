@@ -169,7 +169,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 StartOutput(usings, description, projectRootNamespace, workBookName);
 
-                CreateObject(CSharpSUTVariableName(), CSharpSUTSpecificationSpecificClassName());
+                CreateObject("irrelevant", SUTClassName());
 
                 EndGiven();
             }
@@ -194,11 +194,15 @@ namespace CustomerTestsExcel.ExcelToCode
                 issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{worksheet.Name}'");
         }
 
-        void CreateObject(string cSharpVariableName, string cSharpClassName)
+        string CreateObject(string excelPropertyName, string excelClassName)
         {
             ExcelMoveDown(); // this is a bit mysterious
 
-            VisitGivenComplexPropertyDeclaration(cSharpVariableName, cSharpClassName);
+            // maybe fix this mixing of abstraction levels 
+            string cSharpClassName = converter.ExcelClassNameToCodeName(excelClassName);
+            string cSharpVariableName = VariableCase(excelClassName.Replace(".", ""));
+
+            VisitGivenComplexPropertyDeclaration(excelPropertyName, excelClassName);
 
             DeclareVariable(cSharpVariableName, cSharpClassName);
 
@@ -207,6 +211,8 @@ namespace CustomerTestsExcel.ExcelToCode
             VisitGivenComplexPropertyFinalisation();
 
             ExcelMoveUp(); // this is a bit mysterious
+
+            return cSharpVariableName;
         }
 
         void DeclareVariable(string cSharpVariableName, string cSharpClassName) =>
@@ -319,10 +325,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     OutputBlankLine();
                     using (Scope())
                     {
-                        string cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-                        string cSharpChildVariableName = VariableCase(excelGivenRightString.Replace(".", ""));
-
-                        CreateObject(cSharpChildVariableName, cSharpClassName);
+                        var cSharpChildVariableName = CreateObject(excelGivenLeft, excelGivenRightString);
                         Output(cSharpVariableName + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
                     }
                 }
@@ -332,18 +335,18 @@ namespace CustomerTestsExcel.ExcelToCode
 
                     Output($"{cSharpVariableName}.{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
 
-                    VisitGivenSimpleProperty(excelGivenLeft, excelGivenRight, cSharpMethodName);
+                    VisitGivenSimpleProperty(excelGivenLeft, excelGivenRight);
                 }
             }
         }
 
-        void VisitGivenSimpleProperty(string excelGivenLeft, object excelGivenRight, string cSharpMethodName)
+        void VisitGivenSimpleProperty(string excelGivenLeft, object excelGivenRight)
         {
             visitors.ForEach(
                 v =>
                     v.VisitGivenSimpleProperty(
                         new GivenSimpleProperty(
-                            cSharpMethodName,
+                            excelGivenLeft,
                             converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
                             converter.ExcelPropertyTypeFromCellValue(excelGivenRight))));
         }
@@ -361,14 +364,14 @@ namespace CustomerTestsExcel.ExcelToCode
         void VisitGivenListPropertyFinalisation() =>
             visitors.ForEach(v => v.VisitGivenListPropertyFinalisation());
 
-        void VisitGivenComplexPropertyDeclaration(string cSharpComplexObjectVariableName, string cSharpClassName)
+        void VisitGivenComplexPropertyDeclaration(string excelPropertyName, string excelClassName)
         {
             visitors.ForEach(
                 v =>
                     v.VisitGivenComplexPropertyDeclaration(
                         new GivenComplexProperty(
-                            cSharpComplexObjectVariableName,
-                            cSharpClassName)));
+                            excelPropertyName,
+                            excelClassName)));
         }
 
         void VisitGivenComplexPropertyFinalisation() =>
@@ -542,7 +545,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 .Where(h => !h.IsRoundTrippable)
                 .ToList()
                 .ForEach(h =>
-                    issuesPreventingRoundTrip.Add($"There is a complex property ('{h.PropertyName}', cell {CellReferenceA1Style()}) within a table in the Excel test, worksheet '{worksheet.Name}'")
+                    issuesPreventingRoundTrip.Add($"There is a complex property ('{h.ExcelPropertyName}', cell {CellReferenceA1Style()}) within a table in the Excel test, worksheet '{worksheet.Name}'")
                 );
         }
 
@@ -591,7 +594,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         SubClassTableHeader CreateSubClassHeader()
         {
-            string propertyName;
+            string excelPropertyName;
             string subClassName;
             uint startRow;
             uint endRow;
@@ -603,7 +606,8 @@ namespace CustomerTestsExcel.ExcelToCode
             startRow = row;
             using (SavePosition())
             {
-                propertyName = converter.GivenPropertyNameExcelNameToCodeName(CurrentCell());
+                excelPropertyName = CurrentCell();
+                //propertyName = converter.GivenPropertyNameExcelNameToCodeName(excelPropertyName);
                 ExcelMoveDown();
                 subClassName = CurrentCell();
                 ExcelMoveDown();
@@ -622,7 +626,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             ExcelMoveRight((uint)headers.Count - 1);
 
-            return new SubClassTableHeader(propertyName, subClassName, converter.ExcelClassNameToCodeName(subClassName), startRow, endRow, propertiesStartColumn, propertiesEndColumn, headers);
+            return new SubClassTableHeader(excelPropertyName, subClassName, converter.ExcelClassNameToCodeName(subClassName), startRow, endRow, propertiesStartColumn, propertiesEndColumn, headers);
         }
 
         void SetAllPropertiesOnTableRowVariable(
@@ -688,7 +692,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 var subClassHeader = headers[column] as SubClassTableHeader;
                 string subClassCSharpVariableName = $"{cSharpVariableName}_{subClassHeader.SubClassName.Replace(".", "")}"; // this <.Replace(".", "")> is shared with DoProperty, we should move in into the _converter
 
-                VisitGivenComplexPropertyDeclaration(subClassHeader.PropertyName, subClassHeader.FullSubClassName);
+                VisitGivenComplexPropertyDeclaration(subClassHeader.ExcelPropertyName, subClassHeader.SubClassName);
 
                 SetAllPropertiesOnTableRowVariable(
                     subClassCSharpVariableName,
@@ -702,19 +706,17 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 ExcelMoveLeft();
 
-                Output($"{cSharpVariableName}.{converter.GivenPropertyNameExcelNameToCodeName(subClassHeader.PropertyName)}({subClassCSharpVariableName});");
+                Output($"{cSharpVariableName}.{converter.GivenPropertyNameExcelNameToCodeName(subClassHeader.ExcelPropertyName)}({subClassCSharpVariableName});");
             }
             else if (headers[column] is PropertyTableHeader)
             {
                 var propertyHeader = headers[column] as PropertyTableHeader;
 
-                Output($"{cSharpVariableName}.{converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.PropertyName)}({converter.PropertyValueExcelToCode(propertyHeader.PropertyName, CurrentCellRaw())});");
+                Output($"{cSharpVariableName}.{converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.ExcelPropertyName)}({converter.PropertyValueExcelToCode(propertyHeader.ExcelPropertyName, CurrentCellRaw())});");
 
-                // not sure this is right
                 VisitGivenSimpleProperty(
-                    propertyHeader.PropertyName,
-                    CurrentCellRaw(),
-                    converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.PropertyName)
+                    propertyHeader.ExcelPropertyName,
+                    CurrentCellRaw()
                     );
             }
             else

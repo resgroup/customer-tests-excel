@@ -19,7 +19,7 @@ namespace CustomerTestsExcel.Test
                 StringAssert.Contains("RoundTrippable() => false", generatedCode);
 
                 StringAssert.Contains(
-                    "complex property ('ComplexObject_of', cell D7) within a table",
+                    "complex property ('ComplexObject of', cell D7) within a table",
                     generatedCode);
             }
         }
@@ -29,12 +29,12 @@ namespace CustomerTestsExcel.Test
         {
             var results = GenerateTestsAndReturnResults(@"TestExcelFiles\ComplexObjectWithinTable\");
 
-            StringAssert.Contains("Workbook 'ComplexObjectWithinTable'", results.LogMessages); 
+            StringAssert.Contains("Workbook 'ComplexObjectWithinTable'", results.LogMessages);
 
-            StringAssert.Contains("Worksheet 'ComplexObjectWithinTable'", results.LogMessages); 
+            StringAssert.Contains("Worksheet 'ComplexObjectWithinTable'", results.LogMessages);
 
             StringAssert.Contains(
-                "complex property ('ComplexObject_of', cell D7) within a table",
+                "complex property ('ComplexObject of', cell D7) within a table",
                 results.LogMessages);
         }
     }
