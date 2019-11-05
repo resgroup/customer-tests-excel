@@ -286,7 +286,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             // Declare a list variable to hold the items
                             DeclareListVariable(cSharpListVariableName, cSharpClassName);
 
-                            VisitGivenListPropertyDeclaration(cSharpListVariableName, cSharpClassName);
+                            VisitGivenListPropertyDeclaration(excelGivenLeft, excelGivenRightString);
 
                             while (CurrentCell() == converter.WithItem)
                             {

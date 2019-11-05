@@ -8,17 +8,17 @@ using NUnit.Framework;
 namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 {
     [TestFixture]
-    public class ComplexProperties : TestBase
+    public class ListProperties : TestBase
     {
         [Test]
-        public void GivenClassRecorderRecordsComplexProperties()
+        public void GivenClassRecorderRecordsListProperties()
         {
             var givenClassRecorder = new GivenClassRecorder();
 
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
             sheetConverter.AddVisitor(givenClassRecorder);
 
-            using (var workbook = Workbook(@"TestExcelFiles\VisitGivenComplexProperties.xlsx"))
+            using (var workbook = Workbook(@"TestExcelFiles\VisitGivenListProperties.xlsx"))
             {
                 sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
@@ -26,22 +26,22 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("ThingToSetup",
                     new List<IGivenClassProperty> {
-                        new GivenClassComplexProperty("Root1 of", "Root1ClassName"),
-                        new GivenClassComplexProperty("Root2 of", "Root2ClassName")
+                        new GivenClassComplexListProperty("RootList1 list of", "RootList1ClassName"),
+                        new GivenClassComplexListProperty("RootList2 list of", "RootList2ClassName")
                     })
                 );
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("Root1ClassName",
+                    new GivenClass("RootList1ClassName",
                     new List<IGivenClassProperty> {
-                        new GivenClassComplexProperty("Child1 of", "Child1ClassName")
+                        new GivenClassComplexListProperty("ChildList1 list of", "ChildList1ClassName")
                     })
                 );
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("Child1ClassName",
+                    new GivenClass("ChildList1ClassName",
                     new List<IGivenClassProperty> {
                         new GivenClassSimpleProperty("Property of", ExcelPropertyType.String)
                     })
@@ -49,7 +49,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("Root2ClassName",
+                    new GivenClass("RootList2ClassName",
                     new List<IGivenClassProperty> {
                         new GivenClassSimpleProperty("Property of", ExcelPropertyType.String)
                     })

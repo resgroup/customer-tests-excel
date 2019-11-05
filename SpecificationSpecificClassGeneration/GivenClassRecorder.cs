@@ -10,54 +10,55 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
     public class GivenClassMutable
     {
         public string Name { get; set; }
-        public List<GivenClassProperty> Properties { get; set; } = new List<GivenClassProperty>();
+        public List<IGivenClassProperty> Properties { get; set; } = new List<IGivenClassProperty>();
+
+        public GivenClassMutable(string name)
+        {
+            Name = name;
+        }
     }
 
     public class GivenClassRecorder : IExcelToCodeVisitor
     {
-        readonly List<GivenClass> classes = new List<GivenClass>();
+        readonly List<GivenClassMutable> classes = new List<GivenClassMutable>();
         public IReadOnlyList<GivenClass> Classes =>
-            classes;
+            classes.Select(mutableClass => new GivenClass(mutableClass.Name, mutableClass.Properties)).ToList();
 
         readonly Stack<GivenClassMutable> currentClasses = new Stack<GivenClassMutable>();
 
         public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
         {
-            if (currentClasses.Any())
-            {
-                currentClasses.Peek().Properties.Add(
-                    new GivenClassProperty(
-                        givenComplexProperty.PropertyName,
-                        ExcelPropertyType.Object,
-                        givenComplexProperty.ClassName));
-            }
+            AddPropertyToCurrentClass(
+                new GivenClassComplexProperty(
+                    givenComplexProperty.PropertyName,
+                    givenComplexProperty.ClassName));
 
-            var nextClass = new GivenClassMutable();
-            nextClass.Name = givenComplexProperty.ClassName;
-
-            currentClasses.Push(nextClass);
+            UpdateCurrentClass(givenComplexProperty.ClassName);
         }
 
-        public void VisitGivenComplexPropertyFinalisation()
-        {
-            var finishedClass = currentClasses.Pop();
-            classes.Add(new GivenClass(finishedClass.Name, finishedClass.Properties));
-        }
+        public void VisitGivenComplexPropertyFinalisation() =>
+            FinishCurrentClass();
 
         public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
         {
-            currentClasses.Peek().Properties.Add(new GivenClassProperty(givenSimpleProperty.PropertyOrFunctionName, givenSimpleProperty.ExcelPropertyType));
+            AddPropertyToCurrentClass(
+                new GivenClassSimpleProperty(
+                    givenSimpleProperty.PropertyOrFunctionName,
+                    givenSimpleProperty.ExcelPropertyType));
         }
 
         public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)
         {
-            // ignore to keep test simple, just focus on the complex visits
+            AddPropertyToCurrentClass(
+                new GivenClassComplexListProperty(
+                    givenListProperty.PropertyName,
+                    givenListProperty.ClassName));
+
+            UpdateCurrentClass(givenListProperty.ClassName);
         }
 
-        public void VisitGivenListPropertyFinalisation()
-        {
-            // ignore to keep test simple, just focus on the complex visits
-        }
+        public void VisitGivenListPropertyFinalisation() =>
+            FinishCurrentClass();
 
         public void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column)
         {
@@ -88,6 +89,28 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         {
             // ignore to keep test simple, just focus on the complex visits
         }
+
+        void AddPropertyToCurrentClass(IGivenClassProperty givenClassProperty)
+        {
+            if (currentClasses.Any())
+                currentClasses.Peek().Properties.Add(givenClassProperty);
+        }
+
+        void UpdateCurrentClass(string className)
+        {
+            // The same class might be set up twice (2 items in a list for example). 
+            // So want to put it back on the stack if so.
+            // This doesn't consider classes that have a property of their own class
+            // but we could handle this is we wanted to by looking at the stack for
+            // the class and adding it again to the top of the stack. I think.
+            if (classes.Any(c => c.Name == className))
+                currentClasses.Push(classes.Single(c => c.Name == className));
+
+            currentClasses.Push(new GivenClassMutable(className));
+        }
+
+        void FinishCurrentClass() =>
+            classes.Add(currentClasses.Pop());
 
     }
 }

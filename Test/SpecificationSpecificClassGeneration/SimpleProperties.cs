@@ -42,13 +42,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         }
 
         static void AssertContains(
-            IEnumerable<GivenClassProperty> properties,
+            IEnumerable<IGivenClassProperty> properties,
             string propertyOrFunctionName,
             ExcelPropertyType excelPropertyType)
             =>
             CollectionAssert.Contains(
                 properties,
-                new GivenClassProperty(
+                new GivenClassSimpleProperty(
                     propertyOrFunctionName,
                     excelPropertyType
                 )

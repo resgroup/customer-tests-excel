@@ -15,17 +15,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 
             // The GivenListPropertyVisitRecorder outputs the IGivenListProperty for VisitGivenListPropertyDeclaration,
             // and "Finalisation" for VisitGivenListPropertyFinalisation. Everything else is ignored.
-            // The values aren't exactly the same as the ones in the spreadsheet, as they are formatted by both
-            // ExcelToCode and CodeNameToExcelNameConverter in to the strings that are used in the code.
-            // This is a shame, it would be good to make this more loosely coupled, so that we could use a 
-            // test formatter, and make the assertions exactly the same as the excel.
             var expected = new List<String>
             {
-                "rootList1List, SpecificationSpecificRootList1ClassName",
-                    "childList1List, SpecificationSpecificChildList1ClassName", // this indendation is just to make it read more easily
+                "RootList1 list of, RootList1ClassName",
+                    "ChildList1 list of, ChildList1ClassName", // this indendation is just to make it read more easily
                     "Finalisation",
                 "Finalisation",
-                "rootList2List, SpecificationSpecificRootList2ClassName",
+                "RootList2 list of, RootList2ClassName",
                 "Finalisation"
             };
 

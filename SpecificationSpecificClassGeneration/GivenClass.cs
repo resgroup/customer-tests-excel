@@ -6,9 +6,9 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
     public class GivenClass
     {
         public string Name { get; }
-        public IReadOnlyList<GivenClassProperty> Properties { get; }
+        public IReadOnlyList<IGivenClassProperty> Properties { get; }
 
-        public GivenClass(string name, IReadOnlyList<GivenClassProperty> properties)
+        public GivenClass(string name, IReadOnlyList<IGivenClassProperty> properties)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
             Properties = properties ?? throw new System.ArgumentNullException(nameof(properties));
@@ -30,7 +30,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         {
             var hashCode = -1578535950;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-            hashCode = hashCode * -1521134295 + EqualityComparer<IReadOnlyList<GivenClassProperty>>.Default.GetHashCode(Properties);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IReadOnlyList<IGivenClassProperty>>.Default.GetHashCode(Properties);
             return hashCode;
         }
     }

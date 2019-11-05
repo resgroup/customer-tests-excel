@@ -78,6 +78,7 @@
     <Compile Include="ListPropertiesOutputWriter.cs" />
     <Compile Include="MissingWithItemForList.cs" />
     <Compile Include="MissingListOfForList.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\ListProperties.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ComplexProperties.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\SimpleProperties.cs" />
     <Compile Include="TabularPageAssert.cs" />

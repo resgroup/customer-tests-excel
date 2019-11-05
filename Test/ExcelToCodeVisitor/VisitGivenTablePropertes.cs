@@ -59,10 +59,6 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             var visitRecorder = new GivenTablePropertyVisitRecorder();
 
             // The GivenTablePropertyVisitRecorder outputs strings for the various visits encountered,
-            // The values aren't exactly the same as the ones in the spreadsheet, as they are formatted by both
-            // ExcelToCode and CodeNameToExcelNameConverter in to the strings that are used in the code.
-            // This is a shame, it would be good to make this more loosely coupled, so that we could use a 
-            // test formatter, and make the assertions exactly the same as the excel.
             var expected = new List<string>
             {
                 "irrelevant, ThingToSetup",

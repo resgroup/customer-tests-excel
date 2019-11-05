@@ -62,7 +62,9 @@
     <Compile Include="CodeToExcelException.cs" />
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClass.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClassProperty.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexListProperty.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexProperty.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\IGivenClassProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassRecorder.cs" />
     <Compile Include="ExcelToCode\GivenListProperty.cs" />
     <Compile Include="ExcelToCode\GivenComplexProperty.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="NavigationHTML\DirectoryToIndex.cs" />
     <Compile Include="ReportSpecificationSetupClassUsingTable.cs" />
     <Compile Include="ReportSpecificationSetupClassUsingTableRow.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\GivenClassSimpleProperty.cs" />
     <Compile Include="StringBuilderTextLineWriter.cs" />
     <Compile Include="CodeOutputWriters\StringTestOutputWriterBase.cs" />
     <Compile Include="Assertions\EqualityAssertion.cs" />
