@@ -19,7 +19,7 @@ namespace CustomerTestsExcel.ExcelToCode
         void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty);
         void VisitGivenComplexPropertyFinalisation();
 
-        void VisitGivenTablePropertyDeclaration(IEnumerable<TableHeader> tableHeaders);
+        void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders);
         void VisitGivenTablePropertyRowDeclaration(uint row);
         void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column);
         void VisitGivenTablePropertyCellFinalisation();

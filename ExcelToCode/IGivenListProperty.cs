@@ -1,4 +1,6 @@
-﻿namespace CustomerTestsExcel.ExcelToCode
+﻿using System.Collections.Generic;
+
+namespace CustomerTestsExcel.ExcelToCode
 {
     public interface IGivenListProperty
     {

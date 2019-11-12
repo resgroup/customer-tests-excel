@@ -33,7 +33,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                     givenComplexProperty.PropertyName,
                     givenComplexProperty.ClassName));
 
-            UpdateCurrentClass(givenComplexProperty.ClassName);
+            CreateOrActivateCurrentClass(givenComplexProperty.ClassName);
         }
 
         public void VisitGivenComplexPropertyFinalisation() =>
@@ -54,40 +54,43 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                     givenListProperty.PropertyName,
                     givenListProperty.ClassName));
 
-            UpdateCurrentClass(givenListProperty.ClassName);
+            CreateOrActivateCurrentClass(givenListProperty.ClassName);
         }
 
         public void VisitGivenListPropertyFinalisation() =>
             FinishCurrentClass();
 
-        public void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column)
+        public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders)
         {
-            // ignore to keep test simple, just focus on the complex visits
+            AddPropertyToCurrentClass(
+                new GivenClassComplexListProperty(
+                    givenTableProperty.PropertyName,
+                    givenTableProperty.ClassName));
+
+            CreateOrActivateCurrentClass(givenTableProperty.ClassName);
         }
 
-        public void VisitGivenTablePropertyCellFinalisation()
-        {
-            // ignore to keep test simple, just focus on the complex visits
-        }
-
-        public void VisitGivenTablePropertyDeclaration(IEnumerable<TableHeader> tableHeaders)
-        {
-            // ignore to keep test simple, just focus on the complex visits
-        }
-
-        public void VisitGivenTablePropertyFinalisation()
-        {
-            // ignore to keep test simple, just focus on the complex visits
-        }
+        public void VisitGivenTablePropertyFinalisation() =>
+            FinishCurrentClass();
 
         public void VisitGivenTablePropertyRowDeclaration(uint row)
         {
-            // ignore to keep test simple, just focus on the complex visits
+            // don't need to do anything special with table rows
         }
 
         public void VisitGivenTablePropertyRowFinalisation()
         {
-            // ignore to keep test simple, just focus on the complex visits
+            // don't need to do anything special with table rows
+        }
+
+        public void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column)
+        {
+            // don't need to do anything special with table cells
+        }
+
+        public void VisitGivenTablePropertyCellFinalisation()
+        {
+            // don't need to do anything special with table cells
         }
 
         void AddPropertyToCurrentClass(IGivenClassProperty givenClassProperty)
@@ -96,7 +99,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 currentClasses.Peek().Properties.Add(givenClassProperty);
         }
 
-        void UpdateCurrentClass(string className)
+        void CreateOrActivateCurrentClass(string className)
         {
             // The same class might be set up twice (2 items in a list for example). 
             // So want to put it back on the stack if so.
@@ -105,8 +108,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // the class and adding it again to the top of the stack. I think.
             if (classes.Any(c => c.Name == className))
                 currentClasses.Push(classes.Single(c => c.Name == className));
-
-            currentClasses.Push(new GivenClassMutable(className));
+            else
+                currentClasses.Push(new GivenClassMutable(className));
         }
 
         void FinishCurrentClass() =>

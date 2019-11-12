@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="CodeToExcelException.cs" />
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
+    <Compile Include="ExcelToCode\GivenTableProperty.cs" />
+    <Compile Include="ExcelToCode\IGivenTableProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClass.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexListProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexProperty.cs" />

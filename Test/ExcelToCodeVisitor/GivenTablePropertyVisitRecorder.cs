@@ -13,7 +13,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public IReadOnlyList<string> RecordedTableProperties =>
             recordedTableProperties;
 
-        public void VisitGivenTablePropertyDeclaration(IEnumerable<TableHeader> tableHeaders) =>
+        public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders) =>
             recordedTableProperties.Add($"Table [{string.Join(",", tableHeaders.Select(h => h.ToString()))}]");
 
         public void VisitGivenTablePropertyRowDeclaration(uint row) =>

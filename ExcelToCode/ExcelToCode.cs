@@ -257,16 +257,11 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 if (IsTable(excelGivenLeft))
                 {
-                    var cSharpMethodName = converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft);
-
                     using (Scope())
                     {
-                        string cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-                        string cSharpChildVariableName = converter.GivenTablePropertyNameExcelNameToCodeVariableName(excelGivenLeft);
+                        var cSharpChildVariableName = CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
 
-                        CreateObjectsFromTable(startCellReference, cSharpChildVariableName, cSharpChildVariableName + "_Row", cSharpClassName);
-
-                        Output(cSharpVariableName + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
+                        Output($"{cSharpVariableName}.{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}({cSharpChildVariableName});");
                     }
                 }
                 else if (IsList(excelGivenLeft))
@@ -351,14 +346,14 @@ namespace CustomerTestsExcel.ExcelToCode
                             converter.ExcelPropertyTypeFromCellValue(excelGivenRight))));
         }
 
-        void VisitGivenListPropertyDeclaration(string cSharpListVariableName, string cSharpClassName)
+        void VisitGivenListPropertyDeclaration(string excelPropertyName, string excelClassName)
         {
             visitors.ForEach(
                 v =>
                     v.VisitGivenListPropertyDeclaration(
                         new GivenListProperty(
-                            cSharpListVariableName,
-                            cSharpClassName)));
+                            excelPropertyName,
+                            excelClassName)));
         }
 
         void VisitGivenListPropertyFinalisation() =>
@@ -377,11 +372,18 @@ namespace CustomerTestsExcel.ExcelToCode
         void VisitGivenComplexPropertyFinalisation() =>
             visitors.ForEach(v => v.VisitGivenComplexPropertyFinalisation());
 
-        void VisitGivenTablePropertyDeclaration(IEnumerable<TableHeader> tableHeaders)
+        void VisitGivenTablePropertyDeclaration(
+            string excelPropertyName,
+            string excelClassName,
+            IEnumerable<TableHeader> tableHeaders)
         {
             visitors.ForEach(
                 v =>
-                    v.VisitGivenTablePropertyDeclaration(tableHeaders));
+                    v.VisitGivenTablePropertyDeclaration(
+                        new GivenTableProperty(
+                            excelPropertyName,
+                            excelClassName),
+                        tableHeaders));
         }
 
         void VisitGivenTablePropertyRowDeclaration(uint row)
@@ -461,12 +463,14 @@ namespace CustomerTestsExcel.ExcelToCode
             && (PeekBelowRight(2, 1) != "" && PeekBelow(2) == "")
             );
 
-        void CreateObjectsFromTable(
+        string CreateObjectsFromTable(
             string tableStartCellReference,
-            string cSharpVariableName,
-            string cSharpClassName,
-            string cSharpSpecificationSpecificClassName)
+            string excelGivenLeft,
+            string excelGivenRightString)
         {
+            string cSharpVariableName = converter.GivenTablePropertyNameExcelNameToCodeVariableName(excelGivenLeft) + "Row";
+            string cSharpSpecificationSpecificClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
+
             CheckMissingWithPropertiesForTable(tableStartCellReference);
 
             CheckBadIndentationInTable(tableStartCellReference);
@@ -481,7 +485,7 @@ namespace CustomerTestsExcel.ExcelToCode
             uint propertiesEndColumn = lastColumn;
 
             Output($"var {cSharpVariableName} = new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>();");
-            VisitGivenTablePropertyDeclaration(headers.Values);
+            VisitGivenTablePropertyDeclaration(excelGivenLeft, excelGivenRightString, headers.Values);
 
             uint tableRow = 0;
             uint moveDown = 1 + (headers.Max((KeyValuePair<uint, TableHeader> h) => h.Value.EndRow) - row);
@@ -490,7 +494,7 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 using (SavePosition())
                 {
-                    string indexedCSharpVariableName = VariableCase(cSharpClassName);
+                    string indexedCSharpVariableName = VariableCase(cSharpVariableName);
 
                     using (Scope())
                     {
@@ -519,6 +523,8 @@ namespace CustomerTestsExcel.ExcelToCode
             CheckNoRowsInTable(tableStartCellReference, CellReferenceA1Style(), tableRow);
 
             ExcelMoveUp();
+
+            return cSharpVariableName;
         }
 
         void CheckMissingHeadersForTable(string tableStartCellReference, Dictionary<uint, TableHeader> headers)

@@ -43,7 +43,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore to keep test simple, just focus on the complex visits
         }
 
-        public void VisitGivenTablePropertyDeclaration(IEnumerable<ExcelToCode.TableHeader> tableHeaders)
+        public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<ExcelToCode.TableHeader> tableHeaders)
         {
             // ignore to keep test simple, just focus on the complex visits
         }
