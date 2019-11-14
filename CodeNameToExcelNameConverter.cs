@@ -305,7 +305,7 @@ namespace CustomerTestsExcel
             if (excelPropertyType == ExcelPropertyType.DateTime)
                 return DateTimeValueFromExcelValue(excelPropertyValue);
 
-            if (excelPropertyType == ExcelPropertyType.Timespan)
+            if (excelPropertyType == ExcelPropertyType.TimeSpan)
                 return TimespanValueFromExcelValue(excelPropertyValue);
 
             var stringValue = StringValueFromExcelValue(excelPropertyValue);
@@ -349,7 +349,7 @@ namespace CustomerTestsExcel
                 return ExcelPropertyType.DateTime;
 
             if (excelPropertyValue is TimeSpan)
-                return ExcelPropertyType.Timespan;
+                return ExcelPropertyType.TimeSpan;
 
             if (IsEnum(stringValue))
                 return ExcelPropertyType.Enum;

@@ -15,7 +15,7 @@ namespace CustomerTestsExcel.ExcelToCode
         Decimal,
         String,
         DateTime,
-        Timespan,
+        TimeSpan,
         Enum,
         Boolean
     }

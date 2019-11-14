@@ -24,7 +24,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 AssertContains(visitRecorder, "Null of", "null", ExcelPropertyType.Null);
                 AssertContains(visitRecorder, "StringNull of", "null", ExcelPropertyType.StringNull);
                 AssertContains(visitRecorder, "DateTime of", "DateTime.Parse(\"2019-01-01T00:00:00\")", ExcelPropertyType.DateTime);
-                AssertContains(visitRecorder, "TimeSpan of", "TimeSpan.Parse(\"01:15:00\")", ExcelPropertyType.Timespan);
+                AssertContains(visitRecorder, "TimeSpan of", "TimeSpan.Parse(\"01:15:00\")", ExcelPropertyType.TimeSpan);
                 AssertContains(visitRecorder, "Enum of", "EnumType.EnumValue", ExcelPropertyType.Enum);
                 AssertContains(visitRecorder, "Number of", "1", ExcelPropertyType.Number);
                 AssertContains(visitRecorder, "Decimal of", "1m", ExcelPropertyType.Decimal);
