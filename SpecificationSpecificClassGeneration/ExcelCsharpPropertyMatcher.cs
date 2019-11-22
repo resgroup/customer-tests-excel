@@ -10,10 +10,19 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         }
 
         public bool PropertiesMatch(
-            Type csharpPropertytype, 
+            Type csharpPropertytype,
             ExcelPropertyType excelPropertyType)
         {
-            if (excelPropertyType == ExcelPropertyType.Decimal && csharpPropertytype == typeof(Decimal))
+            if (excelPropertyType == ExcelPropertyType.Null && IsNullableType(csharpPropertytype))
+                return true;
+
+            if (excelPropertyType == ExcelPropertyType.Enum && csharpPropertytype.IsEnum)
+                return true;
+
+            if (excelPropertyType == ExcelPropertyType.Number && IsNumberType(csharpPropertytype))
+                return true;
+
+            if (excelPropertyType == ExcelPropertyType.Decimal && csharpPropertytype == typeof(decimal))
                 return true;
 
             if (excelPropertyType == ExcelPropertyType.DateTime && csharpPropertytype == typeof(DateTime))
@@ -33,5 +42,36 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             return false;
         }
+
+        bool IsNumberType(Type csharpPropertytype) =>
+            csharpPropertytype == typeof(float)
+            || csharpPropertytype == typeof(double)
+            || csharpPropertytype == typeof(int)
+            || csharpPropertytype == typeof(sbyte)
+            || csharpPropertytype == typeof(byte)
+            || csharpPropertytype == typeof(short)
+            || csharpPropertytype == typeof(uint)
+            || csharpPropertytype == typeof(long)
+            || csharpPropertytype == typeof(ulong)
+            || csharpPropertytype == typeof(char);
+
+        bool IsNullableType(Type csharpPropertytype) =>
+            csharpPropertytype == typeof(float?)
+            || csharpPropertytype == typeof(double?)
+            || csharpPropertytype == typeof(int?)
+            || csharpPropertytype == typeof(sbyte?)
+            || csharpPropertytype == typeof(byte?)
+            || csharpPropertytype == typeof(short?)
+            || csharpPropertytype == typeof(uint?)
+            || csharpPropertytype == typeof(long?)
+            || csharpPropertytype == typeof(ulong?)
+            || csharpPropertytype == typeof(char?)
+            || csharpPropertytype == typeof(decimal?)
+            || csharpPropertytype == typeof(DateTime?)
+            || csharpPropertytype == typeof(TimeSpan?)
+            || csharpPropertytype == typeof(bool?)
+            || csharpPropertytype == typeof(string)
+            || csharpPropertytype.IsInterface
+            || csharpPropertytype.IsClass;
     }
 }
