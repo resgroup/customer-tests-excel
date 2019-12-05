@@ -1,4 +1,5 @@
 ﻿using CustomerTestsExcel.ExcelToCode;
+using System;
 using System.Collections.Generic;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
@@ -20,6 +21,70 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             Name = name;
             Type = type;
         }
+
+        public bool TypesMatch(Type cSharpPropertytype)
+        {
+            if (Type == ExcelPropertyType.Null && IsNullableType(cSharpPropertytype))
+                return true;
+
+            if (Type == ExcelPropertyType.Enum && cSharpPropertytype.IsEnum)
+                return true;
+
+            if (Type == ExcelPropertyType.Number && IsNumberType(cSharpPropertytype))
+                return true;
+
+            if (Type == ExcelPropertyType.Decimal && cSharpPropertytype == typeof(decimal))
+                return true;
+
+            if (Type == ExcelPropertyType.DateTime && cSharpPropertytype == typeof(DateTime))
+                return true;
+
+            if (Type == ExcelPropertyType.TimeSpan && cSharpPropertytype == typeof(TimeSpan))
+                return true;
+
+            if (Type == ExcelPropertyType.String && cSharpPropertytype == typeof(string))
+                return true;
+
+            if (Type == ExcelPropertyType.StringNull && cSharpPropertytype == typeof(string))
+                return true;
+
+            if (Type == ExcelPropertyType.Boolean && cSharpPropertytype == typeof(bool))
+                return true;
+
+            return false;
+        }
+
+
+        bool IsNumberType(Type csharpPropertytype) =>
+            csharpPropertytype == typeof(float)
+            || csharpPropertytype == typeof(double)
+            || csharpPropertytype == typeof(int)
+            || csharpPropertytype == typeof(sbyte)
+            || csharpPropertytype == typeof(byte)
+            || csharpPropertytype == typeof(short)
+            || csharpPropertytype == typeof(uint)
+            || csharpPropertytype == typeof(long)
+            || csharpPropertytype == typeof(ulong)
+            || csharpPropertytype == typeof(char);
+
+        bool IsNullableType(Type csharpPropertytype) =>
+            csharpPropertytype == typeof(float?)
+            || csharpPropertytype == typeof(double?)
+            || csharpPropertytype == typeof(int?)
+            || csharpPropertytype == typeof(sbyte?)
+            || csharpPropertytype == typeof(byte?)
+            || csharpPropertytype == typeof(short?)
+            || csharpPropertytype == typeof(uint?)
+            || csharpPropertytype == typeof(long?)
+            || csharpPropertytype == typeof(ulong?)
+            || csharpPropertytype == typeof(char?)
+            || csharpPropertytype == typeof(decimal?)
+            || csharpPropertytype == typeof(DateTime?)
+            || csharpPropertytype == typeof(TimeSpan?)
+            || csharpPropertytype == typeof(bool?)
+            || csharpPropertytype == typeof(string)
+            || csharpPropertytype.IsInterface
+            || csharpPropertytype.IsClass;
 
         public override string ToString() =>
             $"Name {Name}, Type {Type}";

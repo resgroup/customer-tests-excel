@@ -33,18 +33,16 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public void NullExcelPropertyMatchesNullCsharpProperty(Type nullableType)
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    nullableType,
-                    ExcelPropertyType.Null));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.Null)
+                .TypesMatch(nullableType));
         }
 
         [Test]
         public void EnumExcelPropertyMatchesEnumCsharpProperty()
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    typeof(Test),
-                    ExcelPropertyType.Enum));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.Enum)
+                .TypesMatch(typeof(Test)));
         }
 
         [TestCase(typeof(float))]
@@ -60,59 +58,52 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public void NumberExcelPropertyMatchesCsharpProperty(Type numberType)
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    numberType,
-                    ExcelPropertyType.Number));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.Number)
+                .TypesMatch(numberType));
         }
 
         [Test]
         public void DecimalExcelPropertyMatchesDecimalCsharpProperty()
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    typeof(decimal),
-                    ExcelPropertyType.Decimal));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.Decimal)
+                .TypesMatch(typeof(decimal)));
         }
 
         [Test]
         public void DateTimeExcelPropertyMatchesDateTimeCsharpProperty()
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    typeof(DateTime),
-                    ExcelPropertyType.DateTime));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.DateTime)
+                .TypesMatch(typeof(DateTime)));
         }
 
         [Test]
         public void TimeSpanExcelPropertyMatchesTimespanCsharpProperty()
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    typeof(TimeSpan),
-                    ExcelPropertyType.TimeSpan));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.TimeSpan)
+                .TypesMatch(typeof(TimeSpan)));
         }
 
         [Test]
         public void StringExcelPropertyMatchesStringCsharpProperty()
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    typeof(string),
-                    ExcelPropertyType.String));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.String)
+                .TypesMatch(typeof(string)));
 
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    typeof(string),
-                    ExcelPropertyType.StringNull));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.StringNull)
+                .TypesMatch(typeof(string)));
         }
 
         [Test]
         public void BooleanExcelPropertyMatchesBooleanCsharpProperty()
         {
             Assert.True(
-                new ExcelCsharpPropertyMatcher().PropertiesMatch(
-                    typeof(bool),
-                    ExcelPropertyType.Boolean));
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.Boolean)
+                .TypesMatch(typeof(bool)));
         }
     }
 }

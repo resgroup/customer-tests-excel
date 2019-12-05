@@ -1,5 +1,6 @@
 ﻿using CustomerTestsExcel.ExcelToCode;
 using System;
+using System.Reflection;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
@@ -10,68 +11,33 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         }
 
         public bool PropertiesMatch(
-            Type csharpPropertytype,
-            ExcelPropertyType excelPropertyType)
+            PropertyInfo cSharpProperty,
+            IGivenClassProperty excelProperty) =>
+                NamesMatch(cSharpProperty.Name, excelProperty.Name)
+                && excelProperty.TypesMatch(cSharpProperty.PropertyType);
+
+        public bool MethodsMatch(
+            MethodInfo cSharpMethod,
+            IGivenClassProperty excelProperty)
         {
-            if (excelPropertyType == ExcelPropertyType.Null && IsNullableType(csharpPropertytype))
-                return true;
+            if (!NamesMatch(cSharpMethod.Name, excelProperty.Name))
+                return false;
 
-            if (excelPropertyType == ExcelPropertyType.Enum && csharpPropertytype.IsEnum)
-                return true;
+            if (cSharpMethod.ReturnType != typeof(void))
+                return false;
 
-            if (excelPropertyType == ExcelPropertyType.Number && IsNumberType(csharpPropertytype))
-                return true;
-
-            if (excelPropertyType == ExcelPropertyType.Decimal && csharpPropertytype == typeof(decimal))
-                return true;
-
-            if (excelPropertyType == ExcelPropertyType.DateTime && csharpPropertytype == typeof(DateTime))
-                return true;
-
-            if (excelPropertyType == ExcelPropertyType.TimeSpan && csharpPropertytype == typeof(TimeSpan))
-                return true;
-
-            if (excelPropertyType == ExcelPropertyType.String && csharpPropertytype == typeof(string))
-                return true;
-
-            if (excelPropertyType == ExcelPropertyType.StringNull && csharpPropertytype == typeof(string))
-                return true;
-
-            if (excelPropertyType == ExcelPropertyType.Boolean && csharpPropertytype == typeof(bool))
-                return true;
+            if (cSharpMethod.GetParameters().Length == 0)
+                return excelProperty.Type == ExcelPropertyType.Null;
+            else if (cSharpMethod.GetParameters().Length == 1)
+                return excelProperty.TypesMatch(cSharpMethod.GetParameters()[0].ParameterType);
 
             return false;
         }
 
-        bool IsNumberType(Type csharpPropertytype) =>
-            csharpPropertytype == typeof(float)
-            || csharpPropertytype == typeof(double)
-            || csharpPropertytype == typeof(int)
-            || csharpPropertytype == typeof(sbyte)
-            || csharpPropertytype == typeof(byte)
-            || csharpPropertytype == typeof(short)
-            || csharpPropertytype == typeof(uint)
-            || csharpPropertytype == typeof(long)
-            || csharpPropertytype == typeof(ulong)
-            || csharpPropertytype == typeof(char);
+        public bool NamesMatch(
+            string cSharpName,
+            string excelName) =>
+                cSharpName == excelName;
 
-        bool IsNullableType(Type csharpPropertytype) =>
-            csharpPropertytype == typeof(float?)
-            || csharpPropertytype == typeof(double?)
-            || csharpPropertytype == typeof(int?)
-            || csharpPropertytype == typeof(sbyte?)
-            || csharpPropertytype == typeof(byte?)
-            || csharpPropertytype == typeof(short?)
-            || csharpPropertytype == typeof(uint?)
-            || csharpPropertytype == typeof(long?)
-            || csharpPropertytype == typeof(ulong?)
-            || csharpPropertytype == typeof(char?)
-            || csharpPropertytype == typeof(decimal?)
-            || csharpPropertytype == typeof(DateTime?)
-            || csharpPropertytype == typeof(TimeSpan?)
-            || csharpPropertytype == typeof(bool?)
-            || csharpPropertytype == typeof(string)
-            || csharpPropertytype.IsInterface
-            || csharpPropertytype.IsClass;
     }
 }

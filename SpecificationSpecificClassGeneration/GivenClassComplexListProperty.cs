@@ -1,4 +1,6 @@
 ﻿using CustomerTestsExcel.ExcelToCode;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
@@ -8,7 +10,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public string Name { get; }
         public string ClassName { get; }
         public ExcelPropertyType Type =>
-            ExcelPropertyType.Object;
+            ExcelPropertyType.List;
 
         public GivenClassComplexListProperty(string name, string className)
         {
@@ -18,9 +20,17 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             if (string.IsNullOrWhiteSpace(name))
                 throw new System.ArgumentException("", nameof(className));
 
-
             Name = name;
             ClassName = className;
+        }
+
+        public bool TypesMatch(Type cSharpPropertytype)
+        {
+            return
+                typeof(IEnumerable).IsAssignableFrom(cSharpPropertytype)
+                && cSharpPropertytype.IsGenericType
+                && cSharpPropertytype.GenericTypeArguments.Length == 1
+                && ClassNameMatcher.NamesMatch(cSharpPropertytype.GenericTypeArguments[0].Name, ClassName);
         }
 
         public override string ToString() =>

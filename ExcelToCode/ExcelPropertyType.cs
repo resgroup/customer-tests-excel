@@ -10,13 +10,14 @@ namespace CustomerTestsExcel.ExcelToCode
     {
         Null,
         StringNull,
-        Object,
         Number,
         Decimal,
         String,
         DateTime,
         TimeSpan,
         Enum,
-        Boolean
+        Boolean,
+        Object,
+        List
     }
 }

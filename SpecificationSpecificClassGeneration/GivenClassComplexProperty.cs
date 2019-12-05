@@ -1,4 +1,5 @@
 ﻿using CustomerTestsExcel.ExcelToCode;
+using System;
 using System.Collections.Generic;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
@@ -22,6 +23,9 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             Name = name;
             ClassName = className;
         }
+
+        public bool TypesMatch(Type cSharpPropertytype) =>
+            ClassNameMatcher.NamesMatch(cSharpPropertytype.Name, ClassName);
 
         public override string ToString() =>
             $"Name {Name}, Type {Type}, ClassName {ClassName}";

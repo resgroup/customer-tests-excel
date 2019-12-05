@@ -1,4 +1,5 @@
 ﻿using CustomerTestsExcel.ExcelToCode;
+using System;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
@@ -6,5 +7,6 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
     {
         string Name { get; }
         ExcelPropertyType Type { get; }
+        bool TypesMatch(Type cSharpPropertytype);
     }
 }
