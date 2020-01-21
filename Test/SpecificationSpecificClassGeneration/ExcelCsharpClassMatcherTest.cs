@@ -163,19 +163,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassComplexProperty("ComplexProperty", "Target")
             );
 
-            Debug.WriteLine(typeof(ITarget).GetProperty("ComplexProperty"));
-
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
                     excelGivenClass));
         }
-
-        static GivenClass ExcelGivenClass(
-            string className,
-            params IGivenClassProperty[] properties)
-            =>
-            new GivenClass(className, properties);
 
     }
 }

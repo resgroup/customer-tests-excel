@@ -28,7 +28,7 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
         {
             return "Vermeulen Near Wake Length";
         }
-        
+
         // arrange
         public override SpecificationSpecificVermeulenNearWakeLengthCalculator Given()
         {
@@ -121,16 +121,16 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                 }
                 vermeulenNearWakeLengthCalculator.VermeulenNearWakeLengthInputs_table_of(VermeulenNearWakeLengthInputs);
             }
-            
+
             return vermeulenNearWakeLengthCalculator;
         }
-        
+
         public override string When(SpecificationSpecificVermeulenNearWakeLengthCalculator vermeulenNearWakeLengthCalculator)
         {
             vermeulenNearWakeLengthCalculator.Calculate();
             return "Calculate";
         }
-        
+
         public override IEnumerable<IAssertion<SpecificationSpecificVermeulenNearWakeLengthCalculator>> Assertions()
         {
             return new List<IAssertion<SpecificationSpecificVermeulenNearWakeLengthCalculator>>
@@ -235,11 +235,11 @@ namespace SampleTests.Vermeulen_Near_Wake_Length
                 )
             };
         }
-        
+
         protected override string AssertionClassPrefixAddedByGenerator => "I";
-        
+
         protected override bool RoundTrippable() => false;
-        
+
         protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string> {
             "There is a complex property ('TurbineGeometry_of', cell D7) within a table in the Excel test, worksheet 'VermeulenNearWakeLength'"
         };

@@ -16,7 +16,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             // this is a code smell, but not going to worry too much for now.
             if (type == ExcelPropertyType.Object)
-                throw new System.ArgumentException("ExcelPropertyType cannot be ExcelPropertyYpe.Object for simple properties", nameof(name));
+                throw new System.ArgumentException("ExcelPropertyType cannot be ExcelPropertyType.Object for simple properties", nameof(name));
 
             Name = name;
             Type = type;

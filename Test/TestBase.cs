@@ -6,6 +6,7 @@ using NUnit.Framework;
 using CustomerTestsExcel;
 using System.IO;
 using CustomerTestsExcel.ExcelToCode;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 
 namespace CustomerTestsExcel.Test
 {
@@ -25,7 +26,7 @@ namespace CustomerTestsExcel.Test
             var excel = new ExcelTabularLibrary();
 
             var workbookFile = GetExcelFileStream(Path.Combine(TestContext.CurrentContext.TestDirectory, excelFileNameRelativeToOutputFolder));
-            
+
             // the workbook owns the stream, implements IDisposable and disposes of the stream
             return excel.OpenBook(workbookFile);
         }
@@ -76,5 +77,12 @@ namespace CustomerTestsExcel.Test
 
             return logger;
         }
+
+        protected static GivenClass ExcelGivenClass(
+            string className,
+            params IGivenClassProperty[] properties)
+            =>
+            new GivenClass(className, properties);
+
     }
 }
