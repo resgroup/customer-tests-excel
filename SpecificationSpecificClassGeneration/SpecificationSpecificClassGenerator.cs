@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using static System.Environment;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
@@ -37,7 +38,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 };
             allUsings.AddRange(usings);
 
-            var usingStatements = string.Join("", allUsings.Select(u => $"using {u};\r\n"));
+            var usingStatements = string.Join("", allUsings.Select(u => $"using {u};{NewLine}"));
 
             var simpleProperties = new List<string>();
             foreach (var cSharpProperty in type.GetProperties())
@@ -63,12 +64,12 @@ $@"namespace {testNamespace}
             {MockVariableName} = new Mock<{type.Name}>();
         }}
 
-{string.Join("\r\n", simpleProperties)}
+{string.Join(NewLine, simpleProperties)}
     }}
 }}
 ";
 
-            return usingStatements + "\r\n" + classDefinition;
+            return usingStatements + NewLine + classDefinition;
         }
 
         //string PropertySetter(Type type, GivenClassSimpleProperty excelGivenProperty, GivenClass excelGivenClass)
@@ -84,7 +85,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             {MockVariableName}.Setup(m => m.{propertyInfo.Name}).Returns({variableName});
 
             return this;
-        }}{Environment.NewLine}";
+        }}{NewLine}";
         }
 
         string MockVariableName =>

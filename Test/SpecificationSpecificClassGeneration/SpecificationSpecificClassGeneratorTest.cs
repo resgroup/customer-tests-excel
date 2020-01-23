@@ -104,65 +104,54 @@ namespace SampleTests
 
         void IncrementallyAssertEqual(string expected, string actual)
         {
-            if (RemoveWhitespaceAndNoiseAndLowerCase(expected) != RemoveWhitespaceAndNoiseAndLowerCase(actual))
-            {
-                Assert.AreEqual(
-                    RemoveWhitespaceAndNoiseAndLowerCase(expected),
-                    RemoveWhitespaceAndNoiseAndLowerCase(actual),
-                    "Expected and actual code don't match, even when all converted to lowercase and all whitespace and noise are stripped out");
-            }
-
-            if (RemoveWhitespaceAndNoise(expected) != RemoveWhitespaceAndNoise(actual))
-            {
-                Assert.AreEqual(
-                    RemoveWhitespaceAndNoise(expected),
-                    RemoveWhitespaceAndNoise(actual),
-                    "Expected and actual code don't match due to a lower case / upper case problem");
-            }
-
-            if (RemoveWhitespaceAndLowerCase(expected) != RemoveWhitespaceAndLowerCase(actual))
-            {
-                Assert.AreEqual(
-                    RemoveWhitespaceAndLowerCase(expected),
-                    RemoveWhitespaceAndLowerCase(actual),
-                    $"Expected and actual code don't match due to a problem with noise characters ('{noiseCharacters}')");
-            }
-
-            if (RemoveNoiseAndLowerCase(expected) != RemoveNoiseAndLowerCase(actual))
-            {
-                Assert.AreEqual(
-                    RemoveNoiseAndLowerCase(expected),
-                    RemoveNoiseAndLowerCase(actual),
-                    $"Expected and actual code don't match due to a whitespace problem");
-            }
-
-            if (RemoveWhitespace(expected) != RemoveWhitespace(actual))
-            {
-                Assert.AreEqual(
-                    RemoveWhitespace(expected),
-                    RemoveWhitespace(actual),
-                    $"Expected and actual code don't match due to a problem with casing or noise characters ('{noiseCharacters}')");
-            }
-
-            if (RemoveNoise(expected) != RemoveNoise(actual))
-            {
-                Assert.AreEqual(
-                    RemoveNoise(expected),
-                    RemoveNoise(actual),
-                    "Expected and actual code don't match due to a problem with casing or whitespace");
-            }
+            Assert.AreEqual(
+                RemoveWhitespaceAndNoiseAndLowerCase(expected),
+                RemoveWhitespaceAndNoiseAndLowerCase(actual),
+                "Expected and actual code don't match, even when all converted to lowercase and all whitespace and noise are stripped out");
 
             Assert.AreEqual(
-                expected,
-                actual,
+                RemoveWhitespaceAndNoise(expected),
+                RemoveWhitespaceAndNoise(actual),
+                "Expected and actual code don't match due to a lower case / upper case problem");
+
+            Assert.AreEqual(
+                RemoveWhitespaceAndLowerCase(expected),
+                RemoveWhitespaceAndLowerCase(actual),
+                $"Expected and actual code don't match due to a problem with noise characters ('{noiseCharacters}')");
+
+            Assert.AreEqual(
+                RemoveNoiseAndLowerCase(expected),
+                RemoveNoiseAndLowerCase(actual),
+                $"Expected and actual code don't match due to a whitespace problem");
+
+            Assert.AreEqual(
+                RemoveWhitespace(expected),
+                RemoveWhitespace(actual),
+                $"Expected and actual code don't match due to a problem with casing or noise characters ('{noiseCharacters}')");
+
+            Assert.AreEqual(
+                RemoveNoise(expected),
+                RemoveNoise(actual),
+                "Expected and actual code don't match due to a problem with casing or whitespace");
+
+            // This test was passing on the (windows) build server, despite passing here, due
+            // to line ending differences. The build server maybe has a different git checkout
+            // setting or something. Either way, I don't really care about them, so making
+            // sure they can't fail the test
+            Assert.AreEqual(
+                StandardiseLineEndings(expected),
+                StandardiseLineEndings(actual),
                 "Expected and actual code don't match, and it isn't due to noise, casing or whitespace characters");
         }
+
+        string StandardiseLineEndings(string value) =>
+            value.Replace("\r\n", "\n");
 
         string RemoveWhitespaceAndNoiseAndLowerCase(string value) =>
             RemoveWhitespaceAndNoise(value.ToLowerInvariant());
 
         string RemoveNoiseAndLowerCase(string value) =>
-            RemoveNoise(value.ToLowerInvariant());
+            RemoveNoise(StandardiseLineEndings(value.ToLowerInvariant()));
 
         string RemoveWhitespaceAndLowerCase(string value) =>
             RemoveWhitespace(value.ToLowerInvariant());
@@ -180,7 +169,7 @@ namespace SampleTests
         {
             string removableChars = Regex.Escape(noiseCharacters);
             string pattern = "[" + removableChars + "]";
-            return Regex.Replace(value, pattern, "");
+            return StandardiseLineEndings(Regex.Replace(value, pattern, ""));
         }
     }
 }
