@@ -8,6 +8,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
     {
         public string Name { get; }
         public ExcelPropertyType Type { get; }
+        // This is a very obvious violation of the liskov substituation principle, and the interface segrgation principle. Not sure what to do about it yet.
+        public string ClassName => "";
 
         public GivenClassSimpleProperty(string name, ExcelPropertyType type)
         {

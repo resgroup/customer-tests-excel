@@ -16,10 +16,18 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             int IntegerProperty { get; }
             float FloatProperty { get; set; }
             string StringProperty { get; set; }
+            // Functions can make sense if you are setting up data by using a class directly,
+            // but do not make much sense if you are using a mock to set up an interface 
+            // (which is the preferred method now)
+            // so these shouldn't be matched.
+            // a function without parameters that returns a value is basically the same 
+            // as a getter, so we should support this, but don't at the moment
             void StringFunction(string parameter);
             void FunctionWithoutParameter();
+            // end
             void FunctionWithTwoParameters(int parameter1, int parameter2);
             double FunctionWithReturnValue(string parameter);
+
             IEnumerable<ITarget> IEnumerableProperty { get; }
             List<ITarget> ListProperty { get; }
             IReadOnlyList<ITarget> IReadOnlyListProperty { get; }
