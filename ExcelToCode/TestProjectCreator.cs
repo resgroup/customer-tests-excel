@@ -11,9 +11,8 @@ namespace CustomerTestsExcel.ExcelToCode
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreator
     {
-        private GivenClassRecorder givenClassRecorder;
-
-        public bool Success { get; private set; }
+        readonly GivenClassRecorder givenClassRecorder;
+        bool success;
 
         public TestProjectCreator()
         {
@@ -30,7 +29,7 @@ namespace CustomerTestsExcel.ExcelToCode
             ITabularLibrary excel,
             ILogger logger)
         {
-            Success = true;
+            success = true;
 
             var projectFilePath = Path.Combine(specificationFolder, specificationProject);
 
@@ -47,7 +46,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             SaveProjectFile(projectFilePath, project);
 
-            return Success ? 0 : 1;
+            return success ? 0 : 1;
         }
 
         IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
@@ -171,13 +170,13 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             // generate test code
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
-            sheetConverter.AddVisitor(givenClassRecorder);
+            //sheetConverter.AddVisitor(givenClassRecorder);
             var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName);
 
             // log any errors
             if (sheetConverter.Errors.Any())
             {
-                Success = false;
+                success = false;
                 sheetConverter.Errors.ToList().ForEach(error => logger.LogError(workBookName, sheet.Name, error));
             }
 
