@@ -40,6 +40,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var simpleProperties = SimpleProperties(type, excelGivenClass);
 
+            var complexProperties = ComplexProperties(type, excelGivenClass);
+
             var listPropertyDeclarations = ListPropertyDeclarations(type, excelGivenClass);
 
             var listPropertyMockSetups = ListPropertyMockSetups(type, excelGivenClass);
@@ -68,6 +70,8 @@ namespace {testNamespace}
         }}
 
 {string.Join(NewLine, simpleProperties)}
+
+{string.Join(NewLine, complexProperties)}
 
 {string.Join(NewLine, listPropertyFunctions)}
     }}
@@ -112,14 +116,14 @@ namespace {testNamespace}
                     || excelPropertyType == ExcelPropertyType.StringNull
                     || excelPropertyType == ExcelPropertyType.TimeSpan
                     )
-                    simpleProperties.Add(PropertySetter(cSharpProperty, excelProperty));
+                    simpleProperties.Add(SimplePropertySetter(cSharpProperty, excelProperty));
 
             }
 
             return simpleProperties;
         }
 
-        string PropertySetter(PropertyInfo propertyInfo, IGivenClassProperty excelGivenProperty)
+        string SimplePropertySetter(PropertyInfo propertyInfo, IGivenClassProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
             var parameterType = propertyInfo.PropertyType.Name;
@@ -129,6 +133,42 @@ namespace {testNamespace}
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({parameterType} {parameterName})
         {{
             valueProperties.Add(GetCurrentMethod(), {parameterName});
+
+            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName});
+
+            return this;
+        }}{NewLine}";
+        }
+
+        List<string> ComplexProperties(Type type, GivenClass excelGivenClass)
+        {
+            var complexProperties = new List<string>();
+            foreach (var cSharpProperty in type.GetProperties())
+            {
+                var excelProperty =
+                    excelGivenClass
+                    .Properties
+                    .FirstOrDefault(p => excelCsharpPropertyMatcher.PropertiesMatch(cSharpProperty, p));
+
+                if (excelProperty?.Type == ExcelPropertyType.Object)
+                    complexProperties.Add(
+                        ComplexPropertySetter(cSharpProperty, excelProperty));
+
+            }
+
+            return complexProperties;
+        }
+
+        string ComplexPropertySetter(PropertyInfo propertyInfo, IGivenClassProperty excelGivenProperty)
+        {
+            var parameterName = CamelCase(excelGivenProperty.Name);
+            var interfacePropertyName = excelGivenProperty.Name;
+            var propertyClassName = $"SpecificationSpecific{ excelGivenProperty.ClassName}";
+
+            return
+$@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({propertyClassName} {parameterName})
+        {{
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
             {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName});
 

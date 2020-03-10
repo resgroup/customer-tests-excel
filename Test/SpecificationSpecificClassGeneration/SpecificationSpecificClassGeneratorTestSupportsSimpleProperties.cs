@@ -20,8 +20,6 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             DateTime DateTimeProperty { get; set; }
         }
 
-        // want a test for a complex property. That is a property that is itself an interface or similar.
-
         [Test]
         public void SupportsSimpleProperties()
         {
