@@ -4,14 +4,21 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Linq;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    // This class looks like it would be better if it wasn't static. There are a lot of variables being passed around that could be made instance variables.
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreator
     {
+        private GivenClassRecorder givenClassRecorder;
+
         public bool Success { get; private set; }
+
+        public TestProjectCreator()
+        {
+            givenClassRecorder = new GivenClassRecorder();
+        }
 
         public int Create(
             string specificationFolder, 
@@ -164,6 +171,7 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             // generate test code
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
+            sheetConverter.AddVisitor(givenClassRecorder);
             var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName);
 
             // log any errors
