@@ -17,12 +17,11 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             int IntegerProperty { get; }
             float FloatProperty { get; set; }
             string StringProperty { get; set; }
+            DateTime DateTimeProperty { get; set; }
         }
 
         // want a test for a complex property. That is a property that is itself an interface or similar.
 
-
-        // add date time property?
         [Test]
         public void SupportsSimpleProperties()
         {
@@ -30,7 +29,8 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                 "Target",
                 new GivenClassSimpleProperty("IntegerProperty", ExcelPropertyType.Number),
                 new GivenClassSimpleProperty("FloatProperty", ExcelPropertyType.Number),
-                new GivenClassSimpleProperty("StringProperty", ExcelPropertyType.String)
+                new GivenClassSimpleProperty("StringProperty", ExcelPropertyType.String),
+                new GivenClassSimpleProperty("DateTimeProperty", ExcelPropertyType.DateTime)
             );
 
             var actual = new SpecificationSpecificClassGenerator(
@@ -85,6 +85,15 @@ namespace SampleTests
             valueProperties.Add(GetCurrentMethod(), stringProperty);
 
             target.Setup(m => m.StringProperty).Returns(stringProperty);
+
+            return this;
+        }
+
+        internal SpecificationSpecificTarget DateTimeProperty_of(DateTime dateTimeProperty)
+        {
+            valueProperties.Add(GetCurrentMethod(), dateTimeProperty);
+
+            target.Setup(m => m.DateTimeProperty).Returns(dateTimeProperty);
 
             return this;
         }
