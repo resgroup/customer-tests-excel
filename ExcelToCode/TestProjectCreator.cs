@@ -168,9 +168,10 @@ namespace CustomerTestsExcel.ExcelToCode
 
         string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, ILogger logger, string projectRootNamespace)
         {
-            // generate test code
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
-            //sheetConverter.AddVisitor(givenClassRecorder);
+            sheetConverter.AddVisitor(givenClassRecorder);
+
+            // generate test code
             var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName);
 
             // log any errors

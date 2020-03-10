@@ -107,7 +107,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // but we could handle this is we wanted to by looking at the stack for
             // the class and adding it again to the top of the stack. I think.
             if (classes.Any(c => c.Name == className))
-                currentClasses.Push(classes.Single(c => c.Name == className));
+                currentClasses.Push(classes.First(c => c.Name == className));
             else
                 currentClasses.Push(new GivenClassMutable(className));
         }
