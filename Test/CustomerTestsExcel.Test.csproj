@@ -80,7 +80,8 @@
     <Compile Include="MissingListOfForList.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpPropertyMatcherTest.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpClassMatcherTest.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificClassGeneratorTest.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificClassGeneratorTestSupportsListProperties.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificClassGeneratorTestSupportsSimpleProperties.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\TableProperties.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ListProperties.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ComplexProperties.cs" />

@@ -1,0 +1,146 @@
+﻿using CustomerTestsExcel.ExcelToCode;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
+{
+    public class SpecificationSpecificClassGeneratorTest : TestBase
+    {
+        interface ITarget
+        {
+            IEnumerable<ITarget> IEnumerableProperty { get; }
+            List<ITarget> ListProperty { get; }
+            IReadOnlyList<ITarget> IReadOnlyListProperty { get; }
+            ICollection<ITarget> ICollectionProperty { get; }
+        }
+
+        [Test]
+        public void SupportsIEnumerableProperties()
+        {
+            var excelGivenClass = ExcelGivenClass(
+                "Target",
+                new GivenClassComplexListProperty("IEnumerableProperty", "Target")
+            );
+
+            var actual = new SpecificationSpecificClassGenerator(
+                new ExcelCsharpPropertyMatcher()
+                ).cSharpCode(
+                    "SampleTests",
+                    new List<string> { "SampleSystemUnderTest.VermeulenNearWakeLength" },
+                    typeof(ITarget),
+                    excelGivenClass
+                );
+
+            var expectedListDeclaration = @"readonly List<SpecificationSpecificTarget> iEnumerablePropertys = new List<SpecificationSpecificTarget>();";
+
+            var expectedMockSetup = @"target.Setup(m => m.IEnumerableProperty).Returns(iEnumerablePropertys.Select(l => l.value).ToList());";
+
+            var expectedListOfSetters =
+            @"internal SpecificationSpecificTarget IEnumerableProperty_of(SpecificationSpecificTarget iEnumerableProperty)
+        {
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), iEnumerableProperty));
+
+            this.iEnumerablePropertys.Add(iEnumerableProperty);
+
+            return this;
+        }";
+
+            var expectedTableOfSetters =
+            @"internal SpecificationSpecificTarget IEnumerableProperty_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificTarget> iEnumerablePropertys)
+        {
+            iEnumerablePropertys.PropertyName = GetCurrentMethod().Name;
+
+            classTableProperties.Add(iEnumerablePropertys);
+
+            foreach (var row in iEnumerablePropertys.Rows)
+                this.iEnumerablePropertys.Add(row.Properties);
+
+            return this;
+        }";
+
+            StringAssert.Contains(expectedListDeclaration, actual);
+            StringAssert.Contains(expectedMockSetup, actual);
+            StringAssert.Contains(expectedListOfSetters, actual);
+            StringAssert.Contains(expectedTableOfSetters, actual);
+            StringAssert.DoesNotContain(
+                "valueProperties.Add(GetCurrentMethod(), iEnumerableProperty)",
+                actual,
+                "'Object' Code is being generated for a 'List' property");
+        }
+
+        [Test]
+        public void SupportsListProperties()
+        {
+            var excelGivenClass = ExcelGivenClass(
+                "Target",
+                new GivenClassComplexListProperty("ListProperty", "Target")
+            );
+
+            var actual = new SpecificationSpecificClassGenerator(
+                new ExcelCsharpPropertyMatcher()
+                ).cSharpCode(
+                    "SampleTests",
+                    new List<string> (),
+                    typeof(ITarget),
+                    excelGivenClass
+                );
+
+            var expectedMockSetup = @"target.Setup(m => m.ListProperty).Returns(listPropertys.Select(l => l.value).ToList());";
+
+            // Everything apart from the mock setup is the same as the IEnumerable properties, so not replicating here
+            StringAssert.Contains(expectedMockSetup, actual);
+        }
+
+        [Test]
+        public void SupportsIReadOnlyListProperties()
+        {
+            var excelGivenClass = ExcelGivenClass(
+                "Target",
+                new GivenClassComplexListProperty("IReadOnlyListProperty", "Target")
+            );
+
+            var actual = new SpecificationSpecificClassGenerator(
+                new ExcelCsharpPropertyMatcher()
+                ).cSharpCode(
+                    "SampleTests",
+                    new List<string> (),
+                    typeof(ITarget),
+                    excelGivenClass
+                );
+
+            var expectedMockSetup = @"target.Setup(m => m.IReadOnlyListProperty).Returns(iReadOnlyListPropertys.Select(l => l.value).ToList());";
+
+            // Everything apart from the mock setup is the same as the IEnumerable properties, so not replicating here
+            StringAssert.Contains(expectedMockSetup, actual);
+        }
+
+        [Test]
+        public void SupportsICollectionProperties()
+        {
+            var excelGivenClass = ExcelGivenClass(
+                "Target",
+                new GivenClassComplexListProperty("ICollectionProperty", "Target")
+            );
+
+            var actual = new SpecificationSpecificClassGenerator(
+                new ExcelCsharpPropertyMatcher()
+                ).cSharpCode(
+                    "SampleTests",
+                    new List<string>(),
+                    typeof(ITarget),
+                    excelGivenClass
+                );
+
+            var expectedMockSetup = @"target.Setup(m => m.ICollectionProperty).Returns(iCollectionPropertys.Select(l => l.value).ToList());";
+
+            // Everything apart from the mock setup is the same as the IEnumerable properties, so not replicating here
+            StringAssert.Contains(expectedMockSetup, actual);
+        }
+    }
+}

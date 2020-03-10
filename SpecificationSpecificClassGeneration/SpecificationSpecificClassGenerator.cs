@@ -1,5 +1,6 @@
 ﻿using CustomerTestsExcel.ExcelToCode;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -162,10 +163,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         {
             var propertyType = propertyInfo.PropertyType;
 
-            if (propertyType.IsGenericType && (propertyType.GetGenericTypeDefinition() == typeof(IList<>)))
-                return ".ToList()";
-
-            if (propertyType.IsGenericType && (propertyType.GetGenericTypeDefinition() == typeof(List<>)))
+            if (propertyType.IsGenericType && (typeof(IEnumerable).IsAssignableFrom(propertyType)))
                 return ".ToList()";
 
             return "";
