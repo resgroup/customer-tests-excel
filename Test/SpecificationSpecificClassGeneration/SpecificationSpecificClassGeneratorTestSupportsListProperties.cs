@@ -32,7 +32,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                 new ExcelCsharpPropertyMatcher()
                 ).cSharpCode(
                     "SampleTests",
-                    new List<string> { "SampleSystemUnderTest.VermeulenNearWakeLength" },
+                    new List<string>(),
                     typeof(ITarget),
                     excelGivenClass
                 );
@@ -86,7 +86,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                 new ExcelCsharpPropertyMatcher()
                 ).cSharpCode(
                     "SampleTests",
-                    new List<string> (),
+                    new List<string>(),
                     typeof(ITarget),
                     excelGivenClass
                 );
@@ -109,7 +109,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                 new ExcelCsharpPropertyMatcher()
                 ).cSharpCode(
                     "SampleTests",
-                    new List<string> (),
+                    new List<string>(),
                     typeof(ITarget),
                     excelGivenClass
                 );

@@ -29,7 +29,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                 new ExcelCsharpPropertyMatcher()
                 ).cSharpCode(
                     "SampleTests",
-                    new List<string> (),
+                    new List<string>(),
                     typeof(ITarget),
                     excelGivenClass
                 );
