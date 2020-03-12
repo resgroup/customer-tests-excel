@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Linq;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using System.Reflection;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
@@ -12,20 +13,26 @@ namespace CustomerTestsExcel.ExcelToCode
     public class TestProjectCreator
     {
         readonly GivenClassRecorder givenClassRecorder;
+        readonly SpecificationSpecificClassGenerator specificationSpecificClassGenerator;
+        readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         bool success;
 
         public TestProjectCreator()
         {
             givenClassRecorder = new GivenClassRecorder();
+            specificationSpecificClassGenerator = new SpecificationSpecificClassGenerator(
+                new ExcelCsharpPropertyMatcher()
+            );
+            excelCsharpClassMatcher = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher());
         }
 
         public int Create(
-            string specificationFolder, 
-            string specificationProject, 
+            string specificationFolder,
+            string specificationProject,
             string excelTestsFolder,
-            string projectRootNamespace, 
-            IEnumerable<string> usings, 
-            string assertionClassPrefix, 
+            string projectRootNamespace,
+            IEnumerable<string> usings,
+            string assertionClassPrefix,
             ITabularLibrary excel,
             ILogger logger)
         {
@@ -40,9 +47,30 @@ namespace CustomerTestsExcel.ExcelToCode
             string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
             foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
             {
-                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None",Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
+                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
                 OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
             }
+
+
+            var assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
+
+            givenClassRecorder.Classes.ToList().ForEach(
+                excelGivenClass =>
+                {
+
+                    var assemblyType = assemblyTypes.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
+
+                    if (assemblyType != null)
+                    {
+                        specificationSpecificClassGenerator.cSharpCode(
+                            projectRootNamespace,
+                            usings.ToList(), // change this to an ienumerable
+                            assemblyType,
+                            excelGivenClass
+                        );
+                    }
+                }
+            );
 
             SaveProjectFile(projectFilePath, project);
 
@@ -110,13 +138,13 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         void OutputWorkbook(
-            string specificationFolder, 
-            string projectRootNamespace, 
-            IEnumerable<string> usings, 
-            string assertionClassPrefix, 
+            string specificationFolder,
+            string projectRootNamespace,
+            IEnumerable<string> usings,
+            string assertionClassPrefix,
             ITabularLibrary excel,
-            ILogger logger, 
-            XElement compileItemGroupNode, 
+            ILogger logger,
+            XElement compileItemGroupNode,
             string excelFileName)
         {
             using (var workbookFile = GetExcelFileStream(excelFileName))

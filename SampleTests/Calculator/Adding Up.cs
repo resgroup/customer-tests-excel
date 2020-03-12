@@ -17,7 +17,6 @@ using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
-using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.Calculator
 {

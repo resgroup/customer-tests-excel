@@ -17,7 +17,6 @@ using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
-using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.NameConversions
 {
@@ -35,13 +34,13 @@ namespace SampleTests.NameConversions
             var underscore = new SpecificationSpecificUnderscore();
             underscore.A_Property_of("Anything");
             {
-                var Table_Property = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();
+                var Table_PropertyRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();
                 {
-                    var table_Property_Row = new SpecificationSpecificA_Table();
-                    table_Property_Row.A_Property_of("Anything");
-                    Table_Property.Add(table_Property_Row);
+                    var table_PropertyRow = new SpecificationSpecificA_Table();
+                    table_PropertyRow.A_Property_of("Anything");
+                    Table_PropertyRow.Add(table_PropertyRow);
                 }
-                underscore.Table_Property_table_of(Table_Property);
+                underscore.Table_Property_table_of(Table_PropertyRow);
             }
             
             {

@@ -17,7 +17,6 @@ using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
-using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.Rerouting
 {
@@ -41,20 +40,20 @@ namespace SampleTests.Rerouting
                 cargo.Origin_of("HKG");
                 cargo.Destination_of("DAL");
                 {
-                    var ItineraryLeg = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
+                    var ItineraryLegRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
                     {
-                        var itineraryLeg_Row = new SpecificationSpecificItineraryLeg();
-                        itineraryLeg_Row.Origin_of("HKG");
-                        itineraryLeg_Row.Destination_of("LGB");
-                        ItineraryLeg.Add(itineraryLeg_Row);
+                        var itineraryLegRow = new SpecificationSpecificItineraryLeg();
+                        itineraryLegRow.Origin_of("HKG");
+                        itineraryLegRow.Destination_of("LGB");
+                        ItineraryLegRow.Add(itineraryLegRow);
                     }
                     {
-                        var itineraryLeg_Row = new SpecificationSpecificItineraryLeg();
-                        itineraryLeg_Row.Origin_of("LGB");
-                        itineraryLeg_Row.Destination_of("DAL");
-                        ItineraryLeg.Add(itineraryLeg_Row);
+                        var itineraryLegRow = new SpecificationSpecificItineraryLeg();
+                        itineraryLegRow.Origin_of("LGB");
+                        itineraryLegRow.Destination_of("DAL");
+                        ItineraryLegRow.Add(itineraryLegRow);
                     }
-                    cargo.ItineraryLeg_table_of(ItineraryLeg);
+                    cargo.ItineraryLeg_table_of(ItineraryLegRow);
                 }
                 routingService.Cargo_of(cargo);
             }
