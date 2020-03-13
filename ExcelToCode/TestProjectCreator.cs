@@ -32,6 +32,7 @@ namespace CustomerTestsExcel.ExcelToCode
             string excelTestsFolder,
             string projectRootNamespace,
             IEnumerable<string> usings,
+            IEnumerable<string> assembliesUnderTest,
             string assertionClassPrefix,
             ITabularLibrary excel,
             ILogger logger)
@@ -51,8 +52,12 @@ namespace CustomerTestsExcel.ExcelToCode
                 OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
             }
 
+            var assemblyTypes = new List<Type>();
 
-            var assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var assemblyFilename in assembliesUnderTest)
+            {
+                assemblyTypes.AddRange(Assembly.Load(assemblyFilename).GetTypes());
+            }
 
             givenClassRecorder.Classes.ToList().ForEach(
                 excelGivenClass =>

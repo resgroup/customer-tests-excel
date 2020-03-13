@@ -152,14 +152,14 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
 
                 if (excelProperty?.Type == ExcelPropertyType.Object)
                     complexProperties.Add(
-                        ComplexPropertySetter(cSharpProperty, excelProperty));
+                        ComplexPropertySetter(excelProperty));
 
             }
 
             return complexProperties;
         }
 
-        string ComplexPropertySetter(PropertyInfo propertyInfo, IGivenClassProperty excelGivenProperty)
+        string ComplexPropertySetter(IGivenClassProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
             var interfacePropertyName = excelGivenProperty.Name;

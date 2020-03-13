@@ -9,7 +9,7 @@ namespace GenerateCodeFromExcelTest
 {
     // To work with the SampleTests project included in this solution, use the following command line parameters
     // /folder "[path to]\SampleTests" /project SampleTests.csproj /namespace SampleTests /usings SampleSystemUnderTest /assertionClassPrefix I
-    class Program
+    static class Program
     {
         static int Main(string[] args)
         {
@@ -31,7 +31,18 @@ namespace GenerateCodeFromExcelTest
 
                 var usings = GetSetting(args, "usings").Split(' ').ToList();
 
-                new TestProjectCreator().Create(folder, specificationProject, "ExcelTests", rootNamespace, usings, assertionClassPrefix, new ExcelTabularLibrary(), new ConsoleLogger());
+                var assembliesUnderTest = GetSetting(args, "assembliesUnderTest").Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+
+                new TestProjectCreator().Create(
+                    folder,
+                    specificationProject,
+                    "ExcelTests",
+                    rootNamespace,
+                    usings,
+                    assembliesUnderTest,
+                    assertionClassPrefix,
+                    new ExcelTabularLibrary(),
+                    new ConsoleLogger());
 
                 return 0;
             }

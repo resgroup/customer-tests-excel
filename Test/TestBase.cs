@@ -16,6 +16,7 @@ namespace CustomerTestsExcel.Test
         protected const string ANY_ROOT_NAMESPACE = "asdkasdj";
         protected const string ANY_WORKBOOKNAME = "asdkasdj";
         protected readonly IEnumerable<string> NO_USINGS = new List<String>();
+        protected readonly IEnumerable<string> NO_ASSEMBLIES_UNDER_TEST = new List<String>();
 
         protected TestBase()
         {
@@ -70,6 +71,7 @@ namespace CustomerTestsExcel.Test
                 "DummyProject.csproj",
                 "",
                 ANY_ROOT_NAMESPACE,
+                NO_ASSEMBLIES_UNDER_TEST,
                 NO_USINGS,
                 ANY_STRING,
                 new ExcelTabularLibrary(),
