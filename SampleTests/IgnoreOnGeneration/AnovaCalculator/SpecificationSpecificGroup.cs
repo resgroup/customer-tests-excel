@@ -10,15 +10,15 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 {
     internal class SpecificationSpecificGroup : ReportsSpecificationSetup
     {
-        readonly Mock<IAnovaGroup> anovaGroup;
+        readonly Mock<IGroup> anovaGroup;
         readonly List<SpecificationSpecificValue> values = new List<SpecificationSpecificValue>();
 
-        public IAnovaGroup AnovaGroup =>
+        public IGroup AnovaGroup =>
                 anovaGroup.Object;
 
         public SpecificationSpecificGroup()
         {
-            anovaGroup = new Mock<IAnovaGroup>();
+            anovaGroup = new Mock<IGroup>();
             anovaGroup.Setup(m => m.Values).Returns(values.Select(l => l.value));
         }
 

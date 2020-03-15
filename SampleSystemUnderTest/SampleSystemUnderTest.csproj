@@ -49,7 +49,7 @@
     <Compile Include="AnovaCalculator\AnovaGroupResult.cs" />
     <Compile Include="AnovaCalculator\AnovaResult.cs" />
     <Compile Include="AnovaCalculator\AnovaGroupCalculator.cs" />
-    <Compile Include="AnovaCalculator\IAnovaGroup.cs" />
+    <Compile Include="AnovaCalculator\IGroup.cs" />
     <Compile Include="AnovaCalculator\IAnovaGroupResult.cs" />
     <Compile Include="AnovaCalculator\IAnovaResult.cs" />
     <Compile Include="Calculator\Calculator.cs" />
