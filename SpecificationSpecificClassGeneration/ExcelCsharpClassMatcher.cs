@@ -14,7 +14,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         }
 
         public bool Matches(Type type, GivenClass simpleExcelClass) =>
-            ClassNameMatcher.NamesMatch(type.Name, simpleExcelClass.Name)
+            type.IsInterface
+            && ClassNameMatcher.NamesMatch(type.Name, simpleExcelClass.Name)
             && PropertiesOrFunctionsMatch(type, simpleExcelClass);
 
 
