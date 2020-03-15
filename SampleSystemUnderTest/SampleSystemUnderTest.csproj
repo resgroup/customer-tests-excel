@@ -57,8 +57,8 @@
     <Compile Include="Calculator\ICalculation.cs" />
     <Compile Include="Routing\Cargo.cs" />
     <Compile Include="Routing\ICargo.cs" />
-    <Compile Include="Routing\ILeg.cs" />
-    <Compile Include="Routing\Leg.cs" />
+    <Compile Include="Routing\IItineraryLeg.cs" />
+    <Compile Include="Routing\ItineraryLeg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\RoutingService.cs" />
     <Compile Include="VermeulenNearWakeLength\ITurbineGeometry.cs" />

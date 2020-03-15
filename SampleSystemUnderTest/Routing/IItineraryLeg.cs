@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SampleSystemUnderTest.Routing
 {
-    public interface ILeg
+    public interface IItineraryLeg
     {
         string Origin { get; }
         string Destination { get; }
