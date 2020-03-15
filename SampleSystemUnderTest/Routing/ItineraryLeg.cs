@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SampleSystemUnderTest.Routing
 {
-    public class Leg : ILeg
+    public class ItineraryLeg : IItineraryLeg
     {
-        public Leg(string origin, string destination)
+        public ItineraryLeg(string origin, string destination)
         {
             Origin = origin;
             Destination = destination;

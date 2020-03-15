@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +14,7 @@ namespace SampleSystemUnderTest.Routing
 
         public RoutingService(string rerouteFrom , string rerouteTo, ICargo cargo)
         {
-            Contract.Requires(cargo != null);
-
-            Cargo = cargo;
+            Cargo = cargo ?? throw new ArgumentNullException(nameof(cargo));
             RerouteFrom = rerouteFrom;
             RerouteTo = rerouteTo;
         }
@@ -25,7 +22,7 @@ namespace SampleSystemUnderTest.Routing
         public ICargo Reroute()
         {
             // this code doesn't capture all situations, but it gives you an idea.
-            return new Cargo(Reroute(Cargo.Origin), Reroute(Cargo.Destination), Cargo.ItineraryLegs.Select(l => new Leg(Reroute(l.Origin), Reroute(l.Destination))));
+            return new Cargo(Reroute(Cargo.Origin), Reroute(Cargo.Destination), Cargo.ItineraryLegs.Select(l => new ItineraryLeg(Reroute(l.Origin), Reroute(l.Destination))));
         }
 
         private string Reroute(string location)

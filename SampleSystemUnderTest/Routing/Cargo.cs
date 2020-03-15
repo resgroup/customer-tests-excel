@@ -10,7 +10,7 @@ namespace SampleSystemUnderTest.Routing
     public class Cargo : ICargo
     {
 
-        public Cargo(string origin, string destination, IEnumerable<ILeg> itineraryLegs)
+        public Cargo(string origin, string destination, IEnumerable<IItineraryLeg> itineraryLegs)
         {
             Contract.Requires(itineraryLegs != null);
 
@@ -21,6 +21,6 @@ namespace SampleSystemUnderTest.Routing
 
         public string Destination { get; }
         public string Origin { get; }
-        public IEnumerable<ILeg> ItineraryLegs { get; }
+        public IEnumerable<IItineraryLeg> ItineraryLegs { get; }
     }
 }

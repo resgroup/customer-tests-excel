@@ -13,15 +13,15 @@ namespace SampleTests.IgnoreOnGeneration.Routing
 {
     public class SpecificationSpecificItineraryLeg : ReportsSpecificationSetup
     {
-        readonly Mock<ILeg> _leg;
+        readonly Mock<IItineraryLeg> _leg;
 
         public SpecificationSpecificItineraryLeg()
             : base()
         {
-            _leg = new Mock<ILeg>();
+            _leg = new Mock<IItineraryLeg>();
         }
 
-        public ILeg Leg => _leg.Object;
+        public IItineraryLeg Leg => _leg.Object;
 
         public SpecificationSpecificItineraryLeg Origin_of(string origin)
         {
