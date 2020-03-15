@@ -32,6 +32,7 @@ namespace CustomerTestsExcel
         string GivenPropertyNameCodeNameToExcelName(string cSharpPropertyName);
         string GivenPropertyNameExcelNameToCodeName(string excelPropertyName);
 
+        string RemoveExcelTableOfPostfix(string excelPropertyName);
         string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName);
         string GivenTablePropertyNameExcelNameToCodeName(string excelPropertyName);
         string GivenTablePropertyNameExcelNameToCodeVariableName(string excelPropertyName);

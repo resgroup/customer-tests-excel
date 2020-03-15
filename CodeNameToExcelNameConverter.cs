@@ -139,7 +139,7 @@ namespace CustomerTestsExcel
         {
             string withoutIndex = RemoveArrayIndex(excelPropertyName);
 
-            string withoutTableOf = RemoveTableOfPostfix(withoutIndex);
+            string withoutTableOf = RemoveExcelTableOfPostfix(withoutIndex);
 
             return withoutTableOf.Trim().Replace(" ", "_") + "_table_of";
         }
@@ -152,7 +152,7 @@ namespace CustomerTestsExcel
         }
 
         // Change "Calibrations table of" to "Calibrations"
-        string RemoveTableOfPostfix(string excelPropertyName) =>
+        public string RemoveExcelTableOfPostfix(string excelPropertyName) =>
             excelPropertyName.Substring(0, excelPropertyName.Length - 9);
 
         // the property names (not values) of the "Given" part of the test
