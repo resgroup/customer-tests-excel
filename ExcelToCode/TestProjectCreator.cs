@@ -67,11 +67,27 @@ namespace CustomerTestsExcel.ExcelToCode
 
                     if (assemblyType != null)
                     {
-                        specificationSpecificClassGenerator.cSharpCode(
+                        var code = specificationSpecificClassGenerator.cSharpCode(
                             projectRootNamespace,
                             usings.ToList(), // change this to an ienumerable
                             assemblyType,
                             excelGivenClass
+                        );
+
+                        var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name + ".cs");
+                        var outputPath = Path.Combine(specificationFolder, projectRelativePath);
+                        Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+
+                        File.WriteAllText(outputPath, code);
+
+                        compileItemGroupNode.Add(
+                            new XElement(
+                                XName.Get(
+                                    "Compile",
+                                    compileItemGroupNode.Name.Namespace.NamespaceName
+                                    ),
+                            new XAttribute("Include", projectRelativePath)
+                            )
                         );
                     }
                 }

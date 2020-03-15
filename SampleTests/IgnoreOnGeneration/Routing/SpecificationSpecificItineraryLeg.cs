@@ -21,7 +21,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
             _leg = new Mock<IItineraryLeg>();
         }
 
-        public IItineraryLeg Leg => _leg.Object;
+        public IItineraryLeg ItineraryLeg => _leg.Object;
 
         public SpecificationSpecificItineraryLeg Origin_of(string origin)
         {

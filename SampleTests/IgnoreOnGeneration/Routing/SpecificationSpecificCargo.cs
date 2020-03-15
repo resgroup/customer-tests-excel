@@ -19,7 +19,7 @@ namespace SampleTests.IgnoreOnGeneration.Routing
             : base()
         {
             _cargo = new Mock<ICargo>();
-            _cargo.Setup(m => m.ItineraryLegs).Returns(_legs.Select(l => l.Leg));
+            _cargo.Setup(m => m.ItineraryLegs).Returns(_legs.Select(l => l.ItineraryLeg));
         }
 
         public ICargo Cargo => _cargo.Object;
