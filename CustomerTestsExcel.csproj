@@ -69,6 +69,7 @@
     <Compile Include="SpecificationSpecificClassGeneration\GivenClass.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexListProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexProperty.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\GivenClassMutable.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\IGivenClassProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassRecorder.cs" />
     <Compile Include="ExcelToCode\GivenListProperty.cs" />

@@ -341,7 +341,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 v =>
                     v.VisitGivenSimpleProperty(
                         new GivenSimpleProperty(
-                            excelGivenLeft,
+                            converter.RemoveExcelOfPostfix(excelGivenLeft),
                             converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
                             converter.ExcelPropertyTypeFromCellValue(excelGivenRight))));
         }

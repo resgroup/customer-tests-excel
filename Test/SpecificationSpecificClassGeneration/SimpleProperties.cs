@@ -27,17 +27,17 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 var rootClass = givenClassRecorder.Classes.First();
                 // probably want the name with and without the "_of". the sut will have it without the _of, but the specification specific class will have it with the of
                 // might want to think about functions as well, but this will probably do for now.
-                AssertContains(rootClass.Properties, "Null of", ExcelPropertyType.Null);
-                AssertContains(rootClass.Properties, "StringNull of", ExcelPropertyType.StringNull);
-                AssertContains(rootClass.Properties, "DateTime of", ExcelPropertyType.DateTime);
-                AssertContains(rootClass.Properties, "TimeSpan of", ExcelPropertyType.TimeSpan);
-                AssertContains(rootClass.Properties, "Enum of", ExcelPropertyType.Enum);
-                AssertContains(rootClass.Properties, "Number of", ExcelPropertyType.Number);
-                AssertContains(rootClass.Properties, "Decimal of", ExcelPropertyType.Decimal);
-                AssertContains(rootClass.Properties, "False of", ExcelPropertyType.Boolean);
-                AssertContains(rootClass.Properties, "True of", ExcelPropertyType.Boolean);
-                AssertContains(rootClass.Properties, "String of", ExcelPropertyType.String);
-                AssertContains(rootClass.Properties, "QuotedString of", ExcelPropertyType.String);
+                AssertContains(rootClass.Properties, "Null", ExcelPropertyType.Null);
+                AssertContains(rootClass.Properties, "StringNull", ExcelPropertyType.StringNull);
+                AssertContains(rootClass.Properties, "DateTime", ExcelPropertyType.DateTime);
+                AssertContains(rootClass.Properties, "TimeSpan", ExcelPropertyType.TimeSpan);
+                AssertContains(rootClass.Properties, "Enum", ExcelPropertyType.Enum);
+                AssertContains(rootClass.Properties, "Number", ExcelPropertyType.Number);
+                AssertContains(rootClass.Properties, "Decimal", ExcelPropertyType.Decimal);
+                AssertContains(rootClass.Properties, "False", ExcelPropertyType.Boolean);
+                AssertContains(rootClass.Properties, "True", ExcelPropertyType.Boolean);
+                AssertContains(rootClass.Properties, "String", ExcelPropertyType.String);
+                AssertContains(rootClass.Properties, "QuotedString", ExcelPropertyType.String);
             }
         }
 

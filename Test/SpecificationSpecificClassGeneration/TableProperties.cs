@@ -35,7 +35,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     new GivenClass("TableClass",
                     new List<IGivenClassProperty> {
                         new GivenClassComplexProperty("ComplexProperty of", "ComplexClass"),
-                        new GivenClassSimpleProperty("SimpleProperty of", ExcelPropertyType.String)
+                        new GivenClassSimpleProperty("SimpleProperty", ExcelPropertyType.String)
                     })
                 );
 
@@ -43,8 +43,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("ComplexClass",
                     new List<IGivenClassProperty> {
-                        new GivenClassSimpleProperty("ComplexProperty1 of", ExcelPropertyType.String),
-                        new GivenClassSimpleProperty("ComplexProperty2 of", ExcelPropertyType.String)
+                        new GivenClassSimpleProperty("ComplexProperty1", ExcelPropertyType.String),
+                        new GivenClassSimpleProperty("ComplexProperty2", ExcelPropertyType.String)
                     })
                 );
             }

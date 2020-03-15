@@ -55,6 +55,7 @@ namespace CustomerTestsExcel
         string AssertionSubPropertyCodeClassNameToExcelName(string cSharpAssertClassName);
         string AssertionSubPropertyExcelNameToCodeClassName(string excelAssertClassName);
 
+        string RemoveExcelOfPostfix(string excelPropertyName);
         object PropertyValueCodeToExcel(string csharpNameNamespace, object cSharpPropertyValue);
         string PropertyValueExcelToCode(string excelPropertyName, object excelPropertyValue);
         ExcelPropertyType ExcelPropertyTypeFromCellValue(object excelPropertyValue);

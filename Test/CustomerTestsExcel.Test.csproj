@@ -69,6 +69,7 @@
     <Compile Include="ExcelToCodeVisitor\GivenTablePropertyVisitRecorder.cs" />
     <Compile Include="ExcelToCodeVisitor\GivenSimplePropertyVisitRecorder.cs" />
     <Compile Include="ExcelToCodeVisitor\GivenListPropertyVisitRecorder.cs" />
+    <Compile Include="ExcelToCodeVisitor\DuplicateGivenSimplePropertes.cs" />
     <Compile Include="IdentityCodeNameToExcelNameConverter.cs" />
     <Compile Include="ExcelToCodeVisitor\VisitGivenComplexPropertes.cs" />
     <Compile Include="ExcelToCodeVisitor\VisitGivenTablePropertes.cs" />

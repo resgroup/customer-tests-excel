@@ -7,17 +7,6 @@ using NUnit.Framework;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
-    public class GivenClassMutable
-    {
-        public string Name { get; set; }
-        public List<IGivenClassProperty> Properties { get; set; } = new List<IGivenClassProperty>();
-
-        public GivenClassMutable(string name)
-        {
-            Name = name;
-        }
-    }
-
     public class GivenClassRecorder : IExcelToCodeVisitor
     {
         readonly List<GivenClassMutable> classes = new List<GivenClassMutable>();
@@ -95,8 +84,10 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         void AddPropertyToCurrentClass(IGivenClassProperty givenClassProperty)
         {
-            if (currentClasses.Any())
-                currentClasses.Peek().Properties.Add(givenClassProperty);
+            if (currentClasses.Any() == false)
+                return;
+
+            currentClasses.Peek().AddProperty(givenClassProperty);
         }
 
         void CreateOrActivateCurrentClass(string className)

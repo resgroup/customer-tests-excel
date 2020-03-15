@@ -43,7 +43,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("Child1ClassName",
                     new List<IGivenClassProperty> {
-                        new GivenClassSimpleProperty("Property of", ExcelPropertyType.String)
+                        new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
                     })
                 );
 
@@ -51,7 +51,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("Root2ClassName",
                     new List<IGivenClassProperty> {
-                        new GivenClassSimpleProperty("Property of", ExcelPropertyType.String)
+                        new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
                     })
                 );
             }

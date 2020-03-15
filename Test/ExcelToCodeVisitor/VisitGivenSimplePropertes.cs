@@ -20,18 +20,18 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             {
                 sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-                AssertContains(visitRecorder, "Null of", "null", ExcelPropertyType.Null);
-                AssertContains(visitRecorder, "Null of", "null", ExcelPropertyType.Null);
-                AssertContains(visitRecorder, "StringNull of", "null", ExcelPropertyType.StringNull);
-                AssertContains(visitRecorder, "DateTime of", "DateTime.Parse(\"2019-01-01T00:00:00\")", ExcelPropertyType.DateTime);
-                AssertContains(visitRecorder, "TimeSpan of", "TimeSpan.Parse(\"01:15:00\")", ExcelPropertyType.TimeSpan);
-                AssertContains(visitRecorder, "Enum of", "EnumType.EnumValue", ExcelPropertyType.Enum);
-                AssertContains(visitRecorder, "Number of", "1", ExcelPropertyType.Number);
-                AssertContains(visitRecorder, "Decimal of", "1m", ExcelPropertyType.Decimal);
-                AssertContains(visitRecorder, "False of", "false", ExcelPropertyType.Boolean);
-                AssertContains(visitRecorder, "True of", "true", ExcelPropertyType.Boolean);
-                AssertContains(visitRecorder, "String of", "\"hello\"", ExcelPropertyType.String);
-                AssertContains(visitRecorder, "QuotedString of", "\"1\"", ExcelPropertyType.String);
+                AssertContains(visitRecorder, "Null", "null", ExcelPropertyType.Null);
+                AssertContains(visitRecorder, "Null", "null", ExcelPropertyType.Null);
+                AssertContains(visitRecorder, "StringNull", "null", ExcelPropertyType.StringNull);
+                AssertContains(visitRecorder, "DateTime", "DateTime.Parse(\"2019-01-01T00:00:00\")", ExcelPropertyType.DateTime);
+                AssertContains(visitRecorder, "TimeSpan", "TimeSpan.Parse(\"01:15:00\")", ExcelPropertyType.TimeSpan);
+                AssertContains(visitRecorder, "Enum", "EnumType.EnumValue", ExcelPropertyType.Enum);
+                AssertContains(visitRecorder, "Number", "1", ExcelPropertyType.Number);
+                AssertContains(visitRecorder, "Decimal", "1m", ExcelPropertyType.Decimal);
+                AssertContains(visitRecorder, "False", "false", ExcelPropertyType.Boolean);
+                AssertContains(visitRecorder, "True", "true", ExcelPropertyType.Boolean);
+                AssertContains(visitRecorder, "String", "\"hello\"", ExcelPropertyType.String);
+                AssertContains(visitRecorder, "QuotedString", "\"1\"", ExcelPropertyType.String);
             }
         }
 

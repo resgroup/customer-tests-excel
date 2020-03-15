@@ -95,7 +95,7 @@ namespace CustomerTestsExcel
             cSharpPropertyName.EndsWith("_of");
 
         // Change "Calibrations of" or "Calibrations_of" to "Calibrations"
-        string RemoveExcelOfPostfix(string excelPropertyName)
+        public string RemoveExcelOfPostfix(string excelPropertyName)
         {
             const int ofPostfixLength = 3;
 
