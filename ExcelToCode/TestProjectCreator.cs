@@ -74,16 +74,22 @@ namespace CustomerTestsExcel.ExcelToCode
                             excelGivenClass
                         );
 
-                        var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name + ".cs");
+                        var customClassAlreadyExists = (project.Descendants().Any(e => e.Name == "Compile" && e.Attributes().Any(a => a.Name == "Include" && a.Value.Contains($"SpecificationSpecific{excelGivenClass.Name}.cs"))));
+
+                        var fileExtension = (customClassAlreadyExists) ? ".cs" : ".cs.txt";
+
+                        var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name + fileExtension);
                         var outputPath = Path.Combine(specificationFolder, projectRelativePath);
                         Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
 
                         File.WriteAllText(outputPath, code);
 
+                        var nodeType = (customClassAlreadyExists) ? "None" : "Compile";
+
                         compileItemGroupNode.Add(
                             new XElement(
                                 XName.Get(
-                                    "Compile",
+                                    nodeType,
                                     compileItemGroupNode.Name.Namespace.NamespaceName
                                     ),
                             new XAttribute("Include", projectRelativePath)
