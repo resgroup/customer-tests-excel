@@ -56,7 +56,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             foreach (var assemblyFilename in assembliesUnderTest)
             {
-                assemblyTypes.AddRange(Assembly.Load(assemblyFilename).GetTypes());
+                assemblyTypes.AddRange(Assembly.LoadFile(assemblyFilename).GetTypes());
             }
 
             givenClassRecorder.Classes.ToList().ForEach(

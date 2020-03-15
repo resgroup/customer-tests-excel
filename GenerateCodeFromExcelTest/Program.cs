@@ -8,7 +8,8 @@ using System.Text;
 namespace GenerateCodeFromExcelTest
 {
     // To work with the SampleTests project included in this solution, use the following command line parameters
-    // /folder "[path to]\SampleTests" /project SampleTests.csproj /namespace SampleTests /usings SampleSystemUnderTest /assertionClassPrefix I
+    // The path to the assembly must be absolute, so you will probably need to be change it
+    // /folder "..\..\SampleTests" /project SampleTests.csproj /namespace SampleTests /usings "SampleSystemUnderTest SampleTests.IgnoreOnGeneration.AnovaCalculator SampleSystemUnderTest.AnovaCalculator SampleTests.IgnoreOnGeneration.Routing SampleSystemUnderTest.Routing SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length SampleSystemUnderTest.VermeulenNearWakeLength SampleTests.IgnoreOnGeneration.Calculator SampleSystemUnderTest.Calculator SampleTests.IgnoreOnGeneration.NameConversions" /assertionClassPrefix "I" /assembliesUnderTest "C:\Users\ceddl\Documents\GITHub\customer-tests-excel\Builtdlls\Debug\SampleSystemUnderTest.dll"
     static class Program
     {
         static int Main(string[] args)
