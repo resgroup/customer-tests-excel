@@ -14,9 +14,9 @@ namespace SampleSystemUnderTest.AnovaCalculator
     public class AnovaCalculator
     {
         readonly string variableDescription;
-        readonly IEnumerable<IAnovaGroup> groups;
+        readonly IEnumerable<IGroup> groups;
 
-        public AnovaCalculator(string variableDescription, IEnumerable<IAnovaGroup> groups)
+        public AnovaCalculator(string variableDescription, IEnumerable<IGroup> groups)
         {
             this.groups = groups ?? throw new ArgumentNullException(nameof(groups));
             this.variableDescription = variableDescription;
@@ -55,7 +55,7 @@ namespace SampleSystemUnderTest.AnovaCalculator
             return anovaResult;
         }
 
-        double SquaresWithin(IAnovaGroup group, double groupMean) =>
+        double SquaresWithin(IGroup group, double groupMean) =>
             group.Values.Sum(value => Pow(value - groupMean, 2));
     }
 }

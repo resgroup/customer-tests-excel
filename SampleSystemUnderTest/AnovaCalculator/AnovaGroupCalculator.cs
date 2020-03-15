@@ -7,9 +7,9 @@ namespace SampleSystemUnderTest.AnovaCalculator
 {
     public class AnovaGroupCalculator
     {
-        readonly IAnovaGroup group;
+        readonly IGroup group;
 
-        public AnovaGroupCalculator(IAnovaGroup group)
+        public AnovaGroupCalculator(IGroup group)
         {
             this.group = group;
         }

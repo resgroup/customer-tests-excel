@@ -2,7 +2,7 @@
 
 namespace SampleSystemUnderTest.AnovaCalculator
 {
-    public interface IAnovaGroup
+    public interface IGroup
     {
         string Name { get; }
         IEnumerable<float> Values { get; }
