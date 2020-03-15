@@ -71,6 +71,7 @@ namespace CustomerTestsExcel.Test
         public object PropertyValueCodeToExcel(string csharpNameNamespace, object cSharpPropertyValue) => cSharpPropertyValue;
         public string PropertyValueExcelToCode(string excelPropertyName, object excelPropertyValue) => excelPropertyValue.ToString();
         public string RemoveExcelOfPostfix(string excelPropertyName) => excelPropertyName;
+        public string RemoveExcelTableOfPostfix(string excelPropertyName) => excelPropertyName;
     }
 }
 

@@ -60,8 +60,8 @@
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificUnderscore.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidator.cs" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingService.cs" />
-    <Content Include="IgnoreOnGeneration\Routing\SpecificationSpecificItineraryLeg.cs.txt" />
-    <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificCargo.cs" />
+    <Content Include="IgnoreOnGeneration\Routing\SpecificationSpecificItineraryLeg.txt" />
+    <Content Include="IgnoreOnGeneration\Routing\SpecificationSpecificCargo.txt" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthCalculator.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthInput.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificTurbineGeometry.cs" />
@@ -73,7 +73,8 @@
     <Compile Include="NameConversions\Underscores.cs" />
     <Compile Include="Rerouting\Reroute To Sea.cs" />
     <Compile Include="Vermeulen Near Wake Length\VermeulenNearWakeLength.cs" />
-    <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs.txt" />
+    <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
+    <Compile Include="GeneratedSpecificationSpecific\Cargo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

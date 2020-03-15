@@ -86,7 +86,9 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                 {
                     // this is required for "String". Using "string" would be
                     // better, but String is what the type system gives us
-                    "System", 
+                    "System",
+                    "System.Collections.Generic",
+                    "System.Linq",
                     "static System.Reflection.MethodBase",
                     "Moq",
                     "CustomerTestsExcel"
@@ -198,8 +200,9 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             var interfacePropertyName = listProperty.ExcelProperty.Name;
             var dotToSpecificType = DotToSpecificType(listProperty.CsharpProperty);
             var listPropertyName = ListPropertyName(listProperty.ExcelProperty);
+            var interfaceUnderTestPropertyName = listProperty.ExcelProperty.ClassName;
 
-            return $"            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({listPropertyName}.Select(l => l.value){dotToSpecificType});";
+            return $"            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({listPropertyName}.Select(l => l.{interfaceUnderTestPropertyName}){dotToSpecificType});";
         }
 
         string DotToSpecificType(PropertyInfo propertyInfo)

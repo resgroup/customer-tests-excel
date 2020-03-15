@@ -26,7 +26,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("ThingToSetup",
                     new List<IGivenClassProperty> {
-                        new GivenClassComplexListProperty("TableProperty table of", "TableClass"),
+                        new GivenClassComplexListProperty("TableProperty", "TableClass"),
                     })
                 );
 
