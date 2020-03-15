@@ -41,14 +41,15 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                 );
 
             var expected =
-@"using static System.Reflection.MethodBase;
+@"using System;
+using static System.Reflection.MethodBase;
 using Moq;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 
-namespace SampleTests
+namespace SampleTests.GeneratedSpecificationSpecific
 {
-    internal class SpecificationSpecificTarget : ReportsSpecificationSetup
+    public class SpecificationSpecificTarget : ReportsSpecificationSetup
     {
         readonly Mock<ITarget> target;
 

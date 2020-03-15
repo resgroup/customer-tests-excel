@@ -51,9 +51,9 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             return
 $@"{usingStatements}
 
-namespace {testNamespace}
+namespace {testNamespace}.GeneratedSpecificationSpecific
 {{
-    internal class {SpecificationSpecificClassName} : ReportsSpecificationSetup
+    public class {SpecificationSpecificClassName} : ReportsSpecificationSetup
     {{
         readonly Mock<{MockInterfaceName}> {MockVariableName};
 
@@ -84,6 +84,9 @@ namespace {testNamespace}
             var allUsings =
                 new List<String>
                 {
+                    // this is required for "String". Using "string" would be
+                    // better, but String is what the type system gives us
+                    "System", 
                     "static System.Reflection.MethodBase",
                     "Moq",
                     "CustomerTestsExcel"
