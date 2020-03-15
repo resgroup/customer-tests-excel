@@ -173,7 +173,7 @@ namespace CustomerTestsExcel
         {
             var className = properties.GetType().Name;
             var nameSpace = properties.GetType().Namespace;
-            if (nameSpace != typeof(T).Namespace)
+            if (!nameSpace.StartsWith(typeof(T).Namespace))
                 className = nameSpace + "." + className;
             return className;
         }
