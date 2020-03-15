@@ -7,6 +7,7 @@ using CustomerTestsExcel;
 using CustomerTestsExcel.Assertions;
 using System.Linq.Expressions;
 using SampleTests;
+using SampleTests.GeneratedSpecificationSpecific;
 
 using SampleSystemUnderTest;
 using SampleTests.IgnoreOnGeneration.AnovaCalculator;

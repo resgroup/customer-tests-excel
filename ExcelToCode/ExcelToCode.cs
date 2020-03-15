@@ -140,6 +140,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("using CustomerTestsExcel.Assertions;");
             Output("using System.Linq.Expressions;");
             Output($"using {projectRootNamespace};");
+            Output($"using {projectRootNamespace}.GeneratedSpecificationSpecific;");
             OutputBlankLine();
             foreach (var usingNamespace in usings)
                 Output($"using {usingNamespace};");

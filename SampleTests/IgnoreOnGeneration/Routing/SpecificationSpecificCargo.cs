@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SampleSystemUnderTest.Routing;
+using SampleTests.GeneratedSpecificationSpecific;
 
 namespace SampleTests.IgnoreOnGeneration.Routing
 {

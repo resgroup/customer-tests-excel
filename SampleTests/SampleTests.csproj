@@ -60,7 +60,7 @@
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificUnderscore.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidator.cs" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingService.cs" />
-    <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificItineraryLeg.cs" />
+    <Content Include="IgnoreOnGeneration\Routing\SpecificationSpecificItineraryLeg.cs.txt" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificCargo.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthCalculator.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthInput.cs" />
