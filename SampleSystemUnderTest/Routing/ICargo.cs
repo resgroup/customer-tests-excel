@@ -10,6 +10,6 @@ namespace SampleSystemUnderTest.Routing
     {
         string Origin { get; }
         string Destination { get; }
-        IEnumerable<IItineraryLeg> ItineraryLegs { get; }
+        IEnumerable<IItineraryLeg> ItineraryLeg { get; }
     }
 }

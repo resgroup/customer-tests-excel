@@ -16,11 +16,11 @@ namespace SampleSystemUnderTest.Routing
 
             Origin = origin;
             Destination = destination;
-            ItineraryLegs = itineraryLegs;
+            ItineraryLeg = itineraryLegs;
         }
 
         public string Destination { get; }
         public string Origin { get; }
-        public IEnumerable<IItineraryLeg> ItineraryLegs { get; }
+        public IEnumerable<IItineraryLeg> ItineraryLeg { get; }
     }
 }

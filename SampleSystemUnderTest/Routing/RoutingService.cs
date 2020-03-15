@@ -22,7 +22,7 @@ namespace SampleSystemUnderTest.Routing
         public ICargo Reroute()
         {
             // this code doesn't capture all situations, but it gives you an idea.
-            return new Cargo(Reroute(Cargo.Origin), Reroute(Cargo.Destination), Cargo.ItineraryLegs.Select(l => new ItineraryLeg(Reroute(l.Origin), Reroute(l.Destination))));
+            return new Cargo(Reroute(Cargo.Origin), Reroute(Cargo.Destination), Cargo.ItineraryLeg.Select(l => new ItineraryLeg(Reroute(l.Origin), Reroute(l.Destination))));
         }
 
         private string Reroute(string location)
