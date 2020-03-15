@@ -76,7 +76,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                         var customClassAlreadyExists = (project.Descendants().Any(e => e.Name == "Compile" && e.Attributes().Any(a => a.Name == "Include" && a.Value.Contains($"SpecificationSpecific{excelGivenClass.Name}.cs"))));
 
-                        var fileExtension = (customClassAlreadyExists) ? ".cs" : ".cs.txt";
+                        var fileExtension = (customClassAlreadyExists) ? ".cs.txt" : ".cs";
 
                         var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name + fileExtension);
                         var outputPath = Path.Combine(specificationFolder, projectRelativePath);
