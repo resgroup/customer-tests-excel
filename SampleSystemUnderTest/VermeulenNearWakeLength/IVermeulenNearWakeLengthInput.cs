@@ -2,7 +2,7 @@
 {
     public interface IVermeulenNearWakeLengthInput
     {
-        double Velocity_mps { get; }
+        double Velocity { get; }
         double AmbientTurbuluence { get; }
         double RevolutionsPerMinute { get; }
         double ThrustCoefficient { get; }

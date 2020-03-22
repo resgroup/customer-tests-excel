@@ -35,7 +35,7 @@ namespace SampleSystemUnderTest.VermeulenNearWakeLength
             double angularVelocity = input.RevolutionsPerMinute * (2 * PI / 60); 
 
             //=(AngularVelocity * Radius) / D11
-            double tipSpeedRatio = (radius * angularVelocity) / input.Velocity_mps;
+            double tipSpeedRatio = (radius * angularVelocity) / input.Velocity;
 
             //=IF(G11>0.8888,3,1/SQRT(1-G11))
             double flowFieldRatio = (input.ThrustCoefficient > 0.8888)

@@ -8,7 +8,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {
     internal class SpecificationSpecificVermeulenNearWakeLengthInput : ReportsSpecificationSetup, IVermeulenNearWakeLengthInput
     {
-        public double Velocity_mps { get; private set; }
+        public double Velocity { get; private set; }
         public double AmbientTurbuluence { get; private set; }
         public double RevolutionsPerMinute { get; private set; }
         public double ThrustCoefficient { get; private set; }
@@ -19,7 +19,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             valueProperties.Add(GetCurrentMethod(), velocity_mps);
 
-            this.Velocity_mps = velocity_mps;
+            this.Velocity = velocity_mps;
 
             return this;
         }
