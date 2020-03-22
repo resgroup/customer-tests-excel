@@ -9,7 +9,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
     internal class SpecificationSpecificVermeulenNearWakeLengthInput : ReportsSpecificationSetup, IVermeulenNearWakeLengthInput
     {
         public double Velocity { get; private set; }
-        public double AmbientTurbuluence { get; private set; }
+        public double Ambient_Turbulence { get; private set; }
         public double RevolutionsPerMinute { get; private set; }
         public double Thrust_Coefficient { get; private set; }
         public ITurbineGeometry TurbineGeometry => turbineGeometry.TurbineGeometry;
@@ -28,7 +28,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             valueProperties.Add(GetCurrentMethod(), ambientTurbuluence);
 
-            this.AmbientTurbuluence = ambientTurbuluence;
+            this.Ambient_Turbulence = ambientTurbuluence;
 
             return this;
         }

@@ -46,9 +46,9 @@ namespace SampleSystemUnderTest.VermeulenNearWakeLength
             double shearTurbulenceWakeErosionRate = (1 - flowFieldRatio) * Sqrt(1.49 + flowFieldRatio) / (9.76 * (1 + flowFieldRatio)); 
 
             //=IF(E11>0.02,2.5*E11+0.05,5*E11)
-            double ambientTurbulenceWakeErosionRate = (input.AmbientTurbuluence > 0.02)
-                ? 2.5 * input.AmbientTurbuluence + 0.05
-                : 5 * input.AmbientTurbuluence; 
+            double ambientTurbulenceWakeErosionRate = (input.Ambient_Turbulence > 0.02)
+                ? 2.5 * input.Ambient_Turbulence + 0.05
+                : 5 * input.Ambient_Turbulence; 
 
             //=0.012*H11*TipSpeedRatio
             double mechanicalWakeErosionRate = 0.012 * input.TurbineGeometry.NumberOfBlades * tipSpeedRatio;
