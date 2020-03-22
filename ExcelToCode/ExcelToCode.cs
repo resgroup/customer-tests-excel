@@ -1,4 +1,5 @@
 ﻿using CustomerTestsExcel.Indentation;
+using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -171,7 +172,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 StartOutput(usings, description, projectRootNamespace, workBookName);
 
-                CreateObject("irrelevant", SUTClassName());
+                CreateRootObject(SUTClassName());
 
                 EndGiven();
             }
@@ -196,7 +197,31 @@ namespace CustomerTestsExcel.ExcelToCode
                 issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{worksheet.Name}'");
         }
 
+        string CreateRootObject(string excelClassName)
+        {
+            VisitGivenRootClassDeclaration(excelClassName);
+
+            var cSharpVariableName = CreateObjectWithoutVisiting(excelClassName);
+
+            VisitGivenRootClassFinalisation();
+
+            // returning this is a code smell, best to pass it in instead or something
+            return cSharpVariableName;
+        }
+
         string CreateObject(string excelPropertyName, string excelClassName)
+        {
+            VisitGivenComplexPropertyDeclaration(excelPropertyName, excelClassName);
+
+            var cSharpVariableName = CreateObjectWithoutVisiting(excelClassName);
+
+            VisitGivenComplexPropertyFinalisation();
+
+            // returning this is a code smell, best to pass it in instead or something
+            return cSharpVariableName;
+        }
+
+        string CreateObjectWithoutVisiting(string excelClassName)
         {
             ExcelMoveDown(); // this is a bit mysterious
 
@@ -204,16 +229,13 @@ namespace CustomerTestsExcel.ExcelToCode
             string cSharpClassName = converter.ExcelClassNameToCodeName(excelClassName);
             string cSharpVariableName = VariableCase(excelClassName.Replace(".", ""));
 
-            VisitGivenComplexPropertyDeclaration(excelPropertyName, excelClassName);
-
             DeclareVariable(cSharpVariableName, cSharpClassName);
 
             SetVariableProperties(cSharpVariableName);
 
-            VisitGivenComplexPropertyFinalisation();
-
             ExcelMoveUp(); // this is a bit mysterious
 
+            // returning this is a code smell, best to pass it in instead or something
             return cSharpVariableName;
         }
 
@@ -337,6 +359,29 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
+        void VisitGivenRootClassDeclaration(string excelClassName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenRootClassDeclaration(excelClassName));
+        }
+
+        void VisitGivenRootClassFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenRootClassFinalisation());
+
+        void VisitGivenComplexPropertyDeclaration(string excelPropertyName, string excelClassName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenComplexPropertyDeclaration(
+                        new GivenComplexProperty(
+                            converter.GivenPropertyNameExcelNameToSutName(excelPropertyName),
+                            excelClassName)));
+        }
+
+        void VisitGivenComplexPropertyFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenComplexPropertyFinalisation());
+
         void VisitGivenSimpleProperty(string excelGivenLeft, object excelGivenRight)
         {
             visitors.ForEach(
@@ -360,19 +405,6 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void VisitGivenListPropertyFinalisation() =>
             visitors.ForEach(v => v.VisitGivenListPropertyFinalisation());
-
-        void VisitGivenComplexPropertyDeclaration(string excelPropertyName, string excelClassName)
-        {
-            visitors.ForEach(
-                v =>
-                    v.VisitGivenComplexPropertyDeclaration(
-                        new GivenComplexProperty(
-                            converter.GivenPropertyNameExcelNameToSutName(excelPropertyName),
-                            excelClassName)));
-        }
-
-        void VisitGivenComplexPropertyFinalisation() =>
-            visitors.ForEach(v => v.VisitGivenComplexPropertyFinalisation());
 
         void VisitGivenTablePropertyDeclaration(
             string excelPropertyName,

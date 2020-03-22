@@ -18,7 +18,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             var expected = new List<String>
             {
                 // the indendation is just to make it read more easily
-                "irrelevant, ThingToSetup",
+                "ThingToSetup",
                     "Root1, Root1ClassName",
                         "Child1, Child1ClassName",
                         "Finalisation",

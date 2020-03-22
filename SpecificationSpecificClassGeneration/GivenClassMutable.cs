@@ -5,14 +5,16 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
     public class GivenClassMutable
     {
+        public bool IsRootClass { get; }
         public string Name { get; set; }
 
         readonly List<IGivenClassProperty> properties;
         public IReadOnlyList<IGivenClassProperty> Properties => properties;
 
-        public GivenClassMutable(string name)
+        public GivenClassMutable(string name, bool isRootClass = false)
         {
             Name = name;
+            IsRootClass = isRootClass;
             properties = new List<IGivenClassProperty>();
         }
 

@@ -12,6 +12,16 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public IReadOnlyList<string> RecordedListProperties =>
             recordedListProperties;
 
+        public void VisitGivenRootClassDeclaration(string className)
+        {
+            // ignore other properties to keep test simple, just focus on the simple property visits
+        }
+
+        public void VisitGivenRootClassFinalisation()
+        {
+            // ignore other properties to keep test simple, just focus on the simple property visits
+        }
+
         public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty) =>
             recordedListProperties.Add(givenListProperty.ToString());
 

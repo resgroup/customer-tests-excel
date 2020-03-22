@@ -15,6 +15,12 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         readonly Stack<GivenClassMutable> currentClasses = new Stack<GivenClassMutable>();
 
+        public void VisitGivenRootClassDeclaration(string className) =>
+            CreateOrActivateCurrentClass(className, true);
+
+        public void VisitGivenRootClassFinalisation() =>
+            FinishCurrentClass();
+
         public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
         {
             AddPropertyToCurrentClass(
@@ -90,7 +96,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             currentClasses.Peek().AddProperty(givenClassProperty);
         }
 
-        void CreateOrActivateCurrentClass(string className)
+        void CreateOrActivateCurrentClass(string className, bool isRootClass = false)
         {
             // The same class might be set up twice (2 items in a list for example). 
             // So want to put it back on the stack if so.
@@ -98,9 +104,14 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // but we could handle this is we wanted to by looking at the stack for
             // the class and adding it again to the top of the stack. I think.
             if (classes.Any(c => c.Name == className))
-                currentClasses.Push(classes.First(c => c.Name == className));
+                currentClasses.Push(
+                    classes.First(
+                        c => 
+                            c.Name == className 
+                            && c.IsRootClass == isRootClass)
+                    );
             else
-                currentClasses.Push(new GivenClassMutable(className));
+                currentClasses.Push(new GivenClassMutable(className, isRootClass));
         }
 
         void FinishCurrentClass()
@@ -113,6 +124,5 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             if (!classes.Any(c => c.Name == currentClass.Name))
                 classes.Add(currentClass);
         }
-
     }
 }

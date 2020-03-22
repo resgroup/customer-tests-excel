@@ -11,6 +11,9 @@ namespace CustomerTestsExcel.ExcelToCode
     // It's a shame I only thought of this after coding up the visitor pattern solution.
     public interface IExcelToCodeVisitor
     {
+        void VisitGivenRootClassDeclaration(string className);
+        void VisitGivenRootClassFinalisation();
+
         void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty);
 
         void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty);

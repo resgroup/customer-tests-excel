@@ -12,6 +12,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public IReadOnlyList<string> RecordedComplexProperties =>
             recordedComplexProperties;
 
+        public void VisitGivenRootClassDeclaration(string className) =>
+            recordedComplexProperties.Add(className);
+
+        public void VisitGivenRootClassFinalisation() =>
+            recordedComplexProperties.Add("Finalisation");
+
         public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty) =>
             recordedComplexProperties.Add(givenComplexProperty.ToString());
 

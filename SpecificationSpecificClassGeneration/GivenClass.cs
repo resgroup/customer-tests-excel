@@ -5,13 +5,18 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
     public class GivenClass
     {
+        public bool IsRootClass { get; }
         public string Name { get; }
         public IReadOnlyList<IGivenClassProperty> Properties { get; }
 
-        public GivenClass(string name, IReadOnlyList<IGivenClassProperty> properties)
+        public GivenClass(
+            string name, 
+            IReadOnlyList<IGivenClassProperty> properties,
+            bool isRootClass = false)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
             Properties = properties ?? throw new System.ArgumentNullException(nameof(properties));
+            IsRootClass = isRootClass;
         }
 
         public override string ToString()
