@@ -74,7 +74,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             excelGivenClass
                         );
 
-                        var customClassAlreadyExists = (project.Descendants().Any(e => e.Name == "Compile" && e.Attributes().Any(a => a.Name == "Include" && a.Value.Contains($"SpecificationSpecific{excelGivenClass.Name}.cs"))));
+                        var customClassAlreadyExists = (project.Descendants().Any(e => e.Name.LocalName == "Compile" && e.Attributes().Any(a => a.Name.LocalName == "Include" && a.Value.Contains($"SpecificationSpecific{excelGivenClass.Name}.cs"))));
 
                         var fileExtension = (customClassAlreadyExists) ? ".cs.txt" : ".cs";
 
