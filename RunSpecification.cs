@@ -169,12 +169,16 @@ namespace CustomerTestsExcel
             }
         }
 
-        static string ClassName(IReportsSpecificationSetup properties)
+        string ClassName(IReportsSpecificationSetup properties)
         {
-            // Add a namespace for properties that reference classes in other assemblies.
             var className = properties.GetType().Name;
             var nameSpace = properties.GetType().Namespace;
 
+            // Don't namespace things in the CustomerTestsExcel namespace
+            if (properties.GetType().Assembly.FullName == GetType().Assembly.FullName)
+                return className;
+
+            // Add a namespace for properties that reference classes in other assemblies.
             if (typeof(T).Assembly.FullName != properties.GetType().Assembly.FullName)
                 return nameSpace + "." + className;
 
