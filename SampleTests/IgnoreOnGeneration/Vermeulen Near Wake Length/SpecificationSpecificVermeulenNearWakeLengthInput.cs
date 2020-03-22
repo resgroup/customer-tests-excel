@@ -2,6 +2,7 @@
 using System;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.GeneratedSpecificationSpecific;
 
 namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {
@@ -11,7 +12,8 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         public double AmbientTurbuluence { get; private set; }
         public double RevolutionsPerMinute { get; private set; }
         public double ThrustCoefficient { get; private set; }
-        public ITurbineGeometry TurbineGeometry { get; private set; }
+        public ITurbineGeometry TurbineGeometry => turbineGeometry.TurbineGeometry;
+        SpecificationSpecificTurbineGeometry turbineGeometry;
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Velocity_of(int velocity_mps)
         {
@@ -53,7 +55,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             valueProperties.Add(GetCurrentMethod(), turbineGeometry);
 
-            this.TurbineGeometry = turbineGeometry;
+            this.turbineGeometry = turbineGeometry;
 
             return this;
         }
