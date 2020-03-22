@@ -138,6 +138,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Output("using NUnit.Framework;");
             Output("using CustomerTestsExcel;");
             Output("using CustomerTestsExcel.Assertions;");
+            Output("using CustomerTestsExcel.SpecificationSpecificClassGeneration;");
             Output("using System.Linq.Expressions;");
             Output($"using {projectRootNamespace};");
             Output($"using {projectRootNamespace}.GeneratedSpecificationSpecific;");
