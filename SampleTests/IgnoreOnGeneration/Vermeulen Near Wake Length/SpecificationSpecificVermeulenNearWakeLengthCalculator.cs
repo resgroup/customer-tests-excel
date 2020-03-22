@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.Vermeulen_Near_Wake_Length;
+using SampleTests.GeneratedSpecificationSpecific;
+using System.Linq;
 
 namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 {
@@ -11,7 +13,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
     {
         internal IEnumerable<IVermeulenNearWakeLength> VermeulenNearWakeLengths { get; private set; }
 
-        readonly List<IVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputs = new List<IVermeulenNearWakeLengthInput>();
+        readonly List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputs = new List<SpecificationSpecificVermeulenNearWakeLengthInput>();
 
         internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputs)
         {
@@ -27,7 +29,10 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
 
         internal void Calculate()
         {
-            VermeulenNearWakeLengths = new VermeulenNearWakeLengthCalculator(vermeulenNearWakeLengthInputs).Calculate();
+            VermeulenNearWakeLengths = 
+                new VermeulenNearWakeLengthCalculator(
+                    vermeulenNearWakeLengthInputs.Select(i => i.VermeulenNearWakeLengthInput).ToList()
+                ).Calculate();
         }
     }
 }
