@@ -103,8 +103,16 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 currentClasses.Push(new GivenClassMutable(className));
         }
 
-        void FinishCurrentClass() =>
-            classes.Add(currentClasses.Pop());
+        void FinishCurrentClass()
+        {
+            // The class might already exist in our list, in which case don't add it twice.
+            // See CreateOrActivateCurrentClass
+            // There is probably a neater way of doing this.
+            var currentClass = currentClasses.Pop();
+
+            if (!classes.Any(c => c.Name == currentClass.Name))
+                classes.Add(currentClass);
+        }
 
     }
 }
