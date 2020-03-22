@@ -38,9 +38,9 @@ namespace SampleSystemUnderTest.VermeulenNearWakeLength
             double tipSpeedRatio = (radius * angularVelocity) / input.Velocity;
 
             //=IF(G11>0.8888,3,1/SQRT(1-G11))
-            double flowFieldRatio = (input.ThrustCoefficient > 0.8888)
+            double flowFieldRatio = (input.Thrust_Coefficient > 0.8888)
                 ? 3
-                : 1 / (Sqrt(1 - input.ThrustCoefficient));
+                : 1 / (Sqrt(1 - input.Thrust_Coefficient));
 
             //=(1-FlowFieldRatio)*SQRT(1.49+FlowFieldRatio)/(9.76*(1+FlowFieldRatio))
             double shearTurbulenceWakeErosionRate = (1 - flowFieldRatio) * Sqrt(1.49 + flowFieldRatio) / (9.76 * (1 + flowFieldRatio)); 

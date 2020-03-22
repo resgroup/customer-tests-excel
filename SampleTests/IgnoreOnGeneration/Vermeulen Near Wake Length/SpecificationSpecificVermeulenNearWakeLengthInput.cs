@@ -11,7 +11,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         public double Velocity { get; private set; }
         public double AmbientTurbuluence { get; private set; }
         public double RevolutionsPerMinute { get; private set; }
-        public double ThrustCoefficient { get; private set; }
+        public double Thrust_Coefficient { get; private set; }
         public ITurbineGeometry TurbineGeometry => turbineGeometry.TurbineGeometry;
         SpecificationSpecificTurbineGeometry turbineGeometry;
 
@@ -46,7 +46,7 @@ namespace SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length
         {
             valueProperties.Add(GetCurrentMethod(), thrustCoefficient);
 
-            this.ThrustCoefficient = thrustCoefficient;
+            this.Thrust_Coefficient = thrustCoefficient;
 
             return this;
         }
