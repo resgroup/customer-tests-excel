@@ -3,6 +3,6 @@
     public interface ITurbineGeometry
     {
         int NumberOfBlades { get; }
-        double Diameter_m { get; }
+        double Diameter { get; }
     }
 }

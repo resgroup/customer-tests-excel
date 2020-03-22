@@ -29,7 +29,7 @@ namespace SampleSystemUnderTest.VermeulenNearWakeLength
             // point you could just copy and paste the excel formulas in to the code and they would
             // work.
 
-            double radius = input.TurbineGeometry.Diameter_m / 2;
+            double radius = input.TurbineGeometry.Diameter / 2;
 
             // =F11* (2 * PI() / 60)
             double angularVelocity = input.RevolutionsPerMinute * (2 * PI / 60); 
