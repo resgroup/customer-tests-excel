@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using CustomerTestsExcel;
 using CustomerTestsExcel.Assertions;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using System.Linq.Expressions;
 using SampleTests;
 using SampleTests.GeneratedSpecificationSpecific;
@@ -42,54 +43,54 @@ namespace SampleTests.Anova
                     var groups = new SpecificationSpecificGroup();
                     groups.Name_of("Langley School");
                     {
-                        var ValuesRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
+                        var ValuesRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>();
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(90);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(87);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(93);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(115);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(97);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(85);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(102);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(110);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(111);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(102);
                             ValuesRow.Add(valuesRow);
                         }
@@ -101,54 +102,54 @@ namespace SampleTests.Anova
                     var groups = new SpecificationSpecificGroup();
                     groups.Name_of("Ninestiles School");
                     {
-                        var ValuesRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
+                        var ValuesRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>();
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(135);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(125);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(107);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(96);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(114);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(125);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(94);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(123);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(111);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(96);
                             ValuesRow.Add(valuesRow);
                         }
@@ -160,54 +161,54 @@ namespace SampleTests.Anova
                     var groups = new SpecificationSpecificGroup();
                     groups.Name_of("Alderbrook School");
                     {
-                        var ValuesRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue>();
+                        var ValuesRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>();
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(93);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(101);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(74);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(87);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(76);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(87);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(98);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(108);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(113);
                             ValuesRow.Add(valuesRow);
                         }
                         {
-                            var valuesRow = new SpecificationSpecificValue();
+                            var valuesRow = new SpecificationSpecificFloat();
                             valuesRow.Value_of(96);
                             ValuesRow.Add(valuesRow);
                         }

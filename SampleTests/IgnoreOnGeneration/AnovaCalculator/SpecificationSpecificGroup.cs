@@ -5,13 +5,14 @@ using static System.Reflection.MethodBase;
 using CustomerTestsExcel;
 using Moq;
 using SampleSystemUnderTest.AnovaCalculator;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 
 namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 {
     internal class SpecificationSpecificGroup : ReportsSpecificationSetup
     {
         readonly Mock<IGroup> anovaGroup;
-        readonly List<SpecificationSpecificValue> values = new List<SpecificationSpecificValue>();
+        readonly List<SpecificationSpecificFloat> values = new List<SpecificationSpecificFloat>();
 
         public IGroup AnovaGroup =>
                 anovaGroup.Object;
@@ -19,7 +20,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
         public SpecificationSpecificGroup()
         {
             anovaGroup = new Mock<IGroup>();
-            anovaGroup.Setup(m => m.Values).Returns(values.Select(l => l.value));
+            anovaGroup.Setup(m => m.Values).Returns(values.Select(l => l.Value));
         }
 
         internal SpecificationSpecificGroup Name_of(string name)
@@ -31,7 +32,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
             return this;
         }
 
-        internal SpecificationSpecificGroup Values_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificValue> values)
+        internal SpecificationSpecificGroup Values_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat> values)
         {
             // the generated test code should do this
             values.PropertyName = GetCurrentMethod().Name;

@@ -4,6 +4,7 @@ using System.Linq;
 using static System.Reflection.MethodBase;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.AnovaCalculator;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 
 namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 {
