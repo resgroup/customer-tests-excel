@@ -52,14 +52,14 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         }
 
         [Test]
-        public void MatchesFunctionsWithOneParameter()
+        public void DoesntMatchFunctionsWithOneParameter()
         {
             var excelGivenClass = ExcelGivenClass(
                 "Target",
                 new GivenClassSimpleProperty("StringFunction", ExcelPropertyType.String)
             );
 
-            Assert.True(
+            Assert.False(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
                     excelGivenClass));
@@ -80,14 +80,14 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         }
 
         [Test]
-        public void MatchesFunctionsWithNoParameters()
+        public void DoesntMatchFunctionsWithNoParameters()
         {
             var excelGivenClass = ExcelGivenClass(
                 "Target",
                 new GivenClassSimpleProperty("FunctionWithoutParameter", ExcelPropertyType.Null)
             );
 
-            Assert.True(
+            Assert.False(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
                     excelGivenClass));
