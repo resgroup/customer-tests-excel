@@ -19,7 +19,7 @@ namespace SampleSystemUnderTest.AnovaCalculator
             var result = new AnovaGroupResult();
 
             result.group = group;
-            result.mean = group.Values.Average();
+            result.mean = group.Floats.Average();
             result.varianceFromAnovaMean = result.mean - meanOfAllObservations;
             result.squaresBetween = Pow(result.varianceFromAnovaMean, 2);
 

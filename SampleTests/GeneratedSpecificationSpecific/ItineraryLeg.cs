@@ -4,6 +4,7 @@ using System.Linq;
 using static System.Reflection.MethodBase;
 using Moq;
 using CustomerTestsExcel;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
 using SampleTests.IgnoreOnGeneration.AnovaCalculator;
 using SampleSystemUnderTest.AnovaCalculator;

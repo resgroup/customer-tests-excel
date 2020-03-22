@@ -4,6 +4,7 @@ using System.Linq;
 using static System.Reflection.MethodBase;
 using Moq;
 using CustomerTestsExcel;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
 using SampleTests.IgnoreOnGeneration.AnovaCalculator;
 using SampleSystemUnderTest.AnovaCalculator;
@@ -30,7 +31,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             cargo = new Mock<ICargo>();
 
-            cargo.Setup(m => m.ItineraryLeg).Returns(itineraryLegs.Select(l => l.ItineraryLeg).ToList());
+            cargo.Setup(m => m.ItineraryLeg).Returns(itineraryLegs.Select(l => l.ItineraryLeg));
         }
 
         internal SpecificationSpecificCargo Origin_of(String origin)

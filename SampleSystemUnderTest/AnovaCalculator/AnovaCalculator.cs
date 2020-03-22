@@ -24,7 +24,7 @@ namespace SampleSystemUnderTest.AnovaCalculator
 
         public IAnovaResult Calculate()
         {
-            var allValues = groups.SelectMany(g => g.Values);
+            var allValues = groups.SelectMany(g => g.Floats);
 
             double meanOfAllObservations = allValues.Average();
 
@@ -40,7 +40,7 @@ namespace SampleSystemUnderTest.AnovaCalculator
 
             anovaResult.VariableDescription = variableDescription;
 
-            anovaResult.SS_Between = calculatedGroups.Sum(g => g.squaresBetween * g.group.Values.Count());
+            anovaResult.SS_Between = calculatedGroups.Sum(g => g.squaresBetween * g.group.Floats.Count());
             anovaResult.DF_Between = numberOfGroups - 1;
             anovaResult.MS_Between = anovaResult.SS_Between / anovaResult.DF_Between;
 
@@ -56,6 +56,6 @@ namespace SampleSystemUnderTest.AnovaCalculator
         }
 
         double SquaresWithin(IGroup group, double groupMean) =>
-            group.Values.Sum(value => Pow(value - groupMean, 2));
+            group.Floats.Sum(value => Pow(value - groupMean, 2));
     }
 }

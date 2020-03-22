@@ -39,7 +39,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
 
             var expectedListDeclaration = @"readonly List<SpecificationSpecificTarget> iEnumerablePropertys = new List<SpecificationSpecificTarget>();";
 
-            var expectedMockSetup = @"target.Setup(m => m.IEnumerableProperty).Returns(iEnumerablePropertys.Select(l => l.Target).ToList());";
+            var expectedMockSetup = @"target.Setup(m => m.IEnumerableProperty).Returns(iEnumerablePropertys.Select(l => l.Target));";
 
             var expectedListOfSetters =
             @"internal SpecificationSpecificTarget IEnumerableProperty_of(SpecificationSpecificTarget iEnumerableProperty)
@@ -91,7 +91,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                     excelGivenClass
                 );
 
-            var expectedMockSetup = @"target.Setup(m => m.ListProperty).Returns(listPropertys.Select(l => l.Target).ToList());";
+            var expectedMockSetup = @"target.Setup(m => m.ListProperty).Returns(listPropertys.Select(l => l.Target));";
 
             // Everything apart from the mock setup is the same as the IEnumerable properties, so not replicating here
             StringAssert.Contains(expectedMockSetup, actual);
@@ -114,7 +114,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                     excelGivenClass
                 );
 
-            var expectedMockSetup = @"target.Setup(m => m.IReadOnlyListProperty).Returns(iReadOnlyListPropertys.Select(l => l.Target).ToList());";
+            var expectedMockSetup = @"target.Setup(m => m.IReadOnlyListProperty).Returns(iReadOnlyListPropertys.Select(l => l.Target));";
 
             // Everything apart from the mock setup is the same as the IEnumerable properties, so not replicating here
             StringAssert.Contains(expectedMockSetup, actual);
@@ -137,7 +137,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
                     excelGivenClass
                 );
 
-            var expectedMockSetup = @"target.Setup(m => m.ICollectionProperty).Returns(iCollectionPropertys.Select(l => l.Target).ToList());";
+            var expectedMockSetup = @"target.Setup(m => m.ICollectionProperty).Returns(iCollectionPropertys.Select(l => l.Target));";
 
             // Everything apart from the mock setup is the same as the IEnumerable properties, so not replicating here
             StringAssert.Contains(expectedMockSetup, actual);

@@ -28,6 +28,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             void FunctionWithTwoParameters(int parameter1, int parameter2);
             double FunctionWithReturnValue(string parameter);
 
+            IEnumerable<float> IEnumerableFloatProperty { get; }
             IEnumerable<ITarget> IEnumerableProperty { get; }
             List<ITarget> ListProperty { get; }
             IReadOnlyList<ITarget> IReadOnlyListProperty { get; }
@@ -169,6 +170,20 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             var excelGivenClass = ExcelGivenClass(
                 "Target",
                 new GivenClassComplexProperty("ComplexProperty", "Target")
+            );
+
+            Assert.True(
+                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+                    typeof(ITarget),
+                    excelGivenClass));
+        }
+
+        [Test]
+        public void MatchesIEnumerableSpecialCaseFloatProperties()
+        {
+            var excelGivenClass = ExcelGivenClass(
+                "Target",
+                new GivenClassComplexListProperty("IEnumerableFloatProperty", "float")
             );
 
             Assert.True(

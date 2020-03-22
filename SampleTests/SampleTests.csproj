@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="IgnoreOnGeneration\Calculator\SpecificationSpecificCalculator.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculator.cs" />
-    <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificGroup.cs" />
+    <Content Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificGroup.cs.txt" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificUnderscore.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidator.cs" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingService.cs" />
@@ -70,6 +70,7 @@
     <Compile Include="NameConversions\Underscores.cs" />
     <Compile Include="Rerouting\Reroute To Sea.cs" />
     <Compile Include="Vermeulen Near Wake Length\VermeulenNearWakeLength.cs" />
+    <Compile Include="GeneratedSpecificationSpecific\Group.cs" />
     <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Cargo.cs" />
   </ItemGroup>

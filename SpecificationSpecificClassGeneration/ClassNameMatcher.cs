@@ -3,7 +3,8 @@
     public static class ClassNameMatcher
     {
         public static bool NamesMatch(string cSharpClassName, string excelClassName) =>
-            excelClassName == cSharpClassName
+            excelClassName.ToLowerInvariant() == "float"
+            || excelClassName == cSharpClassName
             || $"I{excelClassName}" == cSharpClassName;
     }
 }

@@ -5,6 +5,7 @@ using static System.Reflection.MethodBase;
 using CustomerTestsExcel;
 using SampleSystemUnderTest.AnovaCalculator;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using SampleTests.GeneratedSpecificationSpecific;
 
 namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 {
@@ -32,7 +33,7 @@ namespace SampleTests.IgnoreOnGeneration.AnovaCalculator
 
         internal void Calculate()
         {
-            AnovaResult = new SampleSystemUnderTest.AnovaCalculator.AnovaCalculator(variableDescription, groups.Select(g => g.AnovaGroup)).Calculate();
+            AnovaResult = new SampleSystemUnderTest.AnovaCalculator.AnovaCalculator(variableDescription, groups.Select(g => g.Group)).Calculate();
         }
 
     }

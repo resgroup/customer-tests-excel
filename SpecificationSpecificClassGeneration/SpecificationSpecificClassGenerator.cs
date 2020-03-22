@@ -91,7 +91,8 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                     "System.Linq",
                     "static System.Reflection.MethodBase",
                     "Moq",
-                    "CustomerTestsExcel"
+                    "CustomerTestsExcel",
+                    "CustomerTestsExcel.SpecificationSpecificClassGeneration"
                 };
             allUsings.AddRange(usings);
 
@@ -209,8 +210,8 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         {
             var propertyType = propertyInfo.PropertyType;
 
-            if (propertyType.IsGenericType && (typeof(IEnumerable).IsAssignableFrom(propertyType)))
-                return ".ToList()";
+            //if (propertyType.IsGenericType && (typeof(IEnumerable).IsAssignableFrom(propertyType)))
+            //    return ".ToList()";
 
             return "";
         }
