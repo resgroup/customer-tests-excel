@@ -18,7 +18,7 @@ using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public class SpecificationSpecificGroup : ReportsSpecificationSetup
+    public partial class SpecificationSpecificGroup : ReportsSpecificationSetup
     {
         readonly Mock<IGroup> group;
 
@@ -33,6 +33,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             group.Setup(m => m.Floats).Returns(floatss.Select(l => l.Float));
         }
+
+
 
         internal SpecificationSpecificGroup Name_of(String name)
         {

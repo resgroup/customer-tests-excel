@@ -18,7 +18,7 @@ using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public class SpecificationSpecificItineraryLeg : ReportsSpecificationSetup
+    public partial class SpecificationSpecificItineraryLeg : ReportsSpecificationSetup
     {
         readonly Mock<IItineraryLeg> itineraryLeg;
 
@@ -33,6 +33,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
         }
+
+
 
         internal SpecificationSpecificItineraryLeg Origin_of(String origin)
         {

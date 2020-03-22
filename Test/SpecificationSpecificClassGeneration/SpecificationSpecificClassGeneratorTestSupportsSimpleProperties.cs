@@ -52,7 +52,7 @@ using SampleSystemUnderTest.VermeulenNearWakeLength;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public class SpecificationSpecificTarget : ReportsSpecificationSetup
+    public partial class SpecificationSpecificTarget : ReportsSpecificationSetup
     {
         readonly Mock<ITarget> target;
 

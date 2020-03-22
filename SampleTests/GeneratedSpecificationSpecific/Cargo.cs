@@ -18,7 +18,7 @@ using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public class SpecificationSpecificCargo : ReportsSpecificationSetup
+    public partial class SpecificationSpecificCargo : ReportsSpecificationSetup
     {
         readonly Mock<ICargo> cargo;
 
@@ -33,6 +33,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             cargo.Setup(m => m.ItineraryLeg).Returns(itineraryLegs.Select(l => l.ItineraryLeg));
         }
+
+
 
         internal SpecificationSpecificCargo Origin_of(String origin)
         {

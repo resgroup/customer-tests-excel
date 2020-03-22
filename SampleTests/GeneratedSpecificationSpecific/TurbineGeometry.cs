@@ -18,7 +18,7 @@ using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public class SpecificationSpecificTurbineGeometry : ReportsSpecificationSetup
+    public partial class SpecificationSpecificTurbineGeometry : ReportsSpecificationSetup
     {
         readonly Mock<ITurbineGeometry> turbineGeometry;
 
@@ -33,6 +33,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
         }
+
+
 
         internal SpecificationSpecificTurbineGeometry NumberOfBlades_of(Int32 numberOfBlades)
         {

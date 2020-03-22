@@ -18,7 +18,7 @@ using SampleTests.IgnoreOnGeneration.NameConversions;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public class SpecificationSpecificVermeulenNearWakeLengthInput : ReportsSpecificationSetup
+    public partial class SpecificationSpecificVermeulenNearWakeLengthInput : ReportsSpecificationSetup
     {
         readonly Mock<IVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInput;
 
@@ -33,6 +33,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
         }
+
+
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Velocity_of(Double velocity)
         {
