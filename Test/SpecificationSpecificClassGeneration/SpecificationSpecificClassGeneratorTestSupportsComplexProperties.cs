@@ -39,7 +39,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
         {
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), complexProperty));
 
-            target.Setup(m => m.ComplexProperty).Returns(complexProperty);
+            target.Setup(m => m.ComplexProperty).Returns(complexProperty.ComplexProperty);
 
             return this;
         }";

@@ -167,16 +167,18 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
 
         string ComplexPropertySetter(IGivenClassProperty excelGivenProperty)
         {
+            var functionName = $"{excelGivenProperty.Name}_of";
             var parameterName = CamelCase(excelGivenProperty.Name);
             var interfacePropertyName = excelGivenProperty.Name;
-            var propertyClassName = $"SpecificationSpecific{ excelGivenProperty.ClassName}";
+            var propertyClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
+            var propertyNameOfSutObject = excelGivenProperty.Name;
 
             return
-$@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({propertyClassName} {parameterName})
+$@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
         {{
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
-            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName});
+            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName}.{propertyNameOfSutObject});
 
             return this;
         }}{NewLine}";
