@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="IgnoreOnGeneration\Calculator\SpecificationSpecificCalculator.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculator.cs" />
-    <Content Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificGroup.cs.txt" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificUnderscore.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidator.cs" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingService.cs" />
