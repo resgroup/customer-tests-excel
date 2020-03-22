@@ -76,6 +76,17 @@ namespace CustomerTestsExcel
 
             return withoutOfPostfix + (CsharpPropertyNameHasOfPostfix(cSharpPropertyName) ? " of" : "");
         }
+
+        // Change "Ambient Turbulence   of  "Ambient_Turbulence"
+        // Designed for use with generating the specification specific classes
+        public string GivenPropertyNameExcelNameToSutName(string excelPropertyName)
+        {
+            var withoutOf = RemoveExcelOfPostfix(excelPropertyName);
+
+            var trimmedAndUnderscores = withoutOf.Trim().Replace(" ", "_");
+
+            return trimmedAndUnderscores;
+        }
         // Change "Calibrations   of  " to "Calibrations_of"
         public string GivenPropertyNameExcelNameToCodeName(string excelPropertyName)
         {
@@ -95,7 +106,7 @@ namespace CustomerTestsExcel
             cSharpPropertyName.EndsWith("_of");
 
         // Change "Calibrations of" or "Calibrations_of" to "Calibrations"
-        public string RemoveExcelOfPostfix(string excelPropertyName)
+        string RemoveExcelOfPostfix(string excelPropertyName)
         {
             const int ofPostfixLength = 3;
 
@@ -351,11 +362,11 @@ namespace CustomerTestsExcel
             if (excelPropertyValue is TimeSpan)
                 return ExcelPropertyType.TimeSpan;
 
-            if (IsEnum(stringValue))
-                return ExcelPropertyType.Enum;
-
             if (IsNumeric(excelPropertyValue))
                 return ExcelPropertyType.Number;
+
+            if (IsEnumBeCarefulAlsoMatchesFloats(stringValue))
+                return ExcelPropertyType.Enum;
 
             // Its a shame that formatting numbers as "Money" in Excel does not help us here
             if (stringValue.EndsWith("m", StringComparison.InvariantCulture) && IsNumeric(stringValue.Substring(0, stringValue.Length - 1)))
@@ -406,7 +417,7 @@ namespace CustomerTestsExcel
                 NumberFormatInfo.InvariantInfo, out double _);
         }
 
-        static bool IsEnum(string value)
+        static bool IsEnumBeCarefulAlsoMatchesFloats(string value)
         {
             return (
                 value.StartsWith("Base.", StringComparison.CurrentCultureIgnoreCase)
