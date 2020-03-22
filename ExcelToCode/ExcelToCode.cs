@@ -367,7 +367,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 v =>
                     v.VisitGivenComplexPropertyDeclaration(
                         new GivenComplexProperty(
-                            excelPropertyName,
+                            converter.GivenPropertyNameExcelNameToSutName(excelPropertyName),
                             excelClassName)));
         }
 

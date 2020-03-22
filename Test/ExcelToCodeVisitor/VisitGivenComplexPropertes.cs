@@ -19,11 +19,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             {
                 // the indendation is just to make it read more easily
                 "irrelevant, ThingToSetup",
-                    "Root1 of, Root1ClassName",
-                        "Child1 of, Child1ClassName",
+                    "Root1, Root1ClassName",
+                        "Child1, Child1ClassName",
                         "Finalisation",
                     "Finalisation",
-                    "Root2 of, Root2ClassName",
+                    "Root2, Root2ClassName",
                     "Finalisation",
                 "Finalisation"
             };

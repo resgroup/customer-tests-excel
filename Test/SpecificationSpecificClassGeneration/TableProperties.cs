@@ -34,7 +34,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("TableClass",
                     new List<IGivenClassProperty> {
-                        new GivenClassComplexProperty("ComplexProperty of", "ComplexClass"),
+                        new GivenClassComplexProperty("ComplexProperty", "ComplexClass"),
                         new GivenClassSimpleProperty("SimpleProperty", ExcelPropertyType.String)
                     })
                 );
