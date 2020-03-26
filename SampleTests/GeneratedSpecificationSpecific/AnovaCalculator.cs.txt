@@ -20,6 +20,9 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificAnovaCalculator : ReportsSpecificationSetup
     {
+        public string variableDescription { get; private set; }
+
+
         readonly List<SpecificationSpecificGroup> groups list ofs = new List<SpecificationSpecificGroup>();
 
         public SpecificationSpecificAnovaCalculator()

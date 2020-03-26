@@ -29,6 +29,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var usingStatements = UsingStatements(usings);
 
+            var simplePropertyDeclarations = SimplePropertyDeclarations(excelGivenClass);
+
             var simpleProperties = SimpleProperties(excelGivenClass);
 
             var complexProperties = ComplexProperties(excelGivenClass);
@@ -46,6 +48,8 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 {{
     public partial class {SpecificationSpecificClassName} : ReportsSpecificationSetup
     {{
+{string.Join(NewLine, simplePropertyDeclarations)}
+
 {string.Join(NewLine, listPropertyDeclarations)}
 
         public {SpecificationSpecificClassName}()
@@ -84,17 +88,27 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
             return usingStatements;
         }
 
+        IEnumerable<string> SimplePropertyDeclarations(GivenClass excelGivenClass)
+        {
+            return excelGivenClass
+                .Properties
+                .Where(excelProperty => IsSimpleProperty(excelProperty.Type))
+                .Select(SimplePropertyDeclaration);
+        }
+
+        string SimplePropertyDeclaration(IGivenClassProperty excelGivenProperty)
+        {
+            var parameterName = CamelCase(excelGivenProperty.Name);
+
+            return $"        public string {parameterName} {{ get; private set; }}{NewLine}";
+        }
+
         IEnumerable<string> SimpleProperties(GivenClass excelGivenClass)
         {
-            foreach (var excelProperty in excelGivenClass.Properties)
-            {
-                if (IsSimpleProperty(excelProperty.Type))
-                {
-                    yield return SimplePropertySetter(
-                        CsharpPropertyTypeName(excelProperty.Type),
-                        excelProperty);
-                }
-            }
+            return excelGivenClass
+                .Properties
+                .Where(excelProperty => IsSimpleProperty(excelProperty.Type))
+                .Select(SimplePropertySetter);
         }
 
         string CsharpPropertyTypeName(ExcelPropertyType type)
@@ -141,10 +155,10 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                                 || excelPropertyType == ExcelPropertyType.TimeSpan;
         }
 
-        string SimplePropertySetter(string propertyTypeName, IGivenClassProperty excelGivenProperty)
+        string SimplePropertySetter(IGivenClassProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
-            var parameterType = propertyTypeName;
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type);
             var interfacePropertyName = excelGivenProperty.Name;
 
             return

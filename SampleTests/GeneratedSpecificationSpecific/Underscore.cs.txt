@@ -20,6 +20,9 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificUnderscore : ReportsSpecificationSetup
     {
+        public string a_Property { get; private set; }
+
+
         readonly List<SpecificationSpecificA_Table> table_Propertys = new List<SpecificationSpecificA_Table>();
         readonly List<SpecificationSpecificA_Table> list_Property list ofs = new List<SpecificationSpecificA_Table>();
 

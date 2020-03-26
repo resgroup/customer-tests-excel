@@ -20,6 +20,11 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificRoutingService : ReportsSpecificationSetup
     {
+        public string rerouteFrom { get; private set; }
+
+        public string rerouteTo { get; private set; }
+
+
 
 
         public SpecificationSpecificRoutingService()

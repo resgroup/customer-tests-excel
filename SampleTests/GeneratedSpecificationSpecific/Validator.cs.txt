@@ -20,6 +20,9 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificValidator : ReportsSpecificationSetup
     {
+        public string withValidProperties { get; private set; }
+
+
 
 
         public SpecificationSpecificValidator()
