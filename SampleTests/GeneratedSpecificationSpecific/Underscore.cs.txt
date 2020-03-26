@@ -6,7 +6,6 @@ using Moq;
 using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
-using SampleTests.IgnoreOnGeneration.AnovaCalculator;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
@@ -27,8 +26,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         public SpecificationSpecificUnderscore()
         {
-            underscore.Setup(m => m.Table_Property).Returns(table_Propertys.Select(l => l.A_Table));
-            underscore.Setup(m => m.List_Property).Returns(list_Propertys.Select(l => l.A_Table));
+            table_Propertys = new List<SpecificationSpecificA_Table>();
+            list_Propertys = new List<SpecificationSpecificA_Table>();
         }
 
         internal SpecificationSpecificUnderscore A_Property_of(String a_Property)
@@ -52,6 +51,15 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
+        internal SpecificationSpecificUnderscore Table_Property_list_of(List<SpecificationSpecificA_Table> table_Propertys, string listType)
+        {
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, table_Propertys));
+
+            this.table_Propertys.AddRange(table_Propertys);
+
+            return this;
+        }
+
         internal SpecificationSpecificUnderscore Table_Property_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table> table_Propertys)
         {
             table_Propertys.PropertyName = GetCurrentMethod().Name;
@@ -68,6 +76,15 @@ namespace SampleTests.GeneratedSpecificationSpecific
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property));
 
             this.list_Propertys.Add(list_Property);
+
+            return this;
+        }
+
+        internal SpecificationSpecificUnderscore List_Property_list_of(List<SpecificationSpecificA_Table> list_Propertys, string listType)
+        {
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, list_Propertys));
+
+            this.list_Propertys.AddRange(list_Propertys);
 
             return this;
         }

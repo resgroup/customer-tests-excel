@@ -26,8 +26,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("ThingToSetup",
                     new List<IGivenClassProperty> {
-                        new GivenClassComplexListProperty("RootList1 list of", "RootList1ClassName"),
-                        new GivenClassComplexListProperty("RootList2 list of", "RootList2ClassName")
+                        new GivenClassComplexListProperty("RootList1", "RootList1ClassName"),
+                        new GivenClassComplexListProperty("RootList2", "RootList2ClassName")
                     })
                 );
 
@@ -35,7 +35,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     givenClassRecorder.Classes,
                     new GivenClass("RootList1ClassName",
                     new List<IGivenClassProperty> {
-                        new GivenClassComplexListProperty("ChildList1 list of", "ChildList1ClassName")
+                        new GivenClassComplexListProperty("ChildList1", "ChildList1ClassName")
                     })
                 );
 

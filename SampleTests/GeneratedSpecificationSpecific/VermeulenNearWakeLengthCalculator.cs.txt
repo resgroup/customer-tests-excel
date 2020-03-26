@@ -6,7 +6,6 @@ using Moq;
 using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
-using SampleTests.IgnoreOnGeneration.AnovaCalculator;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
@@ -26,7 +25,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         public SpecificationSpecificVermeulenNearWakeLengthCalculator()
         {
-            vermeulenNearWakeLengthCalculator.Setup(m => m.VermeulenNearWakeLengthInputs).Returns(vermeulenNearWakeLengthInputss.Select(l => l.VermeulenNearWakeLengthInput));
+            vermeulenNearWakeLengthInputss = new List<SpecificationSpecificVermeulenNearWakeLengthInput>();
         }
 
 
@@ -38,6 +37,15 @@ namespace SampleTests.GeneratedSpecificationSpecific
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), vermeulenNearWakeLengthInputs));
 
             this.vermeulenNearWakeLengthInputss.Add(vermeulenNearWakeLengthInputs);
+
+            return this;
+        }
+
+        internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_list_of(List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss, string listType)
+        {
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, vermeulenNearWakeLengthInputss));
+
+            this.vermeulenNearWakeLengthInputss.AddRange(vermeulenNearWakeLengthInputss);
 
             return this;
         }

@@ -6,7 +6,6 @@ using Moq;
 using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
-using SampleTests.IgnoreOnGeneration.AnovaCalculator;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;

@@ -6,7 +6,6 @@ using Moq;
 using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
-using SampleTests.IgnoreOnGeneration.AnovaCalculator;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
@@ -26,7 +25,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         public SpecificationSpecificAnovaCalculator()
         {
-            anovaCalculator.Setup(m => m.Groups).Returns(groupss.Select(l => l.Group));
+            groupss = new List<SpecificationSpecificGroup>();
         }
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(String variableDescription)
@@ -46,6 +45,15 @@ namespace SampleTests.GeneratedSpecificationSpecific
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), groups));
 
             this.groupss.Add(groups);
+
+            return this;
+        }
+
+        internal SpecificationSpecificAnovaCalculator Groups_list_of(List<SpecificationSpecificGroup> groupss, string listType)
+        {
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, groupss));
+
+            this.groupss.AddRange(groupss);
 
             return this;
         }

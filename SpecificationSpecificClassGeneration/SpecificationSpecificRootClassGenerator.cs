@@ -37,7 +37,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var listPropertyDeclarations = ListPropertyDeclarations(excelGivenClass);
 
-            var listPropertyMockSetups = ListPropertyMockSetups(excelGivenClass);
+            var listPropertyMockSetups = ListPropertyInitialisation(excelGivenClass);
 
             var listPropertyFunctions = ListPropertyFunctions(excelGivenClass);
 
@@ -210,16 +210,15 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             return $"        readonly List<{listClassName}> {listPropertyName};";
         }
 
-        IEnumerable<string> ListPropertyMockSetups(GivenClass excelGivenClass) =>
-            ListProperties(excelGivenClass).Select(ListPropertyMockSetup);
+        IEnumerable<string> ListPropertyInitialisation(GivenClass excelGivenClass) =>
+            ListProperties(excelGivenClass).Select(ListPropertyInitialisation);
 
-        string ListPropertyMockSetup(IGivenClassProperty excelProperty)
+        string ListPropertyInitialisation(IGivenClassProperty excelProperty)
         {
-            var interfacePropertyName = excelProperty.Name;
+            var listClassName = $"SpecificationSpecific{excelProperty.ClassName}";
             var listPropertyName = ListPropertyName(excelProperty);
-            var interfaceUnderTestPropertyName = excelProperty.ClassName;
 
-            return $"            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({listPropertyName}.Select(l => l.{interfaceUnderTestPropertyName}));";
+            return $"            {listPropertyName} = new List<{listClassName}>();";
         }
 
         IEnumerable<string> ListPropertyFunctions(GivenClass excelGivenClass) =>
@@ -239,6 +238,15 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
             this.{listPropertyName}.Add({parameterName});
+
+            return this;
+        }}
+
+        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_list_of(List<{listClassName}> {listParameterName}, string listType)
+        {{
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, {listParameterName}));
+
+            this.{listPropertyName}.AddRange({listParameterName});
 
             return this;
         }}
@@ -268,7 +276,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             CamelCase(excelGivenClass.Name);
 
         string SpecificationSpecificClassName =>
-         $"SpecificationSpecific{excelGivenClass.Name}";
+            $"SpecificationSpecific{excelGivenClass.Name}";
 
         string CamelCase(string pascalCase) =>
             string.IsNullOrWhiteSpace(pascalCase) ? "" : char.ToLower(pascalCase[0]) + pascalCase.Substring(1);

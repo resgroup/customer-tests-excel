@@ -17,11 +17,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // and "Finalisation" for VisitGivenListPropertyFinalisation. Everything else is ignored.
             var expected = new List<String>
             {
-                "RootList1 list of, RootList1ClassName",
-                    "ChildList1 list of, ChildList1ClassName", // this indendation is just to make it read more easily
+                "RootList1, RootList1ClassName",
+                    "ChildList1, ChildList1ClassName", // this indendation is just to make it read more easily
                     "Finalisation",
                 "Finalisation",
-                "RootList2 list of, RootList2ClassName",
+                "RootList2, RootList2ClassName",
                 "Finalisation"
             };
 
