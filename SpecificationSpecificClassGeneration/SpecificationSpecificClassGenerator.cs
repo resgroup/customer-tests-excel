@@ -40,7 +40,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var unmatchedProperties = UnmatchedProperties(type, excelGivenClass);
 
-            var simpleProperties = SimpleProperties(type, excelGivenClass);
+            var simpleProperties = SimpleProperties(excelGivenClass);
 
             var complexProperties = ComplexProperties(type, excelGivenClass);
 
@@ -104,7 +104,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
             return usingStatements;
         }
 
-        IEnumerable<string> SimpleProperties(Type type, GivenClass excelGivenClass)
+        IEnumerable<string> SimpleProperties(GivenClass excelGivenClass)
         {
             foreach (var excelProperty in excelGivenClass.Properties)
             {
@@ -113,10 +113,49 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                     .FirstOrDefault(c => excelCsharpPropertyMatcher.PropertiesMatch(c, excelProperty));
 
                 // should probably add this as a function on IGivenClassProperty
-                var excelPropertyType = excelProperty.Type;
-                if (IsSimpleProperty(excelPropertyType) && cSharpProperty != null)
-                    yield return SimplePropertySetter(cSharpProperty, excelProperty);
+                if (IsSimpleProperty(excelProperty.Type))
+                {
+                    if (cSharpProperty == null)
+                        yield return SimplePropertySetter(
+                            CsharpPropertyTypeName(excelProperty.Type),
+                            excelProperty);
+                    else
+                        yield return SimplePropertySetter(
+                            cSharpProperty.PropertyType.Name,
+                            excelProperty);
+                }
             }
+        }
+
+        string CsharpPropertyTypeName(ExcelPropertyType type)
+        {
+            switch (type)
+            {
+                case ExcelPropertyType.Null:
+                    return typeof(object).Name;
+                case ExcelPropertyType.StringNull:
+                    return typeof(string).Name;
+                case ExcelPropertyType.Number:
+                    return typeof(float).Name;
+                case ExcelPropertyType.Decimal:
+                    return typeof(decimal).Name;
+                case ExcelPropertyType.String:
+                    return typeof(string).Name;
+                case ExcelPropertyType.DateTime:
+                    return typeof(DateTime).Name;
+                case ExcelPropertyType.TimeSpan:
+                    return typeof(TimeSpan).Name;
+                case ExcelPropertyType.Enum:
+                    return typeof(Enum).Name;
+                case ExcelPropertyType.Boolean:
+                    return typeof(bool).Name;
+                case ExcelPropertyType.Object:
+                    return typeof(object).Name;
+                case ExcelPropertyType.List:
+                    return typeof(IEnumerable).Name;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type));
+            };
         }
 
         static bool IsSimpleProperty(ExcelPropertyType excelPropertyType)
@@ -132,10 +171,10 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                                 || excelPropertyType == ExcelPropertyType.TimeSpan;
         }
 
-        string SimplePropertySetter(PropertyInfo propertyInfo, IGivenClassProperty excelGivenProperty)
+        string SimplePropertySetter(string propertyTypeName, IGivenClassProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
-            var parameterType = propertyInfo.PropertyType.Name;
+            var parameterType = propertyTypeName;
             var interfacePropertyName = excelGivenProperty.Name;
 
             return

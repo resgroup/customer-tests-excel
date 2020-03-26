@@ -11,7 +11,13 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
     {
         readonly List<GivenClassMutable> classes = new List<GivenClassMutable>();
         public IReadOnlyList<GivenClass> Classes =>
-            classes.Select(mutableClass => new GivenClass(mutableClass.Name, mutableClass.Properties)).ToList();
+            classes.Select(
+                mutableClass => 
+                    new GivenClass(
+                        mutableClass.Name, 
+                        mutableClass.Properties,
+                        mutableClass.IsRootClass)
+                    ).ToList();
 
         readonly Stack<GivenClassMutable> currentClasses = new Stack<GivenClassMutable>();
 

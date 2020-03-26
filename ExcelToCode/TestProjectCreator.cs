@@ -62,15 +62,19 @@ namespace CustomerTestsExcel.ExcelToCode
             givenClassRecorder.Classes.ToList().ForEach(
                 excelGivenClass =>
                 {
+                    Type matchingType;
+                    if (excelGivenClass.IsRootClass)
+                        // this is meant to be the null object pattern
+                        matchingType = typeof(int);
+                    else
+                        matchingType = assemblyTypes.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
 
-                    var assemblyType = assemblyTypes.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
-
-                    if (assemblyType != null)
+                    if (matchingType != null)
                     {
                         var code = specificationSpecificClassGenerator.cSharpCode(
                             projectRootNamespace,
                             usings.ToList(), // change this to an ienumerable
-                            assemblyType,
+                            matchingType,
                             excelGivenClass
                         );
 

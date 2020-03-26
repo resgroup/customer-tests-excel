@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static System.Reflection.MethodBase;
+using Moq;
+using CustomerTestsExcel;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using SampleSystemUnderTest;
+using SampleTests.IgnoreOnGeneration.AnovaCalculator;
+using SampleSystemUnderTest.AnovaCalculator;
+using SampleTests.IgnoreOnGeneration.Routing;
+using SampleSystemUnderTest.Routing;
+using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
+using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.IgnoreOnGeneration.Calculator;
+using SampleSystemUnderTest.Calculator;
+using SampleTests.IgnoreOnGeneration.NameConversions;
+
+namespace SampleTests.GeneratedSpecificationSpecific
+{
+    public partial class SpecificationSpecificVermeulenNearWakeLengthCalculator : ReportsSpecificationSetup
+    {
+        readonly Mock<Int32> vermeulenNearWakeLengthCalculator;
+
+        public Int32 VermeulenNearWakeLengthCalculator =>
+            vermeulenNearWakeLengthCalculator.Object;
+
+
+
+        public SpecificationSpecificVermeulenNearWakeLengthCalculator()
+        {
+            vermeulenNearWakeLengthCalculator = new Mock<Int32>();
+
+
+        }
+
+// Could not find a match for property VermeulenNearWakeLengthInputs, with type of List
+
+
+
+
+
+
+    }
+}

@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static System.Reflection.MethodBase;
+using Moq;
+using CustomerTestsExcel;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using SampleSystemUnderTest;
+using SampleTests.IgnoreOnGeneration.AnovaCalculator;
+using SampleSystemUnderTest.AnovaCalculator;
+using SampleTests.IgnoreOnGeneration.Routing;
+using SampleSystemUnderTest.Routing;
+using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
+using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.IgnoreOnGeneration.Calculator;
+using SampleSystemUnderTest.Calculator;
+using SampleTests.IgnoreOnGeneration.NameConversions;
+
+namespace SampleTests.GeneratedSpecificationSpecific
+{
+    public partial class SpecificationSpecificAnovaCalculator : ReportsSpecificationSetup
+    {
+        readonly Mock<Int32> anovaCalculator;
+
+        public Int32 AnovaCalculator =>
+            anovaCalculator.Object;
+
+
+
+        public SpecificationSpecificAnovaCalculator()
+        {
+            anovaCalculator = new Mock<Int32>();
+
+
+        }
+
+// Could not find a match for property VariableDescription, with type of String
+// Could not find a match for property Groups list of, with type of List
+
+        internal SpecificationSpecificAnovaCalculator VariableDescription_of(String variableDescription)
+        {
+            valueProperties.Add(GetCurrentMethod(), variableDescription);
+
+            anovaCalculator.Setup(m => m.VariableDescription).Returns(variableDescription);
+
+            return this;
+        }
+
+
+
+
+
+    }
+}

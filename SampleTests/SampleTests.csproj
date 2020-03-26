@@ -68,10 +68,16 @@
     <Compile Include="Rerouting\Reroute To Sea.cs" />
     <Compile Include="Vermeulen Near Wake Length\VermeulenNearWakeLength.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Group.cs" />
+    <None Include="GeneratedSpecificationSpecific\AnovaCalculator.cs.txt" />
+    <None Include="GeneratedSpecificationSpecific\Calculator.cs.txt" />
+    <None Include="GeneratedSpecificationSpecific\Validator.cs.txt" />
+    <None Include="GeneratedSpecificationSpecific\Underscore.cs.txt" />
     <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Cargo.cs" />
+    <None Include="GeneratedSpecificationSpecific\RoutingService.cs.txt" />
     <Compile Include="GeneratedSpecificationSpecific\TurbineGeometry.cs" />
     <Compile Include="GeneratedSpecificationSpecific\VermeulenNearWakeLengthInput.cs" />
+    <None Include="GeneratedSpecificationSpecific\VermeulenNearWakeLengthCalculator.cs.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

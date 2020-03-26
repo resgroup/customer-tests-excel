@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static System.Reflection.MethodBase;
+using Moq;
+using CustomerTestsExcel;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using SampleSystemUnderTest;
+using SampleTests.IgnoreOnGeneration.AnovaCalculator;
+using SampleSystemUnderTest.AnovaCalculator;
+using SampleTests.IgnoreOnGeneration.Routing;
+using SampleSystemUnderTest.Routing;
+using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
+using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.IgnoreOnGeneration.Calculator;
+using SampleSystemUnderTest.Calculator;
+using SampleTests.IgnoreOnGeneration.NameConversions;
+
+namespace SampleTests.GeneratedSpecificationSpecific
+{
+    public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
+    {
+        readonly Mock<Int32> calculator;
+
+        public Int32 Calculator =>
+            calculator.Object;
+
+
+
+        public SpecificationSpecificCalculator()
+        {
+            calculator = new Mock<Int32>();
+
+
+        }
+
+// Could not find a match for property FirstValue, with type of Number
+// Could not find a match for property SecondValue, with type of Number
+// Could not find a match for property Operation, with type of Enum
+
+        internal SpecificationSpecificCalculator FirstValue_of(Single firstValue)
+        {
+            valueProperties.Add(GetCurrentMethod(), firstValue);
+
+            calculator.Setup(m => m.FirstValue).Returns(firstValue);
+
+            return this;
+        }
+
+        internal SpecificationSpecificCalculator SecondValue_of(Single secondValue)
+        {
+            valueProperties.Add(GetCurrentMethod(), secondValue);
+
+            calculator.Setup(m => m.SecondValue).Returns(secondValue);
+
+            return this;
+        }
+
+        internal SpecificationSpecificCalculator Operation_of(Enum operation)
+        {
+            valueProperties.Add(GetCurrentMethod(), operation);
+
+            calculator.Setup(m => m.Operation).Returns(operation);
+
+            return this;
+        }
+
+
+
+
+
+    }
+}

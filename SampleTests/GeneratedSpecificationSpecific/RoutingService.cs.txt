@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static System.Reflection.MethodBase;
+using Moq;
+using CustomerTestsExcel;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using SampleSystemUnderTest;
+using SampleTests.IgnoreOnGeneration.AnovaCalculator;
+using SampleSystemUnderTest.AnovaCalculator;
+using SampleTests.IgnoreOnGeneration.Routing;
+using SampleSystemUnderTest.Routing;
+using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
+using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.IgnoreOnGeneration.Calculator;
+using SampleSystemUnderTest.Calculator;
+using SampleTests.IgnoreOnGeneration.NameConversions;
+
+namespace SampleTests.GeneratedSpecificationSpecific
+{
+    public partial class SpecificationSpecificRoutingService : ReportsSpecificationSetup
+    {
+        readonly Mock<Int32> routingService;
+
+        public Int32 RoutingService =>
+            routingService.Object;
+
+
+
+        public SpecificationSpecificRoutingService()
+        {
+            routingService = new Mock<Int32>();
+
+
+        }
+
+// Could not find a match for property RerouteFrom, with type of String
+// Could not find a match for property RerouteTo, with type of String
+// Could not find a match for property Cargo, with type of Object
+
+        internal SpecificationSpecificRoutingService RerouteFrom_of(String rerouteFrom)
+        {
+            valueProperties.Add(GetCurrentMethod(), rerouteFrom);
+
+            routingService.Setup(m => m.RerouteFrom).Returns(rerouteFrom);
+
+            return this;
+        }
+
+        internal SpecificationSpecificRoutingService RerouteTo_of(String rerouteTo)
+        {
+            valueProperties.Add(GetCurrentMethod(), rerouteTo);
+
+            routingService.Setup(m => m.RerouteTo).Returns(rerouteTo);
+
+            return this;
+        }
+
+
+
+
+
+    }
+}

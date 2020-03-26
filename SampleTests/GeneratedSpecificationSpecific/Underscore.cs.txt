@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static System.Reflection.MethodBase;
+using Moq;
+using CustomerTestsExcel;
+using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+using SampleSystemUnderTest;
+using SampleTests.IgnoreOnGeneration.AnovaCalculator;
+using SampleSystemUnderTest.AnovaCalculator;
+using SampleTests.IgnoreOnGeneration.Routing;
+using SampleSystemUnderTest.Routing;
+using SampleTests.IgnoreOnGeneration.Vermeulen_Near_Wake_Length;
+using SampleSystemUnderTest.VermeulenNearWakeLength;
+using SampleTests.IgnoreOnGeneration.Calculator;
+using SampleSystemUnderTest.Calculator;
+using SampleTests.IgnoreOnGeneration.NameConversions;
+
+namespace SampleTests.GeneratedSpecificationSpecific
+{
+    public partial class SpecificationSpecificUnderscore : ReportsSpecificationSetup
+    {
+        readonly Mock<Int32> underscore;
+
+        public Int32 Underscore =>
+            underscore.Object;
+
+
+
+        public SpecificationSpecificUnderscore()
+        {
+            underscore = new Mock<Int32>();
+
+
+        }
+
+// Could not find a match for property A_Property, with type of String
+// Could not find a match for property Table_Property, with type of List
+// Could not find a match for property List_Property list of, with type of List
+
+        internal SpecificationSpecificUnderscore A_Property_of(String a_Property)
+        {
+            valueProperties.Add(GetCurrentMethod(), a_Property);
+
+            underscore.Setup(m => m.A_Property).Returns(a_Property);
+
+            return this;
+        }
+
+
+
+
+
+    }
+}
