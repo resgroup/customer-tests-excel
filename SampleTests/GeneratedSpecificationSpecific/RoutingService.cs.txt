@@ -36,7 +36,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), rerouteFrom);
 
-            routingService.Setup(m => m.RerouteFrom).Returns(rerouteFrom);
+            this.rerouteFrom = rerouteFrom;
 
             return this;
         }
@@ -45,7 +45,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), rerouteTo);
 
-            routingService.Setup(m => m.RerouteTo).Returns(rerouteTo);
+            this.rerouteTo = rerouteTo;
 
             return this;
         }

@@ -38,7 +38,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), firstValue);
 
-            calculator.Setup(m => m.FirstValue).Returns(firstValue);
+            this.firstValue = firstValue;
 
             return this;
         }
@@ -47,7 +47,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), secondValue);
 
-            calculator.Setup(m => m.SecondValue).Returns(secondValue);
+            this.secondValue = secondValue;
 
             return this;
         }
@@ -56,7 +56,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), operation);
 
-            calculator.Setup(m => m.Operation).Returns(operation);
+            this.operation = operation;
 
             return this;
         }

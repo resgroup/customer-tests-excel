@@ -34,7 +34,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), variableDescription);
 
-            anovaCalculator.Setup(m => m.VariableDescription).Returns(variableDescription);
+            this.variableDescription = variableDescription;
 
             return this;
         }

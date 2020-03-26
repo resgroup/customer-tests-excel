@@ -34,7 +34,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), withValidProperties);
 
-            validator.Setup(m => m.WithValidProperties).Returns(withValidProperties);
+            this.withValidProperties = withValidProperties;
 
             return this;
         }

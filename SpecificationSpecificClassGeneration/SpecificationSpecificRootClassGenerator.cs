@@ -100,7 +100,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
 
-            return $"        public string {parameterName} {{ get; private set; }}{NewLine}";
+            return $"        public string {parameterName} {{ get; private set; }}";
         }
 
         IEnumerable<string> SimpleProperties(GivenClass excelGivenClass)
@@ -166,7 +166,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         {{
             valueProperties.Add(GetCurrentMethod(), {parameterName});
 
-            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName});
+            this.{parameterName} = {parameterName};
 
             return this;
         }}{NewLine}";

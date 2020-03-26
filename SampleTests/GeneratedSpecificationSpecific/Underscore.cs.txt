@@ -36,7 +36,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), a_Property);
 
-            underscore.Setup(m => m.A_Property).Returns(a_Property);
+            this.a_Property = a_Property;
 
             return this;
         }
