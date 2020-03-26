@@ -22,12 +22,11 @@ namespace SampleTests.GeneratedSpecificationSpecific
     {
         public string variableDescription { get; private set; }
 
-
-        readonly List<SpecificationSpecificGroup> groups list ofs = new List<SpecificationSpecificGroup>();
+        readonly List<SpecificationSpecificGroup> groupss;
 
         public SpecificationSpecificAnovaCalculator()
         {
-            anovaCalculator.Setup(m => m.Groups list of).Returns(groups list ofs.Select(l => l.Group));
+            anovaCalculator.Setup(m => m.Groups).Returns(groupss.Select(l => l.Group));
         }
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(String variableDescription)
@@ -42,23 +41,23 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
 
-        internal SpecificationSpecificAnovaCalculator Groups list of_of(SpecificationSpecificGroup groups list of)
+        internal SpecificationSpecificAnovaCalculator Groups_of(SpecificationSpecificGroup groups)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), groups list of));
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), groups));
 
-            this.groups list ofs.Add(groups list of);
+            this.groupss.Add(groups);
 
             return this;
         }
 
-        internal SpecificationSpecificAnovaCalculator Groups list of_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificGroup> groups list ofs)
+        internal SpecificationSpecificAnovaCalculator Groups_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificGroup> groupss)
         {
-            groups list ofs.PropertyName = GetCurrentMethod().Name;
+            groupss.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(groups list ofs);
+            classTableProperties.Add(groupss);
 
-            foreach (var row in groups list ofs.Rows)
-                this.groups list ofs.Add(row.Properties);
+            foreach (var row in groupss.Rows)
+                this.groupss.Add(row.Properties);
 
             return this;
         }

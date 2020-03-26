@@ -207,7 +207,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             var listClassName = $"SpecificationSpecific{excelProperty.ClassName}";
             var listPropertyName = ListPropertyName(excelProperty);
 
-            return $"        readonly List<{listClassName}> {listPropertyName} = new List<{listClassName}>();";
+            return $"        readonly List<{listClassName}> {listPropertyName};";
         }
 
         IEnumerable<string> ListPropertyMockSetups(GivenClass excelGivenClass) =>

@@ -303,7 +303,9 @@ namespace CustomerTestsExcel.ExcelToCode
                             // Declare a list variable to hold the items
                             DeclareListVariable(cSharpListVariableName, cSharpClassName);
 
-                            VisitGivenListPropertyDeclaration(excelGivenLeft, excelGivenRightString);
+                            VisitGivenListPropertyDeclaration(
+                                excelGivenLeft, 
+                                excelGivenRightString);
 
                             while (CurrentCell() == converter.WithItem)
                             {
@@ -397,7 +399,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 v =>
                     v.VisitGivenListPropertyDeclaration(
                         new GivenListProperty(
-                            excelPropertyName,
+                            converter.GivenListPropertyNameExcelNameToCodeVariableName(excelPropertyName),
                             excelClassName)));
         }
 

@@ -22,14 +22,13 @@ namespace SampleTests.GeneratedSpecificationSpecific
     {
         public string a_Property { get; private set; }
 
-
-        readonly List<SpecificationSpecificA_Table> table_Propertys = new List<SpecificationSpecificA_Table>();
-        readonly List<SpecificationSpecificA_Table> list_Property list ofs = new List<SpecificationSpecificA_Table>();
+        readonly List<SpecificationSpecificA_Table> table_Propertys;
+        readonly List<SpecificationSpecificA_Table> list_Propertys;
 
         public SpecificationSpecificUnderscore()
         {
             underscore.Setup(m => m.Table_Property).Returns(table_Propertys.Select(l => l.A_Table));
-            underscore.Setup(m => m.List_Property list of).Returns(list_Property list ofs.Select(l => l.A_Table));
+            underscore.Setup(m => m.List_Property).Returns(list_Propertys.Select(l => l.A_Table));
         }
 
         internal SpecificationSpecificUnderscore A_Property_of(String a_Property)
@@ -64,23 +63,23 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-        internal SpecificationSpecificUnderscore List_Property list of_of(SpecificationSpecificA_Table list_Property list of)
+        internal SpecificationSpecificUnderscore List_Property_of(SpecificationSpecificA_Table list_Property)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property list of));
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property));
 
-            this.list_Property list ofs.Add(list_Property list of);
+            this.list_Propertys.Add(list_Property);
 
             return this;
         }
 
-        internal SpecificationSpecificUnderscore List_Property list of_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table> list_Property list ofs)
+        internal SpecificationSpecificUnderscore List_Property_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table> list_Propertys)
         {
-            list_Property list ofs.PropertyName = GetCurrentMethod().Name;
+            list_Propertys.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(list_Property list ofs);
+            classTableProperties.Add(list_Propertys);
 
-            foreach (var row in list_Property list ofs.Rows)
-                this.list_Property list ofs.Add(row.Properties);
+            foreach (var row in list_Propertys.Rows)
+                this.list_Propertys.Add(row.Properties);
 
             return this;
         }

@@ -21,11 +21,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
     public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
     {
         public string firstValue { get; private set; }
-
         public string secondValue { get; private set; }
-
         public string operation { get; private set; }
-
 
 
 

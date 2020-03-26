@@ -22,7 +22,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
     {
 
 
-        readonly List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss = new List<SpecificationSpecificVermeulenNearWakeLengthInput>();
+        readonly List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss;
 
         public SpecificationSpecificVermeulenNearWakeLengthCalculator()
         {
