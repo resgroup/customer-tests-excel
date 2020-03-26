@@ -38,17 +38,17 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var usingStatements = UsingStatements(usings);
 
-            var unmatchedProperties = UnmatchedProperties(type, excelGivenClass);
+            var unmatchedProperties = UnmatchedProperties(excelGivenClass);
 
             var simpleProperties = SimpleProperties(excelGivenClass);
 
-            var complexProperties = ComplexProperties(type, excelGivenClass);
+            var complexProperties = ComplexProperties(excelGivenClass);
 
-            var listPropertyDeclarations = ListPropertyDeclarations(type, excelGivenClass);
+            var listPropertyDeclarations = ListPropertyDeclarations(excelGivenClass);
 
-            var listPropertyMockSetups = ListPropertyMockSetups(type, excelGivenClass);
+            var listPropertyMockSetups = ListPropertyMockSetups(excelGivenClass);
 
-            var listPropertyFunctions = ListPropertyFunctions(type, excelGivenClass);
+            var listPropertyFunctions = ListPropertyFunctions(excelGivenClass);
 
             return
 $@"{usingStatements}
@@ -188,7 +188,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         }}{NewLine}";
         }
 
-        IEnumerable<string> ComplexProperties(Type type, GivenClass excelGivenClass)
+        IEnumerable<string> ComplexProperties(GivenClass excelGivenClass)
         {
             foreach (var excelProperty in excelGivenClass.Properties)
             {
@@ -220,7 +220,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
         }}{NewLine}";
         }
 
-        IEnumerable<string> ListPropertyDeclarations(Type type, GivenClass excelGivenClass) =>
+        IEnumerable<string> ListPropertyDeclarations(GivenClass excelGivenClass) =>
             ListProperties(type, excelGivenClass).Select(ListPropertyDeclaration);
 
         string ListPropertyDeclaration(ListProperty listProperty)
@@ -231,7 +231,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             return $"        readonly List<{listClassName}> {listPropertyName} = new List<{listClassName}>();";
         }
 
-        IEnumerable<string> ListPropertyMockSetups(Type type, GivenClass excelGivenClass) =>
+        IEnumerable<string> ListPropertyMockSetups(GivenClass excelGivenClass) =>
             ListProperties(type, excelGivenClass).Select(ListPropertyMockSetup);
 
         string ListPropertyMockSetup(ListProperty listProperty)
@@ -243,7 +243,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             return $"            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({listPropertyName}.Select(l => l.{interfaceUnderTestPropertyName}));";
         }
 
-        IEnumerable<string> ListPropertyFunctions(Type type, GivenClass excelGivenClass)
+        IEnumerable<string> ListPropertyFunctions(GivenClass excelGivenClass)
         {
             return
                 ListProperties(type, excelGivenClass)
@@ -294,7 +294,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             }
         }
 
-        IEnumerable<string> UnmatchedProperties(Type type, GivenClass excelGivenClass)
+        IEnumerable<string> UnmatchedProperties(GivenClass excelGivenClass)
         {
             foreach (var excelProperty in excelGivenClass.Properties)
             {
