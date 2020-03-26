@@ -20,22 +20,12 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificAnovaCalculator : ReportsSpecificationSetup
     {
-        readonly Mock<Int32> anovaCalculator;
-
-        public Int32 AnovaCalculator =>
-            anovaCalculator.Object;
-
-
+        readonly List<SpecificationSpecificGroup> groups list ofs = new List<SpecificationSpecificGroup>();
 
         public SpecificationSpecificAnovaCalculator()
         {
-            anovaCalculator = new Mock<Int32>();
-
-
+            anovaCalculator.Setup(m => m.Groups list of).Returns(groups list ofs.Select(l => l.Group));
         }
-
-// Could not find a match for property VariableDescription, with type of String
-// Could not find a match for property Groups list of, with type of List
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(String variableDescription)
         {
@@ -49,6 +39,25 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
 
+        internal SpecificationSpecificAnovaCalculator Groups list of_of(SpecificationSpecificGroup groups list of)
+        {
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), groups list of));
 
+            this.groups list ofs.Add(groups list of);
+
+            return this;
+        }
+
+        internal SpecificationSpecificAnovaCalculator Groups list of_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificGroup> groups list ofs)
+        {
+            groups list ofs.PropertyName = GetCurrentMethod().Name;
+
+            classTableProperties.Add(groups list ofs);
+
+            foreach (var row in groups list ofs.Rows)
+                this.groups list ofs.Add(row.Properties);
+
+            return this;
+        }
     }
 }

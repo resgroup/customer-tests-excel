@@ -20,23 +20,12 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificRoutingService : ReportsSpecificationSetup
     {
-        readonly Mock<Int32> routingService;
-
-        public Int32 RoutingService =>
-            routingService.Object;
-
 
 
         public SpecificationSpecificRoutingService()
         {
-            routingService = new Mock<Int32>();
-
 
         }
-
-// Could not find a match for property RerouteFrom, with type of String
-// Could not find a match for property RerouteTo, with type of String
-// Could not find a match for property Cargo, with type of Object
 
         internal SpecificationSpecificRoutingService RerouteFrom_of(String rerouteFrom)
         {
@@ -57,6 +46,14 @@ namespace SampleTests.GeneratedSpecificationSpecific
         }
 
 
+        internal SpecificationSpecificRoutingService Cargo_of(SpecificationSpecificCargo cargo)
+        {
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
+
+            routingService.Setup(m => m.Cargo).Returns(cargo.Cargo);
+
+            return this;
+        }
 
 
 

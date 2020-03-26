@@ -20,26 +20,36 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificVermeulenNearWakeLengthCalculator : ReportsSpecificationSetup
     {
-        readonly Mock<Int32> vermeulenNearWakeLengthCalculator;
-
-        public Int32 VermeulenNearWakeLengthCalculator =>
-            vermeulenNearWakeLengthCalculator.Object;
-
-
+        readonly List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss = new List<SpecificationSpecificVermeulenNearWakeLengthInput>();
 
         public SpecificationSpecificVermeulenNearWakeLengthCalculator()
         {
-            vermeulenNearWakeLengthCalculator = new Mock<Int32>();
-
-
+            vermeulenNearWakeLengthCalculator.Setup(m => m.VermeulenNearWakeLengthInputs).Returns(vermeulenNearWakeLengthInputss.Select(l => l.VermeulenNearWakeLengthInput));
         }
 
-// Could not find a match for property VermeulenNearWakeLengthInputs, with type of List
 
 
 
 
+        internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_of(SpecificationSpecificVermeulenNearWakeLengthInput vermeulenNearWakeLengthInputs)
+        {
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), vermeulenNearWakeLengthInputs));
 
+            this.vermeulenNearWakeLengthInputss.Add(vermeulenNearWakeLengthInputs);
 
+            return this;
+        }
+
+        internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss)
+        {
+            vermeulenNearWakeLengthInputss.PropertyName = GetCurrentMethod().Name;
+
+            classTableProperties.Add(vermeulenNearWakeLengthInputss);
+
+            foreach (var row in vermeulenNearWakeLengthInputss.Rows)
+                this.vermeulenNearWakeLengthInputss.Add(row.Properties);
+
+            return this;
+        }
     }
 }

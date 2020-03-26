@@ -20,21 +20,12 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificValidator : ReportsSpecificationSetup
     {
-        readonly Mock<Int32> validator;
-
-        public Int32 Validator =>
-            validator.Object;
-
 
 
         public SpecificationSpecificValidator()
         {
-            validator = new Mock<Int32>();
-
 
         }
-
-// Could not find a match for property WithValidProperties, with type of Null
 
         internal SpecificationSpecificValidator WithValidProperties_of(Object withValidProperties)
         {

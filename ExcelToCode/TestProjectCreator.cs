@@ -14,6 +14,7 @@ namespace CustomerTestsExcel.ExcelToCode
     {
         readonly GivenClassRecorder givenClassRecorder;
         readonly SpecificationSpecificClassGenerator specificationSpecificClassGenerator;
+        readonly SpecificationSpecificRootClassGenerator specificationSpecificRootClassGenerator;
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         bool success;
 
@@ -21,6 +22,9 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             givenClassRecorder = new GivenClassRecorder();
             specificationSpecificClassGenerator = new SpecificationSpecificClassGenerator(
+                new ExcelCsharpPropertyMatcher()
+            );
+            specificationSpecificRootClassGenerator = new SpecificationSpecificRootClassGenerator(
                 new ExcelCsharpPropertyMatcher()
             );
             excelCsharpClassMatcher = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher());
@@ -62,22 +66,31 @@ namespace CustomerTestsExcel.ExcelToCode
             givenClassRecorder.Classes.ToList().ForEach(
                 excelGivenClass =>
                 {
-                    Type matchingType;
-                    if (excelGivenClass.IsRootClass)
-                        // this is meant to be the null object pattern
-                        matchingType = typeof(int);
-                    else
-                        matchingType = assemblyTypes.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
+                    string code = null;
 
-                    if (matchingType != null)
-                    {
-                        var code = specificationSpecificClassGenerator.cSharpCode(
+                    if (excelGivenClass.IsRootClass)
+                        code = specificationSpecificRootClassGenerator.cSharpCode(
                             projectRootNamespace,
                             usings.ToList(), // change this to an ienumerable
-                            matchingType,
                             excelGivenClass
                         );
+                    else
+                    {
+                        var matchingType = assemblyTypes.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
 
+                        if (matchingType != null)
+                        {
+                            code = specificationSpecificClassGenerator.cSharpCode(
+                                projectRootNamespace,
+                                usings.ToList(), // change this to an ienumerable
+                                matchingType,
+                                excelGivenClass
+                                );
+                        }
+                    }
+
+                    if (code != null)
+                    {
                         var customClassAlreadyExists = (project.Descendants().Any(e => e.Name.LocalName == "Compile" && e.Attributes().Any(a => a.Name.LocalName == "Include" && a.Value.Contains($"SpecificationSpecific{excelGivenClass.Name}.cs"))));
 
                         var fileExtension = (customClassAlreadyExists) ? ".cs.txt" : ".cs";

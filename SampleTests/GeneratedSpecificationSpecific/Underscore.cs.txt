@@ -20,23 +20,14 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificUnderscore : ReportsSpecificationSetup
     {
-        readonly Mock<Int32> underscore;
-
-        public Int32 Underscore =>
-            underscore.Object;
-
-
+        readonly List<SpecificationSpecificA_Table> table_Propertys = new List<SpecificationSpecificA_Table>();
+        readonly List<SpecificationSpecificA_Table> list_Property list ofs = new List<SpecificationSpecificA_Table>();
 
         public SpecificationSpecificUnderscore()
         {
-            underscore = new Mock<Int32>();
-
-
+            underscore.Setup(m => m.Table_Property).Returns(table_Propertys.Select(l => l.A_Table));
+            underscore.Setup(m => m.List_Property list of).Returns(list_Property list ofs.Select(l => l.A_Table));
         }
-
-// Could not find a match for property A_Property, with type of String
-// Could not find a match for property Table_Property, with type of List
-// Could not find a match for property List_Property list of, with type of List
 
         internal SpecificationSpecificUnderscore A_Property_of(String a_Property)
         {
@@ -50,6 +41,45 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
 
+        internal SpecificationSpecificUnderscore Table_Property_of(SpecificationSpecificA_Table table_Property)
+        {
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), table_Property));
 
+            this.table_Propertys.Add(table_Property);
+
+            return this;
+        }
+
+        internal SpecificationSpecificUnderscore Table_Property_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table> table_Propertys)
+        {
+            table_Propertys.PropertyName = GetCurrentMethod().Name;
+
+            classTableProperties.Add(table_Propertys);
+
+            foreach (var row in table_Propertys.Rows)
+                this.table_Propertys.Add(row.Properties);
+
+            return this;
+        }
+        internal SpecificationSpecificUnderscore List_Property list of_of(SpecificationSpecificA_Table list_Property list of)
+        {
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property list of));
+
+            this.list_Property list ofs.Add(list_Property list of);
+
+            return this;
+        }
+
+        internal SpecificationSpecificUnderscore List_Property list of_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table> list_Property list ofs)
+        {
+            list_Property list ofs.PropertyName = GetCurrentMethod().Name;
+
+            classTableProperties.Add(list_Property list ofs);
+
+            foreach (var row in list_Property list ofs.Rows)
+                this.list_Property list ofs.Add(row.Properties);
+
+            return this;
+        }
     }
 }

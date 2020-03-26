@@ -20,23 +20,12 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
     {
-        readonly Mock<Int32> calculator;
-
-        public Int32 Calculator =>
-            calculator.Object;
-
 
 
         public SpecificationSpecificCalculator()
         {
-            calculator = new Mock<Int32>();
-
 
         }
-
-// Could not find a match for property FirstValue, with type of Number
-// Could not find a match for property SecondValue, with type of Number
-// Could not find a match for property Operation, with type of Enum
 
         internal SpecificationSpecificCalculator FirstValue_of(Single firstValue)
         {
