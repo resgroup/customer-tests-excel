@@ -57,7 +57,7 @@
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificUnderscore.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidator.cs" />
-    <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingService.cs" />
+    <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingServicePartial.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthCalculatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificA_Table.cs" />
     <Compile Include="Anova\One Way Anova.cs" />
@@ -74,7 +74,7 @@
     <None Include="GeneratedSpecificationSpecific\Underscore.cs.txt" />
     <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Cargo.cs" />
-    <None Include="GeneratedSpecificationSpecific\RoutingService.cs.txt" />
+    <Compile Include="GeneratedSpecificationSpecific\RoutingService.cs" />
     <Compile Include="GeneratedSpecificationSpecific\TurbineGeometry.cs" />
     <Compile Include="GeneratedSpecificationSpecific\VermeulenNearWakeLengthInput.cs" />
     <Compile Include="GeneratedSpecificationSpecific\VermeulenNearWakeLengthCalculator.cs" />

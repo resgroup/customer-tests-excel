@@ -7,7 +7,6 @@ using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
-using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.IgnoreOnGeneration.Calculator;
@@ -19,6 +18,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
     public partial class SpecificationSpecificAnovaCalculator : ReportsSpecificationSetup
     {
         public string variableDescription { get; private set; }
+
+
 
         readonly List<SpecificationSpecificGroup> groupss;
 

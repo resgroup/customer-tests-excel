@@ -7,7 +7,6 @@ using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
-using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.IgnoreOnGeneration.Calculator;
@@ -18,6 +17,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificVermeulenNearWakeLengthCalculator : ReportsSpecificationSetup
     {
+
+
 
 
         readonly List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss;

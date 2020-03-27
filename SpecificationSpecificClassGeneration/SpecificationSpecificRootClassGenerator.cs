@@ -33,6 +33,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var simpleProperties = SimpleProperties(excelGivenClass);
 
+            var complexPropertyDeclarations = ComplexPropertyDeclarations(excelGivenClass);
+
             var complexProperties = ComplexProperties(excelGivenClass);
 
             var listPropertyDeclarations = ListPropertyDeclarations(excelGivenClass);
@@ -49,6 +51,8 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
     public partial class {SpecificationSpecificClassName} : ReportsSpecificationSetup
     {{
 {string.Join(NewLine, simplePropertyDeclarations)}
+
+{string.Join(NewLine, complexPropertyDeclarations)}
 
 {string.Join(NewLine, listPropertyDeclarations)}
 
@@ -172,6 +176,22 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         }}{NewLine}";
         }
 
+        IEnumerable<string> ComplexPropertyDeclarations(GivenClass excelGivenClass)
+        {
+            return excelGivenClass
+                .Properties
+                .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Object)
+                .Select(ComplexPropertyDeclaration);
+        }
+
+        string ComplexPropertyDeclaration(IGivenClassProperty excelGivenProperty)
+        {
+            var variableName = CamelCase(excelGivenProperty.Name);
+            var variableType = $"SpecificationSpecific{excelGivenProperty.ClassName}";
+
+            return $"        public {variableType} {variableName} {{ get; private set; }}";
+        }
+
         IEnumerable<string> ComplexProperties(GivenClass excelGivenClass)
         {
             return excelGivenClass
@@ -183,17 +203,16 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         string ComplexPropertySetter(IGivenClassProperty excelGivenProperty)
         {
             var functionName = $"{excelGivenProperty.Name}_of";
+            var classVariableName = CamelCase(excelGivenProperty.Name);
             var parameterName = CamelCase(excelGivenProperty.Name);
-            var interfacePropertyName = excelGivenProperty.Name;
             var propertyClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
-            var propertyNameOfSutObject = excelGivenProperty.Name;
 
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
         {{
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
-            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName}.{propertyNameOfSutObject});
+            this.{classVariableName} = {parameterName};
 
             return this;
         }}{NewLine}";

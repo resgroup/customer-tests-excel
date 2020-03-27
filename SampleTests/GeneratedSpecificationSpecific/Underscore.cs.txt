@@ -7,7 +7,6 @@ using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
-using SampleTests.IgnoreOnGeneration.Routing;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleTests.IgnoreOnGeneration.Calculator;
@@ -19,6 +18,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
     public partial class SpecificationSpecificUnderscore : ReportsSpecificationSetup
     {
         public string a_Property { get; private set; }
+
+
 
         readonly List<SpecificationSpecificA_Table> table_Propertys;
         readonly List<SpecificationSpecificA_Table> list_Propertys;
