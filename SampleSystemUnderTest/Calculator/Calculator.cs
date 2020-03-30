@@ -4,16 +4,16 @@ namespace SampleSystemUnderTest.Calculator
 {
     public class Calculator
     {
-        public double Calculate(ICalculation calculation)
+        public double Calculate(double firstValue, Operation operation, double secondValue)
         {
-            switch (calculation.Operation)
+            switch (operation)
             {
                 case Operation.Add:
-                    return calculation.FirstValue + calculation.SecondValue;
+                    return firstValue + secondValue;
                 case Operation.Subtract:
-                    return calculation.FirstValue - calculation.SecondValue;
+                    return firstValue - secondValue;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(calculation), $"calculation.Operation not supported {calculation.Operation}");
+                    throw new ArgumentOutOfRangeException(nameof(operation), $"calculation.Operation not supported {operation}");
             }
         }
     }

@@ -10,6 +10,9 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public string ClassName { get; }
         public ExcelPropertyType Type =>
             ExcelPropertyType.Object;
+        // This is a very obvious violation of the liskov substituation principle, and the interface segrgation principle. Not sure what to do about it yet.
+        public string ExampleValue =>
+            "";
 
         public GivenClassComplexProperty(string name, string className)
         {

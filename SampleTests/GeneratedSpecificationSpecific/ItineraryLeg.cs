@@ -9,7 +9,6 @@ using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
-using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
 using SampleTests.IgnoreOnGeneration.NameConversions;
 

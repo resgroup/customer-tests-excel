@@ -102,9 +102,10 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 
         string SimplePropertyDeclaration(IGivenClassProperty excelGivenProperty)
         {
-            var parameterName = CamelCase(excelGivenProperty.Name);
+            var parameterName = excelGivenProperty.Name;
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue);
 
-            return $"        public string {parameterName} {{ get; private set; }}";
+            return $"        public {parameterType} {parameterName} {{ get; private set; }}";
         }
 
         IEnumerable<string> SimpleProperties(GivenClass excelGivenClass)
@@ -115,7 +116,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                 .Select(SimplePropertySetter);
         }
 
-        string CsharpPropertyTypeName(ExcelPropertyType type)
+        string CsharpPropertyTypeName(ExcelPropertyType type, string propertyValue)
         {
             switch (type)
             {
@@ -134,7 +135,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                 case ExcelPropertyType.TimeSpan:
                     return typeof(TimeSpan).Name;
                 case ExcelPropertyType.Enum:
-                    return typeof(Enum).Name;
+                    return propertyValue?.Substring(0, Math.Max(propertyValue.IndexOf('.'), 1)) ?? "Enum /* no value in excel tests for value of this enum, so unable to deduce the type */";
                 case ExcelPropertyType.Boolean:
                     return typeof(bool).Name;
                 case ExcelPropertyType.Object:
@@ -162,15 +163,15 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
         string SimplePropertySetter(IGivenClassProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type);
-            var interfacePropertyName = excelGivenProperty.Name;
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue);
+            var classPropertyName = excelGivenProperty.Name;
 
             return
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({parameterType} {parameterName})
         {{
             valueProperties.Add(GetCurrentMethod(), {parameterName});
 
-            this.{parameterName} = {parameterName};
+            this.{classPropertyName} = {parameterName};
 
             return this;
         }}{NewLine}";
@@ -186,10 +187,10 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
 
         string ComplexPropertyDeclaration(IGivenClassProperty excelGivenProperty)
         {
-            var variableName = CamelCase(excelGivenProperty.Name);
+            var classVariableName = excelGivenProperty.Name;
             var variableType = $"SpecificationSpecific{excelGivenProperty.ClassName}";
 
-            return $"        public {variableType} {variableName} {{ get; private set; }}";
+            return $"        public {variableType} {classVariableName} {{ get; private set; }}";
         }
 
         IEnumerable<string> ComplexProperties(GivenClass excelGivenClass)
@@ -203,7 +204,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         string ComplexPropertySetter(IGivenClassProperty excelGivenProperty)
         {
             var functionName = $"{excelGivenProperty.Name}_of";
-            var classVariableName = CamelCase(excelGivenProperty.Name);
+            var classVariableName = excelGivenProperty.Name;
             var parameterName = CamelCase(excelGivenProperty.Name);
             var propertyClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
 

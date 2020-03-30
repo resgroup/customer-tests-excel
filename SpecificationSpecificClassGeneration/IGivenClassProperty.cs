@@ -8,6 +8,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         string Name { get; }
         string ClassName { get; }
         ExcelPropertyType Type { get; }
+        string ExampleValue { get; }
         bool TypesMatch(Type cSharpPropertytype);
     }
 }

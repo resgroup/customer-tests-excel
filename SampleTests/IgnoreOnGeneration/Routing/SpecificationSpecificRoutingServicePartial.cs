@@ -13,47 +13,19 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificRoutingService : ReportsSpecificationSetup
     {
-        ICargo _reroutedCargo;
-
-        //public SpecificationSpecificRoutingService()
-        //    : base()
-        //{
-        //}
-
-        //internal string _rerouteFrom { get; private set; }
-        //public SpecificationSpecificRoutingService RerouteFrom_of(string rerouteFrom)
-        //{
-        //    valueProperties.Add(GetCurrentMethod(), rerouteFrom);
-        //    _rerouteFrom = rerouteFrom;
-        //    return this;
-        //}
-
-        //internal string _rerouteTo { get; private set; }
-        //public SpecificationSpecificRoutingService RerouteTo_of(string rerouteTo)
-        //{
-        //    valueProperties.Add(GetCurrentMethod(), rerouteTo);
-        //    _rerouteTo = rerouteTo;
-        //    return this;
-        //}
-
-        //internal SpecificationSpecificCargo _cargo { get; private set; }
-        //public SpecificationSpecificRoutingService Cargo_of(SpecificationSpecificCargo cargo)
-        //{
-        //    classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
-        //    _cargo = cargo;
-        //    return this;
-        //}
+        ICargo reroutedCargo;
 
         public void Reroute()
         {
-            _reroutedCargo = 
+            reroutedCargo = 
                 new RoutingService(
-                    rerouteFrom: rerouteFrom, 
-                    rerouteTo: rerouteTo, 
-                    cargo: this.cargo.Cargo
+                    rerouteFrom: RerouteFrom, 
+                    rerouteTo: RerouteTo, 
+                    cargo: this.Cargo.Cargo
                 ).Reroute();
         }
 
-        public ICargo Returns => _reroutedCargo;
+        public ICargo Returns => 
+            reroutedCargo;
     }
 }

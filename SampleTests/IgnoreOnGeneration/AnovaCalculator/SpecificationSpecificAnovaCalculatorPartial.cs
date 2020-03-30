@@ -17,7 +17,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             AnovaResult = 
                 new SampleSystemUnderTest.AnovaCalculator.AnovaCalculator(
-                    variableDescription, 
+                    VariableDescription, 
                     groupss.Select(g => g.Group)
                 ).Calculate();
         }

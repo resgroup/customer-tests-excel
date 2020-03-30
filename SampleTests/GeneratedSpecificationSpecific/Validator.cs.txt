@@ -9,7 +9,6 @@ using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
-using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
 using SampleTests.IgnoreOnGeneration.NameConversions;
 
@@ -17,7 +16,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificValidator : ReportsSpecificationSetup
     {
-        public string withValidProperties { get; private set; }
+        public Object WithValidProperties { get; private set; }
 
 
 
@@ -32,7 +31,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), withValidProperties);
 
-            this.withValidProperties = withValidProperties;
+            this.WithValidProperties = withValidProperties;
 
             return this;
         }

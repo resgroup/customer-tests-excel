@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IgnoreOnGeneration\Calculator\SpecificationSpecificCalculator.cs" />
+    <Compile Include="IgnoreOnGeneration\Calculator\SpecificationSpecificCalculatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificUnderscore.cs" />
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidator.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="Vermeulen Near Wake Length\VermeulenNearWakeLength.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Group.cs" />
     <Compile Include="GeneratedSpecificationSpecific\AnovaCalculator.cs" />
-    <None Include="GeneratedSpecificationSpecific\Calculator.cs.txt" />
+    <Compile Include="GeneratedSpecificationSpecific\Calculator.cs" />
     <None Include="GeneratedSpecificationSpecific\Validator.cs.txt" />
     <None Include="GeneratedSpecificationSpecific\Underscore.cs.txt" />
     <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
@@ -102,11 +102,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="IgnoreOnGeneration\GenerateTests.bat" />
-    <None Include="ExcelTests\Anova.xlsx" />
-    <None Include="ExcelTests\Calculator.xlsx" />
-    <None Include="ExcelTests\NameConversions.xlsx" />
-    <None Include="ExcelTests\Rerouting.xlsx" />
-    <None Include="ExcelTests\Vermeulen Near Wake Length.xlsx" />
+    <None Include="ExcelTests\Anova.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExcelTests\Calculator.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExcelTests\NameConversions.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExcelTests\Rerouting.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExcelTests\Vermeulen Near Wake Length.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
 </Project>

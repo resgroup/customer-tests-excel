@@ -9,7 +9,6 @@ using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
-using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
 using SampleTests.IgnoreOnGeneration.NameConversions;
 
@@ -17,10 +16,10 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificRoutingService : ReportsSpecificationSetup
     {
-        public string rerouteFrom { get; private set; }
-        public string rerouteTo { get; private set; }
+        public String RerouteFrom { get; private set; }
+        public String RerouteTo { get; private set; }
 
-        public SpecificationSpecificCargo cargo { get; private set; }
+        public SpecificationSpecificCargo Cargo { get; private set; }
 
 
 
@@ -33,7 +32,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), rerouteFrom);
 
-            this.rerouteFrom = rerouteFrom;
+            this.RerouteFrom = rerouteFrom;
 
             return this;
         }
@@ -42,7 +41,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), rerouteTo);
 
-            this.rerouteTo = rerouteTo;
+            this.RerouteTo = rerouteTo;
 
             return this;
         }
@@ -52,7 +51,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
 
-            this.cargo = cargo;
+            this.Cargo = cargo;
 
             return this;
         }

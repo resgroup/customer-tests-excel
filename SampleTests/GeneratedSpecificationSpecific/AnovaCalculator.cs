@@ -9,7 +9,6 @@ using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
-using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
 using SampleTests.IgnoreOnGeneration.NameConversions;
 
@@ -17,7 +16,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificAnovaCalculator : ReportsSpecificationSetup
     {
-        public string variableDescription { get; private set; }
+        public String VariableDescription { get; private set; }
 
 
 
@@ -32,7 +31,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), variableDescription);
 
-            this.variableDescription = variableDescription;
+            this.VariableDescription = variableDescription;
 
             return this;
         }

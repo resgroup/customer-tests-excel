@@ -9,7 +9,6 @@ using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
-using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
 using SampleTests.IgnoreOnGeneration.NameConversions;
 
@@ -17,9 +16,9 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
     {
-        public string firstValue { get; private set; }
-        public string secondValue { get; private set; }
-        public string operation { get; private set; }
+        public Single FirstValue { get; private set; }
+        public Single SecondValue { get; private set; }
+        public Operation Operation { get; private set; }
 
 
 
@@ -34,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), firstValue);
 
-            this.firstValue = firstValue;
+            this.FirstValue = firstValue;
 
             return this;
         }
@@ -43,16 +42,16 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), secondValue);
 
-            this.secondValue = secondValue;
+            this.SecondValue = secondValue;
 
             return this;
         }
 
-        internal SpecificationSpecificCalculator Operation_of(Enum operation)
+        internal SpecificationSpecificCalculator Operation_of(Operation operation)
         {
             valueProperties.Add(GetCurrentMethod(), operation);
 
-            this.operation = operation;
+            this.Operation = operation;
 
             return this;
         }

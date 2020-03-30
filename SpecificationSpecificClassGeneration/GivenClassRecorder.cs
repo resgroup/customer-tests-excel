@@ -45,7 +45,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             AddPropertyToCurrentClass(
                 new GivenClassSimpleProperty(
                     givenSimpleProperty.PropertyOrFunctionName,
-                    givenSimpleProperty.ExcelPropertyType));
+                    givenSimpleProperty.ExcelPropertyType,
+                    givenSimpleProperty.CsharpCodeRepresentation));
         }
 
         public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)

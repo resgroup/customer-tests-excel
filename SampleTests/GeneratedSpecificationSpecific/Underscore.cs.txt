@@ -9,7 +9,6 @@ using SampleSystemUnderTest;
 using SampleSystemUnderTest.AnovaCalculator;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
-using SampleTests.IgnoreOnGeneration.Calculator;
 using SampleSystemUnderTest.Calculator;
 using SampleTests.IgnoreOnGeneration.NameConversions;
 
@@ -17,7 +16,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificUnderscore : ReportsSpecificationSetup
     {
-        public string a_Property { get; private set; }
+        public String A_Property { get; private set; }
 
 
 
@@ -34,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             valueProperties.Add(GetCurrentMethod(), a_Property);
 
-            this.a_Property = a_Property;
+            this.A_Property = a_Property;
 
             return this;
         }

@@ -8,20 +8,24 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
     {
         public string Name { get; }
         public ExcelPropertyType Type { get; }
+        public string ExampleValue { get; }
         // This is a very obvious violation of the liskov substituation principle, and the interface segrgation principle. Not sure what to do about it yet.
         public string ClassName => "";
 
-        public GivenClassSimpleProperty(string name, ExcelPropertyType type)
+        public GivenClassSimpleProperty(string name, ExcelPropertyType type, string exampleValue = "")
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new System.ArgumentException("name is required", nameof(name));
 
-            // this is a code smell, but not going to worry too much for now.
+            // this is a code smell, but not going to worry too much for now. A Sum type is really 
+            // what I want here but they don't easily exist in C#. There almost certainly is a better
+            // solution though
             if (type == ExcelPropertyType.Object)
                 throw new System.ArgumentException("ExcelPropertyType cannot be ExcelPropertyType.Object for simple properties", nameof(name));
 
             Name = name;
             Type = type;
+            ExampleValue = exampleValue;
         }
 
         public bool TypesMatch(Type cSharpPropertytype)
