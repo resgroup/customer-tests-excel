@@ -304,7 +304,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             DeclareListVariable(cSharpListVariableName, cSharpClassName);
 
                             VisitGivenListPropertyDeclaration(
-                                excelGivenLeft, 
+                                excelGivenLeft,
                                 excelGivenRightString);
 
                             while (CurrentCell() == converter.WithItem)
@@ -354,7 +354,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                     Output($"{cSharpVariableName}.{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
 
-                    VisitGivenSimpleProperty(excelGivenLeft, excelGivenRight);
+                    VisitGivenSimplePropertyOrFunction(excelGivenLeft, excelGivenRight);
                 }
             }
         }
@@ -382,15 +382,25 @@ namespace CustomerTestsExcel.ExcelToCode
         void VisitGivenComplexPropertyFinalisation() =>
             visitors.ForEach(v => v.VisitGivenComplexPropertyFinalisation());
 
-        void VisitGivenSimpleProperty(string excelGivenLeft, object excelGivenRight)
+        void VisitGivenSimplePropertyOrFunction(string excelGivenLeft, object excelGivenRight)
         {
-            visitors.ForEach(
-                v =>
-                    v.VisitGivenSimpleProperty(
-                        new GivenSimpleProperty(
-                            converter.GivenPropertyNameExcelNameToSutName(excelGivenLeft),
-                            converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
-                            converter.ExcelPropertyTypeFromCellValue(excelGivenRight))));
+            if (excelGivenLeft.EndsWith(" of"))
+            {
+                visitors.ForEach(
+                    v =>
+                        v.VisitGivenSimpleProperty(
+                            new GivenSimpleProperty(
+                                converter.GivenPropertyNameExcelNameToSutName(excelGivenLeft),
+                                converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
+                                converter.ExcelPropertyTypeFromCellValue(excelGivenRight))));
+            }
+            else
+            {
+                visitors.ForEach(
+                    v =>
+                        v.VisitGivenFunction(
+                            new GivenFunction(excelGivenLeft)));
+            }
         }
 
         void VisitGivenListPropertyDeclaration(string excelPropertyName, string excelClassName)
@@ -754,7 +764,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 Output($"{cSharpVariableName}.{converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.ExcelPropertyName)}({converter.PropertyValueExcelToCode(propertyHeader.ExcelPropertyName, CurrentCellRaw())});");
 
-                VisitGivenSimpleProperty(
+                VisitGivenSimplePropertyOrFunction(
                     propertyHeader.ExcelPropertyName,
                     CurrentCellRaw()
                     );

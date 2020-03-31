@@ -18,6 +18,7 @@ namespace CustomerTestsExcel.ExcelToCode
         Enum,
         Boolean,
         Object,
-        List
+        List,
+        Function
     }
 }

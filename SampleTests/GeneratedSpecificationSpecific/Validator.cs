@@ -16,7 +16,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 {
     public partial class SpecificationSpecificValidator : ReportsSpecificationSetup
     {
-        public Object WithValidProperties { get; private set; }
+
 
 
 
@@ -27,14 +27,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         }
 
-        internal SpecificationSpecificValidator WithValidProperties_of(Object withValidProperties)
-        {
-            valueProperties.Add(GetCurrentMethod(), withValidProperties);
-
-            this.WithValidProperties = withValidProperties;
-
-            return this;
-        }
 
 
 

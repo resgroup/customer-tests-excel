@@ -61,13 +61,16 @@
   <ItemGroup>
     <Compile Include="CodeToExcelException.cs" />
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
+    <Compile Include="ExcelToCode\GivenFunction.cs" />
     <Compile Include="ExcelToCode\GivenTableProperty.cs" />
+    <Compile Include="ExcelToCode\IGivenFunction.cs" />
     <Compile Include="ExcelToCode\IGivenTableProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ClassNameMatcher.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpClassMatcher.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpPropertyMatcher.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClass.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexListProperty.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\GivenClassFunction.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassMutable.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\IGivenClassProperty.cs" />

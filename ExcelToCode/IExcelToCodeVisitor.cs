@@ -16,6 +16,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty);
 
+        void VisitGivenFunction(IGivenFunction givenFunction);
+
         void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty);
         void VisitGivenListPropertyFinalisation();
 

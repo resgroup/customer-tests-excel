@@ -3,17 +3,11 @@ using CustomerTestsExcel;
 using SampleSystemUnderTest.Calculator;
 using System;
 
-namespace SampleTests.IgnoreOnGeneration.NameConversions
+namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public class SpecificationSpecificValidator : ReportsSpecificationSetup
+    public partial class SpecificationSpecificValidator : ReportsSpecificationSetup
     {
-        public bool Valid { get; internal set; }
-
-        public SpecificationSpecificValidator()
-        {
-            Valid = false;
-        }
-
+        public bool Valid { get; internal set; } = false;
 
         internal void WithValidProperties()
         {

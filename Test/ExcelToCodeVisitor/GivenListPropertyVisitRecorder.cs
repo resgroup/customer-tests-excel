@@ -73,5 +73,9 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore to keep test simple, just focus on the complex visits
         }
 
+        public void VisitGivenFunction(IGivenFunction givenFunction)
+        {
+            // ignore to keep test simple, just focus on the complex visits
+        }
     }
 }

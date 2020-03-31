@@ -336,6 +336,9 @@ namespace CustomerTestsExcel
             if (excelPropertyType == ExcelPropertyType.Boolean)
                 return stringValue.ToLower();
 
+            if (excelPropertyType == ExcelPropertyType.Function)
+                return "";
+
             // make sure strings are quoted (which is optional in excel)
             if (excelPropertyType == ExcelPropertyType.String)
                 return EnsureSurroundedByDoubleQuotes(stringValue);

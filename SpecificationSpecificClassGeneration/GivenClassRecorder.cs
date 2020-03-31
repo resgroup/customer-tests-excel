@@ -29,7 +29,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
         {
-            AddPropertyToCurrentClass(
+            AddToCurrentClass(
                 new GivenClassComplexProperty(
                     givenComplexProperty.PropertyName,
                     givenComplexProperty.ClassName));
@@ -42,16 +42,22 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
         {
-            AddPropertyToCurrentClass(
+            AddToCurrentClass(
                 new GivenClassSimpleProperty(
                     givenSimpleProperty.PropertyOrFunctionName,
                     givenSimpleProperty.ExcelPropertyType,
                     givenSimpleProperty.CsharpCodeRepresentation));
         }
 
+        public void VisitGivenFunction(IGivenFunction givenSimpleProperty)
+        {
+            AddToCurrentClass(
+                new GivenClassFunction(givenSimpleProperty.PropertyOrFunctionName));
+        }
+
         public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)
         {
-            AddPropertyToCurrentClass(
+            AddToCurrentClass(
                 new GivenClassComplexListProperty(
                     givenListProperty.PropertyName,
                     givenListProperty.ClassName));
@@ -64,7 +70,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders)
         {
-            AddPropertyToCurrentClass(
+            AddToCurrentClass(
                 new GivenClassComplexListProperty(
                     givenTableProperty.PropertyName,
                     givenTableProperty.ClassName));
@@ -95,7 +101,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // don't need to do anything special with table cells
         }
 
-        void AddPropertyToCurrentClass(IGivenClassProperty givenClassProperty)
+        void AddToCurrentClass(IGivenClassProperty givenClassProperty)
         {
             if (currentClasses.Any() == false)
                 return;
