@@ -23,7 +23,7 @@ namespace CustomerTestsExcel
         // these control what writers are used.
         protected bool _debugOutput = true;
         protected bool _htmlOutput = false;
-        protected bool _excelOutput = true; //false; // This can be set to true manually by programmers (on a per test basis) when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
+        protected bool _excelOutput = false; // This can be set to true manually by programmers (on a per test basis) when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
 
         public abstract string Description();
         public abstract T Given();
