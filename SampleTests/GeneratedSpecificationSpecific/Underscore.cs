@@ -29,6 +29,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
             list_Propertys = new List<SpecificationSpecificA_Table>();
         }
 
+
+
         internal SpecificationSpecificUnderscore A_Property_of(String a_Property)
         {
             valueProperties.Add(GetCurrentMethod(), a_Property);

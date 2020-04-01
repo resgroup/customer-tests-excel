@@ -29,6 +29,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var usingStatements = UsingStatements(usings);
 
+            var functions = Functions(excelGivenClass);
+
             var simplePropertyDeclarations = SimplePropertyDeclarations(excelGivenClass);
 
             var simpleProperties = SimpleProperties(excelGivenClass);
@@ -61,6 +63,8 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 {string.Join(NewLine, listPropertyMockSetups)}
         }}
 
+{string.Join(NewLine, functions)}
+
 {string.Join(NewLine, simpleProperties)}
 
 {string.Join(NewLine, complexProperties)}
@@ -90,6 +94,29 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 
             var usingStatements = string.Join(NewLine, allUsings.Select(u => $"using {u};"));
             return usingStatements;
+        }
+
+        IEnumerable<string> Functions(GivenClass excelGivenClass)
+        {
+            return excelGivenClass
+                .Properties
+                .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Function)
+                .Select(Function);
+        }
+
+        string Function(IGivenClassProperty excelGivenProperty)
+        {
+            var functionName = excelGivenProperty.Name;
+
+            return 
+$@"        // No sensible implementation can be generated for functions, so please 
+        // add the function below in a custom class.
+        // Custom classes should go under a directory called 'IgnoreOnGeneration'.
+        // If the custom class filename is the same as this one ({SpecificationSpecificClassName}),
+        // then it will be used instead of this function. If it is called something else,
+        // say {SpecificationSpecificClassName}Parial, then this class will remain, and
+        // the custom class can add to it.
+        // public void {functionName}() {{ .. }} ";
         }
 
         IEnumerable<string> SimplePropertyDeclarations(GivenClass excelGivenClass)
@@ -288,12 +315,6 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             excelGivenClass
             .Properties
             .Where(excelProperty => excelProperty.Type == ExcelPropertyType.List);
-
-        string InterfacePropertyName =>
-            excelGivenClass.Name;
-
-        string MockVariableName =>
-            CamelCase(excelGivenClass.Name);
 
         string SpecificationSpecificClassName =>
             $"SpecificationSpecific{excelGivenClass.Name}";

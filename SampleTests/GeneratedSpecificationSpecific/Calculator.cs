@@ -29,6 +29,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         }
 
+
+
         internal SpecificationSpecificCalculator FirstValue_of(Single firstValue)
         {
             valueProperties.Add(GetCurrentMethod(), firstValue);

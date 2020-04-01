@@ -27,6 +27,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
             groupss = new List<SpecificationSpecificGroup>();
         }
 
+
+
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(String variableDescription)
         {
             valueProperties.Add(GetCurrentMethod(), variableDescription);

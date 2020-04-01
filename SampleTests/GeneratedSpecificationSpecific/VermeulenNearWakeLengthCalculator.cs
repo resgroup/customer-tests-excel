@@ -31,6 +31,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
 
+
+
         internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_of(SpecificationSpecificVermeulenNearWakeLengthInput vermeulenNearWakeLengthInputs)
         {
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), vermeulenNearWakeLengthInputs));
