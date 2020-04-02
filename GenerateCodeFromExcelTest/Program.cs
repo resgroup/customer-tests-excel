@@ -9,7 +9,7 @@ namespace GenerateCodeFromExcelTest
 {
     // To work with the SampleTests project included in this solution, use the following command line parameters
     // The path to the assembly must be absolute, so you will probably need to be change it
-    // /folder "..\..\SampleTests" /project SampleTests.csproj /namespace SampleTests /usings "SampleSystemUnderTest SampleSystemUnderTest.AnovaCalculator SampleSystemUnderTest.Routing SampleSystemUnderTest.VermeulenNearWakeLength SampleSystemUnderTest.Calculator SampleTests.IgnoreOnGeneration.NameConversions" /assertionClassPrefix "I" /assembliesUnderTest "C:\Users\ceddl\Documents\GITHub\customer-tests-excel\Builtdlls\Debug\SampleSystemUnderTest.dll"
+    // /folder "..\..\SampleTests" /project SampleTests.csproj /namespace SampleTests /usings "SampleSystemUnderTest SampleSystemUnderTest.AnovaCalculator SampleSystemUnderTest.Routing SampleSystemUnderTest.VermeulenNearWakeLength SampleSystemUnderTest.Calculator" /assertionClassPrefix "I" /assembliesUnderTest "C:\Users\ceddl\Documents\GITHub\customer-tests-excel\Builtdlls\Debug\SampleSystemUnderTest.dll"
     static class Program
     {
         static int Main(string[] args)

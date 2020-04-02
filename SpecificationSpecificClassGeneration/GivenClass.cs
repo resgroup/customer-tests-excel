@@ -19,6 +19,16 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             IsRootClass = isRootClass;
         }
 
+        public bool IsFramworkSuppliedClass()
+        {
+            // if this is a framework supplied class, then we don't want to generate a specific setup class
+            // for it, as the framework already provides it.
+            // Currently the framework supplied classes are:
+            // - SpecificationSpecificFloat
+            // We could do some fancy reflection here to find these, but not sure it is merited
+            return Name == "Float";
+        }
+
         public override string ToString()
         {
             var properties = string.Join("\n", Properties.Select(p => p.ToString()));

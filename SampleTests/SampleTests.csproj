@@ -59,7 +59,7 @@
     <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingServicePartial.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthCalculatorPartial.cs" />
-    <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificA_Table.cs" />
+    <Content Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificA_Table.cs.txt" />
     <Compile Include="Anova\One Way Anova.cs" />
     <Compile Include="Calculator\Adding Up.cs" />
     <Compile Include="Calculator\Taking Away.cs" />
@@ -71,6 +71,7 @@
     <Compile Include="GeneratedSpecificationSpecific\AnovaCalculator.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Calculator.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Validator.cs" />
+    <Compile Include="GeneratedSpecificationSpecific\A_Table.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Underscore.cs" />
     <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Cargo.cs" />

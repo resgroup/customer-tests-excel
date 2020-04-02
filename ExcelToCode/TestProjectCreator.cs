@@ -14,6 +14,7 @@ namespace CustomerTestsExcel.ExcelToCode
     {
         readonly GivenClassRecorder givenClassRecorder;
         readonly SpecificationSpecificClassGenerator specificationSpecificClassGenerator;
+        readonly SpecificationSpecificUnmatchedClassGenerator specificationSpecificUnmatchedClassGenerator;
         readonly SpecificationSpecificRootClassGenerator specificationSpecificRootClassGenerator;
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         bool success;
@@ -24,9 +25,8 @@ namespace CustomerTestsExcel.ExcelToCode
             specificationSpecificClassGenerator = new SpecificationSpecificClassGenerator(
                 new ExcelCsharpPropertyMatcher()
             );
-            specificationSpecificRootClassGenerator = new SpecificationSpecificRootClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-            );
+            specificationSpecificUnmatchedClassGenerator = new SpecificationSpecificUnmatchedClassGenerator();
+            specificationSpecificRootClassGenerator = new SpecificationSpecificRootClassGenerator();
             excelCsharpClassMatcher = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher());
         }
 
@@ -84,6 +84,14 @@ namespace CustomerTestsExcel.ExcelToCode
                                 projectRootNamespace,
                                 usings.ToList(), // change this to an ienumerable
                                 matchingType,
+                                excelGivenClass
+                                );
+                        }
+                        else if (!excelGivenClass.IsFramworkSuppliedClass())
+                        {
+                            code = specificationSpecificUnmatchedClassGenerator.cSharpCode(
+                                projectRootNamespace,
+                                usings.ToList(), // change this to an ienumerable
                                 excelGivenClass
                                 );
                         }
