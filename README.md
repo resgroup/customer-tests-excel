@@ -16,6 +16,7 @@ Advantages
 - Tests are converted to C# / NUnit, and make use of existing tooling (which aids debugging, coverage, Continuous Integration etc)
 - Automated refactoring can be done in C#, using existing tooling, and then the changes written back to Excel
 - The NUnit tests are generated from Excel, so the two are guaranteed to be in sync
+- Most scaffolding code can be generated, you usually only need to supply the code to call your system under test
 
 # Usage
 
