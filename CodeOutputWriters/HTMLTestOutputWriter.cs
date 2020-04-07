@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CustomerTestsExcel.Assertions;
+using System.Reflection;
 
 namespace CustomerTestsExcel.CodeOutputWriters
 {
@@ -224,15 +225,8 @@ namespace CustomerTestsExcel.CodeOutputWriters
 
         }
 
-        private string CreateFileName(string assemblyName, string specificationName)
-        {
-            return
-                @"\\kl-web-001\CustomerTests\" +
-                assemblyName.Replace("RES.", "").Replace(".Specification", "").Replace('.', '\\') +
-                @"\" +
-                specificationName +
-                ".html";
-        }
+        private string CreateFileName(string assemblyName, string specificationName) =>
+            $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\{assemblyName.Replace('.', '\\')}\{specificationName}.html";
 
         private IEnumerable<string> GetDirectoryStructure(string assemblyName)
         {
