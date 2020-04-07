@@ -15,15 +15,15 @@ namespace CustomerTestsExcel
     public abstract class SpecificationBase<T> : ISpecification<T>
         where T : IReportsSpecificationSetup
     {
-        protected T _sut;
+        protected T sut;
         protected abstract string AssertionClassPrefixAddedByGenerator { get; }
         protected virtual bool RoundTrippable() => true;
         protected virtual IEnumerable<string> IssuesPreventingRoundTrip() => new List<string>();
 
         // these control what writers are used.
-        protected bool _debugOutput = true;
-        protected bool _htmlOutput = false;
-        protected bool _excelOutput = false; // This can be set to true manually by programmers (on a per test basis) when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
+        protected bool debugOutput = true;
+        protected bool htmlOutput = false;
+        protected bool excelOutput = false; // This can be set to true manually by programmers (on a per test basis) when they have made some changes to a test in code and want to write these changes back out to the associated excel file.
 
         public abstract string Description();
         public abstract T Given();
@@ -32,6 +32,18 @@ namespace CustomerTestsExcel
 
         [Test]
         public virtual void RunTests()
+        {
+            try
+            {
+                TryRunTests();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.ToString());
+            }
+        }
+
+        void TryRunTests()
         {
             var runner = new RunSpecification<T>(GetWriter());
 
@@ -55,13 +67,13 @@ namespace CustomerTestsExcel
         {
             var writers = new List<ITestOutputWriter>();
 
-            if (_debugOutput)
+            if (debugOutput)
                 writers.Add(
                     new StringTestOutputWriter(
                         new HumanFriendlyFormatter(),
                         new DebugTextLineWriter()));
 
-            if (_htmlOutput)
+            if (htmlOutput)
                 writers.Add(
                     new HTMLTestOutputWriter(
                         new HumanFriendlyFormatter()));
@@ -98,7 +110,7 @@ namespace CustomerTestsExcel
         }
 
         bool ExcelOutput =>
-            _excelOutput ||
+            excelOutput ||
             Environment.GetEnvironmentVariable("CUSTOMER_TESTS_EXCEL_WRITE_TO_EXCEL")?.ToLowerInvariant() == "true";
 
     }

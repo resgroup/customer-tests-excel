@@ -19,7 +19,7 @@ namespace CustomerTestsExcel
         public RunSpecification()
         {
             message = new StringBuilderTextLineWriter();
-            this.writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), message);
+            writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), message);
         }
 
         public RunSpecification(ITestOutputWriter writer) : this()
@@ -30,22 +30,6 @@ namespace CustomerTestsExcel
         }
 
         public bool Run(ISpecification<T> specification)
-        {
-            bool passed;
-            try
-            {
-                passed = TryRun(specification);
-            }
-            catch (Exception ex)
-            {
-                passed = false;
-                writer.Exception(ex.ToString());
-            }
-
-            return passed;
-        }
-
-        protected bool TryRun(ISpecification<T> specification)
         {
             T sut;
             var specificationNamespace = specification.GetType().Namespace;
