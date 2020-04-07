@@ -10,13 +10,70 @@ namespace CustomerTestsExcel
 {
     public class ExcelTabularBook : ITabularBook
     {
-        public int NumberOfPages => _workbookPart.WorksheetParts.Count();
+        const string CORE_FILE_PROPERTIES_PART_ID = "rId2";
+        const string WORKBOOK_STYLES_PART_ID = "rId3";
 
-        public string[] GetPageNames() => _workbook.GetFirstChild<Sheets>().Elements<Sheet>().Select(s => s.Name.Value).ToArray();
+        string path;
+        Stream outputStream;
+        readonly SpreadsheetDocument package;
+        WorkbookPart workbookPart;
+        Workbook workbook;
+        string tempFilePath;
+
+        public ExcelTabularBook()
+        {
+            outputStream = new MemoryStream();
+            tempFilePath = "";
+            package = SpreadsheetDocument.Create(outputStream, SpreadsheetDocumentType.Workbook);
+
+            var coreFilePropertiesPart = package.AddNewPart<CoreFilePropertiesPart>(CORE_FILE_PROPERTIES_PART_ID);
+            GenerateCoreFilePropertiesPart(coreFilePropertiesPart);
+
+            workbookPart = package.AddWorkbookPart();
+
+            var workbookStylesPart = workbookPart.AddNewPart<WorkbookStylesPart>(WORKBOOK_STYLES_PART_ID);
+            GenerateWorkbookStylesPart().Save(workbookStylesPart);
+
+            workbook = AddWorkBook(workbookPart);
+            workbook.AppendChild(new Sheets());
+        }
+
+        internal ExcelTabularBook(Stream stream, bool editable = false)
+        {
+            outputStream = stream ?? throw new ArgumentNullException(nameof(stream));
+            package = SpreadsheetDocument.Open(outputStream, editable);
+            workbookPart = package.WorkbookPart;
+            workbook = package.WorkbookPart.Workbook;
+            path = null;
+            tempFilePath = "";
+        }
+
+        internal ExcelTabularBook(string existingFilePath)
+        {
+            if (string.IsNullOrEmpty(existingFilePath))
+                throw new ArgumentNullException(nameof(existingFilePath));
+
+            if (!File.Exists(existingFilePath))
+                throw new Exception(string.Format("Specified excel template '{0}' does not exist.", existingFilePath));
+
+            outputStream = null;
+            tempFilePath = Path.GetTempFileName();
+            File.Copy(existingFilePath, tempFilePath, true);
+            FileInfo tempFileInfo = new FileInfo(tempFilePath);
+            tempFileInfo.IsReadOnly = false;
+            package = SpreadsheetDocument.Open(tempFilePath, true);
+            workbookPart = package.WorkbookPart;
+            workbook = package.WorkbookPart.Workbook;
+            path = existingFilePath;
+        }
+
+        public int NumberOfPages => workbookPart.WorksheetParts.Count();
+
+        public string[] GetPageNames() => workbook.GetFirstChild<Sheets>().Elements<Sheet>().Select(s => s.Name.Value).ToArray();
 
         public void SaveAs(string path)
         {
-            _path = path;
+            this.path = path;
             Save();
         }
 
@@ -25,16 +82,14 @@ namespace CustomerTestsExcel
         public ITabularPage GetPage(int index)
         {
             var sheet = GetSheet(index);
-            var part = _workbookPart.GetPartById(sheet.Id);
+            var part = workbookPart.GetPartById(sheet.Id);
             if (part is WorksheetPart)
             {
-                return new ExcelTabularPage(_package, _workbook, part as WorksheetPart, sheet, _workbookPart.WorkbookStylesPart.Stylesheet, (uint)index, this);
+                return new ExcelTabularPage(package, workbook, part as WorksheetPart, sheet, workbookPart.WorkbookStylesPart.Stylesheet, (uint)index, this);
             }
             else if (part is ChartsheetPart)
             {
-                //standalone tocheck
                 return null;
-                //return new ExcelTabularPage(_package, _workbook, part as ChartsheetPart, sheet, _workbookPart.WorkbookStylesPart.Stylesheet, (uint)index, this);
             }
             else if (part == null)
             {
@@ -48,113 +103,174 @@ namespace CustomerTestsExcel
 
         public ITabularPage AddPageBefore(int workSheetIndex)
         {
-            Sheets sheets = _workbook.GetFirstChild<Sheets>();
+            var sheets = workbook.GetFirstChild<Sheets>();
 
-            Sheet worksheet = SetupWorksheet(sheets);
+            var worksheet = SetupWorksheet(sheets);
 
             sheets.InsertAt<Sheet>(worksheet, workSheetIndex);
-            _workbook.Save();
+            workbook.Save();
 
             return GetPage(worksheet.Name);
         }
 
 
-        const string CORE_FILE_PROPERTIES_PART_ID = "rId2";
-        const string WORKBOOK_STYLES_PART_ID = "rId3";
-
-        string _path;
-        Stream _outputStream;
-        readonly SpreadsheetDocument _package;
-        WorkbookPart _workbookPart;
-        Workbook _workbook;
-        string _tempFilePath;
-
         internal DefinedNames DefinedNames
         {
             get
             {
-                DefinedNames names = _workbook.GetFirstChild<DefinedNames>();
+                var names = workbook.GetFirstChild<DefinedNames>();
 
                 if (names == null)
                 {
                     names = new DefinedNames();
-                    _workbook.InsertAfter(names, _workbook.GetFirstChild<Sheets>());
+                    workbook.InsertAfter(names, workbook.GetFirstChild<Sheets>());
                 }
 
                 return names;
             }
         }
-
-        #region Constructors
-
-        public ExcelTabularBook()
-        {
-            _outputStream = new MemoryStream();
-            _tempFilePath = "";
-            _package = SpreadsheetDocument.Create(_outputStream, SpreadsheetDocumentType.Workbook);
-
-            var coreFilePropertiesPart = _package.AddNewPart<CoreFilePropertiesPart>(CORE_FILE_PROPERTIES_PART_ID);
-            GenerateCoreFilePropertiesPart(coreFilePropertiesPart);
-
-            _workbookPart = _package.AddWorkbookPart();
-
-            WorkbookStylesPart workbookStylesPart = _workbookPart.AddNewPart<WorkbookStylesPart>(WORKBOOK_STYLES_PART_ID);
-            GenerateWorkbookStylesPart().Save(workbookStylesPart);
-
-            _workbook = AddWorkBook(_workbookPart);
-            _workbook.AppendChild(new Sheets());
-        }
-
-        internal ExcelTabularBook(Stream stream, bool editable = false)
+        
+        public void Save(Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            _outputStream = stream;
-            _package = SpreadsheetDocument.Open(_outputStream, editable);
-            _workbookPart = _package.WorkbookPart;
-            _workbook = _package.WorkbookPart.Workbook;
-            _path = null;
-            _tempFilePath = "";
+            foreach (var worksheetPart in workbookPart.WorksheetParts)
+                worksheetPart.Worksheet.Save(worksheetPart);
+            workbookPart.WorkbookStylesPart.Stylesheet.Save(workbookPart.WorkbookStylesPart);
+            workbook.Save(workbookPart);
+            package.Close();
+
+            if (!string.IsNullOrEmpty(tempFilePath) && File.Exists(tempFilePath))
+            {
+                using (var fileStream = new FileStream(tempFilePath, FileMode.Open, FileAccess.Read))
+                    fileStream.CopyTo(stream);
+
+                File.Delete(tempFilePath);
+            }
+            else
+            {
+                outputStream.Seek(0, SeekOrigin.Begin);
+                outputStream.CopyTo(stream);
+            }
         }
 
-        internal ExcelTabularBook(string existingFilePath)
+        public void Save()
         {
-            if (string.IsNullOrEmpty(existingFilePath))
-                throw new ArgumentNullException(nameof(existingFilePath));
+            if (string.IsNullOrEmpty(path))
+                throw new Exception("Cannot save a file before the path is set");
 
-            if (!System.IO.File.Exists(existingFilePath))
-                throw new Exception(string.Format("Specified excel template '{0}' does not exist.", existingFilePath));
-
-            // Temporary workaround
-            _outputStream = null;
-            _tempFilePath = Path.GetTempFileName();
-            File.Copy(existingFilePath, _tempFilePath, true);
-            FileInfo tempFileInfo = new FileInfo(_tempFilePath);
-            tempFileInfo.IsReadOnly = false;
-            _package = SpreadsheetDocument.Open(_tempFilePath, true);
-            _workbookPart = _package.WorkbookPart;
-            _workbook = _package.WorkbookPart.Workbook;
-            _path = existingFilePath;
+            using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+                Save(fileStream);
         }
-        #endregion
+ 
+        public int GetSheetIndex(string sheetName)
+        {
+            int index = 0;
+            foreach (var sheet in workbook.Elements<Sheets>().First().Elements<Sheet>())
+            {
+                if (sheet.Name == sheetName)
+                    return index;
+                index++;
+            }
+            throw new Exception("Could not find sheet " + sheetName);
+        }
 
-        #region Private Methods
+        Sheet GetSheet(int index) => workbook.Elements<Sheets>().First().Elements<Sheet>().ElementAt(index); 
+
+        public string GetSheetName(int index) => GetSheet(index).Name;
+
+        public bool SheetIsWorksheet(string sheetName)
+        {
+            var sheet = GetSheet(GetSheetIndex(sheetName));
+            return workbookPart.GetPartById(sheet.Id) is WorksheetPart;
+        }
+
+        public ITabularPage AddWorkSheet()
+        {
+            // from http://msdn.microsoft.com/en-us/library/cc861607(office.14).aspx#InsertWorksheet
+
+            var sheets = workbook.GetFirstChild<Sheets>();
+
+            var worksheet = SetupWorksheet(sheets);
+
+            // Append the new worksheet and associate it with the workbook.
+            sheets.Append(worksheet);
+            workbook.Save(workbookPart);
+
+            return GetPage(worksheet.Name);
+        }
+
+        private Sheet SetupWorksheet(Sheets sheets)
+        {
+
+            // Get a unique ID for the new sheet.
+            uint sheetId = 1;
+            bool selected = true;
+            if (sheets.Elements<Sheet>().Count() > 0)
+            {
+                sheetId = sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
+                selected = false;
+            }
+
+            string sheetName = "Sheet" + sheetId;
+            // Add a new worksheet part to the workbook.
+            var newWorksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+            newWorksheetPart.Worksheet = ExcelTabularPage.CreateBlankWorksheet(selected);
+
+            string relationshipId = workbookPart.GetIdOfPart(newWorksheetPart);
+
+            return ExcelTabularPage.CreateBlankSheet(relationshipId, sheetId, sheetName, package);
+        }
+
+        public ITabularPage AddPageAfter(int workSheetIndex)
+        {
+            var sheets = workbook.GetFirstChild<Sheets>();
+
+            var worksheet = SetupWorksheet(sheets);
+
+            if (sheets.Count() <= workSheetIndex)
+                sheets.Append(worksheet);
+            else
+                sheets.InsertAt<Sheet>(worksheet, workSheetIndex + 1);
+            workbook.Save();
+
+            return GetPage(worksheet.Name);
+        }
+
+        public void RemoveDefaultSheets()
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                string sheetName = string.Format("Sheet{0}", i);
+                DeleteWorkSheet(sheetName);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (package != null)
+                package.Dispose();
+            if (outputStream != null)
+                outputStream.Dispose();
+            if (!string.IsNullOrEmpty(tempFilePath))
+                File.Delete(tempFilePath);
+        }
 
         private Workbook AddWorkBook(WorkbookPart workbookPart)
         {
             workbookPart.Workbook = new Workbook(
                 new FileVersion() { ApplicationName = "xl", LastEdited = "4", LowestEdited = "4", BuildVersion = "4506" },
-                new WorkbookProperties() { CheckCompatibility = true, DefaultThemeVersion = (UInt32Value)124226U },
+                new WorkbookProperties() { CheckCompatibility = true, DefaultThemeVersion = 124226U },
                 new BookViews(
-                    new WorkbookView() { XWindow = 180, YWindow = 435, WindowWidth = (UInt32Value)18855U, WindowHeight = (UInt32Value)8895U })
+                    new WorkbookView() { XWindow = 180, YWindow = 435, WindowWidth = 18855U, WindowHeight = 8895U })
             );
             return workbookPart.Workbook;
         }
 
         private void GenerateCoreFilePropertiesPart(OpenXmlPart part)
         {
-            System.Xml.XmlTextWriter writer = new System.Xml.XmlTextWriter(part.GetStream(), System.Text.Encoding.UTF8);
+            var writer = new System.Xml.XmlTextWriter(part.GetStream(), System.Text.Encoding.UTF8);
             writer.WriteRaw(
                 string.Format(
                     "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n<cp:coreProperties xmlns:cp=\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\" xmlns:dcmitype=\"http://purl.org/dc/dcmitype/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><dc:creator>{0}</dc:creator><cp:lastModifiedBy>{0}</cp:lastModifiedBy><dcterms:created xsi:type=\"dcterms:W3CDTF\">{1:s}Z</dcterms:created><dcterms:modified xsi:type=\"dcterms:W3CDTF\">{1:s}Z</dcterms:modified></cp:coreProperties>",
@@ -171,25 +287,25 @@ namespace CustomerTestsExcel
                     new Fonts(
                         new Font(
                             new FontSize() { Val = 11D },
-                            new Color() { Theme = (UInt32Value)1U },
+                            new Color() { Theme = 1U },
                             new FontName() { Val = "Calibri" },
                             new FontFamilyNumbering() { Val = 2 },
                             new FontScheme() { Val = FontSchemeValues.Minor }),
                         new Font(
                             new Underline(),
                             new FontSize() { Val = 11D },
-                            new Color() { Indexed = (UInt32Value)12U },
+                            new Color() { Indexed = 12U },
                             new FontName() { Val = "Calibri" },
                             new FontFamilyNumbering() { Val = 2 })
                     )
-                    { Count = (UInt32Value)2U },
+                    { Count = 2U },
                     new Fills(
                         new Fill(
                             new PatternFill() { PatternType = PatternValues.None }),
                         new Fill(
                             new PatternFill() { PatternType = PatternValues.Gray125 })
                     )
-                    { Count = (UInt32Value)2U },
+                    { Count = 2U },
                     new Borders(
                         new Border(
                             new LeftBorder(),
@@ -198,24 +314,24 @@ namespace CustomerTestsExcel
                             new BottomBorder(),
                             new DiagonalBorder())
                     )
-                    { Count = (UInt32Value)1U },
+                    { Count = 1U },
                     new CellStyleFormats(
-                        new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U },
-                        new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)1U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U }
+                        new CellFormat() { NumberFormatId = 0U, FontId = 0U, FillId = 0U, BorderId = 0U },
+                        new CellFormat() { NumberFormatId = 0U, FontId = 1U, FillId = 0U, BorderId = 0U }
                     )
-                    { Count = (UInt32Value)2U },
+                    { Count = 2U },
                     new CellFormats(
-                        new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U },
-                        new CellFormat() { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)1U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)1U }
+                        new CellFormat() { NumberFormatId = 0U, FontId = 0U, FillId = 0U, BorderId = 0U, FormatId = 0U },
+                        new CellFormat() { NumberFormatId = 0U, FontId = 1U, FillId = 0U, BorderId = 0U, FormatId = 1U }
                     )
-                    { Count = (UInt32Value)2U },
+                    { Count = 2U },
                     new CellStyles(
-                        new CellStyle() { Name = "Hyperlink", FormatId = (UInt32Value)1U, BuiltinId = (UInt32Value)8U },
-                        new CellStyle() { Name = "Normal", FormatId = (UInt32Value)0U, BuiltinId = (UInt32Value)0U }
+                        new CellStyle() { Name = "Hyperlink", FormatId = 1U, BuiltinId = 8U },
+                        new CellStyle() { Name = "Normal", FormatId = 0U, BuiltinId = 0U }
                     )
-                    { Count = (UInt32Value)2U },
-                    new DifferentialFormats() { Count = (UInt32Value)0U },
-                    new TableStyles() { Count = (UInt32Value)0U, DefaultTableStyle = "TableStyleMedium9", DefaultPivotStyle = "PivotStyleLight16" });
+                    { Count = 2U },
+                    new DifferentialFormats() { Count = 0U },
+                    new TableStyles() { Count = 0U, DefaultTableStyle = "TableStyleMedium9", DefaultPivotStyle = "PivotStyleLight16" });
             return element;
         }
 
@@ -235,8 +351,8 @@ namespace CustomerTestsExcel
             // Note that this procedure might leave "orphaned" references, such as strings
             // in the shared strings table. You must take care when adding new strings, for example. 
 
-            Sheets sheets = _workbook.GetFirstChild<Sheets>();
-            Sheet theSheet = sheets.Elements<Sheet>().Single(s => s.Name == nameOfWorkSheetToDelete);
+            var sheets = workbook.GetFirstChild<Sheets>();
+            var theSheet = sheets.Elements<Sheet>().Single(s => s.Name == nameOfWorkSheetToDelete);
 
             if (theSheet == null)
             {
@@ -249,158 +365,11 @@ namespace CustomerTestsExcel
             sheets.RemoveChild(theSheet);
 
             // Delete the worksheet part.
-            _workbookPart.DeletePart(_workbookPart.GetPartById(theSheet.Id));
+            workbookPart.DeletePart(workbookPart.GetPartById(theSheet.Id));
 
-            _workbook.Save(_workbookPart);
+            workbook.Save(workbookPart);
 
             return true;
-        }
-
-        #endregion
-
-        private void Recalculate()
-        {
-            // standalone tocheck
-            //foreach (var worksheetPart in _workbookPart.WorksheetParts)
-            //{
-            //    foreach (var row in new OpenXMLExcelRows(worksheetPart.Worksheet.GetFirstChild<SheetData>()))
-            //    {
-            //        foreach (var cell in row.Elements<Cell>())
-            //        {
-            //            if (cell.CellFormula != null)
-            //                cell.CellFormula.CalculateCell = new BooleanValue(true);
-            //        }
-            //    }
-            //}
-        }
-
-        public void Save(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            Recalculate();
-
-            foreach (var worksheetPart in _workbookPart.WorksheetParts)
-                worksheetPart.Worksheet.Save(worksheetPart);
-            _workbookPart.WorkbookStylesPart.Stylesheet.Save(_workbookPart.WorkbookStylesPart);
-            _workbook.Save(_workbookPart);
-            _package.Close();
-
-            if (!string.IsNullOrEmpty(_tempFilePath) && File.Exists(_tempFilePath))
-            {
-                using (var fileStream = new FileStream(_tempFilePath, FileMode.Open, FileAccess.Read))
-                    fileStream.CopyTo(stream);
-
-                File.Delete(_tempFilePath);
-            }
-            else
-            {
-                _outputStream.Seek(0, SeekOrigin.Begin);
-                _outputStream.CopyTo(stream);
-            }
-        }
-
-        public void Save()
-        {
-            if (string.IsNullOrEmpty(_path))
-                throw new Exception("Cannot save a file before the path is set");
-
-            using (var fileStream = new FileStream(_path, FileMode.Create, FileAccess.ReadWrite))
-                Save(fileStream);
-        }
- 
-        public int GetSheetIndex(string sheetName)
-        {
-            int index = 0;
-            foreach (var sheet in _workbook.Elements<Sheets>().First().Elements<Sheet>())
-            {
-                if (sheet.Name == sheetName)
-                    return index;
-                index++;
-            }
-            throw new Exception("Could not find sheet " + sheetName);
-        }
-
-        Sheet GetSheet(int index) => _workbook.Elements<Sheets>().First().Elements<Sheet>().ElementAt(index); 
-
-        public string GetSheetName(int index) => GetSheet(index).Name;
-
-        public bool SheetIsWorksheet(string sheetName)
-        {
-            Sheet sheet = GetSheet(GetSheetIndex(sheetName));
-            return _workbookPart.GetPartById(sheet.Id) is WorksheetPart;
-        }
-
-        public ITabularPage AddWorkSheet()
-        {
-            // from http://msdn.microsoft.com/en-us/library/cc861607(office.14).aspx#InsertWorksheet
-
-            Sheets sheets = _workbook.GetFirstChild<Sheets>();
-
-            Sheet worksheet = SetupWorksheet(sheets);
-
-            // Append the new worksheet and associate it with the workbook.
-            sheets.Append(worksheet);
-            _workbook.Save(_workbookPart);
-
-            return GetPage(worksheet.Name);
-        }
-
-        private Sheet SetupWorksheet(Sheets sheets)
-        {
-
-            // Get a unique ID for the new sheet.
-            uint sheetId = 1;
-            bool selected = true;
-            if (sheets.Elements<Sheet>().Count() > 0)
-            {
-                sheetId = sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
-                selected = false;
-            }
-
-            string sheetName = "Sheet" + sheetId;
-            // Add a new worksheet part to the workbook.
-            WorksheetPart newWorksheetPart = _workbookPart.AddNewPart<WorksheetPart>();
-            newWorksheetPart.Worksheet = ExcelTabularPage.CreateBlankWorksheet(selected);
-
-            string relationshipId = _workbookPart.GetIdOfPart(newWorksheetPart);
-
-            return ExcelTabularPage.CreateBlankSheet(relationshipId, sheetId, sheetName, _package);
-        }
-
-        public ITabularPage AddPageAfter(int workSheetIndex)
-        {
-            Sheets sheets = _workbook.GetFirstChild<Sheets>();
-
-            Sheet worksheet = SetupWorksheet(sheets);
-
-            if (sheets.Count() <= workSheetIndex)
-                sheets.Append(worksheet);
-            else
-                sheets.InsertAt<Sheet>(worksheet, workSheetIndex + 1);
-            _workbook.Save();
-
-            return GetPage(worksheet.Name);
-        }
-
-        public void RemoveDefaultSheets()
-        {
-            for (int i = 1; i <= 3; i++)
-            {
-                string sheetName = System.String.Format("Sheet{0}", i);
-                DeleteWorkSheet(sheetName);
-            }
-        }
-
-        public void Dispose()
-        {
-            if (_package != null)
-                _package.Dispose();
-            if (_outputStream != null)
-                _outputStream.Dispose();
-            if (!string.IsNullOrEmpty(_tempFilePath))
-                File.Delete(_tempFilePath);
         }
 
     }
