@@ -238,10 +238,42 @@ namespace CustomerTestsExcel.CodeOutputWriters
         public void EndSpecification(string specificationNamespace, bool passed)
         {
             worksheet = null;
-
-            workbook.SaveAs(GetFilename(specificationNamespace));
+            SaveExcelFile(specificationNamespace);
 
             workbook = null;
+        }
+
+        private void SaveExcelFile(string specificationNamespace)
+        {
+            string filename = GetFilename(specificationNamespace);
+
+            try
+            {
+                workbook.SaveAs(filename);
+            }
+            catch (Exception exception)
+            {
+                ThrowExceptionWithExplanation(filename, exception);
+            }
+        }
+
+        private static void ThrowExceptionWithExplanation(string filename, Exception exception)
+        {
+            throw new CodeToExcelException(
+$@"Could not save the round tripped excel representation of the test
+
+This fails the test, regardless of the usual outcome
+
+Attempted to save to : {filename}
+
+Tests are written back to excel if the CUSTOMER_TESTS_EXCEL_WRITE_TO_EXCEL
+environment variable is 'true', or if excelOutput is set to true for a test.
+
+The path defaults to '..\..\ExcelTests' and can be overriden with the 
+CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS environment variable. The filename
+comes from the last part of the namespace (which you should generally leave
+alone)"
+                , exception);
         }
 
         public void Exception(string exception)
