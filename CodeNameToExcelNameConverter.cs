@@ -126,19 +126,6 @@ namespace CustomerTestsExcel
                 : cSharpPropertyName;
         }
 
-        // Change "Calibrations(0) of" to "Calibrations of"
-        string RemoveArrayIndex(string excelPropertyName)
-        {
-            int start = excelPropertyName.IndexOf("(", StringComparison.InvariantCulture);
-            int end = excelPropertyName.IndexOf(")", StringComparison.InvariantCulture);
-
-            if (start != -1)
-            {
-                excelPropertyName = excelPropertyName.Substring(0, start) + excelPropertyName.Substring(end + 1);
-            }
-            return excelPropertyName;
-        }
-
         // the property names (not values) of the "Given" part of the test
         public string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName)
         {
@@ -146,14 +133,8 @@ namespace CustomerTestsExcel
             throw new NotImplementedException();
         }
         // Change "Calibrations    table of" to "Calibrations_table_of"
-        public string GivenTablePropertyNameExcelNameToCodeName(string excelPropertyName)
-        {
-            string withoutIndex = RemoveArrayIndex(excelPropertyName);
-
-            string withoutTableOf = RemoveExcelTableOfPostfix(withoutIndex);
-
-            return withoutTableOf.Trim().Replace(" ", "_") + "_table_of";
-        }
+        public string GivenTablePropertyNameExcelNameToCodeName(string excelPropertyName) =>
+            RemoveTableOfPostfix(excelPropertyName).Trim().Replace(" ", "_") + "_table_of";
         // Change "Calibrations    table of" to "Calibrations" (potentially this should also lower case the first character, but it doesn't at the moment, and ExcelToCode does it instead. I guess if other languages are supported in the future, this class shouldn't do the casing, so maybe its best not being done here.)
         public string GivenTablePropertyNameExcelNameToCodeVariableName(string excelPropertyName)
         {
@@ -161,10 +142,14 @@ namespace CustomerTestsExcel
 
             return methodName.Substring(0, methodName.Length - TableOf.Length - 1);
         }
-
         // Change "Calibrations table of" to "Calibrations"
-        public string RemoveExcelTableOfPostfix(string excelPropertyName) =>
+        // Designed for use with specification specific class generation
+        public string GivenTablePropertyNameExcelNameToSutName(string excelPropertyName) =>
+            RemoveTableOfPostfix(excelPropertyName).Trim().Replace(" ", "_");
+        static string RemoveTableOfPostfix(string excelPropertyName) => 
             excelPropertyName.Substring(0, excelPropertyName.Length - 9);
+
+
 
         // the property names (not values) of the "Given" part of the test
         public string GivenListPropertyNameCodeNameToExcelName(string cSharpPropertyName)

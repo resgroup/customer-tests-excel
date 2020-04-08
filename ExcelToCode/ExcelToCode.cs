@@ -425,7 +425,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 v =>
                     v.VisitGivenTablePropertyDeclaration(
                         new GivenTableProperty(
-                            converter.RemoveExcelTableOfPostfix(excelPropertyName),
+                            converter.GivenTablePropertyNameExcelNameToSutName(excelPropertyName),
                             excelClassName),
                         tableHeaders));
         }

@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 {
     [TestFixture]
-    public class GivenClassRecorder2 : TestBase
+    public class DuplicateGivenSimplePropertes : TestBase
     {
         [Test]
         public void GivenClassRecorderIgnoresSimplePropertyDuplicates()
