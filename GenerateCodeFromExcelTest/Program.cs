@@ -34,7 +34,9 @@ namespace GenerateCodeFromExcelTest
 
                 var assembliesUnderTest = GetSetting(args, "assembliesUnderTest").Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
-                new TestProjectCreator().Create(
+                return new TestProjectCreator(
+                    new ConsoleLogger()
+                ).Create(
                     folder,
                     specificationProject,
                     "ExcelTests",
@@ -42,10 +44,7 @@ namespace GenerateCodeFromExcelTest
                     usings,
                     assembliesUnderTest,
                     assertionClassPrefix,
-                    new ExcelTabularLibrary(),
-                    new ConsoleLogger());
-
-                return 0;
+                    new ExcelTabularLibrary());
             }
             catch (Exception ex)
             {

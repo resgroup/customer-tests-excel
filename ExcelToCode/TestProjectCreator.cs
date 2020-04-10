@@ -17,9 +17,11 @@ namespace CustomerTestsExcel.ExcelToCode
         readonly SpecificationSpecificUnmatchedClassGenerator specificationSpecificUnmatchedClassGenerator;
         readonly SpecificationSpecificRootClassGenerator specificationSpecificRootClassGenerator;
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
+        readonly ILogger logger;
         bool success;
 
-        public TestProjectCreator()
+        public TestProjectCreator(
+            ILogger logger)
         {
             givenClassRecorder = new GivenClassRecorder();
             specificationSpecificClassGenerator = new SpecificationSpecificClassGenerator(
@@ -28,6 +30,7 @@ namespace CustomerTestsExcel.ExcelToCode
             specificationSpecificUnmatchedClassGenerator = new SpecificationSpecificUnmatchedClassGenerator();
             specificationSpecificRootClassGenerator = new SpecificationSpecificRootClassGenerator();
             excelCsharpClassMatcher = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher());
+            this.logger = logger;
         }
 
         public int Create(
@@ -38,8 +41,7 @@ namespace CustomerTestsExcel.ExcelToCode
             IEnumerable<string> usings,
             IEnumerable<string> assembliesUnderTest,
             string assertionClassPrefix,
-            ITabularLibrary excel,
-            ILogger logger)
+            ITabularLibrary excel)
         {
             success = true;
 
@@ -49,21 +51,48 @@ namespace CustomerTestsExcel.ExcelToCode
             var compileItemGroupNode = GetItemGroupForCompileNodes(project);
             var excelItemGroupNode = GetItemGroupForExcelNodes(project);
 
+            GenerateTestClasses(
+                specificationFolder, 
+                excelTestsFolder, 
+                projectRootNamespace, 
+                usings, 
+                assertionClassPrefix, 
+                excel, 
+                logger, 
+                project, 
+                compileItemGroupNode, 
+                excelItemGroupNode);
+
+            GenerateSpecificationSpecificSetupClasses(
+                specificationFolder,
+                projectRootNamespace,
+                usings,
+                assembliesUnderTest,
+                project,
+                compileItemGroupNode);
+
+            GenerateSpecificationSpecificPlaceholder(
+                specificationFolder,
+                projectRootNamespace,
+                compileItemGroupNode);
+
+            SaveProjectFile(projectFilePath, project);
+
+            return success ? 0 : -1;
+        }
+
+        private void GenerateTestClasses(string specificationFolder, string excelTestsFolder, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
+        {
             string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
             foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
             {
                 excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
                 OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
             }
+        }
 
-            GenerateSpecificationSpecificSetupClasses(
-                specificationFolder, 
-                projectRootNamespace, 
-                usings, 
-                assembliesUnderTest, 
-                project, 
-                compileItemGroupNode);
-
+        private static void GenerateSpecificationSpecificPlaceholder(string specificationFolder, string projectRootNamespace, XElement compileItemGroupNode)
+        {
             var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", "Placeholder.cs");
             var outputPath = Path.Combine(specificationFolder, projectRelativePath);
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
@@ -104,10 +133,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 new XAttribute("Include", projectRelativePath)
                 )
             );
-
-            SaveProjectFile(projectFilePath, project);
-
-            return success ? 0 : 1;
         }
 
         private void GenerateSpecificationSpecificSetupClasses(
@@ -122,7 +147,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             foreach (var assemblyFilename in assembliesUnderTest)
             {
-                assemblyTypes.AddRange(Assembly.LoadFile(assemblyFilename).GetTypes());
+                assemblyTypes.AddRange(GetTypesFromAssembly(assemblyFilename));
             }
 
             givenClassRecorder.Classes.ToList().ForEach(
@@ -185,6 +210,20 @@ namespace CustomerTestsExcel.ExcelToCode
                     }
                 }
             );
+        }
+
+        IEnumerable<Type> GetTypesFromAssembly(string assemblyFilename)
+        {
+            try
+            {
+                return Assembly.LoadFile(assemblyFilename).GetTypes();
+            }
+            catch (Exception exception)
+            {
+                logger.LogAssemblyError(assemblyFilename, exception);
+                success = false;
+                return new List<Type>();
+            }
         }
 
         IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
