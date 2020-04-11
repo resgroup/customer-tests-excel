@@ -115,7 +115,7 @@ $@"        // No sensible implementation can be generated for functions, so plea
         {
             return excelGivenClass
                 .Properties
-                .Where(excelProperty => IsSimpleProperty(excelProperty.Type))
+                .Where(excelProperty => excelProperty.Type.IsSimpleProperty())
                 .Select(SimplePropertyDeclaration);
         }
 
@@ -131,7 +131,7 @@ $@"        // No sensible implementation can be generated for functions, so plea
         {
             return excelGivenClass
                 .Properties
-                .Where(excelProperty => IsSimpleProperty(excelProperty.Type))
+                .Where(excelProperty => excelProperty.Type.IsSimpleProperty())
                 .Select(SimplePropertySetter);
         }
 
@@ -164,19 +164,6 @@ $@"        // No sensible implementation can be generated for functions, so plea
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type));
             };
-        }
-
-        static bool IsSimpleProperty(ExcelPropertyType excelPropertyType)
-        {
-            return excelPropertyType == ExcelPropertyType.Boolean
-                                || excelPropertyType == ExcelPropertyType.DateTime
-                                || excelPropertyType == ExcelPropertyType.Decimal
-                                || excelPropertyType == ExcelPropertyType.Enum
-                                || excelPropertyType == ExcelPropertyType.Null
-                                || excelPropertyType == ExcelPropertyType.Number
-                                || excelPropertyType == ExcelPropertyType.String
-                                || excelPropertyType == ExcelPropertyType.StringNull
-                                || excelPropertyType == ExcelPropertyType.TimeSpan;
         }
 
         string SimplePropertySetter(IGivenClassProperty excelGivenProperty)

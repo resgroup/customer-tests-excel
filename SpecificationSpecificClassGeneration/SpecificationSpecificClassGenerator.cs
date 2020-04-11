@@ -112,26 +112,13 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
                     type.GetProperties()
                     .FirstOrDefault(c => excelCsharpPropertyMatcher.PropertiesMatch(c, excelProperty));
 
-                if (IsSimpleProperty(excelProperty.Type))
+                if (excelProperty.Type.IsSimpleProperty())
                 {
                     yield return SimplePropertySetter(
                         cSharpProperty.PropertyType.Name,
                         excelProperty);
                 }
             }
-        }
-
-        static bool IsSimpleProperty(ExcelPropertyType excelPropertyType)
-        {
-            return excelPropertyType == ExcelPropertyType.Boolean
-                                || excelPropertyType == ExcelPropertyType.DateTime
-                                || excelPropertyType == ExcelPropertyType.Decimal
-                                || excelPropertyType == ExcelPropertyType.Enum
-                                || excelPropertyType == ExcelPropertyType.Null
-                                || excelPropertyType == ExcelPropertyType.Number
-                                || excelPropertyType == ExcelPropertyType.String
-                                || excelPropertyType == ExcelPropertyType.StringNull
-                                || excelPropertyType == ExcelPropertyType.TimeSpan;
         }
 
         string SimplePropertySetter(string propertyTypeName, IGivenClassProperty excelGivenProperty)

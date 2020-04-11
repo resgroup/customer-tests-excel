@@ -21,4 +21,21 @@ namespace CustomerTestsExcel.ExcelToCode
         List,
         Function
     }
+
+    public static class ExcelPropertyTypeExtensions
+    {
+        public static bool IsSimpleProperty(this ExcelPropertyType excelPropertyType)
+        {
+            return excelPropertyType == 
+                ExcelPropertyType.Boolean
+                || excelPropertyType == ExcelPropertyType.DateTime
+                || excelPropertyType == ExcelPropertyType.Decimal
+                || excelPropertyType == ExcelPropertyType.Enum
+                || excelPropertyType == ExcelPropertyType.Null
+                || excelPropertyType == ExcelPropertyType.Number
+                || excelPropertyType == ExcelPropertyType.String
+                || excelPropertyType == ExcelPropertyType.StringNull
+                || excelPropertyType == ExcelPropertyType.TimeSpan;
+        }
+    }
 }
