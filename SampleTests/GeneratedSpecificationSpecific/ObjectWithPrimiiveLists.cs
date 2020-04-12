@@ -20,24 +20,14 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
         readonly List<SpecificationSpecificInteger> integerTableSyntaxs;
-        readonly List<SpecificationSpecificInteger> integerListSyntaxs;
         readonly List<SpecificationSpecificFloat> floatTableSyntaxs;
-        readonly List<SpecificationSpecificFloat> floatListSyntaxs;
         readonly List<SpecificationSpecificString> stringTableSyntaxs;
-        readonly List<SpecificationSpecificString> stringListSyntaxs;
-        readonly List<SpecificationSpecificDateTime> dateTimeTableSyntaxs;
-        readonly List<SpecificationSpecificDateTime> dateTimeListSyntaxs;
 
         public SpecificationSpecificObjectWithPrimiiveLists()
         {
             integerTableSyntaxs = new List<SpecificationSpecificInteger>();
-            integerListSyntaxs = new List<SpecificationSpecificInteger>();
             floatTableSyntaxs = new List<SpecificationSpecificFloat>();
-            floatListSyntaxs = new List<SpecificationSpecificFloat>();
             stringTableSyntaxs = new List<SpecificationSpecificString>();
-            stringListSyntaxs = new List<SpecificationSpecificString>();
-            dateTimeTableSyntaxs = new List<SpecificationSpecificDateTime>();
-            dateTimeListSyntaxs = new List<SpecificationSpecificDateTime>();
         }
 
 
@@ -75,35 +65,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_of(SpecificationSpecificInteger integerListSyntax)
-        {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), integerListSyntax));
-
-            this.integerListSyntaxs.Add(integerListSyntax);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_list_of(List<SpecificationSpecificInteger> integerListSyntaxs, string listType)
-        {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, integerListSyntaxs));
-
-            this.integerListSyntaxs.AddRange(integerListSyntaxs);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificInteger> integerListSyntaxs)
-        {
-            integerListSyntaxs.PropertyName = GetCurrentMethod().Name;
-
-            classTableProperties.Add(integerListSyntaxs);
-
-            foreach (var row in integerListSyntaxs.Rows)
-                this.integerListSyntaxs.Add(row.Properties);
-
-            return this;
-        }
         internal SpecificationSpecificObjectWithPrimiiveLists FloatTableSyntax_of(SpecificationSpecificFloat floatTableSyntax)
         {
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), floatTableSyntax));
@@ -133,35 +94,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-        internal SpecificationSpecificObjectWithPrimiiveLists FloatListSyntax_of(SpecificationSpecificFloat floatListSyntax)
-        {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), floatListSyntax));
-
-            this.floatListSyntaxs.Add(floatListSyntax);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists FloatListSyntax_list_of(List<SpecificationSpecificFloat> floatListSyntaxs, string listType)
-        {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, floatListSyntaxs));
-
-            this.floatListSyntaxs.AddRange(floatListSyntaxs);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists FloatListSyntax_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat> floatListSyntaxs)
-        {
-            floatListSyntaxs.PropertyName = GetCurrentMethod().Name;
-
-            classTableProperties.Add(floatListSyntaxs);
-
-            foreach (var row in floatListSyntaxs.Rows)
-                this.floatListSyntaxs.Add(row.Properties);
-
-            return this;
-        }
         internal SpecificationSpecificObjectWithPrimiiveLists StringTableSyntax_of(SpecificationSpecificString stringTableSyntax)
         {
             classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), stringTableSyntax));
@@ -188,93 +120,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             foreach (var row in stringTableSyntaxs.Rows)
                 this.stringTableSyntaxs.Add(row.Properties);
-
-            return this;
-        }
-        internal SpecificationSpecificObjectWithPrimiiveLists StringListSyntax_of(SpecificationSpecificString stringListSyntax)
-        {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), stringListSyntax));
-
-            this.stringListSyntaxs.Add(stringListSyntax);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists StringListSyntax_list_of(List<SpecificationSpecificString> stringListSyntaxs, string listType)
-        {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, stringListSyntaxs));
-
-            this.stringListSyntaxs.AddRange(stringListSyntaxs);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists StringListSyntax_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificString> stringListSyntaxs)
-        {
-            stringListSyntaxs.PropertyName = GetCurrentMethod().Name;
-
-            classTableProperties.Add(stringListSyntaxs);
-
-            foreach (var row in stringListSyntaxs.Rows)
-                this.stringListSyntaxs.Add(row.Properties);
-
-            return this;
-        }
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_of(SpecificationSpecificDateTime dateTimeTableSyntax)
-        {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), dateTimeTableSyntax));
-
-            this.dateTimeTableSyntaxs.Add(dateTimeTableSyntax);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_list_of(List<SpecificationSpecificDateTime> dateTimeTableSyntaxs, string listType)
-        {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, dateTimeTableSyntaxs));
-
-            this.dateTimeTableSyntaxs.AddRange(dateTimeTableSyntaxs);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificDateTime> dateTimeTableSyntaxs)
-        {
-            dateTimeTableSyntaxs.PropertyName = GetCurrentMethod().Name;
-
-            classTableProperties.Add(dateTimeTableSyntaxs);
-
-            foreach (var row in dateTimeTableSyntaxs.Rows)
-                this.dateTimeTableSyntaxs.Add(row.Properties);
-
-            return this;
-        }
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeListSyntax_of(SpecificationSpecificDateTime dateTimeListSyntax)
-        {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), dateTimeListSyntax));
-
-            this.dateTimeListSyntaxs.Add(dateTimeListSyntax);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeListSyntax_list_of(List<SpecificationSpecificDateTime> dateTimeListSyntaxs, string listType)
-        {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, dateTimeListSyntaxs));
-
-            this.dateTimeListSyntaxs.AddRange(dateTimeListSyntaxs);
-
-            return this;
-        }
-
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeListSyntax_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificDateTime> dateTimeListSyntaxs)
-        {
-            dateTimeListSyntaxs.PropertyName = GetCurrentMethod().Name;
-
-            classTableProperties.Add(dateTimeListSyntaxs);
-
-            foreach (var row in dateTimeListSyntaxs.Rows)
-                this.dateTimeListSyntaxs.Add(row.Properties);
 
             return this;
         }
