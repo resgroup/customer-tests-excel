@@ -11,7 +11,8 @@ namespace CustomerTestsExcel
     public class RunSpecification<T>
         where T : IReportsSpecificationSetup
     {
-        public string Message { get { return message.StringBuilder.ToString(); } }
+        public string Message => 
+            message.StringBuilder.ToString();
 
         protected readonly ITestOutputWriter writer;
         protected readonly StringBuilderTextLineWriter message;
@@ -19,14 +20,22 @@ namespace CustomerTestsExcel
         public RunSpecification()
         {
             message = new StringBuilderTextLineWriter();
-            writer = new StringTestOutputWriter(new HumanFriendlyFormatter(), message);
+
+            writer = new StringTestOutputWriter(
+                new HumanFriendlyFormatter(), 
+                message);
         }
 
         public RunSpecification(ITestOutputWriter writer) : this()
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            this.writer = new CombinedTestOutputWriter(new List<ITestOutputWriter>() { writer, this.writer });
+            this.writer = new CombinedTestOutputWriter(
+                new List<ITestOutputWriter>() {
+                    writer,
+                    this.writer
+                }
+            );
         }
 
         public bool Run(ISpecification<T> specification)
@@ -35,7 +44,11 @@ namespace CustomerTestsExcel
             var specificationNamespace = specification.GetType().Namespace;
 
             // arrange
-            writer.StartSpecification(specificationNamespace, specification.GetType().Name, specification.Description());
+            writer.StartSpecification(
+                specificationNamespace, 
+                specification.GetType().Name, 
+                specification.Description()
+            );
 
             writer.StartGiven();
             sut = specification.Given();
@@ -90,10 +103,9 @@ namespace CustomerTestsExcel
             {
                 WriteProperties(properties);
             }
-
         }
 
-        private void WriteProperties(IReportsSpecificationSetup properties)
+        void WriteProperties(IReportsSpecificationSetup properties)
         {
             WriteValueProperties(properties);
 
@@ -104,7 +116,7 @@ namespace CustomerTestsExcel
             WriteListProperties(properties);
         }
 
-        private void WriteListProperties(IReportsSpecificationSetup properties)
+        void WriteListProperties(IReportsSpecificationSetup properties)
         {
             foreach (var property in properties.ListProperties)
             {
@@ -122,31 +134,47 @@ namespace CustomerTestsExcel
             }
         }
 
-        private void WriteValueProperties(IReportsSpecificationSetup properties)
+        void WriteValueProperties(IReportsSpecificationSetup properties)
         {
-            foreach (var property in properties.ValueProperties) writer.GivenProperty(property);
+            foreach (var property in properties.ValueProperties)
+                writer.GivenProperty(property);
         }
 
         private void WriteClassProperties(IReportsSpecificationSetup properties)
         {
             foreach (var classProperty in properties.ClassProperties)
             {
-                writer.GivenClassProperty(classProperty.PropertyName, classProperty.Properties == null);
+                writer.GivenClassProperty(
+                    classProperty.PropertyName, 
+                    classProperty.Properties == null
+                );
 
                 if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
             }
         }
 
-        private void WriteClassTableProperties(IReportsSpecificationSetup properties)
+        void WriteClassTableProperties(IReportsSpecificationSetup properties)
         {
             foreach (var classTableProperty in properties.ClassTableProperties)
             {
                 if (classTableProperty.Rows.Any())
                 {
-                    writer.StartClassTable(classTableProperty.PropertyName, ClassName(classTableProperty.Rows.First().Properties));
-                    writer.ClassTablePropertyNamesHeaderRow(classTableProperty.Rows.First().Properties.ValueProperties.Select(p => p.PropertyName));
+                    writer.StartClassTable(
+                        classTableProperty.PropertyName, 
+                        ClassName(classTableProperty.Rows.First().Properties)
+                    );
 
-                    foreach (var row in classTableProperty.Rows) writer.ClassTablePropertyRow(row.Properties.ValueProperties);
+                    writer.ClassTablePropertyNamesHeaderRow(
+                        classTableProperty
+                        .Rows
+                        .First()
+                        .Properties
+                        .ValueProperties
+                        .Select(p => p.PropertyName)
+                    );
+
+                    foreach (var row in classTableProperty.Rows)
+                        writer.ClassTablePropertyRow(row.Properties.ValueProperties);
 
                     writer.EndClassTable();
                 }
