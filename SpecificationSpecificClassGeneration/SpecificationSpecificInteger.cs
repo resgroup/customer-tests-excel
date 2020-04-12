@@ -2,15 +2,15 @@
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
-    public class SpecificationSpecificFloat : ReportsSpecificationSetup
+    public class SpecificationSpecificInteger : ReportsSpecificationSetup
     {
-        public double Float { get; private set; }
+        public int Integer { get; private set; }
 
-        public SpecificationSpecificFloat Float_of(double value)
+        public SpecificationSpecificInteger Integer_of(int value)
         {
             valueProperties.Add(GetCurrentMethod(), value);
-
-            Float = value;
+            
+            Integer = value;
 
             return this;
         }

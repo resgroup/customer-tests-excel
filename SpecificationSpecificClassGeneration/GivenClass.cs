@@ -26,7 +26,11 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // Currently the framework supplied classes are:
             // - SpecificationSpecificFloat
             // We could do some fancy reflection here to find these, but not sure it is merited
-            return Name == "Float";
+            return 
+                Name == "Float"
+                || Name == "Integer"
+                || Name == "DateTime"
+                || Name == "String";
         }
 
         public override string ToString()

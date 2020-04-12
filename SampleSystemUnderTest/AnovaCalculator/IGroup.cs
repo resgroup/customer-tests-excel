@@ -5,6 +5,6 @@ namespace SampleSystemUnderTest.AnovaCalculator
     public interface IGroup
     {
         string Name { get; }
-        IEnumerable<float> Floats { get; }
+        IEnumerable<double> Floats { get; }
     }
 }

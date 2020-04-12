@@ -111,6 +111,9 @@
     <Compile Include="ReportSpecificationSetupClassUsingTable.cs" />
     <Compile Include="ReportSpecificationSetupClassUsingTableRow.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassSimpleProperty.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificString.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificDateTime.cs" />
+    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificInteger.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificUnmatchedClassGenerator.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificRootClassGenerator.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificClassGenerator.cs" />
