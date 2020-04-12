@@ -105,8 +105,8 @@ $@"        // No sensible implementation can be generated for functions, so plea
         // add the function below in a custom class.
         // Custom classes should go under a directory called 'IgnoreOnGeneration'.
         // If the custom class filename is the same as this one ({SpecificationSpecificClassName}),
-        // then it will be used instead of this function. If it is called something else,
-        // say {SpecificationSpecificClassName}Parial, then this class will remain, and
+        // then it will be used instead of this file. If it is called something else,
+        // say {SpecificationSpecificClassName}Partial, then this class will remain, and
         // the custom class can add to it.
         // public void {functionName}() {{ .. }} ";
         }

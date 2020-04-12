@@ -30,8 +30,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
         // add the function below in a custom class.
         // Custom classes should go under a directory called 'IgnoreOnGeneration'.
         // If the custom class filename is the same as this one (SpecificationSpecificValidator),
-        // then it will be used instead of this function. If it is called something else,
-        // say SpecificationSpecificValidatorParial, then this class will remain, and
+        // then it will be used instead of this file. If it is called something else,
+        // say SpecificationSpecificValidatorPartial, then this class will remain, and
         // the custom class can add to it.
         // public void WithValidProperties() { .. } 
 
