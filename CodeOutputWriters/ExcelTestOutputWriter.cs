@@ -136,7 +136,13 @@ namespace CustomerTestsExcel.CodeOutputWriters
             {
                 foreach (var cell in cells)
                 {
-                    SetCell(namer.PropertyValueExcelToCode(namer.AssertPropertyCodeNameToExcelName(cell.PropertyName), cell.PropertyValue), namer.PropertyValueCodeToExcel(cell.PropertyNamespace, cell.PropertyValue));
+                    SetCell(
+                        namer.PropertyValueExcelToCode(
+                            namer.AssertPropertyCodeNameToExcelName(cell.PropertyName),
+                            cell.PropertyValue), 
+                        namer.PropertyValueCodeToExcel(
+                            cell.PropertyNamespace,
+                            cell.PropertyValue));
                     Indent();
                 }
             }

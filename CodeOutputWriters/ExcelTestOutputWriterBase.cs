@@ -62,20 +62,18 @@ namespace CustomerTestsExcel.CodeOutputWriters
             }
         }
 
-        protected void SetCell(uint row, uint column, string cSharpValue, object excelValue)
+        static bool NewValueIsDifferent(string cSharpNewValue, object excelNewValue, ITabularCell existingCell)
         {
-            var cell = worksheet.GetCell(row, column);
-            if (cell.Value == null || (cell.Value.Equals(excelValue) == false && cell.Value.ToString() != cSharpValue))
-            {
-                if (!cell.IsFormula)
-                {
-                    worksheet.SetCell(row, column, excelValue);
-                }
-                else
-                {
-                    AddSkippedCellWarning(row, column, excelValue);
-                }
-            }
+            if (existingCell.Value is DateTime)
+                return !existingCell.Value.Equals(excelNewValue);
+
+            return 
+                existingCell.Value == null 
+                || 
+                (
+                    existingCell.Value.Equals(excelNewValue) == false 
+                    && existingCell.Value.ToString() != cSharpNewValue
+                );
         }
 
         protected void SetCell(uint row, uint column, object value)
@@ -107,6 +105,22 @@ namespace CustomerTestsExcel.CodeOutputWriters
         protected void SetCell(string cSharpValue, object value)
         {
             SetCell(row, column, cSharpValue, value);
+        }
+
+        protected void SetCell(uint row, uint column, string cSharpValue, object excelValue)
+        {
+            var cell = worksheet.GetCell(row, column);
+            if (NewValueIsDifferent(cSharpValue, excelValue, cell))
+            {
+                if (!cell.IsFormula)
+                {
+                    worksheet.SetCell(row, column, excelValue);
+                }
+                else
+                {
+                    AddSkippedCellWarning(row, column, excelValue);
+                }
+            }
         }
 
         protected void SetPosition(uint row, uint column)

@@ -22,12 +22,14 @@ namespace SampleTests.GeneratedSpecificationSpecific
         readonly List<SpecificationSpecificInteger> integerTableSyntaxs;
         readonly List<SpecificationSpecificFloat> floatTableSyntaxs;
         readonly List<SpecificationSpecificString> stringTableSyntaxs;
+        readonly List<SpecificationSpecificDateTime> dateTimeTableSyntaxs;
 
         public SpecificationSpecificObjectWithPrimiiveLists()
         {
             integerTableSyntaxs = new List<SpecificationSpecificInteger>();
             floatTableSyntaxs = new List<SpecificationSpecificFloat>();
             stringTableSyntaxs = new List<SpecificationSpecificString>();
+            dateTimeTableSyntaxs = new List<SpecificationSpecificDateTime>();
         }
 
 
@@ -120,6 +122,35 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             foreach (var row in stringTableSyntaxs.Rows)
                 this.stringTableSyntaxs.Add(row.Properties);
+
+            return this;
+        }
+        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_of(SpecificationSpecificDateTime dateTimeTableSyntax)
+        {
+            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), dateTimeTableSyntax));
+
+            this.dateTimeTableSyntaxs.Add(dateTimeTableSyntax);
+
+            return this;
+        }
+
+        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_list_of(List<SpecificationSpecificDateTime> dateTimeTableSyntaxs, string listType)
+        {
+            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, dateTimeTableSyntaxs));
+
+            this.dateTimeTableSyntaxs.AddRange(dateTimeTableSyntaxs);
+
+            return this;
+        }
+
+        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificDateTime> dateTimeTableSyntaxs)
+        {
+            dateTimeTableSyntaxs.PropertyName = GetCurrentMethod().Name;
+
+            classTableProperties.Add(dateTimeTableSyntaxs);
+
+            foreach (var row in dateTimeTableSyntaxs.Rows)
+                this.dateTimeTableSyntaxs.Add(row.Properties);
 
             return this;
         }

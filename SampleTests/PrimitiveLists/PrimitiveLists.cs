@@ -72,6 +72,20 @@ namespace SampleTests.PrimitiveLists
                 }
                 objectWithPrimiiveLists.StringTableSyntax_table_of(StringTableSyntaxRow);
             }
+            {
+                var DateTimeTableSyntaxRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificDateTime>();
+                {
+                    var dateTimeTableSyntaxRow = new SpecificationSpecificDateTime();
+                    dateTimeTableSyntaxRow.DateTime_of(DateTime.Parse("2000-01-01T00:00:00"));
+                    DateTimeTableSyntaxRow.Add(dateTimeTableSyntaxRow);
+                }
+                {
+                    var dateTimeTableSyntaxRow = new SpecificationSpecificDateTime();
+                    dateTimeTableSyntaxRow.DateTime_of(DateTime.Parse("2000-01-01T00:00:00"));
+                    DateTimeTableSyntaxRow.Add(dateTimeTableSyntaxRow);
+                }
+                objectWithPrimiiveLists.DateTimeTableSyntax_table_of(DateTimeTableSyntaxRow);
+            }
             
             return objectWithPrimiiveLists;
         }

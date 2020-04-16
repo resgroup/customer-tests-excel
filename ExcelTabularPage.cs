@@ -190,8 +190,6 @@ namespace CustomerTestsExcel
                 return rows.Max(r => r.RowIndex.Value);
             }
         }
-        //standalone todo tidy this up, make it faster
-        //this is surprisingly difficult and slow just to get the value of a cell.
         public void SetCell(uint row, uint column, object value)
         {
             if (row == 0 || column == 0)
@@ -200,13 +198,25 @@ namespace CustomerTestsExcel
             CellValue cellValue;
             InlineString cellString;
             EnumValue<CellValues> cellDataType;
+            uint? cellStyleIndex;
 
-            GetCellProperties(value, out cellString, out cellValue, out cellDataType);
+            // Getting the things and then setting them seems strange, 
+            // I think it would make more sense to pass in the cell, 
+            // and let this function set the properties
+            GetCellProperties(
+                value, 
+                out cellString, 
+                out cellValue, 
+                out cellDataType,
+                out cellStyleIndex
+                );
 
             var cell = GetOrAddCell(column, row);
             cell.InlineString = cellString;
             cell.CellValue = cellValue;
             cell.DataType = cellDataType;
+            if (cellStyleIndex.HasValue)
+                cell.StyleIndex = cellStyleIndex;
         }
 
         public Row GetOrAddRow(uint rowIndex)
@@ -390,13 +400,19 @@ namespace CustomerTestsExcel
             return dateTime.ToOADate().ToString(_formatProvider);
         }
 
-        private void GetCellProperties(object value, out InlineString stringValue, out CellValue cellValue, out EnumValue<CellValues> cellDataType)
+        private void GetCellProperties(
+            object value, 
+            out InlineString stringValue, 
+            out CellValue cellValue, 
+            out EnumValue<CellValues> cellDataType,
+            out uint? cellStyleIndex)
         {
             value = MakeInfinityAString(value);
 
             cellValue = null;
             stringValue = null;
             cellDataType = null;
+            cellStyleIndex = null;
 
             if (value == null || value is System.Reflection.Missing)
                 return;
@@ -407,7 +423,20 @@ namespace CustomerTestsExcel
             }
             else if (value is DateTime)
             {
-                cellValue = new CellValue(ConvertDateTimeToString((DateTime)value));
+                cellValue = new CellValue(((DateTime)value).ToOADate().ToString());
+                // this causes a problem loading in excel stupidly: cellDataType = CellValues.Date;
+
+                var spreadsheetDocument = _package;
+                if (spreadsheetDocument != null)
+                {
+                    var cellFormats = spreadsheetDocument.WorkbookPart.WorkbookStylesPart.Stylesheet.CellFormats.Cast<CellFormat>();
+                    var dateFormat =
+                        cellFormats
+                            .Where(cellFormat => cellFormat.NumberFormatId.Value >= 14 && cellFormat.NumberFormatId.Value <= 17 || cellFormat.NumberFormatId.Value == 22 || cellFormat.NumberFormatId.Value == 30)
+                            .FirstOrDefault();
+
+                    cellStyleIndex = (uint) cellFormats.TakeWhile(cellFormat => cellFormat != dateFormat).Count();
+                }
             }
             else if (value is Boolean)
             {

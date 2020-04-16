@@ -280,11 +280,11 @@ namespace CustomerTestsExcel
             }
             else if (cSharpPropertyValue is TimeSpan)
             {
-                return ((TimeSpan)cSharpPropertyValue).ToString();
+                return cSharpPropertyValue;
             }
             else if (cSharpPropertyValue is DateTime)
             {
-                return ((DateTime)cSharpPropertyValue).ToString("yyyy-MM-dd HH:mm:ss");
+                return cSharpPropertyValue;
             }
             else
             {
@@ -299,7 +299,7 @@ namespace CustomerTestsExcel
                 return NullForPropertyNothingForMethod(excelPropertyName);
 
             if (excelPropertyType == ExcelPropertyType.DateTime)
-                return DateTimeValueFromExcelValue(excelPropertyValue);
+                return DateTimeCsharpValueFromExcelValue(excelPropertyValue);
 
             if (excelPropertyType == ExcelPropertyType.TimeSpan)
                 return TimespanValueFromExcelValue(excelPropertyValue);
@@ -344,6 +344,8 @@ namespace CustomerTestsExcel
             if (stringValue.ToLower() == "null")
                 return ExcelPropertyType.StringNull;
 
+            // Dates are a total disaster in Excel, so this might not always work as expected
+            // See ExcelTabularPage
             if (excelPropertyValue is DateTime)
                 return ExcelPropertyType.DateTime;
 
@@ -374,11 +376,8 @@ namespace CustomerTestsExcel
         static string StringValueFromExcelValue(object excelPropertyValue) =>
             string.Format(CultureInfo.InvariantCulture, "{0}", excelPropertyValue).Trim();
 
-        static string DateTimeValueFromExcelValue(object excelPropertyValue) =>
+        static string DateTimeCsharpValueFromExcelValue(object excelPropertyValue) =>
             string.Format(CultureInfo.InvariantCulture, "DateTime.Parse(\"{0:s}\")", excelPropertyValue);
-
-        static string DateTimeOffsetValueFromExcelValue(object excelPropertyValue) =>
-            string.Format(CultureInfo.InvariantCulture, "DateTimeOffset.Parse(\"{0:u}\")", excelPropertyValue);
 
         static string TimespanValueFromExcelValue(object excelPropertyValue) =>
             string.Format(CultureInfo.InvariantCulture, "TimeSpan.Parse(\"{0:c}\")", excelPropertyValue);
