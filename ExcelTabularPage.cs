@@ -395,11 +395,6 @@ namespace CustomerTestsExcel
             }
         }
 
-        private string ConvertDateTimeToString(DateTime dateTime)
-        {
-            return dateTime.ToOADate().ToString(_formatProvider);
-        }
-
         private void GetCellProperties(
             object value, 
             out InlineString stringValue, 
