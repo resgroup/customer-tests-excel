@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace CustomerTestsExcel
 {
-    public class ReportSpecificationSetupProperty
+    public class ReportSpecificationSetupProperty : IReportSpecificationSetupProperty
     {
         // This function could be removed now, but it will cause trouble for things that are using it
         // Should probably mark it as deprecated somehow
@@ -27,6 +27,13 @@ namespace CustomerTestsExcel
         public string PropertyNamespace { get; protected set; }
         public string PropertyName { get; protected set; }
         public object PropertyValue { get; protected set; }
+
+        public void Callback(
+                Action<ReportSpecificationSetupProperty> valuePropertyCallback, 
+                Action<ReportSpecificationSetupClass> classPropertyCallback, 
+                Action<IReportsSpecificationSetup> classTablePropertyCallback, 
+                Action<ReportSpecificationSetupList> listPropertyCallback) =>
+            valuePropertyCallback(this);
     }
 
 }

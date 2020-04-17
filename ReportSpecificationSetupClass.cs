@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CustomerTestsExcel
 {
-    public class ReportSpecificationSetupClass
+    public class ReportSpecificationSetupClass : IReportSpecificationSetupProperty
     {
         public ReportSpecificationSetupClass(
             MethodBase setupMethod,
@@ -27,5 +27,13 @@ namespace CustomerTestsExcel
 
         public string PropertyName { get; protected set; }
         public IReportsSpecificationSetup Properties { get; protected set; }
+
+        public void Callback(
+                Action<ReportSpecificationSetupProperty> valuePropertyCallback,
+                Action<ReportSpecificationSetupClass> classPropertyCallback,
+                Action<IReportsSpecificationSetup> classTablePropertyCallback,
+                Action<ReportSpecificationSetupList> listPropertyCallback) =>
+            classPropertyCallback(this);
+
     }
 }

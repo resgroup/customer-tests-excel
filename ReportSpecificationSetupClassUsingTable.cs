@@ -5,14 +5,14 @@ using System.Text;
 
 namespace CustomerTestsExcel
 {
-    public interface IReportSpecificationSetupClassUsingTable<out T>
+    public interface IReportSpecificationSetupClassUsingTable<out T> : IReportSpecificationSetupProperty
         where T : IReportsSpecificationSetup
     {
         string PropertyName { get; set; }
         IEnumerable<IReportSpecificationSetupClassUsingTableRow<T>> Rows { get; }
     }
 
-    public class ReportSpecificationSetupClassUsingTable<T> : IReportSpecificationSetupClassUsingTable<T> 
+    public class ReportSpecificationSetupClassUsingTable<T> : IReportSpecificationSetupClassUsingTable<T>
         where T : IReportsSpecificationSetup
     {
         readonly List<IReportSpecificationSetupClassUsingTableRow<T>> rowPropertyValues;
@@ -29,6 +29,18 @@ namespace CustomerTestsExcel
         public void Add(T row)
         {
             rowPropertyValues.Add(new ReportSpecificationSetupClassUsingTableRow<T>(row));
+        }
+
+        public void Callback(
+            Action<ReportSpecificationSetupProperty> valuePropertyCallback,
+            Action<ReportSpecificationSetupClass> classPropertyCallback,
+            Action<IReportsSpecificationSetup> classTablePropertyCallback,
+            Action<ReportSpecificationSetupList> listPropertyCallback)
+        {
+            foreach(var row in Rows)
+            {
+                classTablePropertyCallback(row.Properties);
+            }
         }
     }
 }
