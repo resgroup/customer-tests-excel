@@ -107,77 +107,101 @@ namespace CustomerTestsExcel
 
         void WriteProperties(IReportsSpecificationSetup properties)
         {
-            WriteValueProperties(properties);
+            foreach (var property in properties.ListProperties)
+            {
+                property.Callback(
+                    WriteValueProperty,
+                    WriteClassProperty,
+                    WriteClassTableProperty,
+                    WriteListProperty);
+            }
+                //WriteValueProperties(properties);
 
-            WriteClassProperties(properties);
+                //WriteClassProperties(properties);
 
-            WriteClassTableProperties(properties);
+                //WriteClassTableProperties(properties);
 
-            WriteListProperties(properties);
-        }
+                //WriteListProperties(properties);
+            }
 
-        void WriteListProperties(IReportsSpecificationSetup properties)
+            void WriteListProperties(IReportsSpecificationSetup properties)
         {
             foreach (var property in properties.ListProperties)
             {
-
-                writer.StartGivenListProperty(property);
-
-                foreach (var listItem in property.Items)
-                {
-                    writer.StartGivenListPropertyItem(listItem);
-                    WriteProperties(listItem);
-                    writer.EndGivenListPropertyItem(listItem);
-                }
-
-                writer.EndGivenListProperty(property);
+                WriteListProperty(property);
             }
+        }
+
+        private void WriteListProperty(ReportSpecificationSetupList property)
+        {
+            writer.StartGivenListProperty(property);
+
+            foreach (var listItem in property.Items)
+            {
+                writer.StartGivenListPropertyItem(listItem);
+                WriteProperties(listItem);
+                writer.EndGivenListPropertyItem(listItem);
+            }
+
+            writer.EndGivenListProperty(property);
         }
 
         void WriteValueProperties(IReportsSpecificationSetup properties)
         {
             foreach (var property in properties.ValueProperties)
-                writer.GivenProperty(property);
+                WriteValueProperty(property);
         }
+
+        private void WriteValueProperty(ReportSpecificationSetupProperty property) => writer.GivenProperty(property);
 
         private void WriteClassProperties(IReportsSpecificationSetup properties)
         {
             foreach (var classProperty in properties.ClassProperties)
             {
-                writer.GivenClassProperty(
-                    classProperty.PropertyName, 
-                    classProperty.Properties == null
-                );
-
-                if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
+                WriteClassProperty(classProperty);
             }
+        }
+
+        private void WriteClassProperty(ReportSpecificationSetupClass classProperty)
+        {
+            writer.GivenClassProperty(
+                classProperty.PropertyName,
+                classProperty.Properties == null
+            );
+
+            if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
         }
 
         void WriteClassTableProperties(IReportsSpecificationSetup properties)
         {
             foreach (var classTableProperty in properties.ClassTableProperties)
             {
-                if (classTableProperty.Rows.Any())
-                {
-                    writer.StartClassTable(
-                        classTableProperty.PropertyName, 
-                        ClassName(classTableProperty.Rows.First().Properties)
-                    );
+                WriteClassTableProperty(classTableProperty);
+            }
+        }
 
-                    writer.ClassTablePropertyNamesHeaderRow(
-                        classTableProperty
-                        .Rows
-                        .First()
-                        .Properties
-                        .ValueProperties
-                        .Select(p => p.PropertyName)
-                    );
+        private void WriteClassTableProperty(IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup> classTableProperty)
+        {
+            if (classTableProperty.Rows.Any())
+            {
+                writer.StartClassTable(
+                    classTableProperty.PropertyName,
+                    ClassName(classTableProperty.Rows.First().Properties)
+                );
 
-                    foreach (var row in classTableProperty.Rows)
-                        writer.ClassTablePropertyRow(row.Properties.ValueProperties);
+                writer.ClassTablePropertyNamesHeaderRow(
+                    classTableProperty
+                    .Rows
+                    .First()
+                    .Properties
+                    .ValueProperties
+                    .Select(p => p.PropertyName)
+                );
 
-                    writer.EndClassTable();
-                }
+                foreach (var row in classTableProperty.Rows)
+                    writer.ClassTablePropertyRow(row.Properties.ValueProperties);
+
+                writer.EndClassTable();
             }
         }
 

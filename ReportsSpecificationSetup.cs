@@ -7,6 +7,10 @@ namespace CustomerTestsExcel
 {
     public class ReportsSpecificationSetup : IReportsSpecificationSetup
     {
+        protected readonly ReportSpecificationSetupPropertyList properties;
+        public IReadOnlyList<IReportSpecificationSetupProperty> Properties =>
+            properties;
+
         protected readonly ReportSpecificationSetupPropertyList valueProperties;
         public IReadOnlyList<ReportSpecificationSetupProperty> ValueProperties =>
             valueProperties;
