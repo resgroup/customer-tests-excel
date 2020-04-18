@@ -136,7 +136,6 @@
     <Compile Include="Assertions\ParseAssertionProperty.cs" />
     <Compile Include="ReportSpecificationSetupClass.cs" />
     <Compile Include="ReportSpecificationSetupProperty.cs" />
-    <Compile Include="ReportSpecificationSetupPropertyList.cs" />
     <Compile Include="ReportsSpecificationSetup.cs" />
     <Compile Include="SpecificationBase.cs" />
     <Compile Include="CodeNameToExcelNameConverter.cs" />

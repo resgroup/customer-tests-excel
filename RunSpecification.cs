@@ -115,24 +115,9 @@ namespace CustomerTestsExcel
                     WriteClassTableProperty,
                     WriteListProperty);
             }
-            //WriteValueProperties(properties);
-
-            //WriteClassProperties(properties);
-
-            //WriteClassTableProperties(properties);
-
-            //WriteListProperties(properties);
         }
 
-        //void WriteListProperties(IReportsSpecificationSetup properties)
-        //{
-        //    foreach (var property in properties.ListProperties)
-        //    {
-        //        WriteListProperty(property);
-        //    }
-        //}
-
-        private void WriteListProperty(ReportSpecificationSetupList property)
+        void WriteListProperty(ReportSpecificationSetupList property)
         {
             writer.StartGivenListProperty(property);
 
@@ -146,23 +131,9 @@ namespace CustomerTestsExcel
             writer.EndGivenListProperty(property);
         }
 
-        //void WriteValueProperties(IReportsSpecificationSetup properties)
-        //{
-        //    foreach (var property in properties.ValueProperties)
-        //        WriteValueProperty(property);
-        //}
+        void WriteValueProperty(ReportSpecificationSetupProperty property) => writer.GivenProperty(property);
 
-        private void WriteValueProperty(ReportSpecificationSetupProperty property) => writer.GivenProperty(property);
-
-        //private void WriteClassProperties(IReportsSpecificationSetup properties)
-        //{
-        //    foreach (var classProperty in properties.ClassProperties)
-        //    {
-        //        WriteClassProperty(classProperty);
-        //    }
-        //}
-
-        private void WriteClassProperty(ReportSpecificationSetupClass classProperty)
+        void WriteClassProperty(ReportSpecificationSetupClass classProperty)
         {
             writer.GivenClassProperty(
                 classProperty.PropertyName,
@@ -172,15 +143,7 @@ namespace CustomerTestsExcel
             if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
         }
 
-        //void WriteClassTableProperties(IReportsSpecificationSetup properties)
-        //{
-        //    foreach (var classTableProperty in properties.ClassTableProperties)
-        //    {
-        //        WriteClassTableProperty(classTableProperty);
-        //    }
-        //}
-
-        private void WriteClassTableProperty(IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup> classTableProperty)
+        void WriteClassTableProperty(IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup> classTableProperty)
         {
             if (classTableProperty.Rows.Any())
             {
