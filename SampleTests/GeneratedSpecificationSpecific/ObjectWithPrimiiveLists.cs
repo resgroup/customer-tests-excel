@@ -19,6 +19,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
 
+        readonly List<SpecificationSpecificInteger> integerListSyntaxs;
         readonly List<SpecificationSpecificInteger> integerTableSyntaxs;
         readonly List<SpecificationSpecificFloat> floatTableSyntaxs;
         readonly List<SpecificationSpecificString> stringTableSyntaxs;
@@ -26,6 +27,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         public SpecificationSpecificObjectWithPrimiiveLists()
         {
+            integerListSyntaxs = new List<SpecificationSpecificInteger>();
             integerTableSyntaxs = new List<SpecificationSpecificInteger>();
             floatTableSyntaxs = new List<SpecificationSpecificFloat>();
             stringTableSyntaxs = new List<SpecificationSpecificString>();
@@ -38,9 +40,38 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
 
 
+        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_of(SpecificationSpecificInteger integerListSyntax)
+        {
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), integerListSyntax));
+
+            this.integerListSyntaxs.Add(integerListSyntax);
+
+            return this;
+        }
+
+        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_list_of(List<SpecificationSpecificInteger> integerListSyntaxs, string listType)
+        {
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, integerListSyntaxs));
+
+            this.integerListSyntaxs.AddRange(integerListSyntaxs);
+
+            return this;
+        }
+
+        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificInteger> integerListSyntaxs)
+        {
+            integerListSyntaxs.PropertyName = GetCurrentMethod().Name;
+
+            AddClassTableProperty(integerListSyntaxs);
+
+            foreach (var row in integerListSyntaxs.Rows)
+                this.integerListSyntaxs.Add(row.Properties);
+
+            return this;
+        }
         internal SpecificationSpecificObjectWithPrimiiveLists IntegerTableSyntax_of(SpecificationSpecificInteger integerTableSyntax)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), integerTableSyntax));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), integerTableSyntax));
 
             this.integerTableSyntaxs.Add(integerTableSyntax);
 
@@ -49,7 +80,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificObjectWithPrimiiveLists IntegerTableSyntax_list_of(List<SpecificationSpecificInteger> integerTableSyntaxs, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, integerTableSyntaxs));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, integerTableSyntaxs));
 
             this.integerTableSyntaxs.AddRange(integerTableSyntaxs);
 
@@ -60,7 +91,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             integerTableSyntaxs.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(integerTableSyntaxs);
+            AddClassTableProperty(integerTableSyntaxs);
 
             foreach (var row in integerTableSyntaxs.Rows)
                 this.integerTableSyntaxs.Add(row.Properties);
@@ -69,7 +100,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         }
         internal SpecificationSpecificObjectWithPrimiiveLists FloatTableSyntax_of(SpecificationSpecificFloat floatTableSyntax)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), floatTableSyntax));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), floatTableSyntax));
 
             this.floatTableSyntaxs.Add(floatTableSyntax);
 
@@ -78,7 +109,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificObjectWithPrimiiveLists FloatTableSyntax_list_of(List<SpecificationSpecificFloat> floatTableSyntaxs, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, floatTableSyntaxs));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, floatTableSyntaxs));
 
             this.floatTableSyntaxs.AddRange(floatTableSyntaxs);
 
@@ -89,7 +120,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             floatTableSyntaxs.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(floatTableSyntaxs);
+            AddClassTableProperty(floatTableSyntaxs);
 
             foreach (var row in floatTableSyntaxs.Rows)
                 this.floatTableSyntaxs.Add(row.Properties);
@@ -98,7 +129,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         }
         internal SpecificationSpecificObjectWithPrimiiveLists StringTableSyntax_of(SpecificationSpecificString stringTableSyntax)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), stringTableSyntax));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), stringTableSyntax));
 
             this.stringTableSyntaxs.Add(stringTableSyntax);
 
@@ -107,7 +138,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificObjectWithPrimiiveLists StringTableSyntax_list_of(List<SpecificationSpecificString> stringTableSyntaxs, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, stringTableSyntaxs));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, stringTableSyntaxs));
 
             this.stringTableSyntaxs.AddRange(stringTableSyntaxs);
 
@@ -118,7 +149,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             stringTableSyntaxs.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(stringTableSyntaxs);
+            AddClassTableProperty(stringTableSyntaxs);
 
             foreach (var row in stringTableSyntaxs.Rows)
                 this.stringTableSyntaxs.Add(row.Properties);
@@ -127,7 +158,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         }
         internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_of(SpecificationSpecificDateTime dateTimeTableSyntax)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), dateTimeTableSyntax));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), dateTimeTableSyntax));
 
             this.dateTimeTableSyntaxs.Add(dateTimeTableSyntax);
 
@@ -136,7 +167,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_list_of(List<SpecificationSpecificDateTime> dateTimeTableSyntaxs, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, dateTimeTableSyntaxs));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, dateTimeTableSyntaxs));
 
             this.dateTimeTableSyntaxs.AddRange(dateTimeTableSyntaxs);
 
@@ -147,7 +178,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             dateTimeTableSyntaxs.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(dateTimeTableSyntaxs);
+            AddClassTableProperty(dateTimeTableSyntaxs);
 
             foreach (var row in dateTimeTableSyntaxs.Rows)
                 this.dateTimeTableSyntaxs.Add(row.Properties);

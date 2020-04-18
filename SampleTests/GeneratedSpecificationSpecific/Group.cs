@@ -33,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificGroup Name_of(String name)
         {
-            valueProperties.Add(GetCurrentMethod(), name);
+            AddValueProperty(GetCurrentMethod(), name);
 
             group.Setup(m => m.Name).Returns(name);
 
@@ -45,7 +45,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificGroup Floats_of(SpecificationSpecificFloat floats)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), floats));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), floats));
 
             this.floatss.Add(floats);
 
@@ -56,7 +56,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             floatss.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(floatss);
+            AddClassTableProperty(floatss);
 
             foreach (var row in floatss.Rows)
                 this.floatss.Add(row.Properties);

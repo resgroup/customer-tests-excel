@@ -11,7 +11,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal void WithValidProperties()
         {
-            valueProperties.Add(GetCurrentMethod());
+            AddValueProperty(GetCurrentMethod());
 
             Valid = true;
         }

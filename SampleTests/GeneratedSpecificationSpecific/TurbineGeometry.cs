@@ -33,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificTurbineGeometry NumberOfBlades_of(Int32 numberOfBlades)
         {
-            valueProperties.Add(GetCurrentMethod(), numberOfBlades);
+            AddValueProperty(GetCurrentMethod(), numberOfBlades);
 
             turbineGeometry.Setup(m => m.NumberOfBlades).Returns(numberOfBlades);
 
@@ -42,7 +42,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificTurbineGeometry Diameter_of(Double diameter)
         {
-            valueProperties.Add(GetCurrentMethod(), diameter);
+            AddValueProperty(GetCurrentMethod(), diameter);
 
             turbineGeometry.Setup(m => m.Diameter).Returns(diameter);
 

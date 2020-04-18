@@ -33,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificItineraryLeg Origin_of(String origin)
         {
-            valueProperties.Add(GetCurrentMethod(), origin);
+            AddValueProperty(GetCurrentMethod(), origin);
 
             itineraryLeg.Setup(m => m.Origin).Returns(origin);
 
@@ -42,7 +42,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificItineraryLeg Destination_of(String destination)
         {
-            valueProperties.Add(GetCurrentMethod(), destination);
+            AddValueProperty(GetCurrentMethod(), destination);
 
             itineraryLeg.Setup(m => m.Destination).Returns(destination);
 

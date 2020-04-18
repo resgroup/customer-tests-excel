@@ -32,7 +32,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificCalculator FirstValue_of(Single firstValue)
         {
-            valueProperties.Add(GetCurrentMethod(), firstValue);
+            AddValueProperty(GetCurrentMethod(), firstValue);
 
             this.FirstValue = firstValue;
 
@@ -41,7 +41,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificCalculator SecondValue_of(Single secondValue)
         {
-            valueProperties.Add(GetCurrentMethod(), secondValue);
+            AddValueProperty(GetCurrentMethod(), secondValue);
 
             this.SecondValue = secondValue;
 
@@ -50,7 +50,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificCalculator Operation_of(Operation operation)
         {
-            valueProperties.Add(GetCurrentMethod(), operation);
+            AddValueProperty(GetCurrentMethod(), operation);
 
             this.Operation = operation;
 

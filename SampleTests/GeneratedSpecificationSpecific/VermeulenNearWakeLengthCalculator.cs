@@ -34,7 +34,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_of(SpecificationSpecificVermeulenNearWakeLengthInput vermeulenNearWakeLengthInputs)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), vermeulenNearWakeLengthInputs));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), vermeulenNearWakeLengthInputs));
 
             this.vermeulenNearWakeLengthInputss.Add(vermeulenNearWakeLengthInputs);
 
@@ -43,7 +43,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_list_of(List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, vermeulenNearWakeLengthInputss));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, vermeulenNearWakeLengthInputss));
 
             this.vermeulenNearWakeLengthInputss.AddRange(vermeulenNearWakeLengthInputss);
 
@@ -54,7 +54,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             vermeulenNearWakeLengthInputss.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(vermeulenNearWakeLengthInputss);
+            AddClassTableProperty(vermeulenNearWakeLengthInputss);
 
             foreach (var row in vermeulenNearWakeLengthInputss.Rows)
                 this.vermeulenNearWakeLengthInputss.Add(row.Properties);

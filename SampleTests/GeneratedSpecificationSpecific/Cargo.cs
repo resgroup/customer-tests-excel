@@ -33,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificCargo Origin_of(String origin)
         {
-            valueProperties.Add(GetCurrentMethod(), origin);
+            AddValueProperty(GetCurrentMethod(), origin);
 
             cargo.Setup(m => m.Origin).Returns(origin);
 
@@ -42,7 +42,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificCargo Destination_of(String destination)
         {
-            valueProperties.Add(GetCurrentMethod(), destination);
+            AddValueProperty(GetCurrentMethod(), destination);
 
             cargo.Setup(m => m.Destination).Returns(destination);
 
@@ -54,7 +54,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificCargo ItineraryLeg_of(SpecificationSpecificItineraryLeg itineraryLeg)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), itineraryLeg));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), itineraryLeg));
 
             this.itineraryLegs.Add(itineraryLeg);
 
@@ -65,7 +65,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             itineraryLegs.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(itineraryLegs);
+            AddClassTableProperty(itineraryLegs);
 
             foreach (var row in itineraryLegs.Rows)
                 this.itineraryLegs.Add(row.Properties);

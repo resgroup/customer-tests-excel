@@ -33,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Velocity_of(Double velocity)
         {
-            valueProperties.Add(GetCurrentMethod(), velocity);
+            AddValueProperty(GetCurrentMethod(), velocity);
 
             vermeulenNearWakeLengthInput.Setup(m => m.Velocity).Returns(velocity);
 
@@ -42,7 +42,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Ambient_Turbulence_of(Double ambient_Turbulence)
         {
-            valueProperties.Add(GetCurrentMethod(), ambient_Turbulence);
+            AddValueProperty(GetCurrentMethod(), ambient_Turbulence);
 
             vermeulenNearWakeLengthInput.Setup(m => m.Ambient_Turbulence).Returns(ambient_Turbulence);
 
@@ -51,7 +51,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput RevolutionsPerMinute_of(Double revolutionsPerMinute)
         {
-            valueProperties.Add(GetCurrentMethod(), revolutionsPerMinute);
+            AddValueProperty(GetCurrentMethod(), revolutionsPerMinute);
 
             vermeulenNearWakeLengthInput.Setup(m => m.RevolutionsPerMinute).Returns(revolutionsPerMinute);
 
@@ -60,7 +60,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput Thrust_Coefficient_of(Double thrust_Coefficient)
         {
-            valueProperties.Add(GetCurrentMethod(), thrust_Coefficient);
+            AddValueProperty(GetCurrentMethod(), thrust_Coefficient);
 
             vermeulenNearWakeLengthInput.Setup(m => m.Thrust_Coefficient).Returns(thrust_Coefficient);
 
@@ -70,7 +70,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificVermeulenNearWakeLengthInput TurbineGeometry_of(SpecificationSpecificTurbineGeometry turbineGeometry)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), turbineGeometry));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), turbineGeometry));
 
             vermeulenNearWakeLengthInput.Setup(m => m.TurbineGeometry).Returns(turbineGeometry.TurbineGeometry);
 

@@ -30,6 +30,21 @@ namespace SampleTests.PrimitiveLists
         public override SpecificationSpecificObjectWithPrimiiveLists Given()
         {
             var objectWithPrimiiveLists = new SpecificationSpecificObjectWithPrimiiveLists();
+            
+            {
+                var integerListSyntaxList = new List<SpecificationSpecificInteger>();
+                {
+                    var integerListSyntax = new SpecificationSpecificInteger();
+                    integerListSyntax.Integer_of(1);
+                    integerListSyntaxList.Add(integerListSyntax);
+                }
+                {
+                    var integerListSyntax = new SpecificationSpecificInteger();
+                    integerListSyntax.Integer_of(2);
+                    integerListSyntaxList.Add(integerListSyntax);
+                }
+                objectWithPrimiiveLists.IntegerListSyntax_list_of(integerListSyntaxList, "SpecificationSpecificInteger");
+            }
             {
                 var IntegerTableSyntaxRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificInteger>();
                 {

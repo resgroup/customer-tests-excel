@@ -32,7 +32,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificUnderscore A_Property_of(String a_Property)
         {
-            valueProperties.Add(GetCurrentMethod(), a_Property);
+            AddValueProperty(GetCurrentMethod(), a_Property);
 
             this.A_Property = a_Property;
 
@@ -44,7 +44,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificUnderscore Table_Property_of(SpecificationSpecificA_Table table_Property)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), table_Property));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), table_Property));
 
             this.table_Propertys.Add(table_Property);
 
@@ -53,7 +53,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificUnderscore Table_Property_list_of(List<SpecificationSpecificA_Table> table_Propertys, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, table_Propertys));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, table_Propertys));
 
             this.table_Propertys.AddRange(table_Propertys);
 
@@ -64,7 +64,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             table_Propertys.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(table_Propertys);
+            AddClassTableProperty(table_Propertys);
 
             foreach (var row in table_Propertys.Rows)
                 this.table_Propertys.Add(row.Properties);
@@ -73,7 +73,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         }
         internal SpecificationSpecificUnderscore List_Property_of(SpecificationSpecificA_Table list_Property)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), list_Property));
 
             this.list_Propertys.Add(list_Property);
 
@@ -82,7 +82,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificUnderscore List_Property_list_of(List<SpecificationSpecificA_Table> list_Propertys, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, list_Propertys));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, list_Propertys));
 
             this.list_Propertys.AddRange(list_Propertys);
 
@@ -93,7 +93,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             list_Propertys.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(list_Propertys);
+            AddClassTableProperty(list_Propertys);
 
             foreach (var row in list_Propertys.Rows)
                 this.list_Propertys.Add(row.Properties);

@@ -31,7 +31,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificRoutingService RerouteFrom_of(String rerouteFrom)
         {
-            valueProperties.Add(GetCurrentMethod(), rerouteFrom);
+            AddValueProperty(GetCurrentMethod(), rerouteFrom);
 
             this.RerouteFrom = rerouteFrom;
 
@@ -40,7 +40,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificRoutingService RerouteTo_of(String rerouteTo)
         {
-            valueProperties.Add(GetCurrentMethod(), rerouteTo);
+            AddValueProperty(GetCurrentMethod(), rerouteTo);
 
             this.RerouteTo = rerouteTo;
 
@@ -50,7 +50,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificRoutingService Cargo_of(SpecificationSpecificCargo cargo)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
 
             this.Cargo = cargo;
 

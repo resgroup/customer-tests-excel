@@ -59,7 +59,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificA_Table A_Property_of(String a_Property)
         {
-            valueProperties.Add(GetCurrentMethod(), a_Property);
+            AddValueProperty(GetCurrentMethod(), a_Property);
 
             this.A_Property = a_Property;
 

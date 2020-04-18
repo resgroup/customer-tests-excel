@@ -30,7 +30,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(String variableDescription)
         {
-            valueProperties.Add(GetCurrentMethod(), variableDescription);
+            AddValueProperty(GetCurrentMethod(), variableDescription);
 
             this.VariableDescription = variableDescription;
 
@@ -42,7 +42,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificAnovaCalculator Groups_of(SpecificationSpecificGroup groups)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), groups));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), groups));
 
             this.groupss.Add(groups);
 
@@ -51,7 +51,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificAnovaCalculator Groups_list_of(List<SpecificationSpecificGroup> groupss, string listType)
         {
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, groupss));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, groupss));
 
             this.groupss.AddRange(groupss);
 
@@ -62,7 +62,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             groupss.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(groupss);
+            AddClassTableProperty(groupss);
 
             foreach (var row in groupss.Rows)
                 this.groupss.Add(row.Properties);
