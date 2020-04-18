@@ -130,7 +130,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
             return
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({parameterType} {parameterName})
         {{
-            valueProperties.Add(GetCurrentMethod(), {parameterName});
+            AddValueProperty(GetCurrentMethod(), {parameterName});
 
             {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName});
 
@@ -162,7 +162,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
         {{
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
             {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName}.{propertyNameOfSutObject});
 
@@ -210,7 +210,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             return
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({listClassName} {parameterName})
         {{
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
             this.{listPropertyName}.Add({parameterName});
 
@@ -221,7 +221,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         {{
             {listParameterName}.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add({listParameterName});
+            AddClassTableProperty({listParameterName});
 
             foreach (var row in {listParameterName}.Rows)
                 this.{listPropertyName}.Add(row.Properties);

@@ -9,7 +9,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public SpecificationSpecificDateTime DateTime_of(DateTime value)
         {
-            valueProperties.Add(GetCurrentMethod(), value);
+            AddValueProperty(GetCurrentMethod(), value);
 
             DateTime = value;
 

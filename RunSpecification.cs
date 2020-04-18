@@ -11,7 +11,7 @@ namespace CustomerTestsExcel
     public class RunSpecification<T>
         where T : IReportsSpecificationSetup
     {
-        public string Message => 
+        public string Message =>
             message.StringBuilder.ToString();
 
         protected readonly ITestOutputWriter writer;
@@ -22,7 +22,7 @@ namespace CustomerTestsExcel
             message = new StringBuilderTextLineWriter();
 
             writer = new StringTestOutputWriter(
-                new HumanFriendlyFormatter(), 
+                new HumanFriendlyFormatter(),
                 message);
         }
 
@@ -45,8 +45,8 @@ namespace CustomerTestsExcel
 
             // arrange
             writer.StartSpecification(
-                specificationNamespace, 
-                specification.GetType().Name, 
+                specificationNamespace,
+                specification.GetType().Name,
                 specification.Description()
             );
 
@@ -96,7 +96,7 @@ namespace CustomerTestsExcel
 
         void WriteClass(IReportsSpecificationSetup properties)
         {
-            if (!properties.AnythingToSetup())
+            if (!properties.Properties.Any())
                 return;
 
             using (new TidyUp(writer.StartGivenProperties, writer.EndGivenProperties))
@@ -107,7 +107,7 @@ namespace CustomerTestsExcel
 
         void WriteProperties(IReportsSpecificationSetup properties)
         {
-            foreach (var property in properties.ListProperties)
+            foreach (var property in properties.Properties)
             {
                 property.Callback(
                     WriteValueProperty,
@@ -115,22 +115,22 @@ namespace CustomerTestsExcel
                     WriteClassTableProperty,
                     WriteListProperty);
             }
-                //WriteValueProperties(properties);
+            //WriteValueProperties(properties);
 
-                //WriteClassProperties(properties);
+            //WriteClassProperties(properties);
 
-                //WriteClassTableProperties(properties);
+            //WriteClassTableProperties(properties);
 
-                //WriteListProperties(properties);
-            }
-
-            void WriteListProperties(IReportsSpecificationSetup properties)
-        {
-            foreach (var property in properties.ListProperties)
-            {
-                WriteListProperty(property);
-            }
+            //WriteListProperties(properties);
         }
+
+        //void WriteListProperties(IReportsSpecificationSetup properties)
+        //{
+        //    foreach (var property in properties.ListProperties)
+        //    {
+        //        WriteListProperty(property);
+        //    }
+        //}
 
         private void WriteListProperty(ReportSpecificationSetupList property)
         {
@@ -146,21 +146,21 @@ namespace CustomerTestsExcel
             writer.EndGivenListProperty(property);
         }
 
-        void WriteValueProperties(IReportsSpecificationSetup properties)
-        {
-            foreach (var property in properties.ValueProperties)
-                WriteValueProperty(property);
-        }
+        //void WriteValueProperties(IReportsSpecificationSetup properties)
+        //{
+        //    foreach (var property in properties.ValueProperties)
+        //        WriteValueProperty(property);
+        //}
 
         private void WriteValueProperty(ReportSpecificationSetupProperty property) => writer.GivenProperty(property);
 
-        private void WriteClassProperties(IReportsSpecificationSetup properties)
-        {
-            foreach (var classProperty in properties.ClassProperties)
-            {
-                WriteClassProperty(classProperty);
-            }
-        }
+        //private void WriteClassProperties(IReportsSpecificationSetup properties)
+        //{
+        //    foreach (var classProperty in properties.ClassProperties)
+        //    {
+        //        WriteClassProperty(classProperty);
+        //    }
+        //}
 
         private void WriteClassProperty(ReportSpecificationSetupClass classProperty)
         {
@@ -172,13 +172,13 @@ namespace CustomerTestsExcel
             if (classProperty.Properties != null) WriteSubClass(classProperty.Properties);
         }
 
-        void WriteClassTableProperties(IReportsSpecificationSetup properties)
-        {
-            foreach (var classTableProperty in properties.ClassTableProperties)
-            {
-                WriteClassTableProperty(classTableProperty);
-            }
-        }
+        //void WriteClassTableProperties(IReportsSpecificationSetup properties)
+        //{
+        //    foreach (var classTableProperty in properties.ClassTableProperties)
+        //    {
+        //        WriteClassTableProperty(classTableProperty);
+        //    }
+        //}
 
         private void WriteClassTableProperty(IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup> classTableProperty)
         {

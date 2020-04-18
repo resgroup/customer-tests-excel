@@ -8,7 +8,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public SpecificationSpecificInteger Integer_of(int value)
         {
-            valueProperties.Add(GetCurrentMethod(), value);
+            AddValueProperty(GetCurrentMethod(), value);
             
             Integer = value;
 

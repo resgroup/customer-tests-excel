@@ -27,11 +27,11 @@ namespace CustomerTestsExcel.Test
             var listPropertyItems = new List<IReportsSpecificationSetup>
             {
                 new TestReportsSpecificationSetup()
-                    .AddValueProperty(PROPERTY1_NAME, PROPERTY1_VALUE1)
-                    .AddValueProperty(PROPERTY2_NAME, PROPERTY2_VALUE1),
+                    .FluentAddValueProperty(PROPERTY1_NAME, PROPERTY1_VALUE1)
+                    .FluentAddValueProperty(PROPERTY2_NAME, PROPERTY2_VALUE1),
                 new TestReportsSpecificationSetup()
-                    .AddValueProperty(PROPERTY1_NAME, PROPERTY1_VALUE2)
-                    .AddValueProperty(PROPERTY2_NAME, PROPERTY2_VALUE2),
+                    .FluentAddValueProperty(PROPERTY1_NAME, PROPERTY1_VALUE2)
+                    .FluentAddValueProperty(PROPERTY2_NAME, PROPERTY2_VALUE2),
             };
 
             var givenListProperty = new ReportSpecificationSetupList(
@@ -39,7 +39,7 @@ namespace CustomerTestsExcel.Test
                 LIST_PROPERTY_TYPE,
                 listPropertyItems);
 
-            setupWithListProperty = new TestReportsSpecificationSetup().AddListProperty(givenListProperty);
+            setupWithListProperty = new TestReportsSpecificationSetup().FluentAddListProperty(givenListProperty);
         }
 
         [Test]

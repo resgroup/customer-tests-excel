@@ -199,7 +199,7 @@ $@"        // No sensible implementation can be generated for functions, so plea
             return
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({parameterType} {parameterName})
         {{
-            valueProperties.Add(GetCurrentMethod(), {parameterName});
+            AddValueProperty(GetCurrentMethod(), {parameterName});
 
             this.{classPropertyName} = {parameterName};
 
@@ -241,7 +241,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
         {{
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
             this.{classVariableName} = {parameterName};
 
@@ -285,7 +285,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             return
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({listClassName} {parameterName})
         {{
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
             this.{listPropertyName}.Add({parameterName});
 
@@ -294,7 +294,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
 
         internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_list_of(List<{listClassName}> {listParameterName}, string listType)
         {{
-            listProperties.Add(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, {listParameterName}));
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, {listParameterName}));
 
             this.{listPropertyName}.AddRange({listParameterName});
 
@@ -305,7 +305,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         {{
             {listParameterName}.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add({listParameterName});
+            AddClassTableProperty({listParameterName});
 
             foreach (var row in {listParameterName}.Rows)
                 this.{listPropertyName}.Add(row.Properties);

@@ -8,7 +8,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public SpecificationSpecificFloat Float_of(double value)
         {
-            valueProperties.Add(GetCurrentMethod(), value);
+            AddValueProperty(GetCurrentMethod(), value);
 
             Float = value;
 

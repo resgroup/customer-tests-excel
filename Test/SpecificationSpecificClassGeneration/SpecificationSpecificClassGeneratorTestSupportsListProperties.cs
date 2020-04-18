@@ -44,7 +44,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             var expectedListOfSetters =
             @"internal SpecificationSpecificTarget IEnumerableProperty_of(SpecificationSpecificTarget iEnumerableProperty)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), iEnumerableProperty));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), iEnumerableProperty));
 
             this.iEnumerablePropertys.Add(iEnumerableProperty);
 
@@ -56,7 +56,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
         {
             iEnumerablePropertys.PropertyName = GetCurrentMethod().Name;
 
-            classTableProperties.Add(iEnumerablePropertys);
+            AddClassTableProperty(iEnumerablePropertys);
 
             foreach (var row in iEnumerablePropertys.Rows)
                 this.iEnumerablePropertys.Add(row.Properties);
@@ -69,7 +69,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             StringAssert.Contains(expectedListOfSetters, actual);
             StringAssert.Contains(expectedTableOfSetters, actual);
             StringAssert.DoesNotContain(
-                "valueProperties.Add(GetCurrentMethod(), iEnumerableProperty)",
+                "AddValueProperty(GetCurrentMethod(), iEnumerableProperty)",
                 actual,
                 "'Object' Code is being generated for a 'List' property");
         }

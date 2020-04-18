@@ -66,7 +66,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificTarget IntegerProperty_of(Int32 integerProperty)
         {
-            valueProperties.Add(GetCurrentMethod(), integerProperty);
+            AddValueProperty(GetCurrentMethod(), integerProperty);
 
             target.Setup(m => m.IntegerProperty).Returns(integerProperty);
 
@@ -75,7 +75,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificTarget FloatProperty_of(Single floatProperty)
         {
-            valueProperties.Add(GetCurrentMethod(), floatProperty);
+            AddValueProperty(GetCurrentMethod(), floatProperty);
 
             target.Setup(m => m.FloatProperty).Returns(floatProperty);
 
@@ -84,7 +84,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificTarget StringProperty_of(String stringProperty)
         {
-            valueProperties.Add(GetCurrentMethod(), stringProperty);
+            AddValueProperty(GetCurrentMethod(), stringProperty);
 
             target.Setup(m => m.StringProperty).Returns(stringProperty);
 
@@ -93,7 +93,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal SpecificationSpecificTarget DateTimeProperty_of(DateTime dateTimeProperty)
         {
-            valueProperties.Add(GetCurrentMethod(), dateTimeProperty);
+            AddValueProperty(GetCurrentMethod(), dateTimeProperty);
 
             target.Setup(m => m.DateTimeProperty).Returns(dateTimeProperty);
 

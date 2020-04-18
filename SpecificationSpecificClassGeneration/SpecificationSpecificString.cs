@@ -9,7 +9,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public SpecificationSpecificString String_of(string value)
         {
-            valueProperties.Add(GetCurrentMethod(), value);
+            AddValueProperty(GetCurrentMethod(), value);
 
             String = value;
 

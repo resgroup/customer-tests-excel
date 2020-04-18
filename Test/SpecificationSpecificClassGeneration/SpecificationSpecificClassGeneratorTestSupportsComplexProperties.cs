@@ -37,7 +37,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             var expectedSetter =
             @"internal SpecificationSpecificTarget ComplexProperty_of(SpecificationSpecificTarget complexProperty)
         {
-            classProperties.Add(new ReportSpecificationSetupClass(GetCurrentMethod(), complexProperty));
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), complexProperty));
 
             target.Setup(m => m.ComplexProperty).Returns(complexProperty.ComplexProperty);
 
