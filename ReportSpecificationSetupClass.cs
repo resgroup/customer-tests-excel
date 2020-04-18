@@ -31,7 +31,7 @@ namespace CustomerTestsExcel
         public void Callback(
                 Action<ReportSpecificationSetupProperty> valuePropertyCallback,
                 Action<ReportSpecificationSetupClass> classPropertyCallback,
-                Action<IReportsSpecificationSetup> classTablePropertyCallback,
+                Action<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> classTablePropertyCallback,
                 Action<ReportSpecificationSetupList> listPropertyCallback) =>
             classPropertyCallback(this);
 

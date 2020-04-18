@@ -34,13 +34,10 @@ namespace CustomerTestsExcel
         public void Callback(
             Action<ReportSpecificationSetupProperty> valuePropertyCallback,
             Action<ReportSpecificationSetupClass> classPropertyCallback,
-            Action<IReportsSpecificationSetup> classTablePropertyCallback,
+            Action<IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>> classTablePropertyCallback,
             Action<ReportSpecificationSetupList> listPropertyCallback)
         {
-            foreach(var row in Rows)
-            {
-                classTablePropertyCallback(row.Properties);
-            }
+            classTablePropertyCallback(this as IReportSpecificationSetupClassUsingTable<IReportsSpecificationSetup>);
         }
     }
 }
