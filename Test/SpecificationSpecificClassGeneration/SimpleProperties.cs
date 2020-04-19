@@ -30,7 +30,6 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 AssertContains(rootClass.Properties, "Null", ExcelPropertyType.Null);
                 AssertContains(rootClass.Properties, "StringNull", ExcelPropertyType.StringNull);
                 AssertContains(rootClass.Properties, "DateTime", ExcelPropertyType.DateTime);
-                AssertContains(rootClass.Properties, "TimeSpan", ExcelPropertyType.TimeSpan);
                 AssertContains(rootClass.Properties, "Enum", ExcelPropertyType.Enum);
                 AssertContains(rootClass.Properties, "Number", ExcelPropertyType.Number);
                 AssertContains(rootClass.Properties, "Decimal", ExcelPropertyType.Decimal);

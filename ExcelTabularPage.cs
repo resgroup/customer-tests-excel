@@ -11,21 +11,21 @@ namespace CustomerTestsExcel
 {
     internal class ExcelTabularPage : ITabularPage
     {
-        private readonly IFormatProvider _formatProvider = new CultureInfo("en-GB");
-        WorksheetPart _worksheetPart;
-        ChartsheetPart _chartsheetPart;
-        Sheet _sheet;
-        readonly SpreadsheetDocument _package;
-        ExcelTabularBook _parent;
+        private readonly IFormatProvider formatProvider = new CultureInfo("en-GB");
+        WorksheetPart worksheetPart;
+        ChartsheetPart chartsheetPart;
+        Sheet sheet;
+        readonly SpreadsheetDocument spreadsheetDocument;
+        ExcelTabularBook parent;
 
         // this is for GetRow etc
-        private SheetData _sheetData;
-        private SheetData _rowLookupCacheAssociatedSheet = null;
-        private Dictionary<uint, Row> _rowLookupCache = null;
-        private IEnumerator<Row> _rowLookupCacheEnumerator;
+        private SheetData sheetData;
+        private SheetData rowLookupCacheAssociatedSheet = null;
+        private Dictionary<uint, Row> rowLookupCache = null;
+        private IEnumerator<Row> rowLookupCacheEnumerator;
 
         // this is for get cell value
-        private SharedStringTable _sharedStringTable;
+        private SharedStringTable sharedStringTable;
 
         public object this[uint row, uint column]
         {
@@ -33,7 +33,7 @@ namespace CustomerTestsExcel
             set { SetCell(row, column, value); }
         }
 
-        internal ExcelTabularBook WorkBook => _parent;
+        internal ExcelTabularBook WorkBook => parent;
 
         internal static Worksheet CreateBlankWorksheet(bool selected)
         {
@@ -67,24 +67,28 @@ namespace CustomerTestsExcel
             if (package.ExtendedFilePropertiesPart != null)
             {
                 package.ExtendedFilePropertiesPart.Properties.TitlesOfParts.VTVector.Append(new VTLPSTR(sheetName));
-
-                // standalone tocheck var corrector = new SheetAndRangeCountCorrector(package.ExtendedFilePropertiesPart.Properties);
-                // standalone tocheck corrector.Correct();
             }
 
             return new Sheet() { Id = relationshipId, SheetId = sheetId, Name = sheetName };
         }
 
-        internal ExcelTabularPage(SpreadsheetDocument package, Workbook workbook, WorksheetPart worksheetPart, Sheet sheet, Stylesheet stylesheet, uint index, ExcelTabularBook parent)
+        internal ExcelTabularPage(
+            SpreadsheetDocument spreadsheetDocument, 
+            Workbook workbook, 
+            WorksheetPart worksheetPart, 
+            Sheet sheet, 
+            Stylesheet stylesheet, 
+            uint index, 
+            ExcelTabularBook parent)
         {
-            _package = package;
-            _worksheetPart = worksheetPart;
-            _chartsheetPart = null;
-            _sheet = sheet;
-            _parent = parent;
-            _sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
+            this.spreadsheetDocument = spreadsheetDocument;
+            this.worksheetPart = worksheetPart;
+            chartsheetPart = null;
+            this.sheet = sheet;
+            this.parent = parent;
+            sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
 
-            _sharedStringTable = package.WorkbookPart.SharedStringTablePart?.SharedStringTable;
+            sharedStringTable = spreadsheetDocument.WorkbookPart.SharedStringTablePart?.SharedStringTable;
 
             PageSetup pageSetup = worksheetPart.Worksheet.GetFirstChild<PageSetup>();
             if (pageSetup != null)
@@ -103,15 +107,14 @@ namespace CustomerTestsExcel
         {
             get
             {
-                return _sheet.Name;
+                return sheet.Name;
             }
             set
             {
-                if (value != _sheet.Name)
+                if (value != sheet.Name)
                 {
                     SheetNameSafe(value);
-                    string oldName = _sheet.Name;
-                    _sheet.Name = value;
+                    sheet.Name = value;
                 }
             }
         }
@@ -139,35 +142,35 @@ namespace CustomerTestsExcel
         {
             get
             {
-                return _sheet.State == null ? true : _sheet.State.Value == SheetStateValues.Visible;
+                return sheet.State == null ? true : sheet.State.Value == SheetStateValues.Visible;
 
             }
             set
             {
-                SheetStateValues values = value ? SheetStateValues.Visible : SheetStateValues.Hidden;
-                if (_sheet.State == null)
-                    _sheet.State = new EnumValue<SheetStateValues>(values);
+                var values = value ? SheetStateValues.Visible : SheetStateValues.Hidden;
+                if (sheet.State == null)
+                    sheet.State = new EnumValue<SheetStateValues>(values);
                 else
-                    _sheet.State.Value = values;
+                    sheet.State.Value = values;
             }
         }
 
         private void ThrowExceptionIfChartSheet(string functionName)
         {
-            if (_worksheetPart == null && _chartsheetPart != null)
+            if (worksheetPart == null && chartsheetPart != null)
             {
-                throw new ApplicationException(string.Format("Cannot call {0} on '{1}' as it is a ChartSheet", functionName, _sheet.Name));
+                throw new ApplicationException(string.Format("Cannot call {0} on '{1}' as it is a ChartSheet", functionName, sheet.Name));
             }
         }
         public uint MaxColumn
         {
             get
             {
-                // standalone todo - cache this value and add 20 as it doesn't always seem to work
+                // todo - cache this value and add 20 as it doesn't always seem to work
                 // maybe it is just counting cells with something in for the row?
                 ThrowExceptionIfChartSheet("MaxColumn");
                 uint maxColumns = 0;
-                foreach (var row in _worksheetPart.Worksheet.GetFirstChild<SheetData>().Elements<Row>())
+                foreach (var row in worksheetPart.Worksheet.GetFirstChild<SheetData>().Elements<Row>())
                 {
                     var cells = row.Elements<Cell>();
                     var count = cells.Count();
@@ -185,7 +188,7 @@ namespace CustomerTestsExcel
             get
             {
                 ThrowExceptionIfChartSheet("MaxRow");
-                var rows = _worksheetPart.Worksheet.GetFirstChild<SheetData>().Elements<Row>();
+                var rows = worksheetPart.Worksheet.GetFirstChild<SheetData>().Elements<Row>();
                 if (rows.Any() == false) return 0;
                 return rows.Max(r => r.RowIndex.Value);
             }
@@ -221,7 +224,7 @@ namespace CustomerTestsExcel
 
         public Row GetOrAddRow(uint rowIndex)
         {
-            Row row = GetRow(rowIndex);
+            var row = GetRow(rowIndex);
             if (row == null)
             {
                 row = new Row() { RowIndex = rowIndex };
@@ -232,46 +235,46 @@ namespace CustomerTestsExcel
 
         public IEnumerator<Row> GetRowEnumerator()
         {
-            return _sheetData.Elements<Row>().GetEnumerator();
+            return sheetData.Elements<Row>().GetEnumerator();
         }
 
         public Row GetRow(uint rowIndex)
         {
-            if (_rowLookupCacheAssociatedSheet != _sheetData)
+            if (rowLookupCacheAssociatedSheet != sheetData)
             {
-                _rowLookupCache = new Dictionary<uint, Row>();
-                _rowLookupCacheEnumerator = GetRowEnumerator();
-                _rowLookupCacheEnumerator.MoveNext();
-                _rowLookupCacheAssociatedSheet = _sheetData;
+                rowLookupCache = new Dictionary<uint, Row>();
+                rowLookupCacheEnumerator = GetRowEnumerator();
+                rowLookupCacheEnumerator.MoveNext();
+                rowLookupCacheAssociatedSheet = sheetData;
             }
 
             // See if we already have it in the cache
-            if (_rowLookupCache.Keys.Contains(rowIndex))
-                return _rowLookupCache[rowIndex];
+            if (rowLookupCache.Keys.Contains(rowIndex))
+                return rowLookupCache[rowIndex];
 
             // ok, is it at the enumerators current position (don't think it can be...)            
-            if (_rowLookupCacheEnumerator.Current != null && _rowLookupCacheEnumerator.Current.RowIndex == rowIndex)
+            if (rowLookupCacheEnumerator.Current != null && rowLookupCacheEnumerator.Current.RowIndex == rowIndex)
             {
-                _rowLookupCache.Add(rowIndex, _rowLookupCacheEnumerator.Current);
-                return _rowLookupCacheEnumerator.Current;
+                rowLookupCache.Add(rowIndex, rowLookupCacheEnumerator.Current);
+                return rowLookupCacheEnumerator.Current;
             }
 
             // Try the next position
-            _rowLookupCacheEnumerator.MoveNext();
-            if (_rowLookupCacheEnumerator.Current != null && _rowLookupCacheEnumerator.Current.RowIndex == rowIndex)
+            rowLookupCacheEnumerator.MoveNext();
+            if (rowLookupCacheEnumerator.Current != null && rowLookupCacheEnumerator.Current.RowIndex == rowIndex)
             {
-                _rowLookupCache.Add(rowIndex, _rowLookupCacheEnumerator.Current);
-                return _rowLookupCacheEnumerator.Current;
+                rowLookupCache.Add(rowIndex, rowLookupCacheEnumerator.Current);
+                return rowLookupCacheEnumerator.Current;
             }
 
             // OK - we're going to have to try an exhaustive search
-            _rowLookupCacheEnumerator = GetRowEnumerator();
-            while (_rowLookupCacheEnumerator.MoveNext())
+            rowLookupCacheEnumerator = GetRowEnumerator();
+            while (rowLookupCacheEnumerator.MoveNext())
             {
-                if (_rowLookupCacheEnumerator.Current.RowIndex == rowIndex)
+                if (rowLookupCacheEnumerator.Current.RowIndex == rowIndex)
                 {
-                    _rowLookupCache.Add(rowIndex, _rowLookupCacheEnumerator.Current);
-                    return _rowLookupCacheEnumerator.Current;
+                    rowLookupCache.Add(rowIndex, rowLookupCacheEnumerator.Current);
+                    return rowLookupCacheEnumerator.Current;
                 }
             }
 
@@ -280,17 +283,17 @@ namespace CustomerTestsExcel
 
         private void AddRow(Row row)
         {
-            _rowLookupCache = null;
-            _rowLookupCacheAssociatedSheet = null;
-            _rowLookupCacheEnumerator = null;
-            if (_sheetData.Elements<Row>().Count() > 0)
+            rowLookupCache = null;
+            rowLookupCacheAssociatedSheet = null;
+            rowLookupCacheEnumerator = null;
+            if (sheetData.Elements<Row>().Count() > 0)
             {
-                if (_sheetData.Elements<Row>().Last<Row>() != null &&
-                    _sheetData.Elements<Row>().Last<Row>().RowIndex > row.RowIndex.Value)
+                if (sheetData.Elements<Row>().Last() != null &&
+                    sheetData.Elements<Row>().Last().RowIndex > row.RowIndex.Value)
                 {
                     // Add row at the correct position in the list
-                    List<Row> sheetRows = new List<Row>();
-                    using (IEnumerator<Row> enumerator = GetRowEnumerator())
+                    var sheetRows = new List<Row>();
+                    using (var enumerator = GetRowEnumerator())
                     {
                         bool newSheetAdded = false;
                         while (enumerator.MoveNext())
@@ -303,22 +306,22 @@ namespace CustomerTestsExcel
                             sheetRows.Add(enumerator.Current);
                         }
                     }
-                    _sheetData.RemoveAllChildren<Row>();
-                    foreach (Row sheetRow in sheetRows)
+                    sheetData.RemoveAllChildren<Row>();
+                    foreach (var sheetRow in sheetRows)
                     {
-                        _sheetData.Append(sheetRow);
+                        sheetData.Append(sheetRow);
                     }
                 }
                 else
                 {
                     // Add row to the end of the row list
-                    _sheetData.Append(row);
+                    sheetData.Append(row);
                 }
             }
             else
             {
                 // Add first row to the end of the row list
-                _sheetData.Append(row);
+                sheetData.Append(row);
             }
         }
 
@@ -328,7 +331,7 @@ namespace CustomerTestsExcel
             string columnName = GetColumnName(columnIndex);
             string cellReference = columnName + rowIndex;
 
-            Row row = GetOrAddRow(rowIndex);
+            var row = GetOrAddRow(rowIndex);
 
             // If there is not a cell with the specified column name, insert one.  
             if (row.Elements<Cell>().Where(c => c.CellReference.Value == cellReference).Count() > 0)
@@ -357,7 +360,7 @@ namespace CustomerTestsExcel
                     }
                 }
 
-                Cell newCell = new Cell() { CellReference = cellReference, StyleIndex = 0U };
+                var newCell = new Cell() { CellReference = cellReference, StyleIndex = 0U };
                 if (row.StyleIndex != null)
                 {
                     newCell.StyleIndex.Value = row.StyleIndex.Value;
@@ -421,7 +424,7 @@ namespace CustomerTestsExcel
                 cellValue = new CellValue(((DateTime)value).ToOADate().ToString());
                 // this causes a problem loading in excel stupidly: cellDataType = CellValues.Date;
 
-                var spreadsheetDocument = _package;
+                var spreadsheetDocument = this.spreadsheetDocument;
                 if (spreadsheetDocument != null)
                 {
                     var cellFormats = spreadsheetDocument.WorkbookPart.WorkbookStylesPart.Stylesheet.CellFormats.Cast<CellFormat>();
@@ -435,7 +438,7 @@ namespace CustomerTestsExcel
             }
             else if (value is Boolean)
             {
-                cellValue = new CellValue(Convert.ToInt32(value).ToString(_formatProvider));
+                cellValue = new CellValue(Convert.ToInt32(value).ToString(formatProvider));
             }
             else if (value is Byte ||
                      value is Char ||
@@ -449,7 +452,7 @@ namespace CustomerTestsExcel
                      value is UInt32 ||
                      value is UInt64)
             {
-                cellValue = new CellValue(string.Format(_formatProvider, "{0}", value));
+                cellValue = new CellValue(string.Format(formatProvider, "{0}", value));
             }
             else
             {
@@ -479,7 +482,7 @@ namespace CustomerTestsExcel
 
             string cellReference = CellReference(row, column);
 
-            var cell = _worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference == cellReference);
+            var cell = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference == cellReference);
 
             return (cell == null) 
                 ? new TabularCell(null, false) 
@@ -521,10 +524,10 @@ namespace CustomerTestsExcel
 
                             if (int.TryParse(cell.CellValue.InnerText, out sharedStringIndex))
                             {
-                                if (_sharedStringTable == null)
+                                if (sharedStringTable == null)
                                     throw new Exception("Cell references shared string table, but table not found");
 
-                                return _sharedStringTable.ElementAt(sharedStringIndex).InnerText;
+                                return sharedStringTable.ElementAt(sharedStringIndex).InnerText;
                             }
                             else
                                 return cell.CellValue.InnerText;
@@ -550,40 +553,16 @@ namespace CustomerTestsExcel
                 }
                 else if (cell.CellValue != null)
                 {
-                    if (cell.StyleIndex != null && cell.StyleIndex.HasValue)
-                    {
-                        var spreadsheetDocument = _package;
-                        if (spreadsheetDocument != null)
-                        {
-                            var cellFormats = spreadsheetDocument.WorkbookPart.WorkbookStylesPart.Stylesheet.CellFormats;
-                            if (cell.StyleIndex.Value < cellFormats.Count)
-                            {
-                                //see http://msdn.microsoft.com/en-us/library/documentformat.openxml.spreadsheet.numberingformat(v=office.14).aspx
-                                //and http://stackoverflow.com/questions/4730152/what-indicates-an-office-open-xml-cell-contains-a-date-time-value
-                                var cellFormat = cellFormats.ElementAt((int)cell.StyleIndex.Value) as CellFormat;
-                                if (cellFormat != null && cellFormat.NumberFormatId.HasValue)
-                                {
-                                    var numberFormat = cellFormat.NumberFormatId.Value;
+                    if (ExcelDateHelper.IsDateTimeCell(spreadsheetDocument.WorkbookPart, cell))
+                        return DateTime.FromOADate(double.Parse(cell.CellValue.InnerText));
 
-                                    if (numberFormat >= 14 && numberFormat <= 17 || numberFormat == 22 || numberFormat == 30) // date with or without time
-                                        return DateTime.FromOADate(double.Parse(cell.CellValue.InnerText));
-
-                                    else if (numberFormat >= 18 && numberFormat <= 21 || numberFormat == 45 || numberFormat == 46) // time only
-                                        return DateTime.FromOADate(double.Parse(cell.CellValue.InnerText)).TimeOfDay;
-                                }
-                            }
-                        }
-                    }
-
-                    double doubleValue;
-                    if (double.TryParse(cell.CellValue.InnerText, out doubleValue))
+                    if (double.TryParse(cell.CellValue.InnerText, out var doubleValue))
                         return doubleValue;
                     else
                         return cell.CellValue.InnerText;
                 }
             }
             return null;
-
         }
         
     }

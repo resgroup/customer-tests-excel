@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeToExcelException.cs" />
+    <Compile Include="ExcelDateHelper.cs" />
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
     <Compile Include="ExcelToCode\GivenFunction.cs" />
     <Compile Include="ExcelToCode\GivenTableProperty.cs" />
