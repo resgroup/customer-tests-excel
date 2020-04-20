@@ -198,28 +198,11 @@ namespace CustomerTestsExcel
             if (row == 0 || column == 0)
                 throw new IndexOutOfRangeException();
 
-            CellValue cellValue;
-            InlineString cellString;
-            EnumValue<CellValues> cellDataType;
-            uint? cellStyleIndex;
-
-            // Getting the things and then setting them seems strange, 
-            // I think it would make more sense to pass in the cell, 
-            // and let this function set the properties
-            GetCellProperties(
-                value, 
-                out cellString, 
-                out cellValue, 
-                out cellDataType,
-                out cellStyleIndex
-                );
-
             var cell = GetOrAddCell(column, row);
-            cell.InlineString = cellString;
-            cell.CellValue = cellValue;
-            cell.DataType = cellDataType;
-            if (cellStyleIndex.HasValue)
-                cell.StyleIndex = cellStyleIndex;
+
+            SetCellProperties(
+                cell,
+                value);
         }
 
         public Row GetOrAddRow(uint rowIndex)
@@ -398,31 +381,22 @@ namespace CustomerTestsExcel
             }
         }
 
-        private void GetCellProperties(
-            object value, 
-            out InlineString stringValue, 
-            out CellValue cellValue, 
-            out EnumValue<CellValues> cellDataType,
-            out uint? cellStyleIndex)
+        private void SetCellProperties(
+            Cell cell,
+            object value)
         {
             value = MakeInfinityAString(value);
-
-            cellValue = null;
-            stringValue = null;
-            cellDataType = null;
-            cellStyleIndex = null;
 
             if (value == null || value is System.Reflection.Missing)
                 return;
 
             else if (value is string)
             {
-                stringValue = new InlineString(new Text(value as string));
+                cell.InlineString = new InlineString(new Text(value as string));
             }
             else if (value is DateTime)
             {
-                cellValue = new CellValue(((DateTime)value).ToOADate().ToString());
-                // this causes a problem loading in excel stupidly: cellDataType = CellValues.Date;
+                cell.CellValue = new CellValue(((DateTime)value).ToOADate().ToString());
 
                 var spreadsheetDocument = this.spreadsheetDocument;
                 if (spreadsheetDocument != null)
@@ -433,12 +407,12 @@ namespace CustomerTestsExcel
                             .Where(cellFormat => cellFormat.NumberFormatId.Value >= 14 && cellFormat.NumberFormatId.Value <= 17 || cellFormat.NumberFormatId.Value == 22 || cellFormat.NumberFormatId.Value == 30)
                             .FirstOrDefault();
 
-                    cellStyleIndex = (uint) cellFormats.TakeWhile(cellFormat => cellFormat != dateFormat).Count();
+                    cell.StyleIndex = (uint) cellFormats.TakeWhile(cellFormat => cellFormat != dateFormat).Count();
                 }
             }
             else if (value is Boolean)
             {
-                cellValue = new CellValue(Convert.ToInt32(value).ToString(formatProvider));
+                cell.CellValue = new CellValue(Convert.ToInt32(value).ToString(formatProvider));
             }
             else if (value is Byte ||
                      value is Char ||
@@ -452,25 +426,32 @@ namespace CustomerTestsExcel
                      value is UInt32 ||
                      value is UInt64)
             {
-                cellValue = new CellValue(string.Format(formatProvider, "{0}", value));
+                cell.CellValue = new CellValue(string.Format(formatProvider, "{0}", value));
             }
             else
             {
                 throw new Exception("Cannot write value of type " + value.GetType().Name + " must be converted to a basic type (string, number, datetime).");
             }
-            if (!(value is DateTime))
-            {
-                cellDataType = new EnumValue<CellValues>(GetDataType(value));
-            }
+
+            SetDataType(
+                cell,
+                value);
         }
 
-        private CellValues GetDataType(object value)
+        private void SetDataType(
+            Cell cell, 
+            object value)
         {
             if (value is bool)
-                return CellValues.Boolean;
+                cell.DataType = new EnumValue<CellValues>(CellValues.Boolean);
             else if (value is string)
-                return CellValues.InlineString;
-            return CellValues.Number;
+                cell.DataType = new EnumValue<CellValues>(CellValues.InlineString);
+            else if (value is DateTime)
+            {
+                // this causes a problem loading in excel stupidly: cell.DataType = CellValues.Date;
+            }
+            else
+                cell.DataType = new EnumValue<CellValues>(CellValues.Number);
         }
 
         //standalone todo tidy this up, make it faster
