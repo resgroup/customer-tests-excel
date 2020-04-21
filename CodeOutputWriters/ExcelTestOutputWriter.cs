@@ -102,9 +102,30 @@ namespace CustomerTestsExcel.CodeOutputWriters
             UnIndent();
         }
 
+        public void StartGivenListProperty(ReportSpecificationSetupList list)
+        {
+            SetCell(namer.GivenListPropertyNameCodeNameToExcelName(list.PropertyName));
+            Indent();
+            SetCell(namer.CodeClassNameToExcelName(list.PropertyType));
+            MoveToNextRow();
+        }
+
+        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem)
+        {
+            SetCell(namer.WithItem);
+            Indent();
+            MoveToNextRow();
+        }
+
+        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem) =>
+            UnIndent();
+
+        public void EndGivenListProperty(ReportSpecificationSetupList list) =>
+            UnIndent();
+
         public void StartClassTable(string propertyName, string className)
         {
-            SetCell(namer.GivenPropertyNameCodeNameToExcelName(propertyName));
+            SetCell(namer.GivenTablePropertyNameCodeNameToExcelName(propertyName));
             Indent();
             SetCell(namer.CodeClassNameToExcelName(className));
             MoveToNextRow();
@@ -298,26 +319,5 @@ alone)"
 
             //exceptionWorksheet.GetCell(_exceptionRow, 1).Value = "Exception: " + exception;
         }
-
-        public void StartGivenListProperty(ReportSpecificationSetupList list)
-        {
-            SetCell(namer.GivenListPropertyNameCodeNameToExcelName(list.PropertyName));
-            Indent();
-            SetCell(namer.CodeClassNameToExcelName(list.PropertyType));
-            MoveToNextRow();
-        }
-
-        public void StartGivenListPropertyItem(IReportsSpecificationSetup listItem)
-        {
-            SetCell(namer.WithItem);
-            Indent();
-            MoveToNextRow();
-        }
-
-        public void EndGivenListPropertyItem(IReportsSpecificationSetup listItem) =>
-            UnIndent();
-
-        public void EndGivenListProperty(ReportSpecificationSetupList list) =>
-            UnIndent();
     }
 }

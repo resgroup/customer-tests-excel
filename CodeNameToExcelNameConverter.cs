@@ -129,8 +129,9 @@ namespace CustomerTestsExcel
         // the property names (not values) of the "Given" part of the test
         public string GivenTablePropertyNameCodeNameToExcelName(string cSharpPropertyName)
         {
-            // hmmm, I should prbably call this from somewhere
-            throw new NotImplementedException();
+            string withoutTableOf = RemoveTableOfPostfix(cSharpPropertyName);
+
+            return withoutTableOf + " table of";
         }
         // Change "Calibrations    table of" to "Calibrations_table_of"
         public string GivenTablePropertyNameExcelNameToCodeName(string excelPropertyName) =>
