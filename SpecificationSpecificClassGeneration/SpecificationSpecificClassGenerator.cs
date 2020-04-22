@@ -1,54 +1,47 @@
-﻿using CustomerTestsExcel.ExcelToCode;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using static System.Environment;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
-    struct ListProperty
+    public class SpecificationSpecificClassGenerator : SpecificationSpecificClassGeneratorBase
     {
-        public PropertyInfo CsharpProperty;
-        public IGivenClassProperty ExcelProperty;
-    }
-
-    public class SpecificationSpecificClassGenerator
-    {
-        readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
-        GivenClass excelGivenClass;
         Type type;
 
-        public SpecificationSpecificClassGenerator(
-            ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher)
+        public SpecificationSpecificClassGenerator(ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher, GivenClass excelGivenClass) 
+            : base(excelCsharpPropertyMatcher, excelGivenClass)
         {
-            this.excelCsharpPropertyMatcher = excelCsharpPropertyMatcher;
         }
 
-
-        public string cSharpCode(
+        public string CsharpCode(
             string testNamespace,
-            List<string> usings,
-            Type type,
-            GivenClass excelGivenClass)
+            IEnumerable<string> usings,
+            Type type)
         {
-            this.excelGivenClass = excelGivenClass;
             this.type = type;
 
             var usingStatements = UsingStatements(usings);
 
-            var unmatchedProperties = UnmatchedProperties(excelGivenClass);
+            var simpleProperties = 
+                MatchWithCsharpType(excelGivenClass.SimpleProperties, type)
+                .Select(SimplePropertySetterOnMock);
 
-            var simpleProperties = SimpleProperties(excelGivenClass);
+            var complexProperties =
+                MatchWithCsharpType(excelGivenClass.ComplexProperties, type)
+                .Select(ComplexPropertySetterOnMock);
 
-            var complexProperties = ComplexProperties(excelGivenClass);
+            var listPropertyDeclarations =
+                MatchWithCsharpType(excelGivenClass.ListProperties, type)
+                .Select(ListPropertyDeclarationOfMock);
 
-            var listPropertyDeclarations = ListPropertyDeclarations(excelGivenClass);
+            var listPropertyMockSetups = 
+                MatchWithCsharpType(excelGivenClass.ListProperties, type)
+                .Select(ListPropertyMockSetup);
 
-            var listPropertyMockSetups = ListPropertyMockSetups(excelGivenClass);
-
-            var listPropertyFunctions = ListPropertyFunctions(excelGivenClass);
+            var listPropertyFunctions =
+                MatchWithCsharpType(excelGivenClass.ListProperties, type)
+                .Select(ListPropertySetterOnMock);
 
             return
 $@"{usingStatements}
@@ -71,8 +64,6 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 {string.Join(NewLine, listPropertyMockSetups)}
         }}
 
-{string.Join(NewLine, unmatchedProperties)}
-
 {string.Join(NewLine, simpleProperties)}
 
 {string.Join(NewLine, complexProperties)}
@@ -83,52 +74,15 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 ";
         }
 
-        static string UsingStatements(List<string> usings)
+        string SimplePropertySetterOnMock(MatchedProperty matchedProperty)
         {
-            var allUsings =
-                new List<String>
-                {
-                    // this is required for "String". Using "string" would be
-                    // better, but String is what the type system gives us
-                    "System",
-                    "System.Collections.Generic",
-                    "System.Linq",
-                    "static System.Reflection.MethodBase",
-                    "Moq",
-                    "CustomerTestsExcel",
-                    "CustomerTestsExcel.SpecificationSpecificClassGeneration"
-                };
-            allUsings.AddRange(usings);
-
-            var usingStatements = string.Join(NewLine, allUsings.Select(u => $"using {u};"));
-            return usingStatements;
-        }
-
-        IEnumerable<string> SimpleProperties(GivenClass excelGivenClass)
-        {
-            foreach (var excelProperty in excelGivenClass.Properties)
-            {
-                var cSharpProperty =
-                    type.GetProperties()
-                    .FirstOrDefault(c => excelCsharpPropertyMatcher.PropertiesMatch(c, excelProperty));
-
-                if (excelProperty.Type.IsSimpleProperty())
-                {
-                    yield return SimplePropertySetter(
-                        cSharpProperty.PropertyType.Name,
-                        excelProperty);
-                }
-            }
-        }
-
-        string SimplePropertySetter(string propertyTypeName, IGivenClassProperty excelGivenProperty)
-        {
-            var parameterName = CamelCase(excelGivenProperty.Name);
-            var parameterType = propertyTypeName;
-            var interfacePropertyName = excelGivenProperty.Name;
+            var functionName = $"{matchedProperty.ExcelProperty.Name}_of";
+            var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
+            var interfacePropertyName = matchedProperty.ExcelProperty.Name;
+            var parameterType = matchedProperty.CsharpProperty.PropertyType.Name;
 
             return
-$@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({parameterType} {parameterName})
+$@"        internal {SpecificationSpecificClassName} {functionName}({parameterType} {parameterName})
         {{
             AddValueProperty(GetCurrentMethod(), {parameterName});
 
@@ -138,26 +92,13 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         }}{NewLine}";
         }
 
-        IEnumerable<string> ComplexProperties(GivenClass excelGivenClass)
+        string ComplexPropertySetterOnMock(MatchedProperty matchedProperty)
         {
-            foreach (var excelProperty in excelGivenClass.Properties)
-            {
-                var cSharpProperty =
-                    type.GetProperties()
-                    .FirstOrDefault(c => excelCsharpPropertyMatcher.PropertiesMatch(c, excelProperty));
-
-                if (cSharpProperty != null && excelProperty.Type == ExcelPropertyType.Object)
-                    yield return ComplexPropertySetter(excelProperty);
-            }
-        }
-
-        string ComplexPropertySetter(IGivenClassProperty excelGivenProperty)
-        {
-            var functionName = $"{excelGivenProperty.Name}_of";
-            var parameterName = CamelCase(excelGivenProperty.Name);
-            var interfacePropertyName = excelGivenProperty.Name;
-            var propertyClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
-            var propertyNameOfSutObject = excelGivenProperty.Name;
+            var functionName = $"{matchedProperty.ExcelProperty.Name}_of";
+            var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
+            var interfacePropertyName = matchedProperty.ExcelProperty.Name;
+            var propertyClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
+            var propertyNameOfSutObject = matchedProperty.ExcelProperty.Name;
 
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
@@ -170,45 +111,32 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
         }}{NewLine}";
         }
 
-        IEnumerable<string> ListPropertyDeclarations(GivenClass excelGivenClass) =>
-            ListProperties(excelGivenClass).Select(ListPropertyDeclaration);
-
-        string ListPropertyDeclaration(ListProperty listProperty)
+        string ListPropertyDeclarationOfMock(MatchedProperty matchedProperty)
         {
-            var listClassName = $"SpecificationSpecific{ listProperty.ExcelProperty.ClassName}";
-            var listPropertyName = ListPropertyName(listProperty.ExcelProperty);
+            var listClassName = $"SpecificationSpecific{ matchedProperty.ExcelProperty.ClassName}";
+            var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
 
             return $"        readonly List<{listClassName}> {listPropertyName} = new List<{listClassName}>();";
         }
 
-        IEnumerable<string> ListPropertyMockSetups(GivenClass excelGivenClass) =>
-            ListProperties(excelGivenClass).Select(ListPropertyMockSetup);
-
-        string ListPropertyMockSetup(ListProperty listProperty)
+        string ListPropertyMockSetup(MatchedProperty matchedProperty)
         {
-            var interfacePropertyName = listProperty.ExcelProperty.Name;
-            var listPropertyName = ListPropertyName(listProperty.ExcelProperty);
-            var interfaceUnderTestPropertyName = listProperty.ExcelProperty.ClassName;
+            var interfacePropertyName = matchedProperty.ExcelProperty.Name;
+            var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
+            var interfaceUnderTestPropertyName = matchedProperty.ExcelProperty.ClassName;
 
             return $"            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({listPropertyName}.Select(l => l.{interfaceUnderTestPropertyName}));";
         }
 
-        IEnumerable<string> ListPropertyFunctions(GivenClass excelGivenClass)
+        string ListPropertySetterOnMock(MatchedProperty matchedProperty)
         {
-            return
-                ListProperties(excelGivenClass)
-                .Select(listProperty => ListPropertySetter(listProperty.ExcelProperty));
-        }
-
-        string ListPropertySetter(IGivenClassProperty excelGivenProperty)
-        {
-            var parameterName = CamelCase(excelGivenProperty.Name);
-            var listParameterName = ListPropertyName(excelGivenProperty);
-            var listPropertyName = ListPropertyName(excelGivenProperty);
-            var listClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
+            var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
+            var listParameterName = ListPropertyName(matchedProperty.ExcelProperty);
+            var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
+            var listClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
 
             return
-$@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({listClassName} {parameterName})
+$@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelProperty.Name}_of({listClassName} {parameterName})
         {{
             AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
@@ -217,7 +145,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             return this;
         }}
 
-        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_table_of(ReportSpecificationSetupClassUsingTable<{listClassName}> {listParameterName})
+        internal {SpecificationSpecificClassName} {matchedProperty.ExcelProperty.Name}_table_of(ReportSpecificationSetupClassUsingTable<{listClassName}> {listParameterName})
         {{
             {listParameterName}.PropertyName = GetCurrentMethod().Name;
 
@@ -230,32 +158,6 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         }}";
         }
 
-        IEnumerable<ListProperty> ListProperties(GivenClass excelGivenClass)
-        {
-            foreach (var excelProperty in excelGivenClass.Properties)
-            {
-                var cSharpProperty =
-                    type.GetProperties()
-                    .FirstOrDefault(c => excelCsharpPropertyMatcher.PropertiesMatch(c, excelProperty));
-
-                if (excelProperty.Type == ExcelPropertyType.List 
-                    && cSharpProperty != null)
-                    yield return new ListProperty { CsharpProperty = cSharpProperty, ExcelProperty = excelProperty };
-            }
-        }
-
-        IEnumerable<string> UnmatchedProperties(GivenClass excelGivenClass)
-        {
-            foreach (var excelProperty in excelGivenClass.Properties)
-            {
-                var cSharpProperty =
-                    type.GetProperties()
-                    .FirstOrDefault(c => excelCsharpPropertyMatcher.PropertiesMatch(c, excelProperty));
-
-                if (cSharpProperty == null)
-                    yield return $"// Could not find a match for property {excelProperty.Name}, with type of {excelProperty.Type}";
-            }
-        }
         string InterfacePropertyName =>
             excelGivenClass.Name;
 
@@ -264,16 +166,5 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
 
         string MockVariableName =>
             CamelCase(excelGivenClass.Name);
-
-        string SpecificationSpecificClassName =>
-            $"SpecificationSpecific{excelGivenClass.Name}";
-
-        string CamelCase(string pascalCase) =>
-            string.IsNullOrWhiteSpace(pascalCase) ? "" : char.ToLower(pascalCase[0]) + pascalCase.Substring(1);
-
-        string ListPropertyName(IGivenClassProperty excelProperty) =>
-            CamelCase(excelProperty.Name) + "s";
-
-
     }
 }

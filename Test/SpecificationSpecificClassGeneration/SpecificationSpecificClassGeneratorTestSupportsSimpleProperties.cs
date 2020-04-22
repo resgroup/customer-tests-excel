@@ -32,12 +32,12 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             );
 
             var actual = new SpecificationSpecificClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-                ).cSharpCode(
+                new ExcelCsharpPropertyMatcher(),
+                    excelGivenClass
+                ).CsharpCode(
                     "SampleTests",
                     new List<string> { "SampleSystemUnderTest.VermeulenNearWakeLength" },
-                    typeof(ITarget),
-                    excelGivenClass
+                    typeof(ITarget)
                 );
 
             var expected =

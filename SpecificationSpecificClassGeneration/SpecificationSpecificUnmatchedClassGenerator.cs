@@ -1,41 +1,62 @@
-﻿using CustomerTestsExcel.ExcelToCode;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using static System.Environment;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
-    public class SpecificationSpecificUnmatchedClassGenerator
+    public class SpecificationSpecificUnmatchedClassGenerator : SpecificationSpecificClassGeneratorBase
     {
-        GivenClass excelGivenClass;
-
-        public string cSharpCode(
-            string testNamespace,
-            List<string> usings,
-            GivenClass excelGivenClass)
+        public SpecificationSpecificUnmatchedClassGenerator(ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher, GivenClass excelGivenClass)
+            : base(excelCsharpPropertyMatcher, excelGivenClass)
         {
-            this.excelGivenClass = excelGivenClass;
+        }
 
+        public string CsharpCode(
+            string testNamespace,
+            IEnumerable<string> usings)
+        {
             var usingStatements = UsingStatements(usings);
 
-            var functions = Functions(excelGivenClass);
+            var functions =
+                excelGivenClass
+                .Functions
+                .Select(Function);
 
-            var simplePropertyDeclarations = SimplePropertyDeclarations(excelGivenClass);
+            var simplePropertyDeclarations = 
+                excelGivenClass
+                .SimpleProperties
+                .Select(SimplePropertyDeclarationOnSelf);
 
-            var simpleProperties = SimpleProperties(excelGivenClass);
+            var simpleProperties =
+                excelGivenClass
+                .SimpleProperties
+                .Select(SimplePropertySetterOnSelf);
 
-            var complexPropertyDeclarations = ComplexPropertyDeclarations(excelGivenClass);
+            var complexPropertyDeclarations =
+                excelGivenClass
+                .ComplexProperties
+                .Select(ComplexPropertyDeclarationOnSelf);
 
-            var complexProperties = ComplexProperties(excelGivenClass);
+            var complexProperties = 
+                excelGivenClass
+                .ComplexProperties
+                .Select(ComplexPropertySetterOnSelf);
 
-            var listPropertyDeclarations = ListPropertyDeclarations(excelGivenClass);
+            var listPropertyDeclarations =
+                excelGivenClass
+                .ListProperties
+                .Select(ListPropertyDeclarationOnSelf);
 
-            var listPropertyInitialisers = ListPropertyInitialisation(excelGivenClass);
 
-            var listPropertyFunctions = ListPropertyFunctions(excelGivenClass);
+            var listPropertyInitialisers =
+                excelGivenClass
+                .ListProperties
+                .Select(ListPropertyInitialisationOnSelf);
+
+            var listPropertyFunctions = 
+                excelGivenClass
+                .ListProperties
+                .Select(ListPropertySetterOnSelf);
 
             return
 $@"{usingStatements}
@@ -62,7 +83,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
     // Custom classes should go under a directory called 'IgnoreOnGeneration'.
     // If the custom class filename is the same as this one ({SpecificationSpecificClassName}),
     // then it will be used instead of this function. If it is called something else,
-    // say {SpecificationSpecificClassName}Parial, then this class will remain, and
+    // say {SpecificationSpecificClassName}Partial, then this class will remain, and
     // the custom class can add to it.
 
     // Please see VermeulenNearWakeLengthInput.cs for an example of setting up simple and
@@ -96,236 +117,15 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 ";
         }
 
-        static string UsingStatements(List<string> usings)
-        {
-            var allUsings =
-                new List<String>
-                {
-                    // this is required for "String". Using "string" would be
-                    // better, but "String" is what the type system gives us
-                    "System",
-                    "System.Collections.Generic",
-                    "System.Linq",
-                    "static System.Reflection.MethodBase",
-                    "Moq",
-                    "CustomerTestsExcel",
-                    "CustomerTestsExcel.SpecificationSpecificClassGeneration"
-                };
-            allUsings.AddRange(usings);
-
-            var usingStatements = string.Join(NewLine, allUsings.Select(u => $"using {u};"));
-            return usingStatements;
-        }
-
-        IEnumerable<string> Functions(GivenClass excelGivenClass)
-        {
-            return excelGivenClass
-                .Properties
-                .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Function)
-                .Select(Function);
-        }
-
         string Function(IGivenClassProperty excelGivenProperty)
         {
             var functionName = excelGivenProperty.Name;
 
             return 
 $@"        // No sensible implementation can be generated for functions, so please 
-        // add the function below in a custom class.
+        // add the function below in a (partial) custom class.
         // public void {functionName}() {{ .. }} ";
         }
 
-        IEnumerable<string> SimplePropertyDeclarations(GivenClass excelGivenClass)
-        {
-            return excelGivenClass
-                .Properties
-                .Where(excelProperty => excelProperty.Type.IsSimpleProperty())
-                .Select(SimplePropertyDeclaration);
-        }
-
-        string SimplePropertyDeclaration(IGivenClassProperty excelGivenProperty)
-        {
-            var parameterName = excelGivenProperty.Name;
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue);
-
-            return $"        public {parameterType} {parameterName} {{ get; private set; }}";
-        }
-
-        IEnumerable<string> SimpleProperties(GivenClass excelGivenClass)
-        {
-            return excelGivenClass
-                .Properties
-                .Where(excelProperty => excelProperty.Type.IsSimpleProperty())
-                .Select(SimplePropertySetter);
-        }
-
-        string CsharpPropertyTypeName(ExcelPropertyType type, string propertyValue)
-        {
-            switch (type)
-            {
-                case ExcelPropertyType.Null:
-                    return typeof(object).Name;
-                case ExcelPropertyType.StringNull:
-                    return typeof(string).Name;
-                case ExcelPropertyType.Number:
-                    return typeof(float).Name;
-                case ExcelPropertyType.Decimal:
-                    return typeof(decimal).Name;
-                case ExcelPropertyType.String:
-                    return typeof(string).Name;
-                case ExcelPropertyType.DateTime:
-                    return typeof(DateTime).Name;
-                case ExcelPropertyType.TimeSpan:
-                    return typeof(TimeSpan).Name;
-                case ExcelPropertyType.Enum:
-                    return propertyValue?.Substring(0, Math.Max(propertyValue.IndexOf('.'), 1)) ?? "Enum /* no value in excel tests for value of this enum, so unable to deduce the type */";
-                case ExcelPropertyType.Boolean:
-                    return typeof(bool).Name;
-                case ExcelPropertyType.Object:
-                    return typeof(object).Name;
-                case ExcelPropertyType.List:
-                    return typeof(IEnumerable).Name;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type));
-            };
-        }
-
-        string SimplePropertySetter(IGivenClassProperty excelGivenProperty)
-        {
-            var parameterName = CamelCase(excelGivenProperty.Name);
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue);
-            var classPropertyName = excelGivenProperty.Name;
-
-            return
-$@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({parameterType} {parameterName})
-        {{
-            AddValueProperty(GetCurrentMethod(), {parameterName});
-
-            this.{classPropertyName} = {parameterName};
-
-            return this;
-        }}{NewLine}";
-        }
-
-        IEnumerable<string> ComplexPropertyDeclarations(GivenClass excelGivenClass)
-        {
-            return excelGivenClass
-                .Properties
-                .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Object)
-                .Select(ComplexPropertyDeclaration);
-        }
-
-        string ComplexPropertyDeclaration(IGivenClassProperty excelGivenProperty)
-        {
-            var classVariableName = excelGivenProperty.Name;
-            var variableType = $"SpecificationSpecific{excelGivenProperty.ClassName}";
-
-            return $"        public {variableType} {classVariableName} {{ get; private set; }}";
-        }
-
-        IEnumerable<string> ComplexProperties(GivenClass excelGivenClass)
-        {
-            return excelGivenClass
-            .Properties
-            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Object)
-            .Select(ComplexPropertySetter);
-        }
-
-        string ComplexPropertySetter(IGivenClassProperty excelGivenProperty)
-        {
-            var functionName = $"{excelGivenProperty.Name}_of";
-            var classVariableName = excelGivenProperty.Name;
-            var parameterName = CamelCase(excelGivenProperty.Name);
-            var propertyClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
-
-            return
-$@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
-        {{
-            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
-
-            this.{classVariableName} = {parameterName};
-
-            return this;
-        }}{NewLine}";
-        }
-
-        IEnumerable<string> ListPropertyDeclarations(GivenClass excelGivenClass) =>
-            ListProperties(excelGivenClass).Select(ListPropertyDeclaration);
-
-        string ListPropertyDeclaration(IGivenClassProperty excelProperty)
-        {
-            var listClassName = $"SpecificationSpecific{excelProperty.ClassName}";
-            var listPropertyName = ListPropertyName(excelProperty);
-
-            return $"        readonly List<{listClassName}> {listPropertyName};";
-        }
-
-        IEnumerable<string> ListPropertyInitialisation(GivenClass excelGivenClass) =>
-            ListProperties(excelGivenClass).Select(ListPropertyInitialisation);
-
-        string ListPropertyInitialisation(IGivenClassProperty excelProperty)
-        {
-            var listClassName = $"SpecificationSpecific{excelProperty.ClassName}";
-            var listPropertyName = ListPropertyName(excelProperty);
-
-            return $"            {listPropertyName} = new List<{listClassName}>();";
-        }
-
-        IEnumerable<string> ListPropertyFunctions(GivenClass excelGivenClass) =>
-            ListProperties(excelGivenClass)
-            .Select(excelProperty => ListPropertySetter(excelProperty));
-
-        string ListPropertySetter(IGivenClassProperty excelGivenProperty)
-        {
-            var parameterName = CamelCase(excelGivenProperty.Name);
-            var listParameterName = ListPropertyName(excelGivenProperty);
-            var listPropertyName = ListPropertyName(excelGivenProperty);
-            var listClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
-
-            return
-$@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({listClassName} {parameterName})
-        {{
-            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
-
-            this.{listPropertyName}.Add({parameterName});
-
-            return this;
-        }}
-
-        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_list_of(List<{listClassName}> {listParameterName}, string listType)
-        {{
-            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, {listParameterName}));
-
-            this.{listPropertyName}.AddRange({listParameterName});
-
-            return this;
-        }}
-
-        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_table_of(ReportSpecificationSetupClassUsingTable<{listClassName}> {listParameterName})
-        {{
-            {listParameterName}.PropertyName = GetCurrentMethod().Name;
-
-            AddClassTableProperty({listParameterName});
-
-            foreach (var row in {listParameterName}.Rows)
-                this.{listPropertyName}.Add(row.Properties);
-
-            return this;
-        }}";
-        }
-
-        IEnumerable<IGivenClassProperty> ListProperties(GivenClass excelGivenClass) =>
-            excelGivenClass
-            .Properties
-            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.List);
-
-        string SpecificationSpecificClassName =>
-            $"SpecificationSpecific{excelGivenClass.Name}";
-
-        string CamelCase(string pascalCase) =>
-            string.IsNullOrWhiteSpace(pascalCase) ? "" : char.ToLower(pascalCase[0]) + pascalCase.Substring(1);
-
-        string ListPropertyName(IGivenClassProperty excelProperty) =>
-            CamelCase(excelProperty.Name) + "s";
     }
 }

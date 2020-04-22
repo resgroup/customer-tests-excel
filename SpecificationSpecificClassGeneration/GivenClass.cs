@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CustomerTestsExcel.ExcelToCode;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
@@ -18,6 +19,22 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             Properties = properties ?? throw new System.ArgumentNullException(nameof(properties));
             IsRootClass = isRootClass;
         }
+
+        public IEnumerable<IGivenClassProperty> SimpleProperties =>
+            Properties
+            .Where(excelProperty => excelProperty.Type.IsSimpleProperty());
+
+        public IEnumerable<IGivenClassProperty> ComplexProperties =>
+            Properties
+            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Object);
+
+        public IEnumerable<IGivenClassProperty> ListProperties =>
+            Properties
+            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.List);
+
+        public IEnumerable<IGivenClassProperty> Functions =>
+            Properties
+            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Function);
 
         public bool IsFramworkSuppliedClass()
         {

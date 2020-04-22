@@ -13,10 +13,8 @@ namespace CustomerTestsExcel.ExcelToCode
     public class TestProjectCreator
     {
         readonly GivenClassRecorder givenClassRecorder;
-        readonly SpecificationSpecificClassGenerator specificationSpecificClassGenerator;
-        readonly SpecificationSpecificUnmatchedClassGenerator specificationSpecificUnmatchedClassGenerator;
-        readonly SpecificationSpecificRootClassGenerator specificationSpecificRootClassGenerator;
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
+        readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
         readonly ILogger logger;
         bool success;
 
@@ -24,12 +22,9 @@ namespace CustomerTestsExcel.ExcelToCode
             ILogger logger)
         {
             givenClassRecorder = new GivenClassRecorder();
-            specificationSpecificClassGenerator = new SpecificationSpecificClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-            );
-            specificationSpecificUnmatchedClassGenerator = new SpecificationSpecificUnmatchedClassGenerator();
-            specificationSpecificRootClassGenerator = new SpecificationSpecificRootClassGenerator();
-            excelCsharpClassMatcher = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher());
+            excelCsharpPropertyMatcher = new ExcelCsharpPropertyMatcher();
+            excelCsharpClassMatcher = new ExcelCsharpClassMatcher(excelCsharpPropertyMatcher);
+
             this.logger = logger;
         }
 
@@ -156,10 +151,9 @@ namespace CustomerTestsExcel.ExcelToCode
                     string code = null;
 
                     if (excelGivenClass.IsRootClass)
-                        code = specificationSpecificRootClassGenerator.cSharpCode(
+                        code = new SpecificationSpecificRootClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
                             projectRootNamespace,
-                            usings.ToList(), // change this to an ienumerable
-                            excelGivenClass
+                            usings
                         );
                     else
                     {
@@ -167,19 +161,17 @@ namespace CustomerTestsExcel.ExcelToCode
 
                         if (matchingType != null)
                         {
-                            code = specificationSpecificClassGenerator.cSharpCode(
+                            code = new SpecificationSpecificClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
                                 projectRootNamespace,
-                                usings.ToList(), // change this to an ienumerable
-                                matchingType,
-                                excelGivenClass
+                                usings,
+                                matchingType
                                 );
                         }
                         else if (!excelGivenClass.IsFramworkSuppliedClass())
                         {
-                            code = specificationSpecificUnmatchedClassGenerator.cSharpCode(
+                            code = new SpecificationSpecificUnmatchedClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
                                 projectRootNamespace,
-                                usings.ToList(), // change this to an ienumerable
-                                excelGivenClass
+                                usings
                                 );
                         }
                     }

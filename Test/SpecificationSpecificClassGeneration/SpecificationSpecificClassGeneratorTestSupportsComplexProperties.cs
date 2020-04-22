@@ -1,12 +1,6 @@
-﻿using CustomerTestsExcel.ExcelToCode;
-using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+﻿using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
 {
@@ -26,12 +20,12 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             );
 
             var actual = new SpecificationSpecificClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-                ).cSharpCode(
+                new ExcelCsharpPropertyMatcher(),
+                excelGivenClass
+                ).CsharpCode(
                     "SampleTests",
                     new List<string>(),
-                    typeof(ITarget),
-                    excelGivenClass
+                    typeof(ITarget)
                 );
 
             var expectedSetter =

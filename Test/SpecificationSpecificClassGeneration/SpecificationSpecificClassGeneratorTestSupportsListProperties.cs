@@ -1,12 +1,6 @@
-﻿using CustomerTestsExcel.ExcelToCode;
-using CustomerTestsExcel.SpecificationSpecificClassGeneration;
+﻿using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
 {
@@ -29,12 +23,12 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             );
 
             var actual = new SpecificationSpecificClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-                ).cSharpCode(
+                new ExcelCsharpPropertyMatcher(),
+                    excelGivenClass
+                ).CsharpCode(
                     "SampleTests",
                     new List<string>(),
-                    typeof(ITarget),
-                    excelGivenClass
+                    typeof(ITarget)
                 );
 
             var expectedListDeclaration = @"readonly List<SpecificationSpecificTarget> iEnumerablePropertys = new List<SpecificationSpecificTarget>();";
@@ -83,12 +77,12 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             );
 
             var actual = new SpecificationSpecificClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-                ).cSharpCode(
+                new ExcelCsharpPropertyMatcher(),
+                    excelGivenClass
+                ).CsharpCode(
                     "SampleTests",
                     new List<string>(),
-                    typeof(ITarget),
-                    excelGivenClass
+                    typeof(ITarget)
                 );
 
             var expectedMockSetup = @"target.Setup(m => m.ListProperty).Returns(listPropertys.Select(l => l.Target));";
@@ -106,12 +100,12 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             );
 
             var actual = new SpecificationSpecificClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-                ).cSharpCode(
+                new ExcelCsharpPropertyMatcher(),
+                    excelGivenClass
+                ).CsharpCode(
                     "SampleTests",
                     new List<string>(),
-                    typeof(ITarget),
-                    excelGivenClass
+                    typeof(ITarget)
                 );
 
             var expectedMockSetup = @"target.Setup(m => m.IReadOnlyListProperty).Returns(iReadOnlyListPropertys.Select(l => l.Target));";
@@ -129,12 +123,12 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             );
 
             var actual = new SpecificationSpecificClassGenerator(
-                new ExcelCsharpPropertyMatcher()
-                ).cSharpCode(
+                new ExcelCsharpPropertyMatcher(),
+                    excelGivenClass
+                ).CsharpCode(
                     "SampleTests",
                     new List<string>(),
-                    typeof(ITarget),
-                    excelGivenClass
+                    typeof(ITarget)
                 );
 
             var expectedMockSetup = @"target.Setup(m => m.ICollectionProperty).Returns(iCollectionPropertys.Select(l => l.Target));";
