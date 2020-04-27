@@ -12,7 +12,7 @@ namespace CustomerTestsExcel.ExcelToCode
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreator
     {
-        const string excelTestsFolder = "ExcelTests";
+        string excelTestsFolder;
         //readonly GivenClassRecorder givenClassRecorder;
         //readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         //readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
@@ -33,11 +33,13 @@ namespace CustomerTestsExcel.ExcelToCode
             string specificationFolder,
             string specificationProject,
             string projectRootNamespace,
+            string excelTestsFolder,
             IEnumerable<string> usings,
             IEnumerable<string> assembliesUnderTest,
             string assertionClassPrefix,
             ITabularLibrary excel)
         {
+            this.excelTestsFolder = excelTestsFolder;
             var assemblyTypes = GetTypesUnderTest(assembliesUnderTest);
 
             // We could carry on here instead of returning early, but then the 
@@ -60,6 +62,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     project,
                     excelTestFilenames,
                     projectRootNamespace,
+                    excelTestsFolder,
                     usings,
                     assemblyTypes,
                     assertionClassPrefix,

@@ -42,6 +42,7 @@ namespace GenerateCodeFromExcelTest
                     folder,
                     specificationProject,
                     rootNamespace,
+                    "ExcelTests",
                     usings,
                     assembliesUnderTest,
                     assertionClassPrefix,
