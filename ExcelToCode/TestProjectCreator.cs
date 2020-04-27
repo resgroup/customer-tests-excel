@@ -47,8 +47,9 @@ namespace CustomerTestsExcel.ExcelToCode
 
             var excelTestFilenames = ListValidSpecificationSpreadsheets();
 
-            // We could carry on here instead of returning early, but then the 
-            // generated code would not be as expected, so probably best like this
+            var projectFilePath = Path.Combine(specificationFolder, specificationProject);
+            var project = OpenProjectFile(projectFilePath);
+
             if (logger.HasErrors)
                 return;
 
@@ -56,6 +57,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 .Create(
                     specificationFolder,
                     specificationProject,
+                    project,
                     excelTestFilenames,
                     projectRootNamespace,
                     usings,
@@ -93,6 +95,29 @@ namespace CustomerTestsExcel.ExcelToCode
             combinedList.AddRange(Directory.GetFiles(excelTestsFolder, "*.xlsm"));
             combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
             return combinedList;
+        }
+
+        XDocument OpenProjectFile(string projectPath)
+        {
+            try
+            {
+                return TryOpenProjectFile(projectPath);
+            }
+            catch (Exception exception)
+            {
+                logger.LogCsprojLoadError(projectPath, exception);
+                return new XDocument();
+            }
+        }
+
+        XDocument TryOpenProjectFile(string projectPath)
+        {
+            XDocument projectFile;
+            using (var projectStreamReader = new StreamReader(projectPath))
+            {
+                projectFile = XDocument.Load(projectStreamReader.BaseStream);
+            }
+            return projectFile;
         }
     }
 }

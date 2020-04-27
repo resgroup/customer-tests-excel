@@ -32,6 +32,7 @@ namespace CustomerTestsExcel.ExcelToCode
         public int Create(
             string specificationFolder,
             string specificationProject,
+            XDocument project,
             IEnumerable<string> excelTestFilenames,
             string projectRootNamespace,
             IEnumerable<string> usings,
@@ -43,7 +44,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             var projectFilePath = Path.Combine(specificationFolder, specificationProject);
 
-            var project = OpenProjectFile(projectFilePath);
+            //var project = OpenProjectFile(projectFilePath);
             var compileItemGroupNode = GetItemGroupForCompileNodes(project);
             var excelItemGroupNode = GetItemGroupForExcelNodes(project);
 
@@ -203,15 +204,15 @@ namespace CustomerTestsExcel.ExcelToCode
         //    return combinedList;
         //}
 
-        XDocument OpenProjectFile(string projectPath)
-        {
-            XDocument projectFile;
-            using (var projectStreamReader = new StreamReader(projectPath))
-            {
-                projectFile = XDocument.Load(projectStreamReader.BaseStream);
-            }
-            return projectFile;
-        }
+        //XDocument OpenProjectFile(string projectPath)
+        //{
+        //    XDocument projectFile;
+        //    using (var projectStreamReader = new StreamReader(projectPath))
+        //    {
+        //        projectFile = XDocument.Load(projectStreamReader.BaseStream);
+        //    }
+        //    return projectFile;
+        //}
 
         void SaveProjectFile(string projectPath, XDocument projectFile)
         {
