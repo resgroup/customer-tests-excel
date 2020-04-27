@@ -12,23 +12,23 @@ namespace CustomerTestsExcel.ExcelToCode
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreator
     {
-        readonly GivenClassRecorder givenClassRecorder;
-        readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
-        readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
+        //readonly GivenClassRecorder givenClassRecorder;
+        //readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
+        //readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
         readonly ILogger logger;
-        bool success;
+        //bool success;
 
         public TestProjectCreator(
             ILogger logger)
         {
-            givenClassRecorder = new GivenClassRecorder();
-            excelCsharpPropertyMatcher = new ExcelCsharpPropertyMatcher();
-            excelCsharpClassMatcher = new ExcelCsharpClassMatcher(excelCsharpPropertyMatcher);
+            //givenClassRecorder = new GivenClassRecorder();
+            //excelCsharpPropertyMatcher = new ExcelCsharpPropertyMatcher();
+            //excelCsharpClassMatcher = new ExcelCsharpClassMatcher(excelCsharpPropertyMatcher);
 
             this.logger = logger;
         }
 
-        public int Create(
+        public void Create(
             string specificationFolder,
             string specificationProject,
             string excelTestsFolder,
@@ -38,145 +38,32 @@ namespace CustomerTestsExcel.ExcelToCode
             string assertionClassPrefix,
             ITabularLibrary excel)
         {
-            success = true;
+            var assemblyTypes = GetTypesUnderTest(assembliesUnderTest);
 
-            var projectFilePath = Path.Combine(specificationFolder, specificationProject);
+            // We could carry on here instead of returning early, but then the 
+            // generated code would not be as expected, so probably best like this
+            if (logger.HasErrors)
+                return;
 
-            var project = OpenProjectFile(projectFilePath);
-            var compileItemGroupNode = GetItemGroupForCompileNodes(project);
-            var excelItemGroupNode = GetItemGroupForExcelNodes(project);
-
-            GenerateTestClasses(
-                specificationFolder, 
-                excelTestsFolder, 
-                projectRootNamespace, 
-                usings, 
-                assertionClassPrefix, 
-                excel, 
-                logger, 
-                project, 
-                compileItemGroupNode, 
-                excelItemGroupNode);
-
-            GenerateSpecificationSpecificSetupClasses(
-                specificationFolder,
-                projectRootNamespace,
-                usings,
-                assembliesUnderTest,
-                project,
-                compileItemGroupNode);
-
-            GenerateSpecificationSpecificPlaceholder(
-                specificationFolder,
-                projectRootNamespace,
-                compileItemGroupNode);
-
-            SaveProjectFile(projectFilePath, project);
-
-            return success ? 0 : -1;
-        }
-        
-        private void GenerateTestClasses(string specificationFolder, string excelTestsFolder, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
-        {
-            string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
-            foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
-            {
-                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
-                OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
-            }
+            new TestProjectCreatorPure(logger)
+                .Create(
+                    specificationFolder,
+                    specificationProject,
+                    excelTestsFolder,
+                    projectRootNamespace,
+                    usings,
+                    assemblyTypes,
+                    assertionClassPrefix,
+                    excel
+                );
         }
 
-        private static void GenerateSpecificationSpecificPlaceholder(string specificationFolder, string projectRootNamespace, XElement compileItemGroupNode)
+        List<Type> GetTypesUnderTest(IEnumerable<string> assembliesUnderTest)
         {
-            var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", "Placeholder.cs");
-            var outputPath = Path.Combine(specificationFolder, projectRelativePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
-
-            File.WriteAllText(outputPath, SpecificationSpecificPlaceholderGenerator.GenerateSpecificationSpecificPlaceholder(projectRootNamespace));
-
-            compileItemGroupNode.Add(
-                new XElement(
-                    XName.Get(
-                        "Compile",
-                        compileItemGroupNode.Name.Namespace.NamespaceName
-                        ),
-                new XAttribute("Include", projectRelativePath)
-                )
-            );
-        }
-
-        private void GenerateSpecificationSpecificSetupClasses(
-            string specificationFolder, 
-            string projectRootNamespace, 
-            IEnumerable<string> usings, 
-            IEnumerable<string> assembliesUnderTest, 
-            XDocument project, 
-            XElement compileItemGroupNode)
-        {
-            var assemblyTypes = new List<Type>();
-
-            foreach (var assemblyFilename in assembliesUnderTest)
-            {
-                assemblyTypes.AddRange(GetTypesFromAssembly(assemblyFilename));
-            }
-
-            givenClassRecorder.Classes.ToList().ForEach(
-                excelGivenClass =>
-                {
-                    string code = null;
-
-                    if (excelGivenClass.IsRootClass)
-                        code = new SpecificationSpecificRootClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
-                            projectRootNamespace,
-                            usings
-                        );
-                    else
-                    {
-                        var matchingType = assemblyTypes.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
-
-                        if (matchingType != null)
-                        {
-                            code = new SpecificationSpecificClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
-                                projectRootNamespace,
-                                usings,
-                                matchingType
-                                );
-                        }
-                        else if (!excelGivenClass.IsFramworkSuppliedClass())
-                        {
-                            code = new SpecificationSpecificUnmatchedClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
-                                projectRootNamespace,
-                                usings
-                                );
-                        }
-                    }
-
-                    if (code != null)
-                    {
-                        var customClassAlreadyExists = (project.Descendants().Any(e => e.Name.LocalName == "Compile" && e.Attributes().Any(a => a.Name.LocalName == "Include" && a.Value.Contains($"SpecificationSpecific{excelGivenClass.Name}.cs"))));
-
-                        var fileExtension = (customClassAlreadyExists) ? ".cs.txt" : ".cs";
-
-                        var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name + fileExtension);
-                        var outputPath = Path.Combine(specificationFolder, projectRelativePath);
-                        Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
-
-                        File.WriteAllText(outputPath, code);
-
-                        var nodeType = (customClassAlreadyExists) ? "None" : "Compile";
-
-                        compileItemGroupNode.Add(
-                            new XElement(
-                                XName.Get(
-                                    nodeType,
-                                    compileItemGroupNode.Name.Namespace.NamespaceName
-                                    ),
-                            new XAttribute("Include", projectRelativePath)
-                            )
-                        );
-                    }
-                }
-            );
+            return
+                assembliesUnderTest.Aggregate(
+                    new List<Type>(),
+                    (assemblyTypes, assemblyFilename) => assemblyTypes.Concat(GetTypesFromAssembly(assemblyFilename)).ToList());
         }
 
         IEnumerable<Type> GetTypesFromAssembly(string assemblyFilename)
@@ -188,169 +75,274 @@ namespace CustomerTestsExcel.ExcelToCode
             catch (Exception exception)
             {
                 logger.LogAssemblyError(assemblyFilename, exception);
-                success = false;
                 return new List<Type>();
             }
         }
+        
+        
+        //private void GenerateTestClasses(string specificationFolder, string excelTestsFolder, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
+        //{
+        //    string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
+        //    foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
+        //    {
+        //        excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
+        //        OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
+        //    }
+        //}
 
-        IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
-        {
-            var combinedList = new List<string>();
-            combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsx"));
-            combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsm"));
-            combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
-            return combinedList;
-        }
+        //private static void GenerateSpecificationSpecificPlaceholder(string specificationFolder, string projectRootNamespace, XElement compileItemGroupNode)
+        //{
+        //    var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", "Placeholder.cs");
+        //    var outputPath = Path.Combine(specificationFolder, projectRelativePath);
+        //    Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
 
-        XDocument OpenProjectFile(string projectPath)
-        {
-            XDocument projectFile;
-            using (var projectStreamReader = new StreamReader(projectPath))
-            {
-                projectFile = XDocument.Load(projectStreamReader.BaseStream);
-            }
-            return projectFile;
-        }
+        //    File.WriteAllText(outputPath, SpecificationSpecificPlaceholderGenerator.GenerateSpecificationSpecificPlaceholder(projectRootNamespace));
 
-        void SaveProjectFile(string projectPath, XDocument projectFile)
-        {
-            using (var projectStreamWriter = new StreamWriter(projectPath))
-            {
-                projectFile.Save(projectStreamWriter.BaseStream);
-            }
-        }
+        //    compileItemGroupNode.Add(
+        //        new XElement(
+        //            XName.Get(
+        //                "Compile",
+        //                compileItemGroupNode.Name.Namespace.NamespaceName
+        //                ),
+        //        new XAttribute("Include", projectRelativePath)
+        //        )
+        //    );
+        //}
 
-        XElement GetItemGroupForCompileNodes(XDocument projectFile)
-        {
-            return GetItemGroupForNodeTypes(projectFile, "Compile");
-        }
+        //private void GenerateSpecificationSpecificSetupClasses(
+        //    string specificationFolder, 
+        //    string projectRootNamespace, 
+        //    IEnumerable<string> usings, 
+        //    IEnumerable<string> assembliesUnderTest, 
+        //    XDocument project, 
+        //    XElement compileItemGroupNode)
+        //{
+        //    var assemblyTypes = new List<Type>();
 
-        XElement GetItemGroupForExcelNodes(XDocument projectFile)
-        {
-            return GetItemGroupForNodeTypes(projectFile, "None");
-        }
+        //    foreach (var assemblyFilename in assembliesUnderTest)
+        //    {
+        //        assemblyTypes.AddRange(GetTypesFromAssembly(assemblyFilename));
+        //    }
 
-        XElement GetItemGroupForNodeTypes(XDocument projectFile, string nodeName)
-        {
-            var compileNodes = projectFile.Descendants().Where(n => n.Name.LocalName == nodeName);
-            XElement compileItemGroupNode;
-            if (compileNodes.Any())
-            {
-                compileItemGroupNode = compileNodes.First().Parent;
-                // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
-                compileItemGroupNode.Elements().Where(e => e.Attribute("Include")?.Value?.StartsWith("IgnoreOnGeneration\\") != true).Remove();
-            }
-            else
-            {
-                compileItemGroupNode = new XElement("ItemGroup");
-                projectFile.Root.Add(compileItemGroupNode);
-            }
-            return compileItemGroupNode;
-        }
+        //    givenClassRecorder.Classes.ToList().ForEach(
+        //        excelGivenClass =>
+        //        {
+        //            string code = null;
 
-        XElement MakeFileElement(string xmlNamespace, string nodeName, string relativeFilePath)
-        {
-            return new XElement(XName.Get(nodeName, xmlNamespace), new XAttribute("Include", relativeFilePath));
-        }
+        //            if (excelGivenClass.IsRootClass)
+        //                code = new SpecificationSpecificRootClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
+        //                    projectRootNamespace,
+        //                    usings
+        //                );
+        //            else
+        //            {
+        //                var matchingType = assemblyTypes.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
 
-        void OutputWorkbook(
-            string specificationFolder,
-            string projectRootNamespace,
-            IEnumerable<string> usings,
-            string assertionClassPrefix,
-            ITabularLibrary excel,
-            ILogger logger,
-            XElement compileItemGroupNode,
-            string excelFileName)
-        {
-            using (var workbookFile = GetExcelFileStream(excelFileName))
-            {
-                using (var workbook = excel.OpenBook(workbookFile))
-                {
-                    var workBookName = Path.GetFileNameWithoutExtension(excelFileName);
-                    for (int i = 0; i < workbook.NumberOfPages; i++)
-                        if (IsTestSheet(workbook.GetPage(i)))
-                        {
-                            compileItemGroupNode.Add(MakeFileElement(compileItemGroupNode.Name.Namespace.NamespaceName, "Compile", OutputWorkSheet(specificationFolder, usings, assertionClassPrefix, workBookName, workbook.GetPage(i), logger, projectRootNamespace)));
-                        }
-                }
-            }
-        }
+        //                if (matchingType != null)
+        //                {
+        //                    code = new SpecificationSpecificClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
+        //                        projectRootNamespace,
+        //                        usings,
+        //                        matchingType
+        //                        );
+        //                }
+        //                else if (!excelGivenClass.IsFramworkSuppliedClass())
+        //                {
+        //                    code = new SpecificationSpecificUnmatchedClassGenerator(excelCsharpPropertyMatcher, excelGivenClass).CsharpCode(
+        //                        projectRootNamespace,
+        //                        usings
+        //                        );
+        //                }
+        //            }
 
-        Stream GetExcelFileStream(string excelFile, string temporaryFolder = null)
-        {
-            var templateStream = new MemoryStream();
+        //            if (code != null)
+        //            {
+        //                var customClassAlreadyExists = (project.Descendants().Any(e => e.Name.LocalName == "Compile" && e.Attributes().Any(a => a.Name.LocalName == "Include" && a.Value.Contains($"SpecificationSpecific{excelGivenClass.Name}.cs"))));
 
-            if (string.IsNullOrEmpty(temporaryFolder))
-                temporaryFolder = Path.GetTempPath();
+        //                var fileExtension = (customClassAlreadyExists) ? ".cs.txt" : ".cs";
 
-            var tempFileName = Path.Combine(temporaryFolder, Guid.NewGuid().ToString("N") + ".tmp");
+        //                var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name + fileExtension);
+        //                var outputPath = Path.Combine(specificationFolder, projectRelativePath);
+        //                Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
 
-            try
-            {
-                File.Copy(excelFile, tempFileName, true);
+        //                File.WriteAllText(outputPath, code);
 
-                var attr = File.GetAttributes(tempFileName);
-                File.SetAttributes(tempFileName, (attr | FileAttributes.Temporary) & ~FileAttributes.ReadOnly);
+        //                var nodeType = (customClassAlreadyExists) ? "None" : "Compile";
 
-                using (var fs = new FileStream(tempFileName, FileMode.Open, FileAccess.Read))
-                {
-                    fs.CopyTo(templateStream);
-                }
-            }
-            finally
-            {
-                File.Delete(tempFileName);
-            }
+        //                compileItemGroupNode.Add(
+        //                    new XElement(
+        //                        XName.Get(
+        //                            nodeType,
+        //                            compileItemGroupNode.Name.Namespace.NamespaceName
+        //                            ),
+        //                    new XAttribute("Include", projectRelativePath)
+        //                    )
+        //                );
+        //            }
+        //        }
+        //    );
+        //}
 
-            templateStream.Seek(0, SeekOrigin.Begin);
-            return templateStream;
-        }
 
-        bool IsTestSheet(ITabularPage excelSheet) =>
-            excelSheet.GetCell(1, 1).Value != null && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
 
-        string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, ILogger logger, string projectRootNamespace)
-        {
-            var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
-            sheetConverter.AddVisitor(givenClassRecorder);
+        //IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
+        //{
+        //    var combinedList = new List<string>();
+        //    combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsx"));
+        //    combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsm"));
+        //    combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
+        //    return combinedList;
+        //}
 
-            // generate test code
-            var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName);
+        //XDocument OpenProjectFile(string projectPath)
+        //{
+        //    XDocument projectFile;
+        //    using (var projectStreamReader = new StreamReader(projectPath))
+        //    {
+        //        projectFile = XDocument.Load(projectStreamReader.BaseStream);
+        //    }
+        //    return projectFile;
+        //}
 
-            // log any errors
-            if (sheetConverter.Errors.Any())
-            {
-                success = false;
-                sheetConverter.Errors.ToList().ForEach(error => logger.LogError(workBookName, sheet.Name, error));
-            }
+        //void SaveProjectFile(string projectPath, XDocument projectFile)
+        //{
+        //    using (var projectStreamWriter = new StreamWriter(projectPath))
+        //    {
+        //        projectFile.Save(projectStreamWriter.BaseStream);
+        //    }
+        //}
 
-            // log any warnings
-            if (sheetConverter.Warnings.Any())
-                sheetConverter.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
+        //XElement GetItemGroupForCompileNodes(XDocument projectFile)
+        //{
+        //    return GetItemGroupForNodeTypes(projectFile, "Compile");
+        //}
 
-            // log any issues preventing round trip
-            if (sheetConverter.IssuesPreventingRoundTrip.Any())
-                sheetConverter.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
+        //XElement GetItemGroupForExcelNodes(XDocument projectFile)
+        //{
+        //    return GetItemGroupForNodeTypes(projectFile, "None");
+        //}
 
-            // save test code to file
-            var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
-            var outputPath = Path.Combine(outputFolder, projectRelativePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
-            using (var outputFile = new StreamWriter(outputPath))
-            {
-                try
-                {
-                    outputFile.Write(cSharpTestCode);
-                }
-                catch (Exception ex)
-                {
-                    outputFile.Write(string.Format("Error creating c# from Excel: {0}", ex.Message));
-                }
-            }
+        //XElement GetItemGroupForNodeTypes(XDocument projectFile, string nodeName)
+        //{
+        //    var compileNodes = projectFile.Descendants().Where(n => n.Name.LocalName == nodeName);
+        //    XElement compileItemGroupNode;
+        //    if (compileNodes.Any())
+        //    {
+        //        compileItemGroupNode = compileNodes.First().Parent;
+        //        // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
+        //        compileItemGroupNode.Elements().Where(e => e.Attribute("Include")?.Value?.StartsWith("IgnoreOnGeneration\\") != true).Remove();
+        //    }
+        //    else
+        //    {
+        //        compileItemGroupNode = new XElement("ItemGroup");
+        //        projectFile.Root.Add(compileItemGroupNode);
+        //    }
+        //    return compileItemGroupNode;
+        //}
 
-            // stupidly return the relative path
-            return projectRelativePath;
-        }
+        //XElement MakeFileElement(string xmlNamespace, string nodeName, string relativeFilePath)
+        //{
+        //    return new XElement(XName.Get(nodeName, xmlNamespace), new XAttribute("Include", relativeFilePath));
+        //}
+
+        //void OutputWorkbook(
+        //    string specificationFolder,
+        //    string projectRootNamespace,
+        //    IEnumerable<string> usings,
+        //    string assertionClassPrefix,
+        //    ITabularLibrary excel,
+        //    ILogger logger,
+        //    XElement compileItemGroupNode,
+        //    string excelFileName)
+        //{
+        //    using (var workbookFile = GetExcelFileStream(excelFileName))
+        //    {
+        //        using (var workbook = excel.OpenBook(workbookFile))
+        //        {
+        //            var workBookName = Path.GetFileNameWithoutExtension(excelFileName);
+        //            for (int i = 0; i < workbook.NumberOfPages; i++)
+        //                if (IsTestSheet(workbook.GetPage(i)))
+        //                {
+        //                    compileItemGroupNode.Add(MakeFileElement(compileItemGroupNode.Name.Namespace.NamespaceName, "Compile", OutputWorkSheet(specificationFolder, usings, assertionClassPrefix, workBookName, workbook.GetPage(i), logger, projectRootNamespace)));
+        //                }
+        //        }
+        //    }
+        //}
+
+        //Stream GetExcelFileStream(string excelFile, string temporaryFolder = null)
+        //{
+        //    var templateStream = new MemoryStream();
+
+        //    if (string.IsNullOrEmpty(temporaryFolder))
+        //        temporaryFolder = Path.GetTempPath();
+
+        //    var tempFileName = Path.Combine(temporaryFolder, Guid.NewGuid().ToString("N") + ".tmp");
+
+        //    try
+        //    {
+        //        File.Copy(excelFile, tempFileName, true);
+
+        //        var attr = File.GetAttributes(tempFileName);
+        //        File.SetAttributes(tempFileName, (attr | FileAttributes.Temporary) & ~FileAttributes.ReadOnly);
+
+        //        using (var fs = new FileStream(tempFileName, FileMode.Open, FileAccess.Read))
+        //        {
+        //            fs.CopyTo(templateStream);
+        //        }
+        //    }
+        //    finally
+        //    {
+        //        File.Delete(tempFileName);
+        //    }
+
+        //    templateStream.Seek(0, SeekOrigin.Begin);
+        //    return templateStream;
+        //}
+
+        //bool IsTestSheet(ITabularPage excelSheet) =>
+        //    excelSheet.GetCell(1, 1).Value != null && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
+
+        //string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, ILogger logger, string projectRootNamespace)
+        //{
+        //    var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
+        //    sheetConverter.AddVisitor(givenClassRecorder);
+
+        //    // generate test code
+        //    var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName);
+
+        //    // log any errors
+        //    if (sheetConverter.Errors.Any())
+        //    {
+        //        success = false;
+        //        sheetConverter.Errors.ToList().ForEach(error => logger.LogError(workBookName, sheet.Name, error));
+        //    }
+
+        //    // log any warnings
+        //    if (sheetConverter.Warnings.Any())
+        //        sheetConverter.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
+
+        //    // log any issues preventing round trip
+        //    if (sheetConverter.IssuesPreventingRoundTrip.Any())
+        //        sheetConverter.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
+
+        //    // save test code to file
+        //    var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
+        //    var outputPath = Path.Combine(outputFolder, projectRelativePath);
+        //    Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+        //    using (var outputFile = new StreamWriter(outputPath))
+        //    {
+        //        try
+        //        {
+        //            outputFile.Write(cSharpTestCode);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            outputFile.Write(string.Format("Error creating c# from Excel: {0}", ex.Message));
+        //        }
+        //    }
+
+        //    // stupidly return the relative path
+        //    return projectRelativePath;
+        //}
     }
 }

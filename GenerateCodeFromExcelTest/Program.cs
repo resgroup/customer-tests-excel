@@ -34,8 +34,10 @@ namespace GenerateCodeFromExcelTest
 
                 var assembliesUnderTest = GetSetting(args, "assembliesUnderTest").Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
-                return new TestProjectCreator(
-                    new ConsoleLogger()
+                var logger = new ConsoleLogger();
+
+                new TestProjectCreator(
+                    logger
                 ).Create(
                     folder,
                     specificationProject,
@@ -45,12 +47,14 @@ namespace GenerateCodeFromExcelTest
                     assembliesUnderTest,
                     assertionClassPrefix,
                     new ExcelTabularLibrary());
+
+                return logger.HasErrors ? -1 : 0;
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine("Error encountered creating code for tests:");
                 Console.Error.WriteLine(ex.Message);
-                return -1;
+                return -2;
             }
         }
 

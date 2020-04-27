@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
     public abstract class LoggerBase : ILogger
     {
+        public bool HasErrors { get; private set; }
+
         protected abstract void Log(string message);
 
         public void LogIssuePreventingRoundTrip(string workbookName, string worksheetName, string issue) =>
@@ -16,8 +19,11 @@ This filename comes from the `/assembliesUnderTest` command line parameter.
 The error returned is:
 {exception}");
 
-        public void LogError(string workbookName, string worksheetName, string error) =>
+        public void LogError(string workbookName, string worksheetName, string error)
+        {
+            HasErrors = true;
             Log($"Error: Workbook '{workbookName}', Worksheet '{worksheetName}' could not be converted. {error}");
+        }
 
         public void LogWarning(string workbookName, string worksheetName, string issue) =>
             Log($"Warning: Workbook '{workbookName}', Worksheet '{worksheetName}'. {issue}");

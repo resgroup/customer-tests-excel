@@ -66,7 +66,7 @@ namespace CustomerTestsExcel.Test
         {
             var logger = new TestProjectCreatorResults();
 
-            logger.ErrorCode = new TestProjectCreator(logger).Create(
+            new TestProjectCreator(logger).Create(
                 Path.Combine(TestContext.CurrentContext.TestDirectory, specificationFolderRelativeToOutputFolder),
                 "DummyProject.csproj",
                 "",

@@ -66,6 +66,7 @@
     <Compile Include="ExcelToCode\GivenTableProperty.cs" />
     <Compile Include="ExcelToCode\IGivenFunction.cs" />
     <Compile Include="ExcelToCode\IGivenTableProperty.cs" />
+    <Compile Include="ExcelToCode\TestProjectCreatorPure.cs" />
     <Compile Include="IReportSpecificationSetupProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ClassNameMatcher.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpClassMatcher.cs" />
