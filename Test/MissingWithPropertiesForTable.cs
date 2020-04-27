@@ -27,7 +27,7 @@ namespace CustomerTestsExcel.Test
         {
             var results = GenerateTestsAndReturnResults(@"TestExcelFiles\MissingWithPropertiesForTable\");
 
-            Assert.AreNotEqual(0, results.ErrorCode);
+            Assert.AreNotEqual(false, results.HasErrors);
 
             StringAssert.Contains("Workbook 'MissingWithPropertiesForTable'", results.LogMessages);
 

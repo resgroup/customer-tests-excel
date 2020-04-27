@@ -27,7 +27,7 @@ namespace CustomerTestsExcel.Test
         {
             var results = GenerateTestsAndReturnResults(@"TestExcelFiles\NoRowsForAssertionTable\");
 
-            Assert.AreNotEqual(0, results.ErrorCode);
+            Assert.AreNotEqual(false, results.HasErrors);
 
             StringAssert.Contains("Workbook 'NoRowsForAssertionTable'", results.LogMessages); 
 

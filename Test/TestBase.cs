@@ -69,7 +69,6 @@ namespace CustomerTestsExcel.Test
             new TestProjectCreator(logger).Create(
                 Path.Combine(TestContext.CurrentContext.TestDirectory, specificationFolderRelativeToOutputFolder),
                 "DummyProject.csproj",
-                "",
                 ANY_ROOT_NAMESPACE,
                 NO_ASSEMBLIES_UNDER_TEST,
                 NO_USINGS,

@@ -27,7 +27,7 @@ namespace CustomerTestsExcel.Test
         {
             var results = GenerateTestsAndReturnResults(@"TestExcelFiles\MissingWithItemForList\");
 
-            Assert.AreNotEqual(0, results.ErrorCode);
+            Assert.AreNotEqual(false, results.HasErrors);
 
             StringAssert.Contains("Workbook 'MissingWithItemForList'", results.LogMessages);
 

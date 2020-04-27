@@ -25,7 +25,7 @@ namespace CustomerTestsExcel.Test
         {
             var results = GenerateTestsAndReturnResults(@"TestExcelFiles\MissingListOfForList\");
 
-            Assert.AreNotEqual(0, results.ErrorCode);
+            Assert.AreNotEqual(false, results.HasErrors);
 
             StringAssert.Contains("Workbook 'MissingListOfForList'", results.LogMessages);
 

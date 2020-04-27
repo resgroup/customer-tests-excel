@@ -12,6 +12,7 @@ namespace CustomerTestsExcel.ExcelToCode
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreatorPure
     {
+        const string excelTestsFolder = "ExcelTests";
         readonly GivenClassRecorder givenClassRecorder;
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
@@ -31,7 +32,7 @@ namespace CustomerTestsExcel.ExcelToCode
         public int Create(
             string specificationFolder,
             string specificationProject,
-            string excelTestsFolder,
+            IEnumerable<string> excelTestFilenames,
             string projectRootNamespace,
             IEnumerable<string> usings,
             IEnumerable<Type> typesUnderTest,
@@ -47,8 +48,8 @@ namespace CustomerTestsExcel.ExcelToCode
             var excelItemGroupNode = GetItemGroupForExcelNodes(project);
 
             GenerateTestClasses(
-                specificationFolder, 
-                excelTestsFolder, 
+                specificationFolder,
+                excelTestFilenames, 
                 projectRootNamespace, 
                 usings, 
                 assertionClassPrefix, 
@@ -76,10 +77,10 @@ namespace CustomerTestsExcel.ExcelToCode
             return success ? 0 : -1;
         }
         
-        private void GenerateTestClasses(string specificationFolder, string excelTestsFolder, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
+        private void GenerateTestClasses(string specificationFolder, IEnumerable<string> excelTestFilenames, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
         {
             string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
-            foreach (var excelFileName in ListValidSpecificationSpreadsheets(excelFolder))
+            foreach (var excelFileName in excelTestFilenames)
             {
                 excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
                 OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
@@ -193,14 +194,14 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
-        {
-            var combinedList = new List<string>();
-            combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsx"));
-            combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsm"));
-            combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
-            return combinedList;
-        }
+        //IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
+        //{
+        //    var combinedList = new List<string>();
+        //    combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsx"));
+        //    combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsm"));
+        //    combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
+        //    return combinedList;
+        //}
 
         XDocument OpenProjectFile(string projectPath)
         {

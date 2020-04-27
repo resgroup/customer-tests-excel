@@ -41,7 +41,6 @@ namespace GenerateCodeFromExcelTest
                 ).Create(
                     folder,
                     specificationProject,
-                    "ExcelTests",
                     rootNamespace,
                     usings,
                     assembliesUnderTest,
