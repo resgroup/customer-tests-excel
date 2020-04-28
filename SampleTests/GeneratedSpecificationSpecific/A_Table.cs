@@ -33,7 +33,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
     // Custom classes should go under a directory called 'IgnoreOnGeneration'.
     // If the custom class filename is the same as this one (SpecificationSpecificA_Table),
     // then it will be used instead of this function. If it is called something else,
-    // say SpecificationSpecificA_TableParial, then this class will remain, and
+    // say SpecificationSpecificA_TablePartial, then this class will remain, and
     // the custom class can add to it.
 
     // Please see VermeulenNearWakeLengthInput.cs for an example of setting up simple and

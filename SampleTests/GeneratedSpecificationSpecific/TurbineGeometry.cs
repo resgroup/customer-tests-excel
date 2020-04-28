@@ -29,8 +29,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         }
 
-
-
         internal SpecificationSpecificTurbineGeometry NumberOfBlades_of(Int32 numberOfBlades)
         {
             AddValueProperty(GetCurrentMethod(), numberOfBlades);

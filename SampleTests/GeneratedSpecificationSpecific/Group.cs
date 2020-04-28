@@ -29,8 +29,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             group.Setup(m => m.Floats).Returns(floatss.Select(l => l.Float));
         }
 
-
-
         internal SpecificationSpecificGroup Name_of(String name)
         {
             AddValueProperty(GetCurrentMethod(), name);

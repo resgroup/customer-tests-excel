@@ -29,8 +29,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         }
 
-
-
         internal SpecificationSpecificItineraryLeg Origin_of(String origin)
         {
             AddValueProperty(GetCurrentMethod(), origin);

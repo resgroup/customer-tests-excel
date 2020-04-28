@@ -29,8 +29,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             cargo.Setup(m => m.ItineraryLeg).Returns(itineraryLegs.Select(l => l.ItineraryLeg));
         }
 
-
-
         internal SpecificationSpecificCargo Origin_of(String origin)
         {
             AddValueProperty(GetCurrentMethod(), origin);

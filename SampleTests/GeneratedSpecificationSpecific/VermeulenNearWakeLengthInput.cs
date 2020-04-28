@@ -29,8 +29,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         }
 
-
-
         internal SpecificationSpecificVermeulenNearWakeLengthInput Velocity_of(Double velocity)
         {
             AddValueProperty(GetCurrentMethod(), velocity);
