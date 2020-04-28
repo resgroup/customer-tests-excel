@@ -177,7 +177,6 @@ namespace CustomerTestsExcel.ExcelToCode
             catch (Exception exception)
             {
                 logger.LogAssemblyError(assemblyFilename, exception);
-                success = false;
                 return new List<Type>();
             }
         }
@@ -283,7 +282,6 @@ namespace CustomerTestsExcel.ExcelToCode
             // log any errors
             if (sheetConverter.Errors.Any())
             {
-                success = false;
                 sheetConverter.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
             }
 
