@@ -50,16 +50,15 @@ namespace CustomerTestsExcel.ExcelToCode
             var excelTestFilenames = ListValidSpecificationSpreadsheets(specificationFolder);
 
             var projectFilePath = Path.Combine(specificationFolder, specificationProject);
-            var project = OpenProjectFile(projectFilePath);
+            var existingCsproj = OpenProjectFile(projectFilePath);
 
             if (logger.HasErrors)
                 return;
 
-            new TestProjectCreatorPure(logger)
+            var modifiedCsproj = new TestProjectCreatorPure(logger)
                 .Create(
                     specificationFolder,
-                    specificationProject,
-                    project,
+                    existingCsproj,
                     excelTestFilenames,
                     projectRootNamespace,
                     excelTestsFolderName,
@@ -68,6 +67,8 @@ namespace CustomerTestsExcel.ExcelToCode
                     assertionClassPrefix,
                     excel
                 );
+
+            SaveProjectFile(projectFilePath, modifiedCsproj);
         }
 
         List<Type> GetTypesUnderTest(IEnumerable<string> assembliesUnderTest)
@@ -116,12 +117,27 @@ namespace CustomerTestsExcel.ExcelToCode
 
         XDocument TryOpenProjectFile(string projectPath)
         {
-            XDocument projectFile;
             using (var projectStreamReader = new StreamReader(projectPath))
-            {
-                projectFile = XDocument.Load(projectStreamReader.BaseStream);
-            }
-            return projectFile;
+                return XDocument.Load(projectStreamReader.BaseStream);
         }
+
+        void SaveProjectFile(string projectPath, XDocument projectFile)
+        {
+            try
+            {
+                TrySaveProjectFile(projectPath, projectFile);
+            }
+            catch (Exception exception)
+            {
+                logger.LogCsprojSaveError(projectPath, exception);
+            }
+        }
+
+        void TrySaveProjectFile(string projectPath, XDocument projectFile)
+        {
+            using (var projectStreamWriter = new StreamWriter(projectPath))
+                projectFile.Save(projectStreamWriter.BaseStream);
+        }
+
     }
 }

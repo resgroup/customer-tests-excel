@@ -29,10 +29,9 @@ namespace CustomerTestsExcel.ExcelToCode
             this.logger = logger;
         }
 
-        public int Create(
+        public XDocument Create(
             string specificationFolder,
-            string specificationProject,
-            XDocument project,
+            XDocument existingCsproj,
             IEnumerable<string> excelTestFilenames,
             string projectRootNamespace,
             string excelTestsFolderName,
@@ -45,11 +44,12 @@ namespace CustomerTestsExcel.ExcelToCode
 
             success = true;
 
-            var projectFilePath = Path.Combine(specificationFolder, specificationProject);
+            //var projectFilePath = Path.Combine(specificationFolder, specificationProject);
 
             //var project = OpenProjectFile(projectFilePath);
-            var compileItemGroupNode = GetItemGroupForCompileNodes(project);
-            var excelItemGroupNode = GetItemGroupForExcelNodes(project);
+            var newCsproj = new XDocument(existingCsproj);
+            var compileItemGroupNode = GetItemGroupForCompileNodes(newCsproj);
+            var excelItemGroupNode = GetItemGroupForExcelNodes(newCsproj);
 
             GenerateTestClasses(
                 specificationFolder,
@@ -58,8 +58,8 @@ namespace CustomerTestsExcel.ExcelToCode
                 usings, 
                 assertionClassPrefix, 
                 excel, 
-                logger, 
-                project, 
+                logger,
+                newCsproj, 
                 compileItemGroupNode, 
                 excelItemGroupNode);
 
@@ -68,7 +68,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 projectRootNamespace,
                 usings,
                 typesUnderTest,
-                project,
+                newCsproj,
                 compileItemGroupNode);
 
             GenerateSpecificationSpecificPlaceholder(
@@ -76,9 +76,10 @@ namespace CustomerTestsExcel.ExcelToCode
                 projectRootNamespace,
                 compileItemGroupNode);
 
-            SaveProjectFile(projectFilePath, project);
+            //SaveProjectFile(projectFilePath, project);
 
-            return success ? 0 : -1;
+            return newCsproj;
+            //return success ? 0 : -1;
         }
         
         private void GenerateTestClasses(string specificationFolder, IEnumerable<string> excelTestFilenames, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
@@ -217,13 +218,13 @@ namespace CustomerTestsExcel.ExcelToCode
         //    return projectFile;
         //}
 
-        void SaveProjectFile(string projectPath, XDocument projectFile)
-        {
-            using (var projectStreamWriter = new StreamWriter(projectPath))
-            {
-                projectFile.Save(projectStreamWriter.BaseStream);
-            }
-        }
+        //void SaveProjectFile(string projectPath, XDocument projectFile)
+        //{
+        //    using (var projectStreamWriter = new StreamWriter(projectPath))
+        //    {
+        //        projectFile.Save(projectStreamWriter.BaseStream);
+        //    }
+        //}
 
         XElement GetItemGroupForCompileNodes(XDocument projectFile)
         {
@@ -327,7 +328,7 @@ namespace CustomerTestsExcel.ExcelToCode
             if (sheetConverter.Errors.Any())
             {
                 success = false;
-                sheetConverter.Errors.ToList().ForEach(error => logger.LogError(workBookName, sheet.Name, error));
+                sheetConverter.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
             }
 
             // log any warnings
