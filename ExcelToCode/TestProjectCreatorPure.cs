@@ -17,7 +17,6 @@ namespace CustomerTestsExcel.ExcelToCode
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
         readonly ILogger logger;
-        bool success;
 
         public TestProjectCreatorPure(
             ILogger logger)
@@ -42,11 +41,6 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             this.excelTestsFolderName = excelTestsFolderName;
 
-            success = true;
-
-            //var projectFilePath = Path.Combine(specificationFolder, specificationProject);
-
-            //var project = OpenProjectFile(projectFilePath);
             var newCsproj = new XDocument(existingCsproj);
             var compileItemGroupNode = GetItemGroupForCompileNodes(newCsproj);
             var excelItemGroupNode = GetItemGroupForExcelNodes(newCsproj);
@@ -76,15 +70,11 @@ namespace CustomerTestsExcel.ExcelToCode
                 projectRootNamespace,
                 compileItemGroupNode);
 
-            //SaveProjectFile(projectFilePath, project);
-
             return newCsproj;
-            //return success ? 0 : -1;
         }
         
         private void GenerateTestClasses(string specificationFolder, IEnumerable<string> excelTestFilenames, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
         {
-            //string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
             foreach (var excelFileName in excelTestFilenames)
             {
                 excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolderName, Path.GetFileName(excelFileName))));
@@ -119,13 +109,6 @@ namespace CustomerTestsExcel.ExcelToCode
             XDocument project, 
             XElement compileItemGroupNode)
         {
-            //var assemblyTypes = new List<Type>();
-
-            //foreach (var assemblyFilename in assembliesUnderTest)
-            //{
-            //    assemblyTypes.AddRange(GetTypesFromAssembly(assemblyFilename));
-            //}
-
             givenClassRecorder.Classes.ToList().ForEach(
                 excelGivenClass =>
                 {
@@ -198,33 +181,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 return new List<Type>();
             }
         }
-
-        //IEnumerable<string> ListValidSpecificationSpreadsheets(string excelFolder)
-        //{
-        //    var combinedList = new List<string>();
-        //    combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsx"));
-        //    combinedList.AddRange(Directory.GetFiles(excelFolder, "*.xlsm"));
-        //    combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
-        //    return combinedList;
-        //}
-
-        //XDocument OpenProjectFile(string projectPath)
-        //{
-        //    XDocument projectFile;
-        //    using (var projectStreamReader = new StreamReader(projectPath))
-        //    {
-        //        projectFile = XDocument.Load(projectStreamReader.BaseStream);
-        //    }
-        //    return projectFile;
-        //}
-
-        //void SaveProjectFile(string projectPath, XDocument projectFile)
-        //{
-        //    using (var projectStreamWriter = new StreamWriter(projectPath))
-        //    {
-        //        projectFile.Save(projectStreamWriter.BaseStream);
-        //    }
-        //}
 
         XElement GetItemGroupForCompileNodes(XDocument projectFile)
         {
