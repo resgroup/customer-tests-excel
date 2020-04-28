@@ -12,7 +12,7 @@ namespace CustomerTestsExcel.ExcelToCode
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreatorPure
     {
-        string excelTestsFolder;
+        string excelTestsFolderName;
         readonly GivenClassRecorder givenClassRecorder;
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
@@ -35,13 +35,13 @@ namespace CustomerTestsExcel.ExcelToCode
             XDocument project,
             IEnumerable<string> excelTestFilenames,
             string projectRootNamespace,
-            string excelTestsFolder,
+            string excelTestsFolderName,
             IEnumerable<string> usings,
             IEnumerable<Type> typesUnderTest,
             string assertionClassPrefix,
             ITabularLibrary excel)
         {
-            this.excelTestsFolder = excelTestsFolder;
+            this.excelTestsFolderName = excelTestsFolderName;
 
             success = true;
 
@@ -83,10 +83,10 @@ namespace CustomerTestsExcel.ExcelToCode
         
         private void GenerateTestClasses(string specificationFolder, IEnumerable<string> excelTestFilenames, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
         {
-            string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
+            //string excelFolder = Path.Combine(specificationFolder, excelTestsFolder);
             foreach (var excelFileName in excelTestFilenames)
             {
-                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolder, Path.GetFileName(excelFileName))));
+                excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolderName, Path.GetFileName(excelFileName))));
                 OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
             }
         }

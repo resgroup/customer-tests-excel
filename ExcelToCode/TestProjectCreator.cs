@@ -12,7 +12,7 @@ namespace CustomerTestsExcel.ExcelToCode
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreator
     {
-        string excelTestsFolder;
+        string excelTestsFolderName;
         //readonly GivenClassRecorder givenClassRecorder;
         //readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         //readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
@@ -33,13 +33,13 @@ namespace CustomerTestsExcel.ExcelToCode
             string specificationFolder,
             string specificationProject,
             string projectRootNamespace,
-            string excelTestsFolder,
+            string excelTestsFolderName,
             IEnumerable<string> usings,
             IEnumerable<string> assembliesUnderTest,
             string assertionClassPrefix,
             ITabularLibrary excel)
         {
-            this.excelTestsFolder = excelTestsFolder;
+            this.excelTestsFolderName = excelTestsFolderName;
             var assemblyTypes = GetTypesUnderTest(assembliesUnderTest);
 
             // We could carry on here instead of returning early, but then the 
@@ -47,7 +47,7 @@ namespace CustomerTestsExcel.ExcelToCode
             if (logger.HasErrors)
                 return;
 
-            var excelTestFilenames = ListValidSpecificationSpreadsheets();
+            var excelTestFilenames = ListValidSpecificationSpreadsheets(specificationFolder);
 
             var projectFilePath = Path.Combine(specificationFolder, specificationProject);
             var project = OpenProjectFile(projectFilePath);
@@ -62,7 +62,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     project,
                     excelTestFilenames,
                     projectRootNamespace,
-                    excelTestsFolder,
+                    excelTestsFolderName,
                     usings,
                     assemblyTypes,
                     assertionClassPrefix,
@@ -91,11 +91,12 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        IEnumerable<string> ListValidSpecificationSpreadsheets()
+        IEnumerable<string> ListValidSpecificationSpreadsheets(string specificationFolder)
         {
+            var excelTestsPath = Path.Combine(specificationFolder, excelTestsFolderName);
             var combinedList = new List<string>();
-            combinedList.AddRange(Directory.GetFiles(excelTestsFolder, "*.xlsx"));
-            combinedList.AddRange(Directory.GetFiles(excelTestsFolder, "*.xlsm"));
+            combinedList.AddRange(Directory.GetFiles(excelTestsPath, "*.xlsx"));
+            combinedList.AddRange(Directory.GetFiles(excelTestsPath, "*.xlsm"));
             combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
             return combinedList;
         }
