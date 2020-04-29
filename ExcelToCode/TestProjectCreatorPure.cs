@@ -9,6 +9,23 @@ using System.Reflection;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
+    public struct FileToSave
+    {
+        public string Content { get; set; }
+        public string PathRelativeToProjectRoot { get; set; }
+    }
+
+    public class GeneratedProject
+    {
+        public XDocument CsprojFile { get; set; }
+        public List<FileToSave> Files { get; set; }
+
+        public GeneratedProject()
+        {
+            Files = new List<FileToSave>();
+        }
+    }
+
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreatorPure
     {
@@ -17,6 +34,7 @@ namespace CustomerTestsExcel.ExcelToCode
         readonly ExcelCsharpClassMatcher excelCsharpClassMatcher;
         readonly ExcelCsharpPropertyMatcher excelCsharpPropertyMatcher;
         readonly ILogger logger;
+        GeneratedProject generatedProject;
 
         public TestProjectCreatorPure(
             ILogger logger)
@@ -28,8 +46,8 @@ namespace CustomerTestsExcel.ExcelToCode
             this.logger = logger;
         }
 
-        public XDocument Create(
-            string specificationFolder,
+        public GeneratedProject Create(
+            string projectRootFolder,
             XDocument existingCsproj,
             IEnumerable<string> excelTestFilenames,
             string projectRootNamespace,
@@ -41,51 +59,52 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             this.excelTestsFolderName = excelTestsFolderName;
 
-            var newCsproj = new XDocument(existingCsproj);
-            var compileItemGroupNode = GetItemGroupForCompileNodes(newCsproj);
-            var excelItemGroupNode = GetItemGroupForExcelNodes(newCsproj);
+            generatedProject = new GeneratedProject { CsprojFile = new XDocument(existingCsproj) };
+
+            var compileItemGroupNode = GetItemGroupForCompileNodes(generatedProject.CsprojFile);
+            var excelItemGroupNode = GetItemGroupForExcelNodes(generatedProject.CsprojFile);
 
             GenerateTestClasses(
-                specificationFolder,
-                excelTestFilenames, 
-                projectRootNamespace, 
-                usings, 
-                assertionClassPrefix, 
-                excel, 
+                projectRootFolder,
+                excelTestFilenames,
+                projectRootNamespace,
+                usings,
+                assertionClassPrefix,
+                excel,
                 logger,
-                newCsproj, 
-                compileItemGroupNode, 
+                generatedProject.CsprojFile,
+                compileItemGroupNode,
                 excelItemGroupNode);
 
             GenerateSpecificationSpecificSetupClasses(
-                specificationFolder,
+                projectRootFolder,
                 projectRootNamespace,
                 usings,
                 typesUnderTest,
-                newCsproj,
+                generatedProject.CsprojFile,
                 compileItemGroupNode);
 
             GenerateSpecificationSpecificPlaceholder(
-                specificationFolder,
+                projectRootFolder,
                 projectRootNamespace,
                 compileItemGroupNode);
 
-            return newCsproj;
+            return generatedProject;
         }
-        
-        private void GenerateTestClasses(string specificationFolder, IEnumerable<string> excelTestFilenames, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
+
+        private void GenerateTestClasses(string projectRootFolder, IEnumerable<string> excelTestFilenames, string projectRootNamespace, IEnumerable<string> usings, string assertionClassPrefix, ITabularLibrary excel, ILogger logger, XDocument project, XElement compileItemGroupNode, XElement excelItemGroupNode)
         {
             foreach (var excelFileName in excelTestFilenames)
             {
                 excelItemGroupNode.Add(MakeFileElement(project.Root.Name.Namespace.NamespaceName, "None", Path.Combine(excelTestsFolderName, Path.GetFileName(excelFileName))));
-                OutputWorkbook(specificationFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
+                OutputWorkbook(projectRootFolder, projectRootNamespace, usings, assertionClassPrefix, excel, logger, compileItemGroupNode, excelFileName);
             }
         }
 
-        private static void GenerateSpecificationSpecificPlaceholder(string specificationFolder, string projectRootNamespace, XElement compileItemGroupNode)
+        private static void GenerateSpecificationSpecificPlaceholder(string projectRootFolder, string projectRootNamespace, XElement compileItemGroupNode)
         {
             var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", "Placeholder.cs");
-            var outputPath = Path.Combine(specificationFolder, projectRelativePath);
+            var outputPath = Path.Combine(projectRootFolder, projectRelativePath);
             Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
 
             File.WriteAllText(outputPath, SpecificationSpecificPlaceholderGenerator.GenerateSpecificationSpecificPlaceholder(projectRootNamespace));
@@ -102,11 +121,11 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         private void GenerateSpecificationSpecificSetupClasses(
-            string specificationFolder, 
-            string projectRootNamespace, 
+            string specificationFolder,
+            string projectRootNamespace,
             IEnumerable<string> usings,
-            IEnumerable<Type> typesUnderTest, 
-            XDocument project, 
+            IEnumerable<Type> typesUnderTest,
+            XDocument project,
             XElement compileItemGroupNode)
         {
             givenClassRecorder.Classes.ToList().ForEach(
@@ -168,19 +187,6 @@ namespace CustomerTestsExcel.ExcelToCode
             );
         }
 
-        IEnumerable<Type> GetTypesFromAssembly(string assemblyFilename)
-        {
-            try
-            {
-                return Assembly.LoadFile(assemblyFilename).GetTypes();
-            }
-            catch (Exception exception)
-            {
-                logger.LogAssemblyError(assemblyFilename, exception);
-                return new List<Type>();
-            }
-        }
-
         XElement GetItemGroupForCompileNodes(XDocument projectFile)
         {
             return GetItemGroupForNodeTypes(projectFile, "Compile");
@@ -209,13 +215,11 @@ namespace CustomerTestsExcel.ExcelToCode
             return compileItemGroupNode;
         }
 
-        XElement MakeFileElement(string xmlNamespace, string nodeName, string relativeFilePath)
-        {
-            return new XElement(XName.Get(nodeName, xmlNamespace), new XAttribute("Include", relativeFilePath));
-        }
+        XElement MakeFileElement(string xmlNamespace, string nodeName, string relativeFilePath) =>
+            new XElement(XName.Get(nodeName, xmlNamespace), new XAttribute("Include", relativeFilePath));
 
         void OutputWorkbook(
-            string specificationFolder,
+            string projectRootFolder,
             string projectRootNamespace,
             IEnumerable<string> usings,
             string assertionClassPrefix,
@@ -230,10 +234,37 @@ namespace CustomerTestsExcel.ExcelToCode
                 {
                     var workBookName = Path.GetFileNameWithoutExtension(excelFileName);
                     for (int i = 0; i < workbook.NumberOfPages; i++)
-                        if (IsTestSheet(workbook.GetPage(i)))
+                    {
+                        var sheet = workbook.GetPage(i);
+                        if (IsTestSheet(sheet))
                         {
-                            compileItemGroupNode.Add(MakeFileElement(compileItemGroupNode.Name.Namespace.NamespaceName, "Compile", OutputWorkSheet(specificationFolder, usings, assertionClassPrefix, workBookName, workbook.GetPage(i), logger, projectRootNamespace)));
+                            var cSharpCode = OutputWorkSheet(usings, assertionClassPrefix, workBookName, sheet, logger, projectRootNamespace);
+
+                            var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
+
+                            // add to the new struct here, initially as well as saving to file
+                            // then write code in the wrapper to save the files
+                            // then use that, and remove the code here
+                            generatedProject.Files.Add(new FileToSave { Content = cSharpCode, PathRelativeToProjectRoot = projectRelativePath });
+
+                            // save test code to file
+                            //var outputPath = Path.Combine(projectRootFolder, projectRelativePath);
+                            //Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+                            //using (var outputFile = new StreamWriter(outputPath))
+                            //{
+                            //    try
+                            //    {
+                            //        outputFile.Write(cSharpCode);
+                            //    }
+                            //    catch (Exception ex)
+                            //    {
+                            //        outputFile.Write(string.Format("Error creating c# from Excel: {0}", ex.Message));
+                            //    }
+                            //}
+
+                            compileItemGroupNode.Add(MakeFileElement(compileItemGroupNode.Name.Namespace.NamespaceName, "Compile", projectRelativePath));
                         }
+                    }
                 }
             }
         }
@@ -271,46 +302,21 @@ namespace CustomerTestsExcel.ExcelToCode
         bool IsTestSheet(ITabularPage excelSheet) =>
             excelSheet.GetCell(1, 1).Value != null && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
 
-        string OutputWorkSheet(string outputFolder, IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, ILogger logger, string projectRootNamespace)
+        string OutputWorkSheet(IEnumerable<string> usings, string assertionClassPrefix, string workBookName, ITabularPage sheet, ILogger logger, string projectRootNamespace)
         {
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
             sheetConverter.AddVisitor(givenClassRecorder);
 
-            // generate test code
+            // this would be better as a property on sheetConverter, instead of the return value
             var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(usings, sheet, projectRootNamespace, workBookName);
 
-            // log any errors
-            if (sheetConverter.Errors.Any())
-            {
-                sheetConverter.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
-            }
+            sheetConverter.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
 
-            // log any warnings
-            if (sheetConverter.Warnings.Any())
-                sheetConverter.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
+            sheetConverter.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
 
-            // log any issues preventing round trip
-            if (sheetConverter.IssuesPreventingRoundTrip.Any())
-                sheetConverter.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
+            sheetConverter.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
 
-            // save test code to file
-            var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
-            var outputPath = Path.Combine(outputFolder, projectRelativePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
-            using (var outputFile = new StreamWriter(outputPath))
-            {
-                try
-                {
-                    outputFile.Write(cSharpTestCode);
-                }
-                catch (Exception ex)
-                {
-                    outputFile.Write(string.Format("Error creating c# from Excel: {0}", ex.Message));
-                }
-            }
-
-            // stupidly return the relative path
-            return projectRelativePath;
+            return cSharpTestCode;
         }
     }
 }

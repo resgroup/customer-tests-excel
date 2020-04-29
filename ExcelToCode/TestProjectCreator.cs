@@ -30,7 +30,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         public void Create(
-            string specificationFolder,
+            string projectRootFolder,
             string specificationProject,
             string projectRootNamespace,
             string excelTestsFolderName,
@@ -47,17 +47,17 @@ namespace CustomerTestsExcel.ExcelToCode
             if (logger.HasErrors)
                 return;
 
-            var excelTestFilenames = ListValidSpecificationSpreadsheets(specificationFolder);
+            var excelTestFilenames = ListValidSpecificationSpreadsheets(projectRootFolder);
 
-            var projectFilePath = Path.Combine(specificationFolder, specificationProject);
+            var projectFilePath = Path.Combine(projectRootFolder, specificationProject);
             var existingCsproj = OpenProjectFile(projectFilePath);
 
             if (logger.HasErrors)
                 return;
 
-            var modifiedCsproj = new TestProjectCreatorPure(logger)
+            var generatedProject = new TestProjectCreatorPure(logger)
                 .Create(
-                    specificationFolder,
+                    projectRootFolder,
                     existingCsproj,
                     excelTestFilenames,
                     projectRootNamespace,
@@ -68,7 +68,33 @@ namespace CustomerTestsExcel.ExcelToCode
                     excel
                 );
 
-            SaveProjectFile(projectFilePath, modifiedCsproj);
+            SaveProjectFile(projectFilePath, generatedProject.CsprojFile);
+
+            SaveFiles(projectRootFolder, generatedProject.Files);
+        }
+
+        void SaveFiles(string projectRootFolder, List<FileToSave> files)
+        {
+
+        }
+
+        void SaveFile(string projectRootFolder, FileToSave file)
+        {
+            try
+            {
+                TrySaveFile(projectRootFolder, file);
+            }
+            catch (Exception exception)
+            {
+                logger.LogFileSaveError(projectRootFolder, exception);
+            }
+        }
+
+        void TrySaveFile(string projectRootFolder, FileToSave file)
+        {
+            File.WriteAllText(
+                Path.Combine(projectRootFolder, file.PathRelativeToProjectRoot),
+                file.Content);
         }
 
         List<Type> GetTypesUnderTest(IEnumerable<string> assembliesUnderTest)
