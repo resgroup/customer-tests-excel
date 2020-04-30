@@ -15,6 +15,8 @@ namespace CustomerTestsExcel.Test
         public int NumberOfPages => 
             Pages.Count;
 
+        public string Filename { get; set; }
+
         public ITabularPage AddPageBefore(int page)
         {
             var tabularPage = new TestTabularPage();

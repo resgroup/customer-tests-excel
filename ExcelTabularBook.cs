@@ -13,7 +13,8 @@ namespace CustomerTestsExcel
         const string CORE_FILE_PROPERTIES_PART_ID = "rId2";
         const string WORKBOOK_STYLES_PART_ID = "rId3";
 
-        string path;
+        public string Filename { get; set; }
+
         Stream outputStream;
         readonly SpreadsheetDocument package;
         WorkbookPart workbookPart;
@@ -44,7 +45,7 @@ namespace CustomerTestsExcel
             package = SpreadsheetDocument.Open(outputStream, editable);
             workbookPart = package.WorkbookPart;
             workbook = package.WorkbookPart.Workbook;
-            path = null;
+            Filename = null;
             tempFilePath = "";
         }
 
@@ -64,16 +65,16 @@ namespace CustomerTestsExcel
             package = SpreadsheetDocument.Open(tempFilePath, true);
             workbookPart = package.WorkbookPart;
             workbook = package.WorkbookPart.Workbook;
-            path = existingFilePath;
+            Filename = existingFilePath;
         }
 
         public int NumberOfPages => workbookPart.WorksheetParts.Count();
 
         public string[] GetPageNames() => workbook.GetFirstChild<Sheets>().Elements<Sheet>().Select(s => s.Name.Value).ToArray();
 
-        public void SaveAs(string path)
+        public void SaveAs(string filename)
         {
-            this.path = path;
+            Filename = filename;
             Save();
         }
 
@@ -129,7 +130,7 @@ namespace CustomerTestsExcel
                 return names;
             }
         }
-        
+
         public void Save(Stream stream)
         {
             if (stream == null)
@@ -157,10 +158,10 @@ namespace CustomerTestsExcel
 
         public void Save()
         {
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(Filename))
                 throw new Exception("Cannot save a file before the path is set");
 
-            using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+            using (var fileStream = new FileStream(Filename, FileMode.Create, FileAccess.ReadWrite))
                 Save(fileStream);
         }
  
