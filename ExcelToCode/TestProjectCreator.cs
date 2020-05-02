@@ -78,7 +78,7 @@ namespace CustomerTestsExcel.ExcelToCode
                         usings,
                         assemblyTypes,
                         assertionClassPrefix)
-                    .Create();
+                    .Generate();
             }
 
             SaveProjectFile(projectFilePath, generatedProject.CsprojFile);
