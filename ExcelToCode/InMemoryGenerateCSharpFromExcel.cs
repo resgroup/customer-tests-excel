@@ -78,6 +78,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
                 itemGroupNodes
                     .Elements()
+                    .Where(e => e.Name.LocalName == "Compile" || e.Name.LocalName == "None")
                     .Where(e => e.Attribute("Include")
                     ?.Value
                     ?.StartsWith("IgnoreOnGeneration\\") != true)
