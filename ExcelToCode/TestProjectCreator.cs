@@ -54,7 +54,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             var excelWorkbookFilenames = ListValidSpecificationSpreadsheets(projectRootFolder);
 
-            GeneratedProject generatedProject;
+            GeneratedCsharpProject generatedProject;
 
             using (
                 var tidyUp = new TidyUpWithRemember<IEnumerable<ExcelFileIo>>(
@@ -68,17 +68,17 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 var excelWorkbooks = tidyUp.RememberedThing.Select(excelFileIo => OpenWorkbook(excelFileIo, excel));
 
-                generatedProject = new TestProjectCreatorPure(logger)
-                    .Create(
+                generatedProject = 
+                    new InMemoryGenerateCSharpFromExcel(
+                        logger,
                         existingCsproj,
                         excelWorkbooks,
                         projectRootNamespace,
                         excelTestsFolderName,
                         usings,
                         assemblyTypes,
-                        assertionClassPrefix,
-                        excel
-                    );
+                        assertionClassPrefix)
+                    .Create();
             }
 
             SaveProjectFile(projectFilePath, generatedProject.CsprojFile);
@@ -124,10 +124,10 @@ namespace CustomerTestsExcel.ExcelToCode
             return templateStream;
         }
 
-        void SaveFiles(string projectRootFolder, List<FileToSave> files) =>
+        void SaveFiles(string projectRootFolder, List<CsharpProjectFileToSave> files) =>
             files.ForEach(file => SaveFile(projectRootFolder, file));
 
-        void SaveFile(string projectRootFolder, FileToSave file)
+        void SaveFile(string projectRootFolder, CsharpProjectFileToSave file)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        void TrySaveFile(string projectRootFolder, FileToSave file)
+        void TrySaveFile(string projectRootFolder, CsharpProjectFileToSave file)
         {
             var filename = Path.Combine(projectRootFolder, file.PathRelativeToProjectRoot);
 

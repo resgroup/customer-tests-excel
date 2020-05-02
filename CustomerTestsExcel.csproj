@@ -64,7 +64,9 @@
   <ItemGroup>
     <Compile Include="CodeToExcelException.cs" />
     <Compile Include="ExcelDateHelper.cs" />
+    <Compile Include="ExcelToCode\CsharpProjectFileToSave.cs" />
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
+    <Compile Include="ExcelToCode\GeneratedCsharpProject.cs" />
     <Compile Include="ExcelToCode\GivenFunction.cs" />
     <Compile Include="ExcelToCode\GivenTableProperty.cs" />
     <Compile Include="ExcelToCode\IGivenFunction.cs" />
