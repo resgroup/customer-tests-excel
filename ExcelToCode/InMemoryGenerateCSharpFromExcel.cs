@@ -45,8 +45,7 @@ namespace CustomerTestsExcel.ExcelToCode
             this.typesUnderTest = typesUnderTest;
             this.assertionClassPrefix = assertionClassPrefix;
 
-            generatedProject = new GeneratedCsharpProject
-            {
+            generatedProject = new GeneratedCsharpProject {
                 CsprojFile = new XDocument(existingCsproj)
             };
             compileItemGroupNode = GetOrCreateItemGroupForCompileNodes(generatedProject.CsprojFile);
@@ -77,16 +76,12 @@ namespace CustomerTestsExcel.ExcelToCode
             if (itemGroupNodes.Any())
             {
                 // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
-                var generatedNodes = 
-                    itemGroupNodes
+                itemGroupNodes
                     .Elements()
-                    .Where(e => e.Name.LocalName == "Compile" || e.Name.LocalName == "None")
-                    .Where(e =>
-                        e.Attribute("Include")
-                        ?.Value
-                        ?.StartsWith("IgnoreOnGeneration\\") != true
-                    );
-                generatedNodes.Remove();
+                    .Where(e => e.Attribute("Include")
+                    ?.Value
+                    ?.StartsWith("IgnoreOnGeneration\\") != true)
+                    .Remove();
             }
         }
 
@@ -119,7 +114,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         bool IsTestSheet(ITabularPage excelSheet) =>
-            excelSheet.GetCell(1, 1).Value != null
+            excelSheet.GetCell(1, 1).Value != null 
             && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
 
         string OutputWorkSheet(string workBookName, ITabularPage sheet)
@@ -192,7 +187,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         void GeneratedSpecificationSpecificMatchedClass(
-            GivenClass excelGivenClass,
+            GivenClass excelGivenClass, 
             Type matchingType)
         {
             var code =
@@ -226,15 +221,15 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name);
 
-            var customClassAlreadyExists =
+            var customClassAlreadyExists = 
                 generatedProject
                 .CsprojFile
                 .Descendants()
                 .Any(
-                    e =>
-                        e.Name.LocalName == "Compile"
+                    e => 
+                        e.Name.LocalName == "Compile" 
                         && e.Attributes().Any(
-                            a => a.Name.LocalName == "Include"
+                            a => a.Name.LocalName == "Include" 
                             && a.Value.Contains(
                                 $"SpecificationSpecific{excelGivenClass.Name}.cs"
                             )
@@ -264,8 +259,7 @@ namespace CustomerTestsExcel.ExcelToCode
         void AddFile(string cSharpCode, string projectRelativePath)
         {
             generatedProject.Files.Add(
-                new CsharpProjectFileToSave
-                {
+                new CsharpProjectFileToSave {
                     Content = cSharpCode,
                     PathRelativeToProjectRoot = projectRelativePath
                 }
@@ -273,8 +267,8 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         void AddFileToCsproj(
-            XElement groupNode,
-            string buildAction,
+            XElement groupNode, 
+            string buildAction, 
             string filePathRelativeToProject)
         {
             groupNode.Add(
