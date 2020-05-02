@@ -16,6 +16,10 @@ namespace CustomerTestsExcel.ExcelToCode
         {
         }
 
+        // This function also returns some data in the Errors, Warnings and 
+        // similar properties. It would be better to wrap all this in to 
+        // a new type, and return that type here. Or to take an ILogger
+        // and use this to communicate the errors and warnings.
         public string GenerateCSharpTestCode(
             IEnumerable<string> usings,
             ITabularPage worksheet,

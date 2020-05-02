@@ -122,7 +122,6 @@ namespace CustomerTestsExcel.ExcelToCode
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
             sheetConverter.AddVisitor(givenClassRecorder);
 
-            // this would be better as a property on sheetConverter, instead of the return value
             var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(
                 usings,
                 sheet,
@@ -130,6 +129,8 @@ namespace CustomerTestsExcel.ExcelToCode
                 workBookName);
 
             // Could potentially pass the logger in to sheet converter instead of doing this
+            // This would avoid the slightly messy situation where the class returns some
+            // data from the function and some as instance properties.
             sheetConverter.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
 
             sheetConverter.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
