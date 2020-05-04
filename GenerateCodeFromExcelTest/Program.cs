@@ -36,7 +36,7 @@ namespace GenerateCodeFromExcelTest
 
                 var logger = new ConsoleLogger();
 
-                new TestProjectCreator(
+                new FileSystemGenerateCSharpFromExcel(
                     logger,
                     folder,
                     specificationProject,

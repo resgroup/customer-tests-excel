@@ -9,8 +9,7 @@ using System.Reflection;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
-    public class TestProjectCreator
+    public class FileSystemGenerateCSharpFromExcel
     {
         readonly string excelTestsFolderName;
         readonly IEnumerable<string> usings;
@@ -22,7 +21,7 @@ namespace CustomerTestsExcel.ExcelToCode
         private readonly string projectRootFolder;
         readonly string projectRootNamespace;
 
-        public TestProjectCreator(
+        public FileSystemGenerateCSharpFromExcel(
             ILogger logger,
             string projectRootFolder,
             string specificationProject,
