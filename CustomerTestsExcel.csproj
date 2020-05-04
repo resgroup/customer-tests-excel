@@ -163,7 +163,7 @@
     <Compile Include="RunSpecification.cs" />
     <Compile Include="Assertions\TableAssertion.cs" />
     <Compile Include="TabularCell.cs" />
-    <Compile Include="ExcelToCode\TestProjectCreator.cs" />
+    <Compile Include="ExcelToCode\FileSystemGenerateCSharpFromExcel.cs" />
     <Compile Include="TidyUp.cs" />
   </ItemGroup>
   <ItemGroup>
