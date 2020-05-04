@@ -26,9 +26,10 @@ namespace CustomerTestsExcel
             rowPropertyValues = new List<IReportSpecificationSetupClassUsingTableRow<T>>();
         }
 
-        public void Add(T row)
+        public ReportSpecificationSetupClassUsingTable<T> Add(T row)
         {
             rowPropertyValues.Add(new ReportSpecificationSetupClassUsingTableRow<T>(row));
+            return this;
         }
 
         public void Callback(
