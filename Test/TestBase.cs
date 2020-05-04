@@ -66,7 +66,8 @@ namespace CustomerTestsExcel.Test
         {
             var logger = new TestProjectCreatorResults();
 
-            new TestProjectCreator(logger).Create(
+            new TestProjectCreator(
+                logger,
                 Path.Combine(TestContext.CurrentContext.TestDirectory, specificationFolderRelativeToOutputFolder),
                 "DummyProject.csproj",
                 ANY_ROOT_NAMESPACE,
@@ -74,7 +75,8 @@ namespace CustomerTestsExcel.Test
                 NO_ASSEMBLIES_UNDER_TEST,
                 NO_USINGS,
                 ANY_STRING,
-                new ExcelTabularLibrary());
+                new ExcelTabularLibrary())
+            .Create();
 
             return logger;
         }

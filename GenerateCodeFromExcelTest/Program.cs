@@ -37,8 +37,7 @@ namespace GenerateCodeFromExcelTest
                 var logger = new ConsoleLogger();
 
                 new TestProjectCreator(
-                    logger
-                ).Create(
+                    logger,
                     folder,
                     specificationProject,
                     rootNamespace,
@@ -46,7 +45,8 @@ namespace GenerateCodeFromExcelTest
                     usings,
                     assembliesUnderTest,
                     assertionClassPrefix,
-                    new ExcelTabularLibrary());
+                    new ExcelTabularLibrary()
+                ).Create();
 
                 return logger.HasErrors ? -1 : 0;
             }

@@ -9,26 +9,21 @@ using System.Reflection;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public struct ExcelFileIo
-    {
-        public Stream Stream { get; set; }
-        public string Filename { get; set; }
-    }
-
-
     // This class generates the tests themselves, as well as just the project, so it should be named to better communicate this
     public class TestProjectCreator
     {
-        string excelTestsFolderName;
+        readonly string excelTestsFolderName;
+        readonly IEnumerable<string> usings;
+        readonly IEnumerable<string> assembliesUnderTest;
+        readonly string assertionClassPrefix;
+        readonly ITabularLibrary excel;
+        readonly string projectFilePath;
         readonly ILogger logger;
+        private readonly string projectRootFolder;
+        readonly string projectRootNamespace;
 
         public TestProjectCreator(
-            ILogger logger)
-        {
-            this.logger = logger;
-        }
-
-        public void Create(
+            ILogger logger,
             string projectRootFolder,
             string specificationProject,
             string projectRootNamespace,
@@ -38,74 +33,169 @@ namespace CustomerTestsExcel.ExcelToCode
             string assertionClassPrefix,
             ITabularLibrary excel)
         {
+            this.logger = logger;
+            this.projectRootFolder = projectRootFolder;
+            this.projectRootNamespace = projectRootNamespace;
             this.excelTestsFolderName = excelTestsFolderName;
-            var assemblyTypes = GetTypesUnderTest(assembliesUnderTest);
+            this.usings = usings;
+            this.assembliesUnderTest = assembliesUnderTest;
+            this.assertionClassPrefix = assertionClassPrefix;
+            this.excel = excel;
+            projectFilePath = Path.Combine(projectRootFolder, specificationProject);
+        }
+
+        public void Create()
+        {
+            var assemblyTypes = GetTypesUnderTest();
 
             // We could carry on here instead of returning early, but then the 
             // generated code would not be as expected, so probably best like this
             if (logger.HasErrors)
                 return;
 
-            var projectFilePath = Path.Combine(projectRootFolder, specificationProject);
-            var existingCsproj = OpenProjectFile(projectFilePath);
+            var existingCsproj = OpenProjectFile();
 
             if (logger.HasErrors)
                 return;
 
-            var excelWorkbookFilenames = ListValidSpecificationSpreadsheets(projectRootFolder);
+            var excelFilenames = ListValidSpecificationSpreadsheets();
 
-            GeneratedCsharpProject generatedProject;
+            GeneratedCsharpProject inMemoryGeneratedFiles;
 
-            using (
-                var tidyUp = new TidyUpWithRemember<IEnumerable<ExcelFileIo>>(
-                    () => excelWorkbookFilenames.Select(excelWorkbookFilename => new ExcelFileIo { Filename = excelWorkbookFilename, Stream = GetExcelFileStream(excelWorkbookFilename) }),
-                    (excelFileIos => excelFileIos.Select(excelFileIo => excelFileIo.Stream).ToList().ForEach(stream => stream.Dispose()))
-                )
-            )
+            using (var tidyUp = OpenExcelFilesAndAutoClose(excelFilenames))
             {
                 if (logger.HasErrors)
                     return;
 
-                var excelWorkbooks = tidyUp.RememberedThing.Select(excelFileIo => OpenWorkbook(excelFileIo, excel));
-
-                generatedProject = 
-                    new InMemoryGenerateCSharpFromExcel(
-                        logger,
-                        existingCsproj,
-                        excelWorkbooks,
-                        projectRootNamespace,
-                        excelTestsFolderName,
-                        usings,
-                        assemblyTypes,
-                        assertionClassPrefix)
-                    .Generate();
+                inMemoryGeneratedFiles = GenerateInMemory(
+                    assemblyTypes, 
+                    existingCsproj, 
+                    tidyUp.RememberedThing.Select(e => e.ExcelWorkbook)
+                );
             }
 
-            SaveProjectFile(projectFilePath, generatedProject.CsprojFile);
+            SaveProjectFile(inMemoryGeneratedFiles.CsprojFile);
 
-            SaveFiles(projectRootFolder, generatedProject.Files);
+            SaveFiles(inMemoryGeneratedFiles.Files);
         }
 
-        ITabularBook OpenWorkbook(ExcelFileIo excelFileIo, ITabularLibrary excel)
+        List<Type> GetTypesUnderTest()
         {
-            var workbook = excel.OpenBook(excelFileIo.Stream);
-            workbook.Filename = excelFileIo.Filename;
+            return
+                assembliesUnderTest.Aggregate(
+                    new List<Type>(),
+                    (assemblyTypes, assemblyFilename) => assemblyTypes.Concat(GetTypesFromAssembly(assemblyFilename)).ToList());
+        }
+
+        IEnumerable<Type> GetTypesFromAssembly(string assemblyFilename)
+        {
+            try
+            {
+                return Assembly.LoadFile(assemblyFilename).GetTypes();
+            }
+            catch (Exception exception)
+            {
+                logger.LogAssemblyError(assemblyFilename, exception);
+                return new List<Type>();
+            }
+        }
+
+        XDocument OpenProjectFile()
+        {
+            try
+            {
+                return TryOpenProjectFile(projectFilePath);
+            }
+            catch (Exception exception)
+            {
+                logger.LogCsprojLoadError(projectFilePath, exception);
+                return new XDocument();
+            }
+        }
+
+        XDocument TryOpenProjectFile(string projectPath)
+        {
+            using (var projectStreamReader = new StreamReader(projectPath))
+                return XDocument.Load(projectStreamReader.BaseStream);
+        }
+
+        IEnumerable<string> ListValidSpecificationSpreadsheets()
+        {
+            var excelTestsPath = Path.Combine(projectRootFolder, excelTestsFolderName);
+            var combinedList = new List<string>();
+            combinedList.AddRange(Directory.GetFiles(excelTestsPath, "*.xlsx"));
+            combinedList.AddRange(Directory.GetFiles(excelTestsPath, "*.xlsm"));
+            combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
+            return combinedList;
+        }
+
+        TidyUpWithRemember<IEnumerable<ExcelFileIo>> OpenExcelFilesAndAutoClose(IEnumerable<string> excelFilenames)
+        {
+            return 
+                new TidyUpWithRemember<IEnumerable<ExcelFileIo>>(
+                    () => OpenExcelFiles(excelFilenames),
+                    CloseExcelFiles
+                );
+        }
+
+        IEnumerable<ExcelFileIo> OpenExcelFiles(IEnumerable<string> excelWorkbookFilename) =>
+            excelWorkbookFilename
+            .Select(OpenExcelFile);
+
+        ExcelFileIo OpenExcelFile(string excelWorkbookFilename)
+        {
+            try
+            {
+                return TryOpenExcelFile(excelWorkbookFilename);
+            }
+            catch (Exception exception)
+            {
+                logger.LogExcelFileLoadError(excelWorkbookFilename, exception);
+                return new ExcelFileIo();
+            }
+        }
+
+        ExcelFileIo TryOpenExcelFile(string excelWorkbookFilename)
+        {
+            var stream = GetExcelFileStream(excelWorkbookFilename);
+
+            return
+                new ExcelFileIo
+                {
+                    Stream = stream,
+                    ExcelWorkbook = OpenWorkbook(stream, excelWorkbookFilename, excel)
+                };
+        }
+
+        ITabularBook OpenWorkbook(Stream stream, string filename, ITabularLibrary excel)
+        {
+            var workbook = excel.OpenBook(stream);
+            workbook.Filename = filename;
             return workbook;
         }
+
+        static void CloseExcelFiles(IEnumerable<ExcelFileIo> excelFileIos) =>
+            excelFileIos
+            .Select(excelFileIo => excelFileIo.Stream)
+            .ToList()
+            .ForEach(stream => stream.Dispose());
+
 
         Stream GetExcelFileStream(string excelFilename, string temporaryFolder = null)
         {
             var templateStream = new MemoryStream();
 
+            // Excel rather stupidly locks files (even for reading) when it has them open.
+            // To avoid errors in this case, we copy the file to a temporary location and
+            // open from there.
             if (string.IsNullOrEmpty(temporaryFolder))
                 temporaryFolder = Path.GetTempPath();
 
             var tempFileName = Path.Combine(temporaryFolder, Guid.NewGuid().ToString("N") + ".tmp");
 
+            File.Copy(excelFilename, tempFileName, true);
             try
             {
-                File.Copy(excelFilename, tempFileName, true);
-
                 var attr = File.GetAttributes(tempFileName);
                 File.SetAttributes(tempFileName, (attr | FileAttributes.Temporary) & ~FileAttributes.ReadOnly);
 
@@ -124,7 +214,44 @@ namespace CustomerTestsExcel.ExcelToCode
             return templateStream;
         }
 
-        void SaveFiles(string projectRootFolder, List<CsharpProjectFileToSave> files) =>
+        GeneratedCsharpProject GenerateInMemory(
+            List<Type> assemblyTypes, 
+            XDocument existingCsproj, 
+            IEnumerable<ITabularBook> excelWorkbooks)
+        {
+            return
+                new InMemoryGenerateCSharpFromExcel(
+                    logger,
+                    existingCsproj,
+                    excelWorkbooks,
+                    projectRootNamespace,
+                    excelTestsFolderName,
+                    usings,
+                    assemblyTypes,
+                    assertionClassPrefix)
+                .Generate();
+        }
+
+
+        void SaveProjectFile(XDocument projectFile)
+        {
+            try
+            {
+                TrySaveProjectFile(projectFilePath, projectFile);
+            }
+            catch (Exception exception)
+            {
+                logger.LogCsprojSaveError(projectFilePath, exception);
+            }
+        }
+
+        void TrySaveProjectFile(string projectPath, XDocument projectFile)
+        {
+            using (var projectStreamWriter = new StreamWriter(projectPath))
+                projectFile.Save(projectStreamWriter.BaseStream);
+        }
+
+        void SaveFiles(List<CsharpProjectFileToSave> files) =>
             files.ForEach(file => SaveFile(projectRootFolder, file));
 
         void SaveFile(string projectRootFolder, CsharpProjectFileToSave file)
@@ -148,74 +275,6 @@ namespace CustomerTestsExcel.ExcelToCode
             File.WriteAllText(
                 filename,
                 file.Content);
-        }
-
-        List<Type> GetTypesUnderTest(IEnumerable<string> assembliesUnderTest)
-        {
-            return
-                assembliesUnderTest.Aggregate(
-                    new List<Type>(),
-                    (assemblyTypes, assemblyFilename) => assemblyTypes.Concat(GetTypesFromAssembly(assemblyFilename)).ToList());
-        }
-
-        IEnumerable<Type> GetTypesFromAssembly(string assemblyFilename)
-        {
-            try
-            {
-                return Assembly.LoadFile(assemblyFilename).GetTypes();
-            }
-            catch (Exception exception)
-            {
-                logger.LogAssemblyError(assemblyFilename, exception);
-                return new List<Type>();
-            }
-        }
-
-        IEnumerable<string> ListValidSpecificationSpreadsheets(string specificationFolder)
-        {
-            var excelTestsPath = Path.Combine(specificationFolder, excelTestsFolderName);
-            var combinedList = new List<string>();
-            combinedList.AddRange(Directory.GetFiles(excelTestsPath, "*.xlsx"));
-            combinedList.AddRange(Directory.GetFiles(excelTestsPath, "*.xlsm"));
-            combinedList = combinedList.Where(f => !f.Contains("~$")).ToList(); // these are temporary files created by excel when the main file is open.
-            return combinedList;
-        }
-
-        XDocument OpenProjectFile(string projectPath)
-        {
-            try
-            {
-                return TryOpenProjectFile(projectPath);
-            }
-            catch (Exception exception)
-            {
-                logger.LogCsprojLoadError(projectPath, exception);
-                return new XDocument();
-            }
-        }
-
-        XDocument TryOpenProjectFile(string projectPath)
-        {
-            using (var projectStreamReader = new StreamReader(projectPath))
-                return XDocument.Load(projectStreamReader.BaseStream);
-        }
-
-        void SaveProjectFile(string projectPath, XDocument projectFile)
-        {
-            try
-            {
-                TrySaveProjectFile(projectPath, projectFile);
-            }
-            catch (Exception exception)
-            {
-                logger.LogCsprojSaveError(projectPath, exception);
-            }
-        }
-
-        void TrySaveProjectFile(string projectPath, XDocument projectFile)
-        {
-            using (var projectStreamWriter = new StreamWriter(projectPath))
-                projectFile.Save(projectStreamWriter.BaseStream);
         }
 
     }
