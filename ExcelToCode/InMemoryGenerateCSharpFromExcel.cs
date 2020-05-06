@@ -9,7 +9,7 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public class InMemoryGenerateCSharpFromExcel
     {
-        string excelTestsFolderName;
+        readonly string excelTestsFolderName;
         readonly IEnumerable<string> usings;
         readonly IEnumerable<Type> typesUnderTest;
         readonly string assertionClassPrefix;
@@ -121,7 +121,7 @@ namespace CustomerTestsExcel.ExcelToCode
         string OutputWorkSheet(string workBookName, ITabularPage sheet)
         {
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
-            sheetConverter.AddVisitor(givenClassRecorder);
+            sheetConverter.logState.AddVisitor(givenClassRecorder);
 
             var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(
                 usings,
@@ -132,11 +132,11 @@ namespace CustomerTestsExcel.ExcelToCode
             // Could potentially pass the logger in to sheet converter instead of doing this
             // This would avoid the slightly messy situation where the class returns some
             // data from the function and some as instance properties.
-            sheetConverter.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
+            sheetConverter.logState.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
 
-            sheetConverter.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
+            sheetConverter.logState.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
 
-            sheetConverter.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
+            sheetConverter.logState.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
 
             return cSharpTestCode;
         }

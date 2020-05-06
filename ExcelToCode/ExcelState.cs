@@ -6,23 +6,23 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelState
     {
-        protected ITabularPage worksheet;
-        //protected readonly ICodeNameToExcelNameConverter converter;
-        protected uint row;
-        protected uint column;
-        //protected string _sutName;
-        //protected AutoIndentingStringBuilder code;
+        public ITabularPage worksheet;
+        //public readonly ICodeNameToExcelNameConverter converter;
+        public uint row;
+        public uint column;
+        //public string _sutName;
+        //public AutoIndentingStringBuilder code;
 
-        //protected readonly List<string> errors;
+        //public readonly List<string> errors;
         //public IReadOnlyList<string> Errors => errors;
 
-        //protected readonly List<string> issuesPreventingRoundTrip;
+        //public readonly List<string> issuesPreventingRoundTrip;
         //public IReadOnlyList<string> IssuesPreventingRoundTrip => issuesPreventingRoundTrip;
 
-        //protected readonly List<string> warnings;
+        //public readonly List<string> warnings;
         //public IReadOnlyList<string> Warnings => warnings;
 
-        //protected readonly List<IExcelToCodeVisitor> visitors;
+        //public readonly List<IExcelToCodeVisitor> visitors;
 
         public ExcelState()//ICodeNameToExcelNameConverter converter)
         {
@@ -37,41 +37,41 @@ namespace CustomerTestsExcel.ExcelToCode
         //public void AddVisitor(IExcelToCodeVisitor visitor) =>
         //    visitors.Add(visitor);
 
-        //protected void Output(string lineOfCSharpCode) =>
+        //public void Output(string lineOfCSharpCode) =>
         //    code.AppendLine(lineOfCSharpCode);
 
-        //protected TidyUp OutputAndOpenAutoClosingBracket(string lineOfCSharpCodeWithoutBracket)
+        //public TidyUp OutputAndOpenAutoClosingBracket(string lineOfCSharpCodeWithoutBracket)
         //{
         //    code.AppendLine($"{lineOfCSharpCodeWithoutBracket}(");
         //    Indent();
         //    return new TidyUp(CloseBracketAndOutdent);
         //}
 
-        //protected void OutputBlankLine() =>
+        //public void OutputBlankLine() =>
         //    Output("");
 
-        //protected string SUTClassName()
+        //public string SUTClassName()
         //{
         //    if (_sutName == null) throw new Exception("Trying to read _sutName before it has been set");
 
         //    return _sutName;
         //}
 
-        //protected string CSharpSUTSpecificationSpecificClassName() =>
+        //public string CSharpSUTSpecificationSpecificClassName() =>
         //    converter.ExcelClassNameToCodeName(SUTClassName());
 
-        //protected string CSharpSUTVariableName() =>
+        //public string CSharpSUTVariableName() =>
         //    VariableCase(SUTClassName());
 
-        //protected string VariableCase(string camelCase) =>
+        //public string VariableCase(string camelCase) =>
         //    // it is assumed to already be in camel case, this means making the first letter lower case
         //    // this isn't a two way process (eg the conversion process doesn't care what the string is) so this isn't in the _namer
         //    string.IsNullOrWhiteSpace(camelCase) ? "" : char.ToLower(camelCase[0]) + camelCase.Substring(1);
 
-        //protected static string LeadingComma(int index) =>
+        //public static string LeadingComma(int index) =>
         //    (index == 0) ? " " : ",";
 
-        protected bool RowToColumnIsEmpty(uint column)
+        public bool RowToColumnIsEmpty(uint column)
         {
             for (uint columnToCheck = 1; columnToCheck <= column; columnToCheck++)
             {
@@ -81,16 +81,16 @@ namespace CustomerTestsExcel.ExcelToCode
             return true;
         }
 
-        protected bool RowToCurrentColumnIsEmpty() =>
+        public bool RowToCurrentColumnIsEmpty() =>
             RowToColumnIsEmpty(column);
 
-        protected bool AllColumnsAreEmpty() =>
+        public bool AllColumnsAreEmpty() =>
             RowToColumnIsEmpty(GetLastColumn());
 
-        protected bool AnyPrecedingColumnHasAValue() =>
+        public bool AnyPrecedingColumnHasAValue() =>
             !RowToColumnIsEmpty(column - 1);
 
-        protected bool AnyFollowingColumnHasAValue(int rowOffset = 0)
+        public bool AnyFollowingColumnHasAValue(int rowOffset = 0)
         {
             for (uint columnToCheck = column + 1; columnToCheck <
                 GetLastColumn(); columnToCheck++)
@@ -101,13 +101,13 @@ namespace CustomerTestsExcel.ExcelToCode
             return false;
         }
 
-        protected void ExcelMoveUp(uint by = 1) =>
+        public void ExcelMoveUp(uint by = 1) =>
             row -= by;
 
-        protected void ExcelMoveDown(uint by = 1) =>
+        public void ExcelMoveDown(uint by = 1) =>
             row += by;
 
-        protected void ExcelMoveDownToToken(string token)
+        public void ExcelMoveDownToToken(string token)
         {
             while (CurrentCell() != token)
             {
@@ -116,13 +116,13 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        protected void ExcelMoveRight(uint by = 1) =>
+        public void ExcelMoveRight(uint by = 1) =>
             column += by;
 
-        protected void ExcelMoveLeft(uint by = 1) =>
+        public void ExcelMoveLeft(uint by = 1) =>
             column -= by;
 
-        protected uint? FindTokenInCurrentRowFromCurrentColumn(string token)
+        public uint? FindTokenInCurrentRowFromCurrentColumn(string token)
         {
             uint columnToCheck = column;
             while (Cell(row, columnToCheck) != token)
@@ -134,43 +134,43 @@ namespace CustomerTestsExcel.ExcelToCode
             return columnToCheck;
         }
 
-        //protected void OpenCurlyBracket() =>
+        //public void OpenCurlyBracket() =>
         //    Output("{");
 
-        //protected void CloseCurlyBracket() =>
+        //public void CloseCurlyBracket() =>
         //    Output("}");
 
-        //protected TidyUp Scope() =>
+        //public TidyUp Scope() =>
         //    AutoCloseCurlyBracket();
 
-        //protected TidyUp AutoCloseCurlyBracket() =>
+        //public TidyUp AutoCloseCurlyBracket() =>
         //    new TidyUp(OpenCurlyBracket, CloseCurlyBracket);
 
-        //protected void Indent() =>
+        //public void Indent() =>
         //    code.Indent();
 
-        //protected void Outdent() =>
+        //public void Outdent() =>
         //    code.Outdent();
 
-        //protected TidyUp AutoCloseIndent() =>
+        //public TidyUp AutoCloseIndent() =>
         //    new TidyUp(Indent, Outdent);
 
-        //protected void OpenBracketAndIndent()
+        //public void OpenBracketAndIndent()
         //{
         //    Output("(");
         //    code.Indent();
         //}
 
-        //protected void CloseBracketAndOutdent()
+        //public void CloseBracketAndOutdent()
         //{
         //    code.Outdent();
         //    Output(")");
         //}
 
-        //protected TidyUp AutoCloseBracketAndIndent() =>
+        //public TidyUp AutoCloseBracketAndIndent() =>
         //    new TidyUp(OpenBracketAndIndent, CloseBracketAndOutdent);
 
-        protected TidyUp SavePosition()
+        public TidyUp SavePosition()
         {
             uint savedRow = this.row;
             uint savedColumn = column;
@@ -178,19 +178,19 @@ namespace CustomerTestsExcel.ExcelToCode
             return new TidyUp(() => { row = savedRow; column = savedColumn; });
         }
 
-        protected TidyUp AutoRestoreExcelMoveDown(uint by = 1)
+        public TidyUp AutoRestoreExcelMoveDown(uint by = 1)
         {
             ExcelMoveDown(by);
             return new TidyUp(() => ExcelMoveUp(by));
         }
 
-        protected TidyUp AutoRestoreExcelMoveRight(uint by = 1)
+        public TidyUp AutoRestoreExcelMoveRight(uint by = 1)
         {
             ExcelMoveRight(by);
             return new TidyUp(() => ExcelMoveLeft(by));
         }
 
-        protected TidyUp AutoRestoreExcelMoveDownRight(uint downBy = 1, uint rightBy = 1)
+        public TidyUp AutoRestoreExcelMoveDownRight(uint downBy = 1, uint rightBy = 1)
         {
             ExcelMoveRight(rightBy);
             ExcelMoveDown(downBy);
@@ -202,50 +202,50 @@ namespace CustomerTestsExcel.ExcelToCode
             });
         }
 
-        protected uint GetLastRow() =>
+        public uint GetLastRow() =>
             worksheet.MaxRow;
 
-        protected uint GetLastColumn() =>
+        public uint GetLastColumn() =>
             worksheet.MaxColumn + 20; // maxcolumn seems to underreport the amount of columns that there are ...
 
-        protected string PeekAbove(uint by = 1) =>
+        public string PeekAbove(uint by = 1) =>
             Cell(row - by, column);
 
-        protected string PeekBelow(uint by = 1) =>
+        public string PeekBelow(uint by = 1) =>
             Cell(row + by, column);
 
-        protected string PeekRight(uint by = 1) =>
+        public string PeekRight(uint by = 1) =>
             Cell(row, column + by);
 
-        protected string PeekBelowRight(uint belowBy = 1, uint rightBy = 1) =>
+        public string PeekBelowRight(uint belowBy = 1, uint rightBy = 1) =>
             Cell(row + belowBy, column + rightBy);
 
-        protected string CurrentCell() =>
+        public string CurrentCell() =>
             Cell(row, column);
 
-        protected object CurrentCellRaw() =>
+        public object CurrentCellRaw() =>
             CellRaw(row, column);
 
-        protected string Cell(uint row, uint column)
+        public string Cell(uint row, uint column)
         {
             var value = worksheet.GetCell(row, column).Value;
 
             return (value == null) ? "" : value.ToString();
         }
 
-        protected object CellRaw(uint row, uint column) =>
+        public object CellRaw(uint row, uint column) =>
             worksheet.GetCell(row, column).Value;
 
-        protected string CellReferenceA1Style() =>
+        public string CellReferenceA1Style() =>
             CellReferenceA1Style(row, column);
 
-        protected string CellReferenceA1Style(uint row, uint column) =>
+        public string CellReferenceA1Style(uint row, uint column) =>
             $"{ColumnReferenceA1Style(column)}{row}";
 
-        protected string ColumnReferenceA1Style()
+        public string ColumnReferenceA1Style()
             => ColumnReferenceA1Style(column);
 
-        protected string ColumnReferenceA1Style(uint column)
+        public string ColumnReferenceA1Style(uint column)
         {
             const uint A = 65;
             const uint NUMBER_OF_LETTERS_IN_ALPHABET = 26;
@@ -264,7 +264,7 @@ namespace CustomerTestsExcel.ExcelToCode
             return columnName;
         }
 
-        //protected void AddError(string message)
+        //public void AddError(string message)
         //{
         //    // this will appear at the relevant point in the generated code
         //    //Output($"// {message}");

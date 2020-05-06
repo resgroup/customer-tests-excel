@@ -41,7 +41,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             };
 
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
-            sheetConverter.AddVisitor(visitRecorder);
+            sheetConverter.logState.AddVisitor(visitRecorder);
 
             using (var workbook = Workbook(@"TestExcelFiles\VisitGivenTableProperties.xlsx"))
             {
@@ -94,7 +94,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             };
 
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
-            sheetConverter.AddVisitor(visitRecorder);
+            sheetConverter.logState.AddVisitor(visitRecorder);
 
             using (var workbook = Workbook(@"TestExcelFiles\VisitGivenTableProperties.xlsx"))
             {
