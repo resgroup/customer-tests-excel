@@ -30,6 +30,9 @@ namespace CustomerTestsExcel.ExcelToCode
         public ExcelToCodeBase(ICodeNameToExcelNameConverter converter)
         {
             this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
+            logState = new LogState();
+            codeState = new CodeState(converter);
+            excelState = new ExcelState();
             //errors = new List<string>();
             //issuesPreventingRoundTrip = new List<string>();
             //warnings = new List<string>();
