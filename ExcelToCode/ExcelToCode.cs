@@ -57,6 +57,8 @@ namespace CustomerTestsExcel.ExcelToCode
             string workBookName)
         {
             base.worksheet = worksheet;
+            // it would be better to create this in base ctor
+            // and clear it here
             code = new AutoIndentingStringBuilder("    ");
             column = 1;
             row = 1;
