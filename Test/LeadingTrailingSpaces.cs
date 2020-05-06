@@ -64,11 +64,6 @@ namespace CustomerTestsExcel.Test
             StringAssert.Contains("TableProperty-_-TableProperty", generatedCode);
 
         [Test]
-        public void SheetConverterCreatesWellFormedCodePropertyNamesFromExcelTablePropertiesWithSpaces() =>
-            StringAssert.Contains("var tableProperty-_-TablePropertyRow", generatedCode);
-
-
-        [Test]
         public void SheetConverterTrimsLeadingSpacesFromPropertyClassNames() =>
         StringAssert.DoesNotContain("_TableClass-", generatedCode);
 
