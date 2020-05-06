@@ -70,7 +70,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificUnderscore Table_Property_list_of(List<SpecificationSpecificA_Table> table_Propertys, string listType)
+        internal SpecificationSpecificUnderscore Table_Property_list_of(string listType, List<SpecificationSpecificA_Table> table_Propertys)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, table_Propertys));
 
@@ -99,7 +99,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificUnderscore List_Property_list_of(List<SpecificationSpecificA_Table> list_Propertys, string listType)
+        internal SpecificationSpecificUnderscore List_Property_list_of(string listType, List<SpecificationSpecificA_Table> list_Propertys)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, list_Propertys));
 

@@ -60,7 +60,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_list_of(List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss, string listType)
+        internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_list_of(string listType, List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, vermeulenNearWakeLengthInputss));
 

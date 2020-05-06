@@ -29,125 +29,106 @@ namespace SampleTests.PrimitiveLists
         // arrange
         public override SpecificationSpecificObjectWithPrimiiveLists Given()
         {
-            var objectWithPrimiiveLists = new SpecificationSpecificObjectWithPrimiiveLists();
-            {
-                var IntegerTableSyntaxRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificInteger>();
-                {
-                    var integerTableSyntaxRow = new SpecificationSpecificInteger();
-                    integerTableSyntaxRow.Integer_of(1);
-                    IntegerTableSyntaxRow.Add(integerTableSyntaxRow);
-                }
-                {
-                    var integerTableSyntaxRow = new SpecificationSpecificInteger();
-                    integerTableSyntaxRow.Integer_of(2);
-                    IntegerTableSyntaxRow.Add(integerTableSyntaxRow);
-                }
-                objectWithPrimiiveLists.IntegerTableSyntax_table_of(IntegerTableSyntaxRow);
-            }
+            return
+                new SpecificationSpecificObjectWithPrimiiveLists()
+                .IntegerTableSyntax_table_of(
+                    new ReportSpecificationSetupClassUsingTable<SpecificationSpecificInteger>()
+                    .Add(
+                        new SpecificationSpecificInteger()
+                        .Integer_of(1)
+                    )
+                    .Add(
+                        new SpecificationSpecificInteger()
+                        .Integer_of(2)
+                    )
+                )
+                
+                .IntegerListSyntax_list_of(
+                    "SpecificationSpecificInteger", 
+                    new FluentList<SpecificationSpecificInteger>()
+                    .FluentAdd(
+                        new SpecificationSpecificInteger()
+                        .Integer_of(3)
+                    )
+                    .FluentAdd(
+                        new SpecificationSpecificInteger()
+                        .Integer_of(3)
+                    )
+                )
+                .FloatTableSyntax_table_of(
+                    new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>()
+                    .Add(
+                        new SpecificationSpecificFloat()
+                        .Float_of(1.1)
+                    )
+                    .Add(
+                        new SpecificationSpecificFloat()
+                        .Float_of(2.2)
+                    )
+                )
+                
+                .FloatListSyntax_list_of(
+                    "SpecificationSpecificFloat", 
+                    new FluentList<SpecificationSpecificFloat>()
+                    .FluentAdd(
+                        new SpecificationSpecificFloat()
+                        .Float_of(3.3)
+                    )
+                    .FluentAdd(
+                        new SpecificationSpecificFloat()
+                        .Float_of(3.3)
+                    )
+                )
+                .StringTableSyntax_table_of(
+                    new ReportSpecificationSetupClassUsingTable<SpecificationSpecificString>()
+                    .Add(
+                        new SpecificationSpecificString()
+                        .String_of("s1")
+                    )
+                    .Add(
+                        new SpecificationSpecificString()
+                        .String_of("s2")
+                    )
+                )
+                
+                .StringListSyntax_list_of(
+                    "SpecificationSpecificString", 
+                    new FluentList<SpecificationSpecificString>()
+                    .FluentAdd(
+                        new SpecificationSpecificString()
+                        .String_of("s3")
+                    )
+                    .FluentAdd(
+                        new SpecificationSpecificString()
+                        .String_of("s4")
+                    )
+                )
+                .DateTimeTableSyntax_table_of(
+                    new ReportSpecificationSetupClassUsingTable<SpecificationSpecificDateTime>()
+                    .Add(
+                        new SpecificationSpecificDateTime()
+                        .DateTime_of(DateTime.Parse("2020-01-01T00:00:00"))
+                    )
+                    .Add(
+                        new SpecificationSpecificDateTime()
+                        .DateTime_of(DateTime.Parse("2020-01-02T00:00:00"))
+                    )
+                )
+                
+                .DateTimeListSyntax_list_of(
+                    "SpecificationSpecificDateTime", 
+                    new FluentList<SpecificationSpecificDateTime>()
+                    .FluentAdd(
+                        new SpecificationSpecificDateTime()
+                        .DateTime_of(DateTime.Parse("2020-01-03T00:00:00"))
+                    )
+                    .FluentAdd(
+                        new SpecificationSpecificDateTime()
+                        .DateTime_of(DateTime.Parse("2020-01-04T00:00:00"))
+                    )
+                )
+            ;
             
-            {
-                var integerListSyntaxList = new List<SpecificationSpecificInteger>();
-                {
-                    var integerListSyntax = new SpecificationSpecificInteger();
-                    integerListSyntax.Integer_of(3);
-                    integerListSyntaxList.Add(integerListSyntax);
-                }
-                {
-                    var integerListSyntax = new SpecificationSpecificInteger();
-                    integerListSyntax.Integer_of(3);
-                    integerListSyntaxList.Add(integerListSyntax);
-                }
-                objectWithPrimiiveLists.IntegerListSyntax_list_of(integerListSyntaxList, "SpecificationSpecificInteger");
-            }
-            {
-                var FloatTableSyntaxRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>();
-                {
-                    var floatTableSyntaxRow = new SpecificationSpecificFloat();
-                    floatTableSyntaxRow.Float_of(1.1);
-                    FloatTableSyntaxRow.Add(floatTableSyntaxRow);
-                }
-                {
-                    var floatTableSyntaxRow = new SpecificationSpecificFloat();
-                    floatTableSyntaxRow.Float_of(2.2);
-                    FloatTableSyntaxRow.Add(floatTableSyntaxRow);
-                }
-                objectWithPrimiiveLists.FloatTableSyntax_table_of(FloatTableSyntaxRow);
-            }
-            
-            {
-                var floatListSyntaxList = new List<SpecificationSpecificFloat>();
-                {
-                    var floatListSyntax = new SpecificationSpecificFloat();
-                    floatListSyntax.Float_of(3.3);
-                    floatListSyntaxList.Add(floatListSyntax);
-                }
-                {
-                    var floatListSyntax = new SpecificationSpecificFloat();
-                    floatListSyntax.Float_of(3.3);
-                    floatListSyntaxList.Add(floatListSyntax);
-                }
-                objectWithPrimiiveLists.FloatListSyntax_list_of(floatListSyntaxList, "SpecificationSpecificFloat");
-            }
-            {
-                var StringTableSyntaxRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificString>();
-                {
-                    var stringTableSyntaxRow = new SpecificationSpecificString();
-                    stringTableSyntaxRow.String_of("s1");
-                    StringTableSyntaxRow.Add(stringTableSyntaxRow);
-                }
-                {
-                    var stringTableSyntaxRow = new SpecificationSpecificString();
-                    stringTableSyntaxRow.String_of("s2");
-                    StringTableSyntaxRow.Add(stringTableSyntaxRow);
-                }
-                objectWithPrimiiveLists.StringTableSyntax_table_of(StringTableSyntaxRow);
-            }
-            
-            {
-                var stringListSyntaxList = new List<SpecificationSpecificString>();
-                {
-                    var stringListSyntax = new SpecificationSpecificString();
-                    stringListSyntax.String_of("s3");
-                    stringListSyntaxList.Add(stringListSyntax);
-                }
-                {
-                    var stringListSyntax = new SpecificationSpecificString();
-                    stringListSyntax.String_of("s4");
-                    stringListSyntaxList.Add(stringListSyntax);
-                }
-                objectWithPrimiiveLists.StringListSyntax_list_of(stringListSyntaxList, "SpecificationSpecificString");
-            }
-            {
-                var DateTimeTableSyntaxRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificDateTime>();
-                {
-                    var dateTimeTableSyntaxRow = new SpecificationSpecificDateTime();
-                    dateTimeTableSyntaxRow.DateTime_of(DateTime.Parse("2020-01-01T00:00:00"));
-                    DateTimeTableSyntaxRow.Add(dateTimeTableSyntaxRow);
-                }
-                {
-                    var dateTimeTableSyntaxRow = new SpecificationSpecificDateTime();
-                    dateTimeTableSyntaxRow.DateTime_of(DateTime.Parse("2020-01-02T00:00:00"));
-                    DateTimeTableSyntaxRow.Add(dateTimeTableSyntaxRow);
-                }
-                objectWithPrimiiveLists.DateTimeTableSyntax_table_of(DateTimeTableSyntaxRow);
-            }
-            
-            {
-                var dateTimeListSyntaxList = new List<SpecificationSpecificDateTime>();
-                {
-                    var dateTimeListSyntax = new SpecificationSpecificDateTime();
-                    dateTimeListSyntax.DateTime_of(DateTime.Parse("2020-01-03T00:00:00"));
-                    dateTimeListSyntaxList.Add(dateTimeListSyntax);
-                }
-                {
-                    var dateTimeListSyntax = new SpecificationSpecificDateTime();
-                    dateTimeListSyntax.DateTime_of(DateTime.Parse("2020-01-04T00:00:00"));
-                    dateTimeListSyntaxList.Add(dateTimeListSyntax);
-                }
-                objectWithPrimiiveLists.DateTimeListSyntax_list_of(dateTimeListSyntaxList, "SpecificationSpecificDateTime");
-            }
-            
-            return objectWithPrimiiveLists;
         }
         
         public override string When(SpecificationSpecificObjectWithPrimiiveLists objectWithPrimiiveLists)

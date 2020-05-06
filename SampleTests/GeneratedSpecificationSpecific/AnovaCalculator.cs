@@ -68,7 +68,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificAnovaCalculator Groups_list_of(List<SpecificationSpecificGroup> groupss, string listType)
+        internal SpecificationSpecificAnovaCalculator Groups_list_of(string listType, List<SpecificationSpecificGroup> groupss)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, groupss));
 

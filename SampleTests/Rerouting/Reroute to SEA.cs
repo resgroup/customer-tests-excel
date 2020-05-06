@@ -29,34 +29,31 @@ namespace SampleTests.Rerouting
         // arrange
         public override SpecificationSpecificRoutingService Given()
         {
-            var routingService = new SpecificationSpecificRoutingService();
-            routingService.RerouteFrom_of("DAL");
-            routingService.RerouteTo_of("SEA");
+            return
+                new SpecificationSpecificRoutingService()
+                .RerouteFrom_of("DAL")
+                .RerouteTo_of("SEA")
+                
+                .Cargo_of(
+                    new SpecificationSpecificCargo()
+                    .Origin_of("HKG")
+                    .Destination_of("DAL")
+                    .ItineraryLeg_table_of(
+                        new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>()
+                        .Add(
+                            new SpecificationSpecificItineraryLeg()
+                            .Origin_of("HKG")
+                            .Destination_of("LGB")
+                        )
+                        .Add(
+                            new SpecificationSpecificItineraryLeg()
+                            .Origin_of("LGB")
+                            .Destination_of("DAL")
+                        )
+                    )
+                )
+            ;
             
-            {
-                var cargo = new SpecificationSpecificCargo();
-                cargo.Origin_of("HKG");
-                cargo.Destination_of("DAL");
-                {
-                    var ItineraryLegRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg>();
-                    {
-                        var itineraryLegRow = new SpecificationSpecificItineraryLeg();
-                        itineraryLegRow.Origin_of("HKG");
-                        itineraryLegRow.Destination_of("LGB");
-                        ItineraryLegRow.Add(itineraryLegRow);
-                    }
-                    {
-                        var itineraryLegRow = new SpecificationSpecificItineraryLeg();
-                        itineraryLegRow.Origin_of("LGB");
-                        itineraryLegRow.Destination_of("DAL");
-                        ItineraryLegRow.Add(itineraryLegRow);
-                    }
-                    cargo.ItineraryLeg_table_of(ItineraryLegRow);
-                }
-                routingService.Cargo_of(cargo);
-            }
-            
-            return routingService;
         }
         
         public override string When(SpecificationSpecificRoutingService routingService)

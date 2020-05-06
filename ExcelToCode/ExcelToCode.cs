@@ -5,11 +5,14 @@ using System.Linq;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    // this class is very much too big, split in to smaller ones
-    // easy targets would be given, when, assert.
-    // the various property types could probably also be split off quite easily as well
-    // a better way of doing this would probably be to form a representation of the test in code (like the assertions property) and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile if this gets more complex.
-    // might be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
+    // This class is very much too big, split in to smaller one, easy targets would be given, when, assert.
+    //  The various types of Given setup (simple property, complex object (with sub properties), lists, tables)
+    // The various property types could probably also be split off quite easily as well
+    // A better way of doing this would probably be to form a representation of the test in code (like the assertions property)
+    //  and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile.
+    // This is now easier than it used to be, as IExcelToCodeVisitor is called for everything in the Given section, and there is already
+    //  a visitor that records everything and keeps a representation in code.
+    // It would be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
         public ExcelToCode(ICodeNameToExcelNameConverter converter) : base(converter)
@@ -199,55 +202,43 @@ namespace CustomerTestsExcel.ExcelToCode
                 issuesPreventingRoundTrip.Add($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{worksheet.Name}'");
         }
 
-        string CreateRootObject(string excelClassName)
+        void CreateRootObject(string excelClassName)
         {
             VisitGivenRootClassDeclaration(excelClassName);
 
-            var cSharpVariableName = CreateObjectWithoutVisiting(excelClassName);
+            Output("return");
+            using (AutoCloseIndent())
+            {
+                CreateObjectWithoutVisiting(excelClassName);
+            }
+            Output(";");
 
             VisitGivenRootClassFinalisation();
-
-            // returning this is a code smell, best to pass it in instead or something
-            return cSharpVariableName;
         }
 
-        string CreateObject(string excelPropertyName, string excelClassName)
+        void CreateObject(string excelPropertyName, string excelClassName)
         {
             VisitGivenComplexPropertyDeclaration(excelPropertyName, excelClassName);
 
-            var cSharpVariableName = CreateObjectWithoutVisiting(excelClassName);
+            CreateObjectWithoutVisiting(excelClassName);
 
             VisitGivenComplexPropertyFinalisation();
-
-            // returning this is a code smell, best to pass it in instead or something
-            return cSharpVariableName;
         }
 
-        string CreateObjectWithoutVisiting(string excelClassName)
+        void CreateObjectWithoutVisiting(string excelClassName)
         {
             ExcelMoveDown(); // this is a bit mysterious
 
-            // maybe fix this mixing of abstraction levels 
             string cSharpClassName = converter.ExcelClassNameToCodeName(excelClassName);
-            string cSharpVariableName = VariableCase(excelClassName.Replace(".", ""));
 
-            DeclareVariable(cSharpVariableName, cSharpClassName);
+            Output($"new {cSharpClassName}()");
 
-            SetVariableProperties(cSharpVariableName);
+            SetVariableProperties();
 
             ExcelMoveUp(); // this is a bit mysterious
-
-            // returning this is a code smell, best to pass it in instead or something
-            return cSharpVariableName;
         }
 
-        void DeclareVariable(string cSharpVariableName, string cSharpClassName) =>
-            Output($"var {cSharpVariableName} = new {cSharpClassName}();");
-
-        void DeclareListVariable(string cSharpVariableName, string cSharpClassName) =>
-            Output($"var {cSharpVariableName} = new List<{cSharpClassName}>();");
-
-        void SetVariableProperties(string cSharpVariableName)
+        void SetVariableProperties()
         {
             if (CurrentCell() == converter.WithProperties)
             {
@@ -256,14 +247,14 @@ namespace CustomerTestsExcel.ExcelToCode
                     ExcelMoveDown();
                     while (!string.IsNullOrEmpty(CurrentCell()))
                     {
-                        DoProperty(cSharpVariableName);
+                        DoProperty();
                         ExcelMoveDown();
                     }
                 }
             }
         }
 
-        void DoProperty(string cSharpVariableName)
+        void DoProperty()
         {
             // "Calibrations(0) of", "InstrumentCalibration"
             // methodname = "Calibrations_of"
@@ -283,12 +274,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 if (IsTable(excelGivenLeft))
                 {
-                    using (Scope())
-                    {
-                        var cSharpChildVariableName = CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
-
-                        Output($"{cSharpVariableName}.{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}({cSharpChildVariableName});");
-                    }
+                    using (OutputAndOpenAutoClosingBracket($".{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}"))
+                        CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
                 }
                 else if (IsList(excelGivenLeft))
                 {
@@ -300,45 +287,37 @@ namespace CustomerTestsExcel.ExcelToCode
                     string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
 
                     OutputBlankLine();
-                    using (Scope())
+                    using (AutoRestoreExcelMoveDown())
                     {
-                        using (AutoRestoreExcelMoveDown())
+                        VisitGivenListPropertyDeclaration(
+                            excelGivenLeft,
+                            excelGivenRightString);
+
+                        using (OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
                         {
-                            // Declare a list variable to hold the items
-                            DeclareListVariable(cSharpListVariableName, cSharpClassName);
-
-                            VisitGivenListPropertyDeclaration(
-                                excelGivenLeft,
-                                excelGivenRightString);
-
+                            Output($"\"{cSharpClassName}\", ");
+                            Output($"new FluentList<{cSharpClassName}>()");
                             while (CurrentCell() == converter.WithItem)
                             {
                                 ExcelMoveDown();
 
-                                using (Scope())
+                                // Add an item to the list
+                                using (AutoRestoreExcelMoveRight())
                                 {
-                                    // Add an item to the list
-                                    using (AutoRestoreExcelMoveRight())
+                                    using (OutputAndOpenAutoClosingBracket($".FluentAdd"))
                                     {
-                                        DeclareVariable(cSharpListItemVariableName, cSharpClassName);
+                                        Output($"new {cSharpClassName}()");
 
                                         while (!string.IsNullOrEmpty(CurrentCell()))
                                         {
-                                            DoProperty(cSharpListItemVariableName);
+                                            DoProperty();
                                             ExcelMoveDown();
                                         }
-
-                                        OutputListAdd(cSharpListVariableName, cSharpListItemVariableName);
                                     }
                                 }
                             }
-
-                            // Add the list of the parent object
-                            Output($"{cSharpVariableName}.{cSharpMethodName}({cSharpListVariableName}, \"{cSharpClassName}\");");
-
-                            VisitGivenListPropertyFinalisation();
-
                         }
+                        VisitGivenListPropertyFinalisation();
                     }
                 }
                 else if (HasGivenSubProperties())
@@ -346,17 +325,15 @@ namespace CustomerTestsExcel.ExcelToCode
                     var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
                     OutputBlankLine();
-                    using (Scope())
-                    {
-                        var cSharpChildVariableName = CreateObject(excelGivenLeft, excelGivenRightString);
-                        Output(cSharpVariableName + "." + cSharpMethodName + "(" + cSharpChildVariableName + ")" + ";");
-                    }
+
+                    using (OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                        CreateObject(excelGivenLeft, excelGivenRightString);
                 }
                 else
                 {
                     var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-                    Output($"{cSharpVariableName}.{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)});");
+                    Output($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
 
                     VisitGivenSimplePropertyOrFunction(excelGivenLeft, excelGivenRight);
                 }
@@ -463,11 +440,6 @@ namespace CustomerTestsExcel.ExcelToCode
         bool IsList(string excelGivenLeft) =>
             excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
 
-        void OutputListAdd(
-            string cSharpListVariableName,
-            string cSharpListItemVariableName) =>
-                Output($"{cSharpListVariableName}.Add({cSharpListItemVariableName});");
-
         // check to see if it looks like a table, but does not end with converter.ListOf
         void CheckMissingListOf()
         {
@@ -511,12 +483,11 @@ namespace CustomerTestsExcel.ExcelToCode
             && (PeekBelowRight(2, 1) != "" && PeekBelow(2) == "")
             );
 
-        string CreateObjectsFromTable(
+        void CreateObjectsFromTable(
             string tableStartCellReference,
             string excelGivenLeft,
             string excelGivenRightString)
         {
-            string cSharpVariableName = converter.GivenTablePropertyNameExcelNameToCodeVariableName(excelGivenLeft) + "Row";
             string cSharpSpecificationSpecificClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
 
             CheckMissingWithPropertiesForTable(tableStartCellReference);
@@ -532,7 +503,7 @@ namespace CustomerTestsExcel.ExcelToCode
             uint lastColumn = headers.Max(h => h.Value.EndColumn);
             uint propertiesEndColumn = lastColumn;
 
-            Output($"var {cSharpVariableName} = new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>();");
+            Output($"new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>()");
             VisitGivenTablePropertyDeclaration(excelGivenLeft, excelGivenRightString, headers.Values);
 
             uint tableRow = 0;
@@ -542,21 +513,16 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 using (SavePosition())
                 {
-                    string indexedCSharpVariableName = VariableCase(cSharpVariableName);
-
-                    using (Scope())
+                    using (OutputAndOpenAutoClosingBracket(".Add"))
                     {
                         VisitGivenTablePropertyRowDeclaration(tableRow);
 
                         SetAllPropertiesOnTableRowVariable(
-                            indexedCSharpVariableName,
                             cSharpSpecificationSpecificClassName,
                             column,
                             propertiesEndColumn,
                             headers,
                             tableRow);
-
-                        Output($"{cSharpVariableName}.Add({indexedCSharpVariableName});");
 
                         VisitGivenTablePropertyRowFinalisation();
                     }
@@ -571,8 +537,6 @@ namespace CustomerTestsExcel.ExcelToCode
             CheckNoRowsInTable(tableStartCellReference, CellReferenceA1Style(), tableRow);
 
             ExcelMoveUp();
-
-            return cSharpVariableName;
         }
 
         void CheckMissingHeadersForTable(string tableStartCellReference, Dictionary<uint, TableHeader> headers)
@@ -661,7 +625,6 @@ namespace CustomerTestsExcel.ExcelToCode
             using (SavePosition())
             {
                 excelPropertyName = CurrentCell();
-                //propertyName = converter.GivenPropertyNameExcelNameToCodeName(excelPropertyName);
                 ExcelMoveDown();
                 subClassName = CurrentCell();
                 ExcelMoveDown();
@@ -684,25 +647,20 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         void SetAllPropertiesOnTableRowVariable(
-            string cSharpVariableName,
             string cSharpSpecificationSpecificClassName,
             uint? propertiesStartColumn,
             uint propertiesEndColumn,
             Dictionary<uint, TableHeader> propertyNames,
             uint tableRow)
         {
-            DeclareTableRowVariable(cSharpVariableName, cSharpSpecificationSpecificClassName);
+            Output($"new {cSharpSpecificationSpecificClassName}()");
 
             SetPropertiesOnTableRowVariable(
                 propertiesStartColumn,
                 propertyNames,
                 propertiesEndColumn,
-                cSharpVariableName,
                 tableRow);
         }
-
-        void DeclareTableRowVariable(string cSharpVariableName, string cSharpSpecificationSpecificClassName) =>
-            Output($"var {cSharpVariableName} = new {cSharpSpecificationSpecificClassName}();");
 
         // This should work when there are sub classes in the table
         bool TableHasMoreRows(uint lastColumn)
@@ -717,7 +675,6 @@ namespace CustomerTestsExcel.ExcelToCode
             uint? propertiesStartColumn,
             Dictionary<uint, TableHeader> headers,
             uint propertiesEndColumn,
-            string cSharpVariableName,
             uint tableRow)
         {
             if (propertiesStartColumn.HasValue)
@@ -728,7 +685,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 {
                     SetPropertyOnTableRowVariable(
                         headers,
-                        cSharpVariableName,
                         tableRow,
                         column - propertiesStartColumn.Value);
                     ExcelMoveRight();
@@ -736,7 +692,10 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        void SetPropertyOnTableRowVariable(Dictionary<uint, TableHeader> headers, string cSharpVariableName, uint tableRow, uint tableColumn)
+        void SetPropertyOnTableRowVariable(
+            Dictionary<uint, TableHeader> headers,
+            uint tableRow,
+            uint tableColumn)
         {
             // need to add the row and column of the table here, or just not have them
             VisitGivenTablePropertyCellDeclaration(headers[column], tableRow, tableColumn);
@@ -744,29 +703,29 @@ namespace CustomerTestsExcel.ExcelToCode
             if (headers[column] is SubClassTableHeader)
             {
                 var subClassHeader = headers[column] as SubClassTableHeader;
-                string subClassCSharpVariableName = $"{cSharpVariableName}_{subClassHeader.SubClassName.Replace(".", "")}"; // this <.Replace(".", "")> is shared with DoProperty, we should move in into the _converter
 
                 VisitGivenComplexPropertyDeclaration(subClassHeader.ExcelPropertyName, subClassHeader.SubClassName);
 
-                SetAllPropertiesOnTableRowVariable(
-                    subClassCSharpVariableName,
-                    subClassHeader.FullSubClassName,
-                    subClassHeader.PropertiesStartColumn,
-                    subClassHeader.PropertiesEndColumn,
-                    subClassHeader.Headers,
-                    tableRow);
+                using (OutputAndOpenAutoClosingBracket($".{converter.GivenPropertyNameExcelNameToCodeName(subClassHeader.ExcelPropertyName)}"))
+                {
+
+                    SetAllPropertiesOnTableRowVariable(
+                        subClassHeader.FullSubClassName,
+                        subClassHeader.PropertiesStartColumn,
+                        subClassHeader.PropertiesEndColumn,
+                        subClassHeader.Headers,
+                        tableRow);
+                }
 
                 VisitGivenComplexPropertyFinalisation();
 
                 ExcelMoveLeft();
-
-                Output($"{cSharpVariableName}.{converter.GivenPropertyNameExcelNameToCodeName(subClassHeader.ExcelPropertyName)}({subClassCSharpVariableName});");
             }
             else if (headers[column] is PropertyTableHeader)
             {
                 var propertyHeader = headers[column] as PropertyTableHeader;
 
-                Output($"{cSharpVariableName}.{converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.ExcelPropertyName)}({converter.PropertyValueExcelToCode(propertyHeader.ExcelPropertyName, CurrentCellRaw())});");
+                Output($".{converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.ExcelPropertyName)}({converter.PropertyValueExcelToCode(propertyHeader.ExcelPropertyName, CurrentCellRaw())})");
 
                 VisitGivenSimplePropertyOrFunction(
                     propertyHeader.ExcelPropertyName,
@@ -784,14 +743,11 @@ namespace CustomerTestsExcel.ExcelToCode
         void EndGiven()
         {
             OutputBlankLine();
-            Output("return " + CSharpSUTVariableName() + ";");
             Output("}");
         }
 
-        bool HasGivenSubProperties()
-        {
-            return (PeekBelow() == converter.WithProperties);
-        }
+        bool HasGivenSubProperties() =>
+            PeekBelow() == converter.WithProperties;
 
         protected void DoWhen()
         {
@@ -1110,31 +1066,46 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 throw new Exception("Invalid assertion operator found in excel file: " + assertionTableHeader.AssertionOperator);
             }
-
-            // When the excel is created from the code, it won't overwrite any calculations, unless there is important stuff in them.
-            // In this case it adds some text to reserved cell a3 to indicate this, and writes out the value it would have written
-            // in the column next to the assertion (assuming there is no calculation there). If these values are in an excel 
-            // sheet, the code which generates the c# outputs an error, telling you to fix it up. This logic isn't done for assertion
-            // tables, which at the moment isn't a problem as the tables can't convert themselves from c# to excel anyway.
-
         }
 
-        void DoEqualityWithStringFormatAssertion(int assertIndex, string cSharpPropertyName, string cSharpPropertyValue, string cSharpClassName, string cSharpVariableName, string assertionSpecificValue)
+        void DoEqualityWithStringFormatAssertion(
+            int assertIndex, 
+            string cSharpPropertyName, 
+            string cSharpPropertyValue, 
+            string cSharpClassName, 
+            string cSharpVariableName, 
+            string assertionSpecificValue)
         {
-            Output(string.Format("{0} new EqualityAssertionWithStringFormat<{1}>({2} => {2}.{3}, {4}, \"{5}\")", LeadingComma(assertIndex), cSharpClassName, cSharpVariableName, cSharpPropertyName, cSharpPropertyValue, assertionSpecificValue));
+            Output($"{LeadingComma(assertIndex)} new EqualityAssertionWithStringFormat<{cSharpClassName}>({cSharpVariableName} => {cSharpVariableName}.{cSharpPropertyName}, {cSharpPropertyValue}, \"{assertionSpecificValue}\")");
         }
 
-        void DoEqualityWithPercentagePrecisionAssertion(int assertIndex, string cSharpPropertyName, string cSharpPropertyValue, string cSharpClassName, string cSharpVariableName, string assertionSpecificValue)
+        void DoEqualityWithPercentagePrecisionAssertion(
+            int assertIndex, 
+            string cSharpPropertyName, 
+            string cSharpPropertyValue, 
+            string cSharpClassName, 
+            string cSharpVariableName, 
+            string assertionSpecificValue)
         {
-            Output(string.Format("{0} new EqualityAssertionWithPercentagePrecision<{1}>({2} => {2}.{3}, {4}, {5})", LeadingComma(assertIndex), cSharpClassName, cSharpVariableName, cSharpPropertyName, cSharpPropertyValue, assertionSpecificValue));
+            Output($"{LeadingComma(assertIndex)} new EqualityAssertionWithPercentagePrecision<{cSharpClassName}>({cSharpVariableName} => {cSharpVariableName}.{cSharpPropertyName}, {cSharpPropertyValue}, {assertionSpecificValue})");
         }
 
-        void DoExcelFormulaDoesNotMatchCodeAssertion(int assertIndex, string cSharpPropertyName, string cSharpPropertyValue, string roundTripValue, string cSharpClassName)
+        void DoExcelFormulaDoesNotMatchCodeAssertion(
+            int assertIndex, 
+            string cSharpPropertyName, 
+            string cSharpPropertyValue, 
+            string roundTripValue, 
+            string cSharpClassName)
         {
-            Output(LeadingComma(assertIndex) + "new ExcelFormulaDoesNotMatchCodeAssertion<" + cSharpClassName + ">(\"" + cSharpPropertyName + "\", \"" + cSharpPropertyValue + "\", \"" + roundTripValue + "\")");
+            Output($"{LeadingComma(assertIndex)}new ExcelFormulaDoesNotMatchCodeAssertion<{cSharpClassName}>(\"{cSharpPropertyName}\", \"{cSharpPropertyValue}\", \"{roundTripValue}\")");
         }
 
-        void DoEqualityAssertion(int assertIndex, string cSharpPropertyName, string cSharpPropertyValue, string cSharpClassName, string cSharpVariableName)
+        void DoEqualityAssertion(
+            int assertIndex, 
+            string cSharpPropertyName, 
+            string cSharpPropertyValue, 
+            string cSharpClassName, 
+            string cSharpVariableName)
         {
             Output($"{LeadingComma(assertIndex)} new EqualityAssertion<{cSharpClassName}>({cSharpVariableName} => {cSharpVariableName}.{cSharpPropertyName}, {cSharpPropertyValue})");
         }

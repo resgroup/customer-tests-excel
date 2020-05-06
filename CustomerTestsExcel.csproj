@@ -73,6 +73,7 @@
     <Compile Include="ExcelToCode\IGivenFunction.cs" />
     <Compile Include="ExcelToCode\IGivenTableProperty.cs" />
     <Compile Include="ExcelToCode\InMemoryGenerateCSharpFromExcel.cs" />
+    <Compile Include="FluentList.cs" />
     <Compile Include="IReportSpecificationSetupProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ClassNameMatcher.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpClassMatcher.cs" />

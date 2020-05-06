@@ -29,10 +29,11 @@ namespace SampleTests.NameConversions
         // arrange
         public override SpecificationSpecificValidator Given()
         {
-            var validator = new SpecificationSpecificValidator();
-            validator.WithValidProperties();
+            return
+                new SpecificationSpecificValidator()
+                .WithValidProperties()
+            ;
             
-            return validator;
         }
         
         public override string When(SpecificationSpecificValidator validator)

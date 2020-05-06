@@ -74,7 +74,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists IntegerTableSyntax_list_of(List<SpecificationSpecificInteger> integerTableSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists IntegerTableSyntax_list_of(string listType, List<SpecificationSpecificInteger> integerTableSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, integerTableSyntaxs));
 
@@ -103,7 +103,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_list_of(List<SpecificationSpecificInteger> integerListSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists IntegerListSyntax_list_of(string listType, List<SpecificationSpecificInteger> integerListSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, integerListSyntaxs));
 
@@ -132,7 +132,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists FloatTableSyntax_list_of(List<SpecificationSpecificFloat> floatTableSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists FloatTableSyntax_list_of(string listType, List<SpecificationSpecificFloat> floatTableSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, floatTableSyntaxs));
 
@@ -161,7 +161,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists FloatListSyntax_list_of(List<SpecificationSpecificFloat> floatListSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists FloatListSyntax_list_of(string listType, List<SpecificationSpecificFloat> floatListSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, floatListSyntaxs));
 
@@ -190,7 +190,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists StringTableSyntax_list_of(List<SpecificationSpecificString> stringTableSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists StringTableSyntax_list_of(string listType, List<SpecificationSpecificString> stringTableSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, stringTableSyntaxs));
 
@@ -219,7 +219,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists StringListSyntax_list_of(List<SpecificationSpecificString> stringListSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists StringListSyntax_list_of(string listType, List<SpecificationSpecificString> stringListSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, stringListSyntaxs));
 
@@ -248,7 +248,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_list_of(List<SpecificationSpecificDateTime> dateTimeTableSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeTableSyntax_list_of(string listType, List<SpecificationSpecificDateTime> dateTimeTableSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, dateTimeTableSyntaxs));
 
@@ -277,7 +277,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeListSyntax_list_of(List<SpecificationSpecificDateTime> dateTimeListSyntaxs, string listType)
+        internal SpecificationSpecificObjectWithPrimiiveLists DateTimeListSyntax_list_of(string listType, List<SpecificationSpecificDateTime> dateTimeListSyntaxs)
         {
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, dateTimeListSyntaxs));
 

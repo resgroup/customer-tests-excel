@@ -29,12 +29,13 @@ namespace SampleTests.Calculator
         // arrange
         public override SpecificationSpecificCalculator Given()
         {
-            var calculator = new SpecificationSpecificCalculator();
-            calculator.FirstValue_of(1);
-            calculator.SecondValue_of(2);
-            calculator.Operation_of(Operation.Add);
+            return
+                new SpecificationSpecificCalculator()
+                .FirstValue_of(1)
+                .SecondValue_of(2)
+                .Operation_of(Operation.Add)
+            ;
             
-            return calculator;
         }
         
         public override string When(SpecificationSpecificCalculator calculator)

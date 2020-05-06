@@ -9,11 +9,13 @@ namespace SampleTests.GeneratedSpecificationSpecific
     {
         public bool Valid { get; internal set; } = false;
 
-        internal void WithValidProperties()
+        internal SpecificationSpecificValidator WithValidProperties()
         {
             AddValueProperty(GetCurrentMethod());
 
             Valid = true;
+
+            return this;
         }
 
         internal void Validate()

@@ -29,192 +29,157 @@ namespace SampleTests.Anova
         // arrange
         public override SpecificationSpecificAnovaCalculator Given()
         {
-            var anovaCalculator = new SpecificationSpecificAnovaCalculator();
-            anovaCalculator.VariableDescription_of("IQ");
+            return
+                new SpecificationSpecificAnovaCalculator()
+                .VariableDescription_of("IQ")
+                
+                .Groups_list_of(
+                    "SpecificationSpecificGroup", 
+                    new FluentList<SpecificationSpecificGroup>()
+                    .FluentAdd(
+                        new SpecificationSpecificGroup()
+                        .Name_of("Langley School")
+                        .Floats_table_of(
+                            new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>()
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(90)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(87)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(93)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(115)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(97)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(85)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(102)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(110)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(111)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(102)
+                            )
+                        )
+                    )
+                    .FluentAdd(
+                        new SpecificationSpecificGroup()
+                        .Name_of("Ninestiles School")
+                        .Floats_table_of(
+                            new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>()
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(135)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(125)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(107)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(96)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(114)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(125)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(94)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(123)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(111)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(96)
+                            )
+                        )
+                    )
+                    .FluentAdd(
+                        new SpecificationSpecificGroup()
+                        .Name_of("Alderbrook School")
+                        .Floats_table_of(
+                            new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>()
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(93)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(101)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(74)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(87)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(76)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(87)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(98)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(108)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(113)
+                            )
+                            .Add(
+                                new SpecificationSpecificFloat()
+                                .Float_of(96)
+                            )
+                        )
+                    )
+                )
+            ;
             
-            {
-                var groupsList = new List<SpecificationSpecificGroup>();
-                {
-                    var groups = new SpecificationSpecificGroup();
-                    groups.Name_of("Langley School");
-                    {
-                        var FloatsRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>();
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(90);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(87);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(93);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(115);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(97);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(85);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(102);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(110);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(111);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(102);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        groups.Floats_table_of(FloatsRow);
-                    }
-                    groupsList.Add(groups);
-                }
-                {
-                    var groups = new SpecificationSpecificGroup();
-                    groups.Name_of("Ninestiles School");
-                    {
-                        var FloatsRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>();
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(135);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(125);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(107);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(96);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(114);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(125);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(94);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(123);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(111);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(96);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        groups.Floats_table_of(FloatsRow);
-                    }
-                    groupsList.Add(groups);
-                }
-                {
-                    var groups = new SpecificationSpecificGroup();
-                    groups.Name_of("Alderbrook School");
-                    {
-                        var FloatsRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat>();
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(93);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(101);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(74);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(87);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(76);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(87);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(98);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(108);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(113);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        {
-                            var floatsRow = new SpecificationSpecificFloat();
-                            floatsRow.Float_of(96);
-                            FloatsRow.Add(floatsRow);
-                        }
-                        groups.Floats_table_of(FloatsRow);
-                    }
-                    groupsList.Add(groups);
-                }
-                anovaCalculator.Groups_list_of(groupsList, "SpecificationSpecificGroup");
-            }
-            
-            return anovaCalculator;
         }
         
         public override string When(SpecificationSpecificAnovaCalculator anovaCalculator)

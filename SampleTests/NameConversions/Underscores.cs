@@ -29,29 +29,27 @@ namespace SampleTests.NameConversions
         // arrange
         public override SpecificationSpecificUnderscore Given()
         {
-            var underscore = new SpecificationSpecificUnderscore();
-            underscore.A_Property_of("Anything");
-            {
-                var Table_PropertyRow = new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>();
-                {
-                    var table_PropertyRow = new SpecificationSpecificA_Table();
-                    table_PropertyRow.A_Property_of("Anything");
-                    Table_PropertyRow.Add(table_PropertyRow);
-                }
-                underscore.Table_Property_table_of(Table_PropertyRow);
-            }
+            return
+                new SpecificationSpecificUnderscore()
+                .A_Property_of("Anything")
+                .Table_Property_table_of(
+                    new ReportSpecificationSetupClassUsingTable<SpecificationSpecificA_Table>()
+                    .Add(
+                        new SpecificationSpecificA_Table()
+                        .A_Property_of("Anything")
+                    )
+                )
+                
+                .List_Property_list_of(
+                    "SpecificationSpecificA_Table", 
+                    new FluentList<SpecificationSpecificA_Table>()
+                    .FluentAdd(
+                        new SpecificationSpecificA_Table()
+                        .A_Property_of("Anything")
+                    )
+                )
+            ;
             
-            {
-                var list_PropertyList = new List<SpecificationSpecificA_Table>();
-                {
-                    var list_Property = new SpecificationSpecificA_Table();
-                    list_Property.A_Property_of("Anything");
-                    list_PropertyList.Add(list_Property);
-                }
-                underscore.List_Property_list_of(list_PropertyList, "SpecificationSpecificA_Table");
-            }
-            
-            return underscore;
         }
         
         public override string When(SpecificationSpecificUnderscore underscore)

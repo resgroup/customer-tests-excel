@@ -1,8 +1,6 @@
 ﻿using CustomerTestsExcel.Indentation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
@@ -40,6 +38,13 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected void Output(string lineOfCSharpCode) =>
             code.AppendLine(lineOfCSharpCode);
+
+        protected TidyUp OutputAndOpenAutoClosingBracket(string lineOfCSharpCodeWithoutBracket)
+        {
+            code.AppendLine($"{lineOfCSharpCodeWithoutBracket}(");
+            Indent();
+            return new TidyUp(CloseBracketAndOutdent);
+        }
 
         protected void OutputBlankLine() =>
             Output("");
@@ -139,6 +144,15 @@ namespace CustomerTestsExcel.ExcelToCode
 
         protected TidyUp AutoCloseCurlyBracket() =>
             new TidyUp(OpenCurlyBracket, CloseCurlyBracket);
+
+        protected void Indent() =>
+            code.Indent();
+
+        protected void Outdent() =>
+            code.Outdent();
+
+        protected TidyUp AutoCloseIndent() =>
+            new TidyUp(Indent, Outdent);
 
         protected void OpenBracketAndIndent()
         {

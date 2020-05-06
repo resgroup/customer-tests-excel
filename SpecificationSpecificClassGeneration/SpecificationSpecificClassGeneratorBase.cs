@@ -148,7 +148,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             return this;
         }}
 
-        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_list_of(List<{listClassName}> {listParameterName}, string listType)
+        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_list_of(string listType, List<{listClassName}> {listParameterName})
         {{
             AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, {listParameterName}));
 
