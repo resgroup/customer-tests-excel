@@ -7,31 +7,11 @@ namespace CustomerTestsExcel.ExcelToCode
     public class ExcelState
     {
         public ITabularPage worksheet;
-        //public readonly ICodeNameToExcelNameConverter converter;
         public uint row;
         public uint column;
-        //public string _sutName;
-        //public AutoIndentingStringBuilder code;
 
-        //public readonly List<string> errors;
-        //public IReadOnlyList<string> Errors => errors;
-
-        //public readonly List<string> issuesPreventingRoundTrip;
-        //public IReadOnlyList<string> IssuesPreventingRoundTrip => issuesPreventingRoundTrip;
-
-        //public readonly List<string> warnings;
-        //public IReadOnlyList<string> Warnings => warnings;
-
-        //public readonly List<IExcelToCodeVisitor> visitors;
-
-        public ExcelState()//ICodeNameToExcelNameConverter converter)
+        public ExcelState()
         {
-            //this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
-            //code = new AutoIndentingStringBuilder("\t");
-            //errors = new List<string>();
-            //issuesPreventingRoundTrip = new List<string>();
-            //warnings = new List<string>();
-            //visitors = new List<IExcelToCodeVisitor>();
         }
 
         internal void Initialise(ITabularPage worksheet)
@@ -40,43 +20,6 @@ namespace CustomerTestsExcel.ExcelToCode
             row = 1;
             column = 1;
         }
-
-        //public void AddVisitor(IExcelToCodeVisitor visitor) =>
-        //    visitors.Add(visitor);
-
-        //public void Output(string lineOfCSharpCode) =>
-        //    code.AppendLine(lineOfCSharpCode);
-
-        //public TidyUp OutputAndOpenAutoClosingBracket(string lineOfCSharpCodeWithoutBracket)
-        //{
-        //    code.AppendLine($"{lineOfCSharpCodeWithoutBracket}(");
-        //    Indent();
-        //    return new TidyUp(CloseBracketAndOutdent);
-        //}
-
-        //public void OutputBlankLine() =>
-        //    Output("");
-
-        //public string SUTClassName()
-        //{
-        //    if (_sutName == null) throw new Exception("Trying to read _sutName before it has been set");
-
-        //    return _sutName;
-        //}
-
-        //public string CSharpSUTSpecificationSpecificClassName() =>
-        //    converter.ExcelClassNameToCodeName(SUTClassName());
-
-        //public string CSharpSUTVariableName() =>
-        //    VariableCase(SUTClassName());
-
-        //public string VariableCase(string camelCase) =>
-        //    // it is assumed to already be in camel case, this means making the first letter lower case
-        //    // this isn't a two way process (eg the conversion process doesn't care what the string is) so this isn't in the _namer
-        //    string.IsNullOrWhiteSpace(camelCase) ? "" : char.ToLower(camelCase[0]) + camelCase.Substring(1);
-
-        //public static string LeadingComma(int index) =>
-        //    (index == 0) ? " " : ",";
 
         public bool RowToColumnIsEmpty(uint column)
         {
@@ -140,42 +83,6 @@ namespace CustomerTestsExcel.ExcelToCode
 
             return columnToCheck;
         }
-
-        //public void OpenCurlyBracket() =>
-        //    Output("{");
-
-        //public void CloseCurlyBracket() =>
-        //    Output("}");
-
-        //public TidyUp Scope() =>
-        //    AutoCloseCurlyBracket();
-
-        //public TidyUp AutoCloseCurlyBracket() =>
-        //    new TidyUp(OpenCurlyBracket, CloseCurlyBracket);
-
-        //public void Indent() =>
-        //    code.Indent();
-
-        //public void Outdent() =>
-        //    code.Outdent();
-
-        //public TidyUp AutoCloseIndent() =>
-        //    new TidyUp(Indent, Outdent);
-
-        //public void OpenBracketAndIndent()
-        //{
-        //    Output("(");
-        //    code.Indent();
-        //}
-
-        //public void CloseBracketAndOutdent()
-        //{
-        //    code.Outdent();
-        //    Output(")");
-        //}
-
-        //public TidyUp AutoCloseBracketAndIndent() =>
-        //    new TidyUp(OpenBracketAndIndent, CloseBracketAndOutdent);
 
         public TidyUp SavePosition()
         {
@@ -270,14 +177,5 @@ namespace CustomerTestsExcel.ExcelToCode
 
             return columnName;
         }
-
-        //public void AddError(string message)
-        //{
-        //    // this will appear at the relevant point in the generated code
-        //    //Output($"// {message}");
-
-        //    // this can be used elsewhere, such as in the console output of the test generation
-        //    //errors.Add(message);
-        //}
     }
 }

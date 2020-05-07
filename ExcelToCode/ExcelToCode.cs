@@ -18,7 +18,7 @@ namespace CustomerTestsExcel.ExcelToCode
             : base(
                   converter,
                   new LogState(),
-                  new CodeState(converter),
+                  new CodeState(),
                   new ExcelState()
                   )
         {
