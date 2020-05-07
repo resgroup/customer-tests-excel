@@ -34,6 +34,13 @@ namespace CustomerTestsExcel.ExcelToCode
             //visitors = new List<IExcelToCodeVisitor>();
         }
 
+        internal void Initialise(ITabularPage worksheet)
+        {
+            this.worksheet = worksheet;
+            row = 1;
+            column = 1;
+        }
+
         //public void AddVisitor(IExcelToCodeVisitor visitor) =>
         //    visitors.Add(visitor);
 
@@ -101,25 +108,25 @@ namespace CustomerTestsExcel.ExcelToCode
             return false;
         }
 
-        public void ExcelMoveUp(uint by = 1) =>
+        public void MoveUp(uint by = 1) =>
             row -= by;
 
-        public void ExcelMoveDown(uint by = 1) =>
+        public void MoveDown(uint by = 1) =>
             row += by;
 
-        public void ExcelMoveDownToToken(string token)
+        public void MoveDownToToken(string token)
         {
             while (CurrentCell() != token)
             {
                 if (row > GetLastRow()) throw new ExcelToCodeException(string.Format("Cannot find token {0} in column {1}, reached last row ({2})", token, column, row));
-                ExcelMoveDown();
+                MoveDown();
             }
         }
 
-        public void ExcelMoveRight(uint by = 1) =>
+        public void MoveRight(uint by = 1) =>
             column += by;
 
-        public void ExcelMoveLeft(uint by = 1) =>
+        public void MoveLeft(uint by = 1) =>
             column -= by;
 
         public uint? FindTokenInCurrentRowFromCurrentColumn(string token)
@@ -178,27 +185,27 @@ namespace CustomerTestsExcel.ExcelToCode
             return new TidyUp(() => { row = savedRow; column = savedColumn; });
         }
 
-        public TidyUp AutoRestoreExcelMoveDown(uint by = 1)
+        public TidyUp AutoRestoreMoveDown(uint by = 1)
         {
-            ExcelMoveDown(by);
-            return new TidyUp(() => ExcelMoveUp(by));
+            MoveDown(by);
+            return new TidyUp(() => MoveUp(by));
         }
 
-        public TidyUp AutoRestoreExcelMoveRight(uint by = 1)
+        public TidyUp AutoRestoreMoveRight(uint by = 1)
         {
-            ExcelMoveRight(by);
-            return new TidyUp(() => ExcelMoveLeft(by));
+            MoveRight(by);
+            return new TidyUp(() => MoveLeft(by));
         }
 
-        public TidyUp AutoRestoreExcelMoveDownRight(uint downBy = 1, uint rightBy = 1)
+        public TidyUp AutoRestoreMoveDownRight(uint downBy = 1, uint rightBy = 1)
         {
-            ExcelMoveRight(rightBy);
-            ExcelMoveDown(downBy);
+            MoveRight(rightBy);
+            MoveDown(downBy);
 
             return new TidyUp(() =>
             {
-                ExcelMoveLeft(rightBy);
-                ExcelMoveUp(downBy);
+                MoveLeft(rightBy);
+                MoveUp(downBy);
             });
         }
 

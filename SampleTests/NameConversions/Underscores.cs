@@ -26,7 +26,6 @@ namespace SampleTests.NameConversions
             return "Underscores in names are converted to underscores in C#";
         }
         
-        // arrange
         public override SpecificationSpecificUnderscore Given()
         {
             return
@@ -49,7 +48,6 @@ namespace SampleTests.NameConversions
                     )
                 )
             ;
-            
         }
         
         public override string When(SpecificationSpecificUnderscore underscore)

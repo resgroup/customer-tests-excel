@@ -26,14 +26,12 @@ namespace SampleTests.NameConversions
             return "Functions";
         }
         
-        // arrange
         public override SpecificationSpecificValidator Given()
         {
             return
                 new SpecificationSpecificValidator()
                 .WithValidProperties()
             ;
-            
         }
         
         public override string When(SpecificationSpecificValidator validator)

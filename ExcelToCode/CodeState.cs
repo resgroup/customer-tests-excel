@@ -33,10 +33,18 @@ namespace CustomerTestsExcel.ExcelToCode
             //visitors = new List<IExcelToCodeVisitor>();
         }
 
+        internal void Initialise()
+        {
+            code = new AutoIndentingStringBuilder("    ");
+        }
+
+        public string GeneratedCode =>
+            code.ToString();
+
         //public void AddVisitor(IExcelToCodeVisitor visitor) =>
         //    visitors.Add(visitor);
 
-        public void Output(string lineOfCSharpCode) =>
+        public void Add(string lineOfCSharpCode) =>
             code.AppendLine(lineOfCSharpCode);
 
         public TidyUp OutputAndOpenAutoClosingBracket(string lineOfCSharpCodeWithoutBracket)
@@ -46,8 +54,8 @@ namespace CustomerTestsExcel.ExcelToCode
             return new TidyUp(CloseBracketAndOutdent);
         }
 
-        public void OutputBlankLine() =>
-            Output("");
+        public void BlankLine() =>
+            Add("");
 
         public string SUTClassName()
         {
@@ -134,10 +142,10 @@ namespace CustomerTestsExcel.ExcelToCode
         //}
 
         public void OpenCurlyBracket() =>
-            Output("{");
+            Add("{");
 
         public void CloseCurlyBracket() =>
-            Output("}");
+            Add("}");
 
         public TidyUp Scope() =>
             AutoCloseCurlyBracket();
@@ -156,14 +164,14 @@ namespace CustomerTestsExcel.ExcelToCode
 
         public void OpenBracketAndIndent()
         {
-            Output("(");
+            Add("(");
             code.Indent();
         }
 
         public void CloseBracketAndOutdent()
         {
             code.Outdent();
-            Output(")");
+            Add(")");
         }
 
         public TidyUp AutoCloseBracketAndIndent() =>
@@ -266,7 +274,7 @@ namespace CustomerTestsExcel.ExcelToCode
         public void AddError(string message)
         {
             // this will appear at the relevant point in the generated code
-            Output($"// {message}");
+            Add($"// {message}");
 
             // this can be used elsewhere, such as in the console output of the test generation
             //errors.Add(message);

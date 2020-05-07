@@ -16,7 +16,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             var givenClassRecorder = new GivenClassRecorder();
 
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
-            sheetConverter.logState.AddVisitor(givenClassRecorder);
+            sheetConverter.AddVisitor(givenClassRecorder);
 
             using (var workbook = Workbook(@"TestExcelFiles\PropertyTypes.xlsx"))
             {

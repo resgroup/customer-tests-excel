@@ -14,7 +14,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             var visitRecorder = new GivenSimplePropertyVisitRecorder();
 
             var sheetConverter = new ExcelToCode.ExcelToCode(new CodeNameToExcelNameConverter(ANY_STRING));
-            sheetConverter.logState.AddVisitor(visitRecorder);
+            sheetConverter.AddVisitor(visitRecorder);
 
             using (var workbook = Workbook(@"TestExcelFiles\PropertyTypes.xlsx"))
             {

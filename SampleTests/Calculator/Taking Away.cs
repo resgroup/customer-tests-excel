@@ -26,7 +26,6 @@ namespace SampleTests.Calculator
             return "Add";
         }
         
-        // arrange
         public override SpecificationSpecificCalculator Given()
         {
             return
@@ -35,7 +34,6 @@ namespace SampleTests.Calculator
                 .SecondValue_of(4)
                 .Operation_of(Operation.Subtract)
             ;
-            
         }
         
         public override string When(SpecificationSpecificCalculator calculator)

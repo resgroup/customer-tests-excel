@@ -26,7 +26,6 @@ namespace SampleTests.PrimitiveLists
             return "Primtive lists are supported";
         }
         
-        // arrange
         public override SpecificationSpecificObjectWithPrimiiveLists Given()
         {
             return
@@ -128,7 +127,6 @@ namespace SampleTests.PrimitiveLists
                     )
                 )
             ;
-            
         }
         
         public override string When(SpecificationSpecificObjectWithPrimiiveLists objectWithPrimiiveLists)

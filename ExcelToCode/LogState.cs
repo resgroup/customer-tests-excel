@@ -33,8 +33,16 @@ namespace CustomerTestsExcel.ExcelToCode
             visitors = new List<IExcelToCodeVisitor>();
         }
 
+        internal void Initialise()
+        {
+            issuesPreventingRoundTrip.Clear();
+        }
+
         public void AddVisitor(IExcelToCodeVisitor visitor) =>
             visitors.Add(visitor);
+
+        internal void AddIssuePreventingRoundTrip(string issue) =>
+            issuesPreventingRoundTrip.Add(issue);
 
         //public void Output(string lineOfCSharpCode) =>
         //    code.AppendLine(lineOfCSharpCode);
@@ -263,13 +271,7 @@ namespace CustomerTestsExcel.ExcelToCode
         //    return columnName;
         //}
 
-        public void AddError(string message)
-        {
-            // this will appear at the relevant point in the generated code
-            //Output($"// {message}");
-
-            // this can be used elsewhere, such as in the console output of the test generation
+        public void AddError(string message) =>
             errors.Add(message);
-        }
     }
 }

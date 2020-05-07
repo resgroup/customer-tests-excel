@@ -26,7 +26,6 @@ namespace SampleTests.Anova
             return "Calculate One Way Anova";
         }
         
-        // arrange
         public override SpecificationSpecificAnovaCalculator Given()
         {
             return
@@ -179,7 +178,6 @@ namespace SampleTests.Anova
                     )
                 )
             ;
-            
         }
         
         public override string When(SpecificationSpecificAnovaCalculator anovaCalculator)

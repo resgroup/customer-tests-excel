@@ -26,7 +26,6 @@ namespace SampleTests.Rerouting
             return "Reroute Cargo from HKG - DAL to HKG - SEA";
         }
         
-        // arrange
         public override SpecificationSpecificRoutingService Given()
         {
             return
@@ -53,7 +52,6 @@ namespace SampleTests.Rerouting
                     )
                 )
             ;
-            
         }
         
         public override string When(SpecificationSpecificRoutingService routingService)
