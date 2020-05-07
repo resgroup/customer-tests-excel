@@ -26,6 +26,25 @@ namespace CustomerTestsExcel.ExcelToCode
         public void AddVisitor(IExcelToCodeVisitor visitor) =>
             log.AddVisitor(visitor);
 
+        public void VisitGivenSimplePropertyOrFunction(
+            string excelGivenLeft,
+            object excelGivenRight)
+        {
+            if (excelGivenLeft.EndsWith(" of"))
+            {
+                log.VisitGivenSimpleProperty(
+                    new GivenSimpleProperty(
+                        converter.GivenPropertyNameExcelNameToSutName(excelGivenLeft),
+                        converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
+                        converter.ExcelPropertyTypeFromCellValue(excelGivenRight)));
+            }
+            else
+            {
+                log.VisitGivenFunction(
+                    new GivenFunction(excelGivenLeft));
+            }
+        }
+
         protected string SUTClassName()
         {
             if (sutName == null) throw new Exception("Trying to read _sutName before it has been set");

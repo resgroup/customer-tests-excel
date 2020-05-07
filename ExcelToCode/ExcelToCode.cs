@@ -215,7 +215,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void CreateRootObject(string excelClassName)
         {
-            VisitGivenRootClassDeclaration(excelClassName);
+            log.VisitGivenRootClassDeclaration(excelClassName);
 
             code.Add("return");
             using (code.AutoCloseIndent())
@@ -224,16 +224,18 @@ namespace CustomerTestsExcel.ExcelToCode
             }
             code.Add(";");
 
-            VisitGivenRootClassFinalisation();
+            log.VisitGivenRootClassFinalisation();
         }
 
         void CreateObject(string excelPropertyName, string excelClassName)
         {
-            VisitGivenComplexPropertyDeclaration(excelPropertyName, excelClassName);
+            log.VisitGivenComplexPropertyDeclaration(
+                converter.GivenPropertyNameExcelNameToSutName(excelPropertyName), 
+                excelClassName);
 
             CreateObjectWithoutVisiting(excelClassName);
 
-            VisitGivenComplexPropertyFinalisation();
+            log.VisitGivenComplexPropertyFinalisation();
         }
 
         void CreateObjectWithoutVisiting(string excelClassName)
@@ -300,8 +302,8 @@ namespace CustomerTestsExcel.ExcelToCode
                     code.BlankLine();
                     using (excel.AutoRestoreMoveDown())
                     {
-                        VisitGivenListPropertyDeclaration(
-                            excelGivenLeft,
+                        log.VisitGivenListPropertyDeclaration(
+                            converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
                             excelGivenRightString);
 
                         using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
@@ -328,7 +330,7 @@ namespace CustomerTestsExcel.ExcelToCode
                                 }
                             }
                         }
-                        VisitGivenListPropertyFinalisation();
+                        log.VisitGivenListPropertyFinalisation();
                     }
                 }
                 else if (HasGivenSubProperties())
@@ -346,107 +348,12 @@ namespace CustomerTestsExcel.ExcelToCode
 
                     code.Add($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
 
-                    VisitGivenSimplePropertyOrFunction(excelGivenLeft, excelGivenRight);
+                    VisitGivenSimplePropertyOrFunction(
+                        excelGivenLeft,
+                        excelGivenRight);
                 }
             }
         }
-
-        void VisitGivenRootClassDeclaration(string excelClassName)
-        {
-            log.visitors.ForEach(
-                v =>
-                    v.VisitGivenRootClassDeclaration(excelClassName));
-        }
-
-        void VisitGivenRootClassFinalisation() =>
-            log.visitors.ForEach(v => v.VisitGivenRootClassFinalisation());
-
-        void VisitGivenComplexPropertyDeclaration(string excelPropertyName, string excelClassName)
-        {
-            log.visitors.ForEach(
-                v =>
-                    v.VisitGivenComplexPropertyDeclaration(
-                        new GivenComplexProperty(
-                            converter.GivenPropertyNameExcelNameToSutName(excelPropertyName),
-                            excelClassName)));
-        }
-
-        void VisitGivenComplexPropertyFinalisation() =>
-            log.visitors.ForEach(v => v.VisitGivenComplexPropertyFinalisation());
-
-        void VisitGivenSimplePropertyOrFunction(string excelGivenLeft, object excelGivenRight)
-        {
-            if (excelGivenLeft.EndsWith(" of"))
-            {
-                log.visitors.ForEach(
-                    v =>
-                        v.VisitGivenSimpleProperty(
-                            new GivenSimpleProperty(
-                                converter.GivenPropertyNameExcelNameToSutName(excelGivenLeft),
-                                converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
-                                converter.ExcelPropertyTypeFromCellValue(excelGivenRight))));
-            }
-            else
-            {
-                log.visitors.ForEach(
-                    v =>
-                        v.VisitGivenFunction(
-                            new GivenFunction(excelGivenLeft)));
-            }
-        }
-
-        void VisitGivenListPropertyDeclaration(string excelPropertyName, string excelClassName)
-        {
-            log.visitors.ForEach(
-                v =>
-                    v.VisitGivenListPropertyDeclaration(
-                        new GivenListProperty(
-                            converter.GivenListPropertyNameExcelNameToCodeVariableName(excelPropertyName),
-                            excelClassName)));
-        }
-
-        void VisitGivenListPropertyFinalisation() =>
-            log.visitors.ForEach(v => v.VisitGivenListPropertyFinalisation());
-
-        void VisitGivenTablePropertyDeclaration(
-            string excelPropertyName,
-            string excelClassName,
-            IEnumerable<TableHeader> tableHeaders)
-        {
-            log.visitors.ForEach(
-                v =>
-                    v.VisitGivenTablePropertyDeclaration(
-                        new GivenTableProperty(
-                            converter.GivenTablePropertyNameExcelNameToSutName(excelPropertyName),
-                            excelClassName),
-                        tableHeaders));
-        }
-
-        void VisitGivenTablePropertyRowDeclaration(uint row)
-        {
-            log.visitors.ForEach(
-                v =>
-                    v.VisitGivenTablePropertyRowDeclaration(row));
-        }
-
-        void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column)
-        {
-            log.visitors.ForEach(
-                v =>
-                    v.VisitGivenTablePropertyCellDeclaration(
-                        tableHeader,
-                        row,
-                        column));
-        }
-
-        void VisitGivenTablePropertyCellFinalisation() =>
-            log.visitors.ForEach(v => v.VisitGivenTablePropertyCellFinalisation());
-
-        void VisitGivenTablePropertyRowFinalisation() =>
-            log.visitors.ForEach(v => v.VisitGivenTablePropertyRowFinalisation());
-
-        void VisitGivenTablePropertyFinalisation() =>
-            log.visitors.ForEach(v => v.VisitGivenTablePropertyFinalisation());
 
         bool IsList(string excelGivenLeft) =>
             excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
@@ -515,7 +422,10 @@ namespace CustomerTestsExcel.ExcelToCode
             uint propertiesEndColumn = lastColumn;
 
             code.Add($"new ReportSpecificationSetupClassUsingTable<{cSharpSpecificationSpecificClassName}>()");
-            VisitGivenTablePropertyDeclaration(excelGivenLeft, excelGivenRightString, headers.Values);
+            log.VisitGivenTablePropertyDeclaration(
+                converter.GivenTablePropertyNameExcelNameToSutName(excelGivenLeft), 
+                excelGivenRightString, 
+                headers.Values);
 
             uint tableRow = 0;
             uint moveDown = 1 + (headers.Max((KeyValuePair<uint, TableHeader> h) => h.Value.EndRow) - excel.row);
@@ -526,7 +436,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 {
                     using (code.OutputAndOpenAutoClosingBracket(".Add"))
                     {
-                        VisitGivenTablePropertyRowDeclaration(tableRow);
+                        log.VisitGivenTablePropertyRowDeclaration(tableRow);
 
                         SetAllPropertiesOnTableRowVariable(
                             cSharpSpecificationSpecificClassName,
@@ -535,7 +445,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             headers,
                             tableRow);
 
-                        VisitGivenTablePropertyRowFinalisation();
+                        log.VisitGivenTablePropertyRowFinalisation();
                     }
                     tableRow++;
                 }
@@ -543,7 +453,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 excel.MoveDown();
             }
 
-            VisitGivenTablePropertyFinalisation();
+            log.VisitGivenTablePropertyFinalisation();
 
             CheckNoRowsInTable(tableStartCellReference, excel.CellReferenceA1Style(), tableRow);
 
@@ -709,13 +619,15 @@ namespace CustomerTestsExcel.ExcelToCode
             uint tableColumn)
         {
             // need to add the row and column of the table here, or just not have them
-            VisitGivenTablePropertyCellDeclaration(headers[excel.column], tableRow, tableColumn);
+            log.VisitGivenTablePropertyCellDeclaration(headers[excel.column], tableRow, tableColumn);
 
             if (headers[excel.column] is SubClassTableHeader)
             {
                 var subClassHeader = headers[excel.column] as SubClassTableHeader;
 
-                VisitGivenComplexPropertyDeclaration(subClassHeader.ExcelPropertyName, subClassHeader.SubClassName);
+                log.VisitGivenComplexPropertyDeclaration(
+                    converter.GivenPropertyNameExcelNameToSutName(subClassHeader.ExcelPropertyName), 
+                    subClassHeader.SubClassName);
 
                 using (code.OutputAndOpenAutoClosingBracket($".{converter.GivenPropertyNameExcelNameToCodeName(subClassHeader.ExcelPropertyName)}"))
                 {
@@ -728,7 +640,7 @@ namespace CustomerTestsExcel.ExcelToCode
                         tableRow);
                 }
 
-                VisitGivenComplexPropertyFinalisation();
+                log.VisitGivenComplexPropertyFinalisation();
 
                 excel.MoveLeft();
             }
@@ -748,7 +660,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 throw new ExcelToCodeException("Unknown type of Table Header");
             }
 
-            VisitGivenTablePropertyCellFinalisation();
+            log.VisitGivenTablePropertyCellFinalisation();
         }
 
         bool HasGivenSubProperties() =>

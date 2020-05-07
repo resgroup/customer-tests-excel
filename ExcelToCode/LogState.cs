@@ -24,9 +24,8 @@ namespace CustomerTestsExcel.ExcelToCode
 
         public readonly List<IExcelToCodeVisitor> visitors;
 
-        public LogState()//ICodeNameToExcelNameConverter converter)
+        public LogState()
         {
-            //this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
             errors = new List<string>();
             issuesPreventingRoundTrip = new List<string>();
             warnings = new List<string>();
@@ -35,11 +34,109 @@ namespace CustomerTestsExcel.ExcelToCode
 
         internal void Initialise()
         {
+            // maybe want to clear the visitors as well
+            errors.Clear();
+            warnings.Clear();
             issuesPreventingRoundTrip.Clear();
+        }
+
+        internal void VisitGivenSimpleProperty(GivenSimpleProperty givenSimpleProperty)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenSimpleProperty(givenSimpleProperty));
+        }
+
+        internal void VisitGivenFunction(GivenFunction givenFunction)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenFunction(givenFunction));
         }
 
         public void AddVisitor(IExcelToCodeVisitor visitor) =>
             visitors.Add(visitor);
+
+        public void VisitGivenRootClassDeclaration(string excelClassName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenRootClassDeclaration(excelClassName));
+        }
+
+        public void VisitGivenRootClassFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenRootClassFinalisation());
+
+        public void VisitGivenComplexPropertyDeclaration(
+            string sutPropertyName,
+            string excelClassName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenComplexPropertyDeclaration(
+                        new GivenComplexProperty(
+                            sutPropertyName,
+                            excelClassName)));
+        }
+
+        public void VisitGivenComplexPropertyFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenComplexPropertyFinalisation());
+
+        public void VisitGivenListPropertyDeclaration(
+            string codePropertyName,
+            string excelClassName)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenListPropertyDeclaration(
+                        new GivenListProperty(
+                            codePropertyName,
+                            excelClassName)));
+        }
+
+        public void VisitGivenListPropertyFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenListPropertyFinalisation());
+
+        public void VisitGivenTablePropertyDeclaration(
+            string codePropertyName,
+            string excelClassName,
+            IEnumerable<TableHeader> tableHeaders)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenTablePropertyDeclaration(
+                        new GivenTableProperty(
+                            codePropertyName,
+                            excelClassName),
+                        tableHeaders));
+        }
+
+        public void VisitGivenTablePropertyRowDeclaration(uint row)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenTablePropertyRowDeclaration(row));
+        }
+
+        public void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column)
+        {
+            visitors.ForEach(
+                v =>
+                    v.VisitGivenTablePropertyCellDeclaration(
+                        tableHeader,
+                        row,
+                        column));
+        }
+
+        public void VisitGivenTablePropertyCellFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenTablePropertyCellFinalisation());
+
+        public void VisitGivenTablePropertyRowFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenTablePropertyRowFinalisation());
+
+        public void VisitGivenTablePropertyFinalisation() =>
+            visitors.ForEach(v => v.VisitGivenTablePropertyFinalisation());
+
 
         internal void AddIssuePreventingRoundTrip(string issue) =>
             issuesPreventingRoundTrip.Add(issue);
