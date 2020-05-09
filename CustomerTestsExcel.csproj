@@ -69,6 +69,7 @@
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
     <Compile Include="ExcelToCode\ExcelState.cs" />
     <Compile Include="ExcelToCode\CodeState.cs" />
+    <Compile Include="ExcelToCode\ExcelToCodeTable.cs" />
     <Compile Include="ExcelToCode\LogState.cs" />
     <Compile Include="ExcelToCode\GeneratedCsharpProject.cs" />
     <Compile Include="ExcelToCode\GivenFunction.cs" />

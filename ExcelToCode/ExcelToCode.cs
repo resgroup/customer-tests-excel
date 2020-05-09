@@ -14,6 +14,8 @@ namespace CustomerTestsExcel.ExcelToCode
     // It would be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
+        ExcelToCodeTable excelToCodeTable;
+
         public ExcelToCode(ICodeNameToExcelNameConverter converter)
             : base(
                   converter,
@@ -22,6 +24,12 @@ namespace CustomerTestsExcel.ExcelToCode
                   new ExcelState()
                   )
         {
+            excelToCodeTable = new ExcelToCodeTable(
+                  converter,
+                  log,
+                  code,
+                  excel
+                );
         }
 
         // This function also returns some data in the Errors, Warnings and 
@@ -275,82 +283,96 @@ namespace CustomerTestsExcel.ExcelToCode
             // variable name = instrumentCalibration
             // we actually don't need the index any more now that each item in the list has its own scope, so we could remove it from the excel definition
 
-            CheckMissingTableOf();
+            //CheckMissingTableOf();
             CheckMissingListOf();
             var startCellReference = excel.CellReferenceA1Style();
-
             var excelGivenLeft = excel.CurrentCell();
-            using (excel.AutoRestoreMoveRight())
+
+            if (excelToCodeTable.CanParse(excelGivenLeft))
             {
-                var excelGivenRight = excel.CurrentCellRaw();
-                var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
-
-                if (IsTable(excelGivenLeft))
+                using (excel.AutoRestoreMoveRight())
                 {
-                    using (code.OutputAndOpenAutoClosingBracket($".{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}"))
-                        CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
+                    var excelGivenRight = excel.CurrentCellRaw();
+                    var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
+                    excelToCodeTable.Parse(excelGivenLeft, excelGivenRightString, startCellReference);
                 }
-                else if (IsList(excelGivenLeft))
+            }
+            else
+            {
+
+                using (excel.AutoRestoreMoveRight())
                 {
-                    CheckMissingWithItemForList(startCellReference);
+                    var excelGivenRight = excel.CurrentCellRaw();
+                    var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
 
-                    var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
-                    var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-                    string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
-                    string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
-
-                    code.BlankLine();
-                    using (excel.AutoRestoreMoveDown())
+                    //if (excelToCodeTable.IsTable(excelGivenLeft))
+                    //{
+                    //    using (code.OutputAndOpenAutoClosingBracket($".{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}"))
+                    //        CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
+                    //}
+                    //else 
+                    if (IsList(excelGivenLeft))
                     {
-                        log.VisitGivenListPropertyDeclaration(
-                            converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
-                            excelGivenRightString);
+                        CheckMissingWithItemForList(startCellReference);
 
-                        using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                        var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
+                        var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
+                        string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
+                        string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
+
+                        code.BlankLine();
+                        using (excel.AutoRestoreMoveDown())
                         {
-                            code.Add($"\"{cSharpClassName}\", ");
-                            code.Add($"new FluentList<{cSharpClassName}>()");
-                            while (excel.CurrentCell() == converter.WithItem)
+                            log.VisitGivenListPropertyDeclaration(
+                                converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
+                                excelGivenRightString);
+
+                            using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
                             {
-                                excel.MoveDown();
-
-                                // Add an item to the list
-                                using (excel.AutoRestoreMoveRight())
+                                code.Add($"\"{cSharpClassName}\", ");
+                                code.Add($"new FluentList<{cSharpClassName}>()");
+                                while (excel.CurrentCell() == converter.WithItem)
                                 {
-                                    using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
-                                    {
-                                        code.Add($"new {cSharpClassName}()");
+                                    excel.MoveDown();
 
-                                        while (!string.IsNullOrEmpty(excel.CurrentCell()))
+                                    // Add an item to the list
+                                    using (excel.AutoRestoreMoveRight())
+                                    {
+                                        using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
                                         {
-                                            DoProperty();
-                                            excel.MoveDown();
+                                            code.Add($"new {cSharpClassName}()");
+
+                                            while (!string.IsNullOrEmpty(excel.CurrentCell()))
+                                            {
+                                                DoProperty();
+                                                excel.MoveDown();
+                                            }
                                         }
                                     }
                                 }
                             }
+                            log.VisitGivenListPropertyFinalisation();
                         }
-                        log.VisitGivenListPropertyFinalisation();
                     }
-                }
-                else if (HasGivenSubProperties())
-                {
-                    var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+                    else if (HasGivenSubProperties())
+                    {
+                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-                    code.BlankLine();
+                        code.BlankLine();
 
-                    using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                        CreateObject(excelGivenLeft, excelGivenRightString);
-                }
-                else
-                {
-                    var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+                        using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                            CreateObject(excelGivenLeft, excelGivenRightString);
+                    }
+                    else
+                    {
+                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-                    code.Add($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
+                        code.Add($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
 
-                    VisitGivenSimplePropertyOrFunction(
-                        excelGivenLeft,
-                        excelGivenRight);
+                        VisitGivenSimplePropertyOrFunction(
+                            excelGivenLeft,
+                            excelGivenRight);
+                    }
                 }
             }
         }
