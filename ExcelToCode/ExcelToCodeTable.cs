@@ -5,8 +5,10 @@ using System.Linq;
 namespace CustomerTestsExcel.ExcelToCode
 {
     // not sure this should descend from ExcelToCodeBase, probably remove
-    // Its only the properties that it wants, which isn't worth the 
-    // extra complexity
+    // Its only the properties that it wants, and VisitGivenSimplePropertyOrFunction
+    // which might not be worth the extra complexity.
+    // Would be good to have a plan for VisitGivenSimplePropertyOrFunction though
+    // Maybe have a think when done lists and complex properties
     public class ExcelToCodeTable : ExcelToCodeBase
     {
         public ExcelToCodeTable(
@@ -323,10 +325,5 @@ namespace CustomerTestsExcel.ExcelToCode
 
             log.VisitGivenTablePropertyCellFinalisation();
         }
-
-        //bool HasGivenSubProperties() =>
-        //    excel.PeekBelow() == converter.WithProperties;
-
-
     }
 }
