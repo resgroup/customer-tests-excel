@@ -288,14 +288,14 @@ namespace CustomerTestsExcel.ExcelToCode
             var startCellReference = excel.CellReferenceA1Style();
             var excelGivenLeft = excel.CurrentCell();
 
-            if (excelToCodeTable.CanParse(excelGivenLeft))
+            if (excelToCodeTable.CanParse())
             {
-                using (excel.AutoRestoreMoveRight())
-                {
-                    var excelGivenRight = excel.CurrentCellRaw();
-                    var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
-                    excelToCodeTable.Parse(excelGivenLeft, excelGivenRightString, startCellReference);
-                }
+                //using (excel.AutoRestoreMoveRight())
+                //{
+                    //var excelGivenRight = excel.CurrentCellRaw();
+                    //var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
+                    excelToCodeTable.Parse();
+                //}
             }
             else
             {

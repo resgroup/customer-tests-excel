@@ -23,36 +23,30 @@ namespace CustomerTestsExcel.ExcelToCode
         {
         }
 
-        //internal void DoTable()
-        //{
-        //    CheckMissingTableOf();
-        //    var startCellReference = excel.CellReferenceA1Style();
-
-        //    var excelGivenLeft = excel.CurrentCell();
-        //    if (IsTable(excelGivenLeft))
-        //    {
-        //        using (code.OutputAndOpenAutoClosingBracket($".{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}"))
-        //            CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
-        //    }
-
-        //}
-
-        internal bool CanParse(string excelGivenLeft)
+        // This is true if the current cell is the top left cell of a table property
+        internal bool CanParse()
         {
             CheckMissingTableOf();
 
-            return IsTable(excelGivenLeft);
+            return IsTable(excel.CurrentCell());
         }
 
         bool IsTable(string excelGivenLeft) =>
             excelGivenLeft.EndsWith(converter.TableOf, StringComparison.InvariantCultureIgnoreCase);
 
-        internal void Parse(string excelGivenLeft, string excelGivenRightString, string startCellReference)
+        internal void Parse()
         {
-            CheckMissingTableOf();
+            var startCellReference = excel.CellReferenceA1Style();
+            var excelGivenLeft = excel.CurrentCell();
 
-            using (code.OutputAndOpenAutoClosingBracket($".{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}"))
-                CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
+            using (excel.AutoRestoreMoveRight())
+            {
+                var excelGivenRight = excel.CurrentCellRaw();
+                var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
+
+                using (code.OutputAndOpenAutoClosingBracket($".{converter.GivenTablePropertyNameExcelNameToCodeName(excelGivenLeft)}"))
+                    CreateObjectsFromTable(startCellReference, excelGivenLeft, excelGivenRightString);
+            }
         }
 
         // check to see if it looks like a table, but does not end with converter.TableOf
