@@ -244,17 +244,6 @@ namespace CustomerTestsExcel.ExcelToCode
             log.VisitGivenRootClassFinalisation();
         }
 
-        void CreateObject(string excelPropertyName, string excelClassName)
-        {
-            log.VisitGivenComplexPropertyDeclaration(
-                converter.GivenPropertyNameExcelNameToSutName(excelPropertyName),
-                excelClassName);
-
-            CreateObjectWithoutVisiting(excelClassName);
-
-            log.VisitGivenComplexPropertyFinalisation();
-        }
-
         void CreateObjectWithoutVisiting(string excelClassName)
         {
             excel.MoveDown(); // this is a bit mysterious
@@ -349,16 +338,6 @@ namespace CustomerTestsExcel.ExcelToCode
                             log.VisitGivenListPropertyFinalisation();
                         }
                     }
-                    //else if (excelToCodeComplexProperty.CanParse())
-                    //{
-                    //    excelToCodeComplexProperty.Parse(excelGivenLeft, excelGivenRightString);
-                    //    //var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
-
-                    //    //code.BlankLine();
-
-                    //    ////using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                    //    //    excelToCodeComplexProperty.CreateObject(excelGivenLeft, excelGivenRightString);
-                    //}
                     else
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
@@ -401,9 +380,6 @@ namespace CustomerTestsExcel.ExcelToCode
 
         string ListItemVariableNameFromMethodName(string excelGivenLeft) =>
             VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft));
-
-        bool HasGivenSubProperties() =>
-            excel.PeekBelow() == converter.WithProperties;
 
         protected void DoWhen()
         {

@@ -86,6 +86,11 @@ namespace CustomerTestsExcel.ExcelToCode
         string ListItemVariableNameFromMethodName(string excelGivenLeft) =>
             VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft));
 
+        // probably want to move this in to this class as well
+        // there is probably also no reason why the root class has to be a complex object
+        // presumably a list of a table should be valid as well
+        // this might not work at the moment, with the setup class generation and other things
+        // but we should probably output an error / warning explaining the case
         //void CreateRootObject(string excelClassName)
         //{
         //    log.VisitGivenRootClassDeclaration(excelClassName);
@@ -205,10 +210,6 @@ namespace CustomerTestsExcel.ExcelToCode
                             log.VisitGivenListPropertyFinalisation();
                         }
                     }
-                    //else if (CanParse())
-                    //{
-                    //    Parse(excelGivenLeft, excelGivenRightString);
-                    //}
                     else
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
