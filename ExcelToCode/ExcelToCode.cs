@@ -294,6 +294,10 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 excelToCodeTable.Parse();
             }
+            else if (excelToCodeComplexProperty.CanParse())
+            {
+                excelToCodeComplexProperty.Parse();
+            }
             else
             {
 
@@ -345,16 +349,16 @@ namespace CustomerTestsExcel.ExcelToCode
                             log.VisitGivenListPropertyFinalisation();
                         }
                     }
-                    else if (excelToCodeComplexProperty.CanParse())
-                    {
-                        excelToCodeComplexProperty.Parse(excelGivenLeft, excelGivenRightString);
-                        //var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+                    //else if (excelToCodeComplexProperty.CanParse())
+                    //{
+                    //    excelToCodeComplexProperty.Parse(excelGivenLeft, excelGivenRightString);
+                    //    //var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-                        //code.BlankLine();
+                    //    //code.BlankLine();
 
-                        //using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                        //    excelToCodeComplexProperty.CreateObject(excelGivenLeft, excelGivenRightString);
-                    }
+                    //    ////using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                    //    //    excelToCodeComplexProperty.CreateObject(excelGivenLeft, excelGivenRightString);
+                    //}
                     else
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);

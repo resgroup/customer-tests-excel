@@ -31,18 +31,26 @@ namespace CustomerTestsExcel.ExcelToCode
         internal bool CanParse() =>
             HasGivenSubProperties();
 
-        internal void Parse(string excelGivenLeft, string excelGivenRightString)
+        internal void Parse()
         {
+            var excelGivenLeft = excel.CurrentCell();
+
             var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
             code.BlankLine();
 
-            using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                CreateObject(excelGivenLeft, excelGivenRightString);
+            using (excel.AutoRestoreMoveRight())
+            {
+                var excelGivenRight = excel.CurrentCellRaw();
+                var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
+
+                using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                    CreateObject(excelGivenLeft, excelGivenRightString);
+            }
         }
 
         bool HasGivenSubProperties() =>
-            excel.PeekBelow() == converter.WithProperties;
+            excel.PeekBelowRight() == converter.WithProperties;
 
         // todo: remove this
         bool IsList(string excelGivenLeft) =>
@@ -142,6 +150,10 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 excelToCodeTable.Parse();
             }
+            else if (CanParse())
+            {
+                Parse();
+            }
             else
             {
 
@@ -193,10 +205,10 @@ namespace CustomerTestsExcel.ExcelToCode
                             log.VisitGivenListPropertyFinalisation();
                         }
                     }
-                    else if (CanParse())
-                    {
-                        Parse(excelGivenLeft, excelGivenRightString);
-                    }
+                    //else if (CanParse())
+                    //{
+                    //    Parse(excelGivenLeft, excelGivenRightString);
+                    //}
                     else
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
