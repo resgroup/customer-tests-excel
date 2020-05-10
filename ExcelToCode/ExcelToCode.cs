@@ -113,6 +113,7 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 code.BlankLine();
                 log.Warnings.ToList().ForEach(warning => code.Add($"// {warning}"));
+                log.Warnings.ToList().ForEach(warning => code.Add($"// {warning}"));
             }
         }
 
@@ -346,12 +347,13 @@ namespace CustomerTestsExcel.ExcelToCode
                     }
                     else if (excelToCodeComplexProperty.CanParse())
                     {
-                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+                        excelToCodeComplexProperty.Parse(excelGivenLeft, excelGivenRightString);
+                        //var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-                        code.BlankLine();
+                        //code.BlankLine();
 
-                        using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                            excelToCodeComplexProperty.CreateObject(excelGivenLeft, excelGivenRightString);
+                        //using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                        //    excelToCodeComplexProperty.CreateObject(excelGivenLeft, excelGivenRightString);
                     }
                     else
                     {

@@ -31,6 +31,16 @@ namespace CustomerTestsExcel.ExcelToCode
         internal bool CanParse() =>
             HasGivenSubProperties();
 
+        internal void Parse(string excelGivenLeft, string excelGivenRightString)
+        {
+            var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+
+            code.BlankLine();
+
+            using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                CreateObject(excelGivenLeft, excelGivenRightString);
+        }
+
         bool HasGivenSubProperties() =>
             excel.PeekBelow() == converter.WithProperties;
 
@@ -185,12 +195,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     }
                     else if (CanParse())
                     {
-                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
-
-                        code.BlankLine();
-
-                        using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                            CreateObject(excelGivenLeft, excelGivenRightString);
+                        Parse(excelGivenLeft, excelGivenRightString);
                     }
                     else
                     {
@@ -205,7 +210,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 }
             }
         }
-
 
 
     }
