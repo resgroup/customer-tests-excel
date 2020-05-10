@@ -237,40 +237,11 @@ namespace CustomerTestsExcel.ExcelToCode
             code.Add("return");
             using (code.AutoCloseIndent())
             {
-                CreateObjectWithoutVisiting(excelClassName);
+                excelToCodeComplexProperty.CreateObjectWithoutVisiting(excelClassName);
             }
             code.Add(";");
 
             log.VisitGivenRootClassFinalisation();
-        }
-
-        void CreateObjectWithoutVisiting(string excelClassName)
-        {
-            excel.MoveDown(); // this is a bit mysterious
-
-            string cSharpClassName = converter.ExcelClassNameToCodeName(excelClassName);
-
-            code.Add($"new {cSharpClassName}()");
-
-            SetVariableProperties();
-
-            excel.MoveUp(); // this is a bit mysterious
-        }
-
-        void SetVariableProperties()
-        {
-            if (excel.CurrentCell() == converter.WithProperties)
-            {
-                using (excel.AutoRestoreMoveRight())
-                {
-                    excel.MoveDown();
-                    while (!string.IsNullOrEmpty(excel.CurrentCell()))
-                    {
-                        DoProperty();
-                        excel.MoveDown();
-                    }
-                }
-            }
         }
 
         void DoProperty()

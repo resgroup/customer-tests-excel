@@ -116,7 +116,7 @@ namespace CustomerTestsExcel.ExcelToCode
             log.VisitGivenComplexPropertyFinalisation();
         }
 
-        void CreateObjectWithoutVisiting(string excelClassName)
+        internal void CreateObjectWithoutVisiting(string excelClassName)
         {
             excel.MoveDown(); // this is a bit mysterious
 
@@ -223,7 +223,5 @@ namespace CustomerTestsExcel.ExcelToCode
                 }
             }
         }
-
-
     }
 }
