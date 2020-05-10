@@ -15,6 +15,7 @@ namespace CustomerTestsExcel.ExcelToCode
     public class ExcelToCode : ExcelToCodeBase
     {
         ExcelToCodeTable excelToCodeTable;
+        ExcelToCodeComplexProperty excelToCodeComplexProperty;
 
         public ExcelToCode(ICodeNameToExcelNameConverter converter)
             : base(
@@ -25,6 +26,13 @@ namespace CustomerTestsExcel.ExcelToCode
                   )
         {
             excelToCodeTable = new ExcelToCodeTable(
+                  converter,
+                  log,
+                  code,
+                  excel
+                );
+
+            excelToCodeComplexProperty = new ExcelToCodeComplexProperty(
                   converter,
                   log,
                   code,
@@ -336,7 +344,7 @@ namespace CustomerTestsExcel.ExcelToCode
                             log.VisitGivenListPropertyFinalisation();
                         }
                     }
-                    else if (HasGivenSubProperties())
+                    else if (excelToCodeComplexProperty.HasGivenSubProperties())
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
