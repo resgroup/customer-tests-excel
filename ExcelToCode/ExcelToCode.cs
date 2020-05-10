@@ -14,8 +14,8 @@ namespace CustomerTestsExcel.ExcelToCode
     // It would be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
-        ExcelToCodeTable excelToCodeTable;
-        ExcelToCodeComplexProperty excelToCodeComplexProperty;
+        readonly ExcelToCodeTable excelToCodeTable;
+        readonly ExcelToCodeComplexProperty excelToCodeComplexProperty;
 
         public ExcelToCode(ICodeNameToExcelNameConverter converter)
             : base(
@@ -344,14 +344,14 @@ namespace CustomerTestsExcel.ExcelToCode
                             log.VisitGivenListPropertyFinalisation();
                         }
                     }
-                    else if (excelToCodeComplexProperty.HasGivenSubProperties())
+                    else if (excelToCodeComplexProperty.CanParse())
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
                         code.BlankLine();
 
                         using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                            CreateObject(excelGivenLeft, excelGivenRightString);
+                            excelToCodeComplexProperty.CreateObject(excelGivenLeft, excelGivenRightString);
                     }
                     else
                     {

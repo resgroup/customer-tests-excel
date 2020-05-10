@@ -6,7 +6,7 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelToCodeComplexProperty : ExcelToCodeBase
     {
-        ExcelToCodeTable excelToCodeTable;
+        readonly ExcelToCodeTable excelToCodeTable;
 
         public ExcelToCodeComplexProperty(
             ICodeNameToExcelNameConverter converter,
@@ -20,10 +20,53 @@ namespace CustomerTestsExcel.ExcelToCode
                   excel
                   )
         {
+            excelToCodeTable = new ExcelToCodeTable(
+                  converter,
+                  log,
+                  code,
+                  excel
+                );
         }
 
-        internal bool HasGivenSubProperties() =>
+        internal bool CanParse() =>
+            HasGivenSubProperties();
+
+        bool HasGivenSubProperties() =>
             excel.PeekBelow() == converter.WithProperties;
+
+        // todo: remove this
+        bool IsList(string excelGivenLeft) =>
+            excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
+
+        // todo: remove this
+        void CheckMissingListOf()
+        {
+            if (LooksLikeAListButIsnt())
+                AddErrorToCodeAndLog($"It looks like you might be trying to set up a list property, starting at cell {excel.CellReferenceA1Style()}. If this is the case, please make sure that cell {excel.CellReferenceA1Style()} ends with '{converter.ListOf}'");
+        }
+
+        // todo: remove this
+        bool LooksLikeAListButIsnt() =>
+            IsList(excel.CurrentCell()) == false
+            && excel.PeekBelowRight() == converter.WithItem;
+
+        // todo: remove this
+        void CheckMissingWithItemForList(string listStartCellReference)
+        {
+            using (excel.AutoRestoreMoveDown())
+            {
+                if (excel.CurrentCell() != converter.WithItem)
+                    throw new ExcelToCodeException($"The list property starting at {listStartCellReference} is not formatted correctly. Cell {excel.CellReferenceA1Style()} should be '{converter.WithItem}', but is '{excel.CurrentCell()}'");
+            }
+        }
+
+        // todo: remove this
+        string ListVariableNameFromMethodName(string excelGivenLeft) =>
+            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft)) + "List";
+
+        // todo: remove this
+        string ListItemVariableNameFromMethodName(string excelGivenLeft) =>
+            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft));
 
         //void CreateRootObject(string excelClassName)
         //{
@@ -39,7 +82,7 @@ namespace CustomerTestsExcel.ExcelToCode
         //    log.VisitGivenRootClassFinalisation();
         //}
 
-        void CreateObject(string excelPropertyName, string excelClassName)
+        internal void CreateObject(string excelPropertyName, string excelClassName)
         {
             log.VisitGivenComplexPropertyDeclaration(
                 converter.GivenPropertyNameExcelNameToSutName(excelPropertyName),
@@ -72,96 +115,96 @@ namespace CustomerTestsExcel.ExcelToCode
                     excel.MoveDown();
                     while (!string.IsNullOrEmpty(excel.CurrentCell()))
                     {
-                        //todo: DoProperty();
+                        DoProperty();
                         excel.MoveDown();
                     }
                 }
             }
         }
 
-        //void DoProperty()
-        //{
-        //    CheckMissingListOf();
-        //    var startCellReference = excel.CellReferenceA1Style();
-        //    var excelGivenLeft = excel.CurrentCell();
+        void DoProperty()
+        {
+            CheckMissingListOf();
+            var startCellReference = excel.CellReferenceA1Style();
+            var excelGivenLeft = excel.CurrentCell();
 
-        //    if (excelToCodeTable.CanParse())
-        //    {
-        //        excelToCodeTable.Parse();
-        //    }
-        //    else
-        //    {
+            if (excelToCodeTable.CanParse())
+            {
+                excelToCodeTable.Parse();
+            }
+            else
+            {
 
-        //        using (excel.AutoRestoreMoveRight())
-        //        {
-        //            var excelGivenRight = excel.CurrentCellRaw();
-        //            var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
+                using (excel.AutoRestoreMoveRight())
+                {
+                    var excelGivenRight = excel.CurrentCellRaw();
+                    var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
 
-        //            if (IsList(excelGivenLeft))
-        //            {
-        //                CheckMissingWithItemForList(startCellReference);
+                    if (IsList(excelGivenLeft))
+                    {
+                        CheckMissingWithItemForList(startCellReference);
 
-        //                var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
-        //                var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-        //                string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
-        //                string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
+                        var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
+                        var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
+                        string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
+                        string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
 
-        //                code.BlankLine();
-        //                using (excel.AutoRestoreMoveDown())
-        //                {
-        //                    log.VisitGivenListPropertyDeclaration(
-        //                        converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
-        //                        excelGivenRightString);
+                        code.BlankLine();
+                        using (excel.AutoRestoreMoveDown())
+                        {
+                            log.VisitGivenListPropertyDeclaration(
+                                converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
+                                excelGivenRightString);
 
-        //                    using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-        //                    {
-        //                        code.Add($"\"{cSharpClassName}\", ");
-        //                        code.Add($"new FluentList<{cSharpClassName}>()");
-        //                        while (excel.CurrentCell() == converter.WithItem)
-        //                        {
-        //                            excel.MoveDown();
+                            using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                            {
+                                code.Add($"\"{cSharpClassName}\", ");
+                                code.Add($"new FluentList<{cSharpClassName}>()");
+                                while (excel.CurrentCell() == converter.WithItem)
+                                {
+                                    excel.MoveDown();
 
-        //                            // Add an item to the list
-        //                            using (excel.AutoRestoreMoveRight())
-        //                            {
-        //                                using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
-        //                                {
-        //                                    code.Add($"new {cSharpClassName}()");
+                                    // Add an item to the list
+                                    using (excel.AutoRestoreMoveRight())
+                                    {
+                                        using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
+                                        {
+                                            code.Add($"new {cSharpClassName}()");
 
-        //                                    while (!string.IsNullOrEmpty(excel.CurrentCell()))
-        //                                    {
-        //                                        DoProperty();
-        //                                        excel.MoveDown();
-        //                                    }
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    log.VisitGivenListPropertyFinalisation();
-        //                }
-        //            }
-        //            else if (HasGivenSubProperties())
-        //            {
-        //                var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+                                            while (!string.IsNullOrEmpty(excel.CurrentCell()))
+                                            {
+                                                DoProperty();
+                                                excel.MoveDown();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            log.VisitGivenListPropertyFinalisation();
+                        }
+                    }
+                    else if (CanParse())
+                    {
+                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-        //                code.BlankLine();
+                        code.BlankLine();
 
-        //                using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-        //                    CreateObject(excelGivenLeft, excelGivenRightString);
-        //            }
-        //            else
-        //            {
-        //                var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
+                        using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                            CreateObject(excelGivenLeft, excelGivenRightString);
+                    }
+                    else
+                    {
+                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
-        //                code.Add($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
+                        code.Add($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
 
-        //                VisitGivenSimplePropertyOrFunction(
-        //                    excelGivenLeft,
-        //                    excelGivenRight);
-        //            }
-        //        }
-        //    }
-        //}
+                        VisitGivenSimplePropertyOrFunction(
+                            excelGivenLeft,
+                            excelGivenRight);
+                    }
+                }
+            }
+        }
 
 
 
