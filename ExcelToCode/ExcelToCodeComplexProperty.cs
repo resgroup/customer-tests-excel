@@ -93,41 +93,14 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void DoProperty()
         {
-            //CheckMissingListOf();
-            var startCellReference = excel.CellReferenceA1Style();
-            var excelGivenLeft = excel.CurrentCell();
-
             if (excelToCodeState.Table.CanParse())
-            {
                 excelToCodeState.Table.Parse();
-            }
-            else if (CanParse())
-            {
-                Parse();
-            }
+            else if (excelToCodeState.ComplexProperty.CanParse())
+                excelToCodeState.ComplexProperty.Parse();
             else if (excelToCodeState.List.CanParse())
-            {
                 excelToCodeState.List.Parse();
-            }
             else
-            {
-
-                using (excel.AutoRestoreMoveRight())
-                {
-                    var excelGivenRight = excel.CurrentCellRaw();
-                    var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
-
-                    {
-                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
-
-                        code.Add($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
-
-                        VisitGivenSimplePropertyOrFunction(
-                            excelGivenLeft,
-                            excelGivenRight);
-                    }
-                }
-            }
+                excelToCodeState.SimpleProperty.Parse();
         }
     }
 }

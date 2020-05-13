@@ -7,6 +7,7 @@ namespace CustomerTestsExcel.ExcelToCode
     public class ExcelToCodeState
     {
         public ExcelToCodeTable Table { get; }
+        public ExcelToCodeSimpleProperty SimpleProperty { get; }
         public ExcelToCodeComplexProperty ComplexProperty { get; }
         public ExcelToCodeList List { get; }
         public LogState Log { get; }
@@ -21,6 +22,7 @@ namespace CustomerTestsExcel.ExcelToCode
             Code = new CodeState();
             Excel = new ExcelState();
             Table = new ExcelToCodeTable(this);
+            SimpleProperty = new ExcelToCodeSimpleProperty(this);
             ComplexProperty = new ExcelToCodeComplexProperty(this);
             List = new ExcelToCodeList(this);
         }
