@@ -11,6 +11,7 @@ namespace CustomerTestsExcel.ExcelToCode
         public ExcelToCodeComplexProperty ComplexProperty { get; }
         public ExcelToCodeList List { get; }
         public ExcelToCodeWhen When { get; }
+        public ExcelToCodeThen Then { get; }
         public LogState Log { get; }
         public ExcelState Excel { get; }
         public CodeState Code { get; }
@@ -27,6 +28,7 @@ namespace CustomerTestsExcel.ExcelToCode
             ComplexProperty = new ExcelToCodeComplexProperty(this);
             List = new ExcelToCodeList(this);
             When = new ExcelToCodeWhen(this);
+            Then = new ExcelToCodeThen(this);
         }
     }
 }
