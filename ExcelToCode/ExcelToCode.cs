@@ -6,8 +6,6 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelToCode : ExcelToCodeBase
     {
-        protected string sutName;
-
         public ExcelToCode(ICodeNameToExcelNameConverter converter)
             : base(new ExcelToCodeState(converter))
         { }
@@ -51,40 +49,29 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             Initialise(worksheet);
 
+            var sutName = ReadSutName();
             var description = ReadDescription();
-            sutName = ReadSutName();
 
-            DoHeaders(usings, description, projectRootNamespace, workBookName);
+            DoHeaders(
+                sutName,
+                usings, 
+                description, 
+                projectRootNamespace, 
+                workBookName);
 
             DoGiven(sutName);
             excel.MoveDown();
-
             CheckExactlyOneBlankLineBetweenGivenAndWhen();
 
             DoWhen(sutName);
             excel.MoveDown();
+            // Looks like there should be a CheckExactlyOneBlankLineBetweenWhenAndThen() function
 
-            DoThen();
+            DoThen(sutName);
+
             DoFooters();
 
             return code.GeneratedCode;
-        }
-
-        private void Initialise(ITabularPage worksheet)
-        {
-            excel.Initialise(worksheet);
-            code.Initialise();
-            log.Initialise();
-        }
-
-        string ReadDescription()
-        {
-            using (excel.SavePosition())
-            {
-                excel.MoveDownToToken(converter.Specification);
-
-                return excel.PeekRight();
-            }
         }
 
         string ReadSutName()
@@ -97,7 +84,25 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        void DoHeaders(IEnumerable<string> usings, string description, string projectRootNamespace, string workBookName)
+        string ReadDescription()
+        {
+            using (excel.SavePosition())
+            {
+                excel.MoveDownToToken(converter.Specification);
+
+                return excel.PeekRight();
+            }
+        }
+
+        void Initialise(ITabularPage worksheet) =>
+            excelToCodeState.Initialise(worksheet);
+
+        void DoHeaders(
+            string sutName,
+            IEnumerable<string> usings, 
+            string description, 
+            string projectRootNamespace, 
+            string workBookName)
         {
             code.Add("using System;");
             code.Add("using System.Collections.Generic;");
@@ -125,35 +130,8 @@ namespace CustomerTestsExcel.ExcelToCode
             code.Add("}");
         }
 
-        void DoFooters()
-        {
-            code.Add("};");
-            code.Add("}");
-            // This is so that when writing back out to excel, the prefix can be removed. So the prefix exists in the code, but not in excel, and is round trippable
-            code.BlankLine();
-            code.Add($"protected override string AssertionClassPrefixAddedByGenerator => \"{converter.AssertionClassPrefixAddedByGenerator}\";");
-            OutputErrors();
-            OutputWarnings();
-            OutputRoundTripIssues();
-            code.Add("}");
-            code.Add("}");
-        }
-
-        void DoGiven(string sutName)
-        {
+        void DoGiven(string sutName) =>
             excelToCodeState.Given.DoGiven(sutName);
-            //excel.MoveDownToToken(converter.Given);
-
-            //using (excel.AutoRestoreMoveRight())
-            //{
-            //    code.BlankLine();
-            //    code.Add($"public override {CSharpSUTSpecificationSpecificClassName(sutName)} Given()");
-            //    using (code.AutoCloseCurlyBracket())
-            //        CreateRootObject(sutName);
-            //}
-
-            //excel.MoveUp();
-        }
 
         void CheckExactlyOneBlankLineBetweenGivenAndWhen()
         {
@@ -175,8 +153,22 @@ namespace CustomerTestsExcel.ExcelToCode
         void DoWhen(string sutName) =>
             excelToCodeState.When.DoWhen(sutName);
 
-        void DoThen() => 
+        void DoThen(string sutName) => 
             excelToCodeState.Then.DoThen(sutName);
+
+        void DoFooters()
+        {
+            code.Add("};");
+            code.Add("}");
+            // This is so that when writing back out to excel, the prefix can be removed. So the prefix exists in the code, but not in excel, and is round trippable
+            code.BlankLine();
+            code.Add($"protected override string AssertionClassPrefixAddedByGenerator => \"{converter.AssertionClassPrefixAddedByGenerator}\";");
+            OutputErrors();
+            OutputWarnings();
+            OutputRoundTripIssues();
+            code.Add("}");
+            code.Add("}");
+        }
 
         void OutputErrors()
         {

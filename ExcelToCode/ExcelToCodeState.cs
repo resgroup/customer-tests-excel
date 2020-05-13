@@ -33,5 +33,13 @@ namespace CustomerTestsExcel.ExcelToCode
             When = new ExcelToCodeWhen(this);
             Then = new ExcelToCodeThen(this);
         }
+
+        public void Initialise(ITabularPage worksheet)
+        {
+            Excel.Initialise(worksheet);
+            Code.Initialise();
+            Log.Initialise();
+        }
+
     }
 }
