@@ -11,13 +11,20 @@ namespace CustomerTestsExcel.ExcelToCode
         {
         }
 
-        internal bool IsList(string excelGivenLeft) =>
-            excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
+        internal bool CanParse()
+        {
+            CheckMissingListOf();
+
+            return IsList();
+        }
+
+        bool IsList() =>
+            excel
+            .CurrentCell()
+            .EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
 
         void DoProperty()
         {
-            CheckMissingListOf();
-            var startCellReference = excel.CellReferenceA1Style();
             var excelGivenLeft = excel.CurrentCell();
 
             if (excelToCodeState.Table.CanParse())
@@ -28,19 +35,17 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 excelToCodeState.ComplexProperty.Parse();
             }
+            else if (excelToCodeState.List.CanParse())
+            {
+                excelToCodeState.List.Parse();
+            }
             else
             {
-
                 using (excel.AutoRestoreMoveRight())
                 {
                     var excelGivenRight = excel.CurrentCellRaw();
                     var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
 
-                    if (IsList(excelGivenLeft))
-                    {
-                        Parse(startCellReference, excelGivenLeft, excelGivenRightString);
-                    }
-                    else
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
@@ -54,45 +59,54 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        internal void Parse(string startCellReference, string excelGivenLeft, string excelGivenRightString)
+        internal void Parse()
         {
-            CheckMissingWithItemForList(startCellReference);
+            var startCellReference = excel.CellReferenceA1Style();
+            var excelGivenLeft = excel.CurrentCell();
 
-            var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
-            var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-
-            code.BlankLine();
-            using (excel.AutoRestoreMoveDown())
+            using (excel.AutoRestoreMoveRight())
             {
-                log.VisitGivenListPropertyDeclaration(
-                    converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
-                    excelGivenRightString);
+                var excelGivenRight = excel.CurrentCellRaw();
+                var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
 
-                using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
+                CheckMissingWithItemForList(startCellReference);
+
+                var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
+                var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
+
+                code.BlankLine();
+                using (excel.AutoRestoreMoveDown())
                 {
-                    code.Add($"\"{cSharpClassName}\", ");
-                    code.Add($"new FluentList<{cSharpClassName}>()");
-                    while (excel.CurrentCell() == converter.WithItem)
+                    log.VisitGivenListPropertyDeclaration(
+                        converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
+                        excelGivenRightString);
+
+                    using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
                     {
-                        excel.MoveDown();
-
-                        // Add an item to the list
-                        using (excel.AutoRestoreMoveRight())
+                        code.Add($"\"{cSharpClassName}\", ");
+                        code.Add($"new FluentList<{cSharpClassName}>()");
+                        while (excel.CurrentCell() == converter.WithItem)
                         {
-                            using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
-                            {
-                                code.Add($"new {cSharpClassName}()");
+                            excel.MoveDown();
 
-                                while (!string.IsNullOrEmpty(excel.CurrentCell()))
+                            // Add an item to the list
+                            using (excel.AutoRestoreMoveRight())
+                            {
+                                using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
                                 {
-                                    DoProperty();
-                                    excel.MoveDown();
+                                    code.Add($"new {cSharpClassName}()");
+
+                                    while (!string.IsNullOrEmpty(excel.CurrentCell()))
+                                    {
+                                        DoProperty();
+                                        excel.MoveDown();
+                                    }
                                 }
                             }
                         }
                     }
+                    log.VisitGivenListPropertyFinalisation();
                 }
-                log.VisitGivenListPropertyFinalisation();
             }
         }
 
@@ -104,7 +118,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         bool LooksLikeAListButIsnt() =>
-            IsList(excel.CurrentCell()) == false
+            IsList() == false
             && excel.PeekBelowRight() == converter.WithItem;
 
         void CheckMissingWithItemForList(string listStartCellReference)

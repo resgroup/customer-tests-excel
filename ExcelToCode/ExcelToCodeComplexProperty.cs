@@ -70,12 +70,12 @@ namespace CustomerTestsExcel.ExcelToCode
 
             code.Add($"new {cSharpClassName}()");
 
-            SetVariableProperties();
+            SetObjectProperties();
 
             excel.MoveUp(); // this is a bit mysterious
         }
 
-        void SetVariableProperties()
+        void SetObjectProperties()
         {
             if (excel.CurrentCell() == converter.WithProperties)
             {
@@ -93,7 +93,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void DoProperty()
         {
-            CheckMissingListOf();
+            //CheckMissingListOf();
             var startCellReference = excel.CellReferenceA1Style();
             var excelGivenLeft = excel.CurrentCell();
 
@@ -105,6 +105,10 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 Parse();
             }
+            else if (excelToCodeState.List.CanParse())
+            {
+                excelToCodeState.List.Parse();
+            }
             else
             {
 
@@ -113,11 +117,6 @@ namespace CustomerTestsExcel.ExcelToCode
                     var excelGivenRight = excel.CurrentCellRaw();
                     var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
 
-                    if (excelToCodeState.List.IsList(excelGivenLeft))
-                    {
-                        excelToCodeState.List.Parse(startCellReference, excelGivenLeft, excelGivenRightString);
-                    }
-                    else
                     {
                         var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
 
