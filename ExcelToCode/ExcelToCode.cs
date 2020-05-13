@@ -4,16 +4,10 @@ using System.Linq;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    // This class is very much too big, split in to smaller one, easy targets would be given, when, assert.
-    //  The various types of Given setup (simple property, complex object (with sub properties), lists, tables)
-    // The various property types could probably also be split off quite easily as well
-    // A better way of doing this would probably be to form a representation of the test in code (like the assertions property)
-    //  and then write this out to a string in a different class. This involves some framework overhead, but will definitely be worthwhile.
-    // This is now easier than it used to be, as IExcelToCodeVisitor is called for everything in the Given section, and there is already
-    //  a visitor that records everything and keeps a representation in code.
-    // It would be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
+        protected string sutName;
+
         public ExcelToCode(ICodeNameToExcelNameConverter converter)
             : base(new ExcelToCodeState(converter))
         { }
@@ -61,8 +55,8 @@ namespace CustomerTestsExcel.ExcelToCode
             sutName = ReadSutName();
 
             DoHeaders(usings, description, projectRootNamespace, workBookName);
-            DoGiven();
-            DoWhen();
+            DoGiven(sutName);
+            DoWhen(sutName);
             DoAssert();
             DoFooters();
 
@@ -154,7 +148,7 @@ namespace CustomerTestsExcel.ExcelToCode
             code.Add($"namespace {projectRootNamespace}.{converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
             code.Add("{");
             code.Add("[TestFixture]");
-            code.Add($"public class {converter.ExcelSpecificationNameToCodeSpecificationClassName(excel.worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName()}>, ISpecification<{CSharpSUTSpecificationSpecificClassName()}>");
+            code.Add($"public class {converter.ExcelSpecificationNameToCodeSpecificationClassName(excel.worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName(sutName)}>, ISpecification<{CSharpSUTSpecificationSpecificClassName(sutName)}>");
             code.Add("{");
             code.Add("public override string Description()");
             code.Add("{");
@@ -176,16 +170,16 @@ namespace CustomerTestsExcel.ExcelToCode
             code.Add("}");
         }
 
-        void DoGiven()
+        void DoGiven(string sutName)
         {
             excel.MoveDownToToken(converter.Given);
 
             using (excel.AutoRestoreMoveRight())
             {
                 code.BlankLine();
-                code.Add($"public override {CSharpSUTSpecificationSpecificClassName()} Given()");
+                code.Add($"public override {CSharpSUTSpecificationSpecificClassName(sutName)} Given()");
                 using (code.AutoCloseCurlyBracket())
-                    CreateRootObject(SUTClassName());
+                    CreateRootObject(sutName);
             }
 
             CheckExactlyOneBlankLineBetweenGivenAndWhen();
@@ -222,23 +216,24 @@ namespace CustomerTestsExcel.ExcelToCode
             log.VisitGivenRootClassFinalisation();
         }
 
-        protected void DoWhen()
+        protected void DoWhen(string sutName)
         {
-            excel.MoveDownToToken(converter.When);
+            excelToCodeState.When.DoWhen(sutName);
+            //excel.MoveDownToToken(converter.When);
 
-            using (excel.AutoRestoreMoveRight())
-            {
-                code.BlankLine();
-                code.Add("public override string When(" + CSharpSUTSpecificationSpecificClassName() + " " + CSharpSUTVariableName() + ")");
+            //using (excel.AutoRestoreMoveRight())
+            //{
+            //    code.BlankLine();
+            //    code.Add("public override string When(" + CSharpSUTSpecificationSpecificClassName() + " " + CSharpSUTVariableName() + ")");
 
-                using (code.Scope())
-                {
-                    code.Add($"{CSharpSUTVariableName()}.{converter.ActionExcelNameToCodeName(excel.CurrentCell())}();");
-                    code.Add($"return \"{excel.CurrentCell()}\";");
-                }
+            //    using (code.Scope())
+            //    {
+            //        code.Add($"{CSharpSUTVariableName()}.{converter.ActionExcelNameToCodeName(excel.CurrentCell())}();");
+            //        code.Add($"return \"{excel.CurrentCell()}\";");
+            //    }
 
-                code.BlankLine();
-            }
+            //    code.BlankLine();
+            //}
 
             excel.MoveDown();
         }
@@ -247,14 +242,14 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             excel.MoveDownToToken(converter.Assert);
 
-            code.Add("public override IEnumerable<IAssertion<" + CSharpSUTSpecificationSpecificClassName() + ">> Assertions()");
+            code.Add("public override IEnumerable<IAssertion<" + CSharpSUTSpecificationSpecificClassName(sutName) + ">> Assertions()");
             code.Add("{");
-            code.Add("return new List<IAssertion<" + CSharpSUTSpecificationSpecificClassName() + ">>");
+            code.Add("return new List<IAssertion<" + CSharpSUTSpecificationSpecificClassName(sutName) + ">>");
             code.Add("{");
 
             excel.MoveRight();
 
-            DoAssertions(CSharpSUTSpecificationSpecificClassName(), VariableCase(CSharpSUTVariableName()));
+            DoAssertions(CSharpSUTSpecificationSpecificClassName(sutName), VariableCase(CSharpSUTVariableName(sutName)));
         }
 
         void DoAssertions(string cSharpClassName, string cSharpVariableName)

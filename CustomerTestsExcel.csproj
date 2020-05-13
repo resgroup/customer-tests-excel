@@ -69,6 +69,7 @@
     <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
     <Compile Include="ExcelToCode\ExcelState.cs" />
     <Compile Include="ExcelToCode\CodeState.cs" />
+    <Compile Include="ExcelToCode\ExcelToCodeWhen.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeSimpleProperty.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeState.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeList.cs" />

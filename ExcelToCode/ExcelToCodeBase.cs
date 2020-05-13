@@ -9,7 +9,6 @@ namespace CustomerTestsExcel.ExcelToCode
         protected ExcelState excel;
         protected CodeState code;
         protected readonly ICodeNameToExcelNameConverter converter;
-        protected string sutName;
 
         public ExcelToCodeBase(ExcelToCodeState excelToCodeState)
         {
@@ -42,27 +41,6 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
-        protected string SUTClassName()
-        {
-            if (sutName == null) throw new Exception("Trying to read _sutName before it has been set");
-
-            return sutName;
-        }
-
-        protected string CSharpSUTSpecificationSpecificClassName() =>
-            converter.ExcelClassNameToCodeName(SUTClassName());
-
-        protected string CSharpSUTVariableName() =>
-            VariableCase(SUTClassName());
-
-        protected string VariableCase(string camelCase) =>
-            // it is assumed to already be in camel case, this means making the first letter lower case
-            // this isn't a two way process (eg the conversion process doesn't care what the string is) so this isn't in the _namer
-            string.IsNullOrWhiteSpace(camelCase) ? "" : char.ToLower(camelCase[0]) + camelCase.Substring(1);
-
-        protected static string LeadingComma(int index) =>
-            (index == 0) ? " " : ",";
-
         protected void AddErrorToCodeAndLog(string message)
         {
             // this will appear at the relevant point in the generated code
@@ -85,5 +63,19 @@ namespace CustomerTestsExcel.ExcelToCode
             else
                 excelToCodeState.SimpleProperty.Parse();
         }
+
+        protected string VariableCase(string camelCase) =>
+            // it is assumed to already be in camel case, this means making the first letter lower case
+            // this isn't a two way process (eg the conversion process doesn't care what the string is) so this isn't in the _namer
+            string.IsNullOrWhiteSpace(camelCase) ? "" : char.ToLower(camelCase[0]) + camelCase.Substring(1);
+
+        protected static string LeadingComma(int index) =>
+            (index == 0) ? " " : ",";
+
+        protected string CSharpSUTSpecificationSpecificClassName(string sutName) =>
+            converter.ExcelClassNameToCodeName(sutName);
+
+        protected string CSharpSUTVariableName(string sutName) =>
+            VariableCase(sutName);
     }
 }
