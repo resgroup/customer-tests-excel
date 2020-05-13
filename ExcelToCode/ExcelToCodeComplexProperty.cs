@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace CustomerTestsExcel.ExcelToCode
+﻿namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelToCodeComplexProperty : ExcelToCodeBase
     {
@@ -35,23 +31,7 @@ namespace CustomerTestsExcel.ExcelToCode
         bool HasGivenSubProperties() =>
             excel.PeekBelowRight() == converter.WithProperties;
 
-        // todo: remove this
-        bool IsList(string excelGivenLeft) =>
-            excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
-
-        // todo: remove this
-        void CheckMissingListOf()
-        {
-            if (LooksLikeAListButIsnt())
-                AddErrorToCodeAndLog($"It looks like you might be trying to set up a list property, starting at cell {excel.CellReferenceA1Style()}. If this is the case, please make sure that cell {excel.CellReferenceA1Style()} ends with '{converter.ListOf}'");
-        }
-
-        // todo: remove this
-        bool LooksLikeAListButIsnt() =>
-            IsList(excel.CurrentCell()) == false
-            && excel.PeekBelowRight() == converter.WithItem;
-
-        internal void CreateObject(string excelPropertyName, string excelClassName)
+        void CreateObject(string excelPropertyName, string excelClassName)
         {
             log.VisitGivenComplexPropertyDeclaration(
                 converter.GivenPropertyNameExcelNameToSutName(excelPropertyName),
@@ -89,18 +69,6 @@ namespace CustomerTestsExcel.ExcelToCode
                     }
                 }
             }
-        }
-
-        void DoProperty()
-        {
-            if (excelToCodeState.Table.CanParse())
-                excelToCodeState.Table.Parse();
-            else if (excelToCodeState.ComplexProperty.CanParse())
-                excelToCodeState.ComplexProperty.Parse();
-            else if (excelToCodeState.List.CanParse())
-                excelToCodeState.List.Parse();
-            else
-                excelToCodeState.SimpleProperty.Parse();
         }
     }
 }

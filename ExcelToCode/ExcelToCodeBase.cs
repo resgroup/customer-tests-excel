@@ -71,5 +71,19 @@ namespace CustomerTestsExcel.ExcelToCode
             // this can be used elsewhere, such as in the console output of the test generation
             log.errors.Add(message);
         }
+
+        protected void DoProperty()
+        {
+            // Could turn this in to a list of parsers, with the SimpleProperty
+            // being a default if none of the others CanParse
+            if (excelToCodeState.Table.CanParse())
+                excelToCodeState.Table.Parse();
+            else if (excelToCodeState.ComplexProperty.CanParse())
+                excelToCodeState.ComplexProperty.Parse();
+            else if (excelToCodeState.List.CanParse())
+                excelToCodeState.List.Parse();
+            else
+                excelToCodeState.SimpleProperty.Parse();
+        }
     }
 }
