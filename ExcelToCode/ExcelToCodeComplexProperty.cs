@@ -6,26 +6,9 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelToCodeComplexProperty : ExcelToCodeBase
     {
-        readonly ExcelToCodeTable excelToCodeTable;
-
-        public ExcelToCodeComplexProperty(
-            ICodeNameToExcelNameConverter converter,
-            LogState log,
-            CodeState code,
-            ExcelState excel)
-            : base(
-                  converter,
-                  log,
-                  code,
-                  excel
-                  )
+        public ExcelToCodeComplexProperty(ExcelToCodeState excelToCodeState)
+            : base(excelToCodeState)
         {
-            excelToCodeTable = new ExcelToCodeTable(
-                  converter,
-                  log,
-                  code,
-                  excel
-                );
         }
 
         internal bool CanParse() =>
@@ -67,43 +50,6 @@ namespace CustomerTestsExcel.ExcelToCode
         bool LooksLikeAListButIsnt() =>
             IsList(excel.CurrentCell()) == false
             && excel.PeekBelowRight() == converter.WithItem;
-
-        // todo: remove this
-        void CheckMissingWithItemForList(string listStartCellReference)
-        {
-            using (excel.AutoRestoreMoveDown())
-            {
-                if (excel.CurrentCell() != converter.WithItem)
-                    throw new ExcelToCodeException($"The list property starting at {listStartCellReference} is not formatted correctly. Cell {excel.CellReferenceA1Style()} should be '{converter.WithItem}', but is '{excel.CurrentCell()}'");
-            }
-        }
-
-        // todo: remove this
-        string ListVariableNameFromMethodName(string excelGivenLeft) =>
-            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft)) + "List";
-
-        // todo: remove this
-        string ListItemVariableNameFromMethodName(string excelGivenLeft) =>
-            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft));
-
-        // probably want to move this in to this class as well
-        // there is probably also no reason why the root class has to be a complex object
-        // presumably a list of a table should be valid as well
-        // this might not work at the moment, with the setup class generation and other things
-        // but we should probably output an error / warning explaining the case
-        //void CreateRootObject(string excelClassName)
-        //{
-        //    log.VisitGivenRootClassDeclaration(excelClassName);
-
-        //    code.Add("return");
-        //    using (code.AutoCloseIndent())
-        //    {
-        //        CreateObjectWithoutVisiting(excelClassName);
-        //    }
-        //    code.Add(";");
-
-        //    log.VisitGivenRootClassFinalisation();
-        //}
 
         internal void CreateObject(string excelPropertyName, string excelClassName)
         {
@@ -151,9 +97,9 @@ namespace CustomerTestsExcel.ExcelToCode
             var startCellReference = excel.CellReferenceA1Style();
             var excelGivenLeft = excel.CurrentCell();
 
-            if (excelToCodeTable.CanParse())
+            if (excelToCodeState.Table.CanParse())
             {
-                excelToCodeTable.Parse();
+                excelToCodeState.Table.Parse();
             }
             else if (CanParse())
             {
@@ -167,48 +113,9 @@ namespace CustomerTestsExcel.ExcelToCode
                     var excelGivenRight = excel.CurrentCellRaw();
                     var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
 
-                    if (IsList(excelGivenLeft))
+                    if (excelToCodeState.List.IsList(excelGivenLeft))
                     {
-                        CheckMissingWithItemForList(startCellReference);
-
-                        var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
-                        var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-                        string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
-                        string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
-
-                        code.BlankLine();
-                        using (excel.AutoRestoreMoveDown())
-                        {
-                            log.VisitGivenListPropertyDeclaration(
-                                converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
-                                excelGivenRightString);
-
-                            using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                            {
-                                code.Add($"\"{cSharpClassName}\", ");
-                                code.Add($"new FluentList<{cSharpClassName}>()");
-                                while (excel.CurrentCell() == converter.WithItem)
-                                {
-                                    excel.MoveDown();
-
-                                    // Add an item to the list
-                                    using (excel.AutoRestoreMoveRight())
-                                    {
-                                        using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
-                                        {
-                                            code.Add($"new {cSharpClassName}()");
-
-                                            while (!string.IsNullOrEmpty(excel.CurrentCell()))
-                                            {
-                                                DoProperty();
-                                                excel.MoveDown();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            log.VisitGivenListPropertyFinalisation();
-                        }
+                        excelToCodeState.List.Parse(startCellReference, excelGivenLeft, excelGivenRightString);
                     }
                     else
                     {

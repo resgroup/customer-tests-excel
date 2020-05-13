@@ -14,31 +14,9 @@ namespace CustomerTestsExcel.ExcelToCode
     // It would be good to make it obvious which operations relate to excel and which to the code generation. eg "excel.MoveDown" and "cSharp.DeclareVariable"
     public class ExcelToCode : ExcelToCodeBase
     {
-        readonly ExcelToCodeTable excelToCodeTable;
-        readonly ExcelToCodeComplexProperty excelToCodeComplexProperty;
-
         public ExcelToCode(ICodeNameToExcelNameConverter converter)
-            : base(
-                  converter,
-                  new LogState(),
-                  new CodeState(),
-                  new ExcelState()
-                  )
-        {
-            excelToCodeTable = new ExcelToCodeTable(
-                  converter,
-                  log,
-                  code,
-                  excel
-                );
-
-            excelToCodeComplexProperty = new ExcelToCodeComplexProperty(
-                  converter,
-                  log,
-                  code,
-                  excel
-                );
-        }
+            : base(new ExcelToCodeState(converter))
+        { }
 
         // This function also returns some data in the Errors, Warnings and 
         // similar properties. It would be better to wrap all this in to 
@@ -237,120 +215,12 @@ namespace CustomerTestsExcel.ExcelToCode
             code.Add("return");
             using (code.AutoCloseIndent())
             {
-                excelToCodeComplexProperty.CreateObjectWithoutVisiting(excelClassName);
+                excelToCodeState.ComplexProperty.CreateObjectWithoutVisiting(excelClassName);
             }
             code.Add(";");
 
             log.VisitGivenRootClassFinalisation();
         }
-
-        void DoProperty()
-        {
-            CheckMissingListOf();
-            var startCellReference = excel.CellReferenceA1Style();
-            var excelGivenLeft = excel.CurrentCell();
-
-            if (excelToCodeTable.CanParse())
-            {
-                excelToCodeTable.Parse();
-            }
-            else if (excelToCodeComplexProperty.CanParse())
-            {
-                excelToCodeComplexProperty.Parse();
-            }
-            else
-            {
-
-                using (excel.AutoRestoreMoveRight())
-                {
-                    var excelGivenRight = excel.CurrentCellRaw();
-                    var excelGivenRightString = excelGivenRight != null ? excelGivenRight.ToString() : string.Empty;
-
-                    if (IsList(excelGivenLeft))
-                    {
-                        CheckMissingWithItemForList(startCellReference);
-
-                        var cSharpMethodName = converter.GivenListPropertyNameExcelNameToCodeName(excelGivenLeft);
-                        var cSharpClassName = converter.ExcelClassNameToCodeName(excelGivenRightString);
-                        string cSharpListVariableName = ListVariableNameFromMethodName(excelGivenLeft);
-                        string cSharpListItemVariableName = ListItemVariableNameFromMethodName(excelGivenLeft);
-
-                        code.BlankLine();
-                        using (excel.AutoRestoreMoveDown())
-                        {
-                            log.VisitGivenListPropertyDeclaration(
-                                converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft),
-                                excelGivenRightString);
-
-                            using (code.OutputAndOpenAutoClosingBracket($".{cSharpMethodName}"))
-                            {
-                                code.Add($"\"{cSharpClassName}\", ");
-                                code.Add($"new FluentList<{cSharpClassName}>()");
-                                while (excel.CurrentCell() == converter.WithItem)
-                                {
-                                    excel.MoveDown();
-
-                                    // Add an item to the list
-                                    using (excel.AutoRestoreMoveRight())
-                                    {
-                                        using (code.OutputAndOpenAutoClosingBracket($".FluentAdd"))
-                                        {
-                                            code.Add($"new {cSharpClassName}()");
-
-                                            while (!string.IsNullOrEmpty(excel.CurrentCell()))
-                                            {
-                                                DoProperty();
-                                                excel.MoveDown();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            log.VisitGivenListPropertyFinalisation();
-                        }
-                    }
-                    else
-                    {
-                        var cSharpMethodName = converter.GivenPropertyNameExcelNameToCodeName(excelGivenLeft);
-
-                        code.Add($".{cSharpMethodName}({converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight)})");
-
-                        VisitGivenSimplePropertyOrFunction(
-                            excelGivenLeft,
-                            excelGivenRight);
-                    }
-                }
-            }
-        }
-
-        bool IsList(string excelGivenLeft) =>
-            excelGivenLeft.EndsWith(converter.ListOf, StringComparison.InvariantCultureIgnoreCase);
-
-        // check to see if it looks like a table, but does not end with converter.ListOf
-        void CheckMissingListOf()
-        {
-            if (LooksLikeAListButIsnt())
-                AddErrorToCodeAndLog($"It looks like you might be trying to set up a list property, starting at cell {excel.CellReferenceA1Style()}. If this is the case, please make sure that cell {excel.CellReferenceA1Style()} ends with '{converter.ListOf}'");
-        }
-
-        bool LooksLikeAListButIsnt() =>
-            IsList(excel.CurrentCell()) == false
-            && excel.PeekBelowRight() == converter.WithItem;
-
-        void CheckMissingWithItemForList(string listStartCellReference)
-        {
-            using (excel.AutoRestoreMoveDown())
-            {
-                if (excel.CurrentCell() != converter.WithItem)
-                    throw new ExcelToCodeException($"The list property starting at {listStartCellReference} is not formatted correctly. Cell {excel.CellReferenceA1Style()} should be '{converter.WithItem}', but is '{excel.CurrentCell()}'");
-            }
-        }
-
-        string ListVariableNameFromMethodName(string excelGivenLeft) =>
-            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft)) + "List";
-
-        string ListItemVariableNameFromMethodName(string excelGivenLeft) =>
-            VariableCase(converter.GivenListPropertyNameExcelNameToCodeVariableName(excelGivenLeft));
 
         protected void DoWhen()
         {

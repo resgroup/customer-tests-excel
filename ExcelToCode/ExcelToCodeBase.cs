@@ -4,23 +4,20 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelToCodeBase
     {
+        protected readonly ExcelToCodeState excelToCodeState;
         public LogState log;
         protected ExcelState excel;
         protected CodeState code;
         protected readonly ICodeNameToExcelNameConverter converter;
         protected string sutName;
 
-        public ExcelToCodeBase(
-            ICodeNameToExcelNameConverter converter,
-            LogState log,
-            CodeState code,
-            ExcelState excel
-            )
+        public ExcelToCodeBase(ExcelToCodeState excelToCodeState)
         {
-            this.converter = converter ?? throw new ArgumentNullException(nameof(converter));
-            this.log = log;
-            this.code = code;
-            this.excel = excel;
+            converter = excelToCodeState.Converter;
+            log = excelToCodeState.Log;
+            code = excelToCodeState.Code;
+            excel = excelToCodeState.Excel;
+            this.excelToCodeState = excelToCodeState;
         }
 
         public void AddVisitor(IExcelToCodeVisitor visitor) =>

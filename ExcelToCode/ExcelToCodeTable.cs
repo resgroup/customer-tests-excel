@@ -11,17 +11,8 @@ namespace CustomerTestsExcel.ExcelToCode
     // Maybe have a think when done lists and complex properties
     public class ExcelToCodeTable : ExcelToCodeBase
     {
-        public ExcelToCodeTable(
-            ICodeNameToExcelNameConverter converter,
-            LogState log,
-            CodeState code,
-            ExcelState excel)
-            : base(
-                  converter,
-                  log,
-                  code,
-                  excel
-                  )
+        public ExcelToCodeTable(ExcelToCodeState excelToCodeState)
+            : base(excelToCodeState)
         {
         }
 
