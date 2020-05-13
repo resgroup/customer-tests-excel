@@ -64,7 +64,7 @@ namespace CustomerTestsExcel.ExcelToCode
             DoWhen(sutName);
             excel.MoveDown();
 
-            DoAssert();
+            DoThen();
             DoFooters();
 
             return code.GeneratedCode;
@@ -75,44 +75,6 @@ namespace CustomerTestsExcel.ExcelToCode
             excel.Initialise(worksheet);
             code.Initialise();
             log.Initialise();
-        }
-
-        void OutputErrors()
-        {
-            if (log.Errors.Any())
-            {
-                code.BlankLine();
-                log.Errors.ToList().ForEach(error => code.Add($"// {error}"));
-            }
-        }
-
-        void OutputWarnings()
-        {
-            if (log.Warnings.Any())
-            {
-                code.BlankLine();
-                log.Warnings.ToList().ForEach(warning => code.Add($"// {warning}"));
-                log.Warnings.ToList().ForEach(warning => code.Add($"// {warning}"));
-            }
-        }
-
-        void OutputRoundTripIssues()
-        {
-            if (!log.IssuesPreventingRoundTrip.Any())
-                return;
-
-            code.BlankLine();
-            code.Add($"protected override bool RoundTrippable() => false;");
-            code.BlankLine();
-            code.Add("protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string>");
-            code.Add("{");
-            code.Add(
-                string.Join(
-                    "," + Environment.NewLine,
-                    log.IssuesPreventingRoundTrip.Select(issue => "\"" + issue + "\"")
-                )
-            );
-            code.Add("};");
         }
 
         string ReadDescription()
@@ -179,17 +141,18 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void DoGiven(string sutName)
         {
-            excel.MoveDownToToken(converter.Given);
+            excelToCodeState.Given.DoGiven(sutName);
+            //excel.MoveDownToToken(converter.Given);
 
-            using (excel.AutoRestoreMoveRight())
-            {
-                code.BlankLine();
-                code.Add($"public override {CSharpSUTSpecificationSpecificClassName(sutName)} Given()");
-                using (code.AutoCloseCurlyBracket())
-                    CreateRootObject(sutName);
-            }
+            //using (excel.AutoRestoreMoveRight())
+            //{
+            //    code.BlankLine();
+            //    code.Add($"public override {CSharpSUTSpecificationSpecificClassName(sutName)} Given()");
+            //    using (code.AutoCloseCurlyBracket())
+            //        CreateRootObject(sutName);
+            //}
 
-            excel.MoveUp();
+            //excel.MoveUp();
         }
 
         void CheckExactlyOneBlankLineBetweenGivenAndWhen()
@@ -209,26 +172,49 @@ namespace CustomerTestsExcel.ExcelToCode
                 log.AddIssuePreventingRoundTrip($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{excel.worksheet.Name}'");
         }
 
-        void CreateRootObject(string excelClassName)
-        {
-            log.VisitGivenRootClassDeclaration(excelClassName);
-
-            code.Add("return");
-            using (code.AutoCloseIndent())
-            {
-                excelToCodeState.ComplexProperty.CreateObjectWithoutVisiting(excelClassName);
-            }
-            code.Add(";");
-
-            log.VisitGivenRootClassFinalisation();
-        }
-
         void DoWhen(string sutName) =>
             excelToCodeState.When.DoWhen(sutName);
 
-        void DoAssert() => 
+        void DoThen() => 
             excelToCodeState.Then.DoThen(sutName);
 
+        void OutputErrors()
+        {
+            if (log.Errors.Any())
+            {
+                code.BlankLine();
+                log.Errors.ToList().ForEach(error => code.Add($"// {error}"));
+            }
+        }
+
+        void OutputWarnings()
+        {
+            if (log.Warnings.Any())
+            {
+                code.BlankLine();
+                log.Warnings.ToList().ForEach(warning => code.Add($"// {warning}"));
+                log.Warnings.ToList().ForEach(warning => code.Add($"// {warning}"));
+            }
+        }
+
+        void OutputRoundTripIssues()
+        {
+            if (!log.IssuesPreventingRoundTrip.Any())
+                return;
+
+            code.BlankLine();
+            code.Add($"protected override bool RoundTrippable() => false;");
+            code.BlankLine();
+            code.Add("protected override IEnumerable<string> IssuesPreventingRoundTrip() => new List<string>");
+            code.Add("{");
+            code.Add(
+                string.Join(
+                    "," + Environment.NewLine,
+                    log.IssuesPreventingRoundTrip.Select(issue => "\"" + issue + "\"")
+                )
+            );
+            code.Add("};");
+        }
 
     }
 }

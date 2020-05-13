@@ -70,6 +70,7 @@
     <Compile Include="ExcelToCode\ExcelState.cs" />
     <Compile Include="ExcelToCode\CodeState.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeThen.cs" />
+    <Compile Include="ExcelToCode\ExcelToCodeGiven.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeWhen.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeSimpleProperty.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeState.cs" />
