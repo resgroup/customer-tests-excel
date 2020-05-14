@@ -31,7 +31,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
             excel.MoveDown();
 
-            while (excel.row <= excel.GetLastRow() && !excel.RowToCurrentColumnIsEmpty() && !excel.AnyPrecedingColumnHasAValue())
+            while (excel.Row <= excel.GetLastRow() && !excel.RowToCurrentColumnIsEmpty() && !excel.AnyPrecedingColumnHasAValue())
             {
                 DoAssertion(assertIndex, cSharpClassName, cSharpVariableName);
 
@@ -111,7 +111,7 @@ namespace CustomerTestsExcel.ExcelToCode
         void CheckMissingTableOfForAssertion()
         {
             if (LooksLikeAnAssertionTableButIsnt())
-                AddErrorToCodeAndLog($"It looks like you might be trying to set up a table assertion, starting at cell {excel.CellReferenceA1Style()}. If this is the case, please make sure that cell {excel.CellReferenceA1Style(excel.row, excel.column + 1)} is '{converter.TableOf}', and that the table itself (the bit with the class name, 'With Properties' etc) starts on column {excel.ColumnReferenceA1Style(excel.column + 2)}");
+                AddErrorToCodeAndLog($"It looks like you might be trying to set up a table assertion, starting at cell {excel.CellReferenceA1Style()}. If this is the case, please make sure that cell {excel.CellReferenceA1Style(excel.Row, excel.Column + 1)} is '{converter.TableOf}', and that the table itself (the bit with the class name, 'With Properties' etc) starts on column {excel.ColumnReferenceA1Style(excel.Column + 2)}");
         }
 
         bool LooksLikeAnAssertionTableButIsnt() =>
@@ -180,7 +180,7 @@ namespace CustomerTestsExcel.ExcelToCode
                     using (code.AutoCloseCurlyBracket())
                     {
                         int tableRowIndex = 0;
-                        while (excel.row <= excel.GetLastRow() && !excel.RowToCurrentColumnIsEmpty() && !excel.AnyPrecedingColumnHasAValue()) // should encapsulate this conditional
+                        while (excel.Row <= excel.GetLastRow() && !excel.RowToCurrentColumnIsEmpty() && !excel.AnyPrecedingColumnHasAValue()) // should encapsulate this conditional
                         {
                             code.Add($"{LeadingComma(tableRowIndex)}new List<IAssertion<{cSharpSubClassName}>>");
                             tableRowIndex++;
@@ -219,7 +219,7 @@ namespace CustomerTestsExcel.ExcelToCode
             using (excel.AutoRestoreMoveDownRight(2, 2))
             {
                 if (excel.CurrentCell() == "" && excel.PeekRight() != "")
-                    throw new ExcelToCodeException($"The assertion table starting at {tableStartCellReference} is not formatted correctly. The properties start on column {excel.ColumnReferenceA1Style(excel.column + 1)}, but they should start one to the left, on column {excel.ColumnReferenceA1Style()}");
+                    throw new ExcelToCodeException($"The assertion table starting at {tableStartCellReference} is not formatted correctly. The properties start on column {excel.ColumnReferenceA1Style(excel.Column + 1)}, but they should start one to the left, on column {excel.ColumnReferenceA1Style()}");
             }
         }
 
@@ -378,5 +378,7 @@ namespace CustomerTestsExcel.ExcelToCode
             }
         }
 
+        protected static string LeadingComma(int index) =>
+            (index == 0) ? " " : ",";
     }
 }

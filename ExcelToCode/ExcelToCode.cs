@@ -122,7 +122,7 @@ namespace CustomerTestsExcel.ExcelToCode
             code.Add($"namespace {projectRootNamespace}.{converter.ExcelFileNameToCodeNamespacePart(workBookName)}");
             code.Add("{");
             code.Add("[TestFixture]");
-            code.Add($"public class {converter.ExcelSpecificationNameToCodeSpecificationClassName(excel.worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName(sutName)}>, ISpecification<{CSharpSUTSpecificationSpecificClassName(sutName)}>");
+            code.Add($"public class {converter.ExcelSpecificationNameToCodeSpecificationClassName(excel.Worksheet.Name)} : SpecificationBase<{CSharpSUTSpecificationSpecificClassName(sutName)}>, ISpecification<{CSharpSUTSpecificationSpecificClassName(sutName)}>");
             code.Add("{");
             code.Add("public override string Description()");
             code.Add("{");
@@ -135,19 +135,19 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void CheckExactlyOneBlankLineBetweenGivenAndWhen()
         {
-            uint endOfGiven = excel.row;
+            uint endOfGiven = excel.Row;
             uint startOfWhen;
 
             using (excel.SavePosition())
             {
                 excel.MoveDownToToken(converter.When);
-                startOfWhen = excel.row;
+                startOfWhen = excel.Row;
             }
 
             if (startOfWhen - endOfGiven <= 1)
-                log.AddIssuePreventingRoundTrip($"There is no blank line between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{excel.worksheet.Name}'");
+                log.AddIssuePreventingRoundTrip($"There is no blank line between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{excel.Worksheet.Name}'");
             else if (startOfWhen - endOfGiven > 2)
-                log.AddIssuePreventingRoundTrip($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{excel.worksheet.Name}'");
+                log.AddIssuePreventingRoundTrip($"There should be exactly one blank line, but there are {startOfWhen - endOfGiven - 1}, between the end of the Given section (Row {endOfGiven}) and the start of the When section (Row {startOfWhen}) in the Excel test, worksheet '{excel.Worksheet.Name}'");
         }
 
         void DoWhen(string sutName) =>

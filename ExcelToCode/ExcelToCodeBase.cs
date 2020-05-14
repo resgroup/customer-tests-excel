@@ -69,9 +69,6 @@ namespace CustomerTestsExcel.ExcelToCode
             // this isn't a two way process (eg the conversion process doesn't care what the string is) so this isn't in the _namer
             string.IsNullOrWhiteSpace(camelCase) ? "" : char.ToLower(camelCase[0]) + camelCase.Substring(1);
 
-        protected static string LeadingComma(int index) =>
-            (index == 0) ? " " : ",";
-
         protected string CSharpSUTSpecificationSpecificClassName(string sutName) =>
             converter.ExcelClassNameToCodeName(sutName);
 

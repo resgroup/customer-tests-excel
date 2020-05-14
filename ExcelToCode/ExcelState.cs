@@ -1,81 +1,77 @@
-﻿using CustomerTestsExcel.Indentation;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
     public class ExcelState
     {
-        public ITabularPage worksheet;
-        public uint row;
-        public uint column;
+        public ITabularPage Worksheet { get; private set; }
+        public uint Row { get; private set; }
+        public uint Column { get; private set; }
 
-        public ExcelState()
-        {
-        }
+        public ExcelState() { }
 
         internal void Initialise(ITabularPage worksheet)
         {
-            this.worksheet = worksheet;
-            row = 1;
-            column = 1;
+            Worksheet = worksheet;
+            Row = 1;
+            Column = 1;
         }
 
         public bool RowToColumnIsEmpty(uint column)
         {
             for (uint columnToCheck = 1; columnToCheck <= column; columnToCheck++)
             {
-                if (!string.IsNullOrWhiteSpace(Cell(row, columnToCheck))) return false;
+                if (!string.IsNullOrWhiteSpace(Cell(Row, columnToCheck))) return false;
             }
 
             return true;
         }
 
         public bool RowToCurrentColumnIsEmpty() =>
-            RowToColumnIsEmpty(column);
+            RowToColumnIsEmpty(Column);
 
         public bool AllColumnsAreEmpty() =>
             RowToColumnIsEmpty(GetLastColumn());
 
         public bool AnyPrecedingColumnHasAValue() =>
-            !RowToColumnIsEmpty(column - 1);
+            !RowToColumnIsEmpty(Column - 1);
 
         public bool AnyFollowingColumnHasAValue(int rowOffset = 0)
         {
-            for (uint columnToCheck = column + 1; columnToCheck <
+            for (uint columnToCheck = Column + 1; columnToCheck <
                 GetLastColumn(); columnToCheck++)
             {
-                if (!string.IsNullOrWhiteSpace(Cell((uint)(row + rowOffset), columnToCheck))) return true;
+                if (!string.IsNullOrWhiteSpace(Cell((uint)(Row + rowOffset), columnToCheck))) return true;
             }
 
             return false;
         }
 
         public void MoveUp(uint by = 1) =>
-            row -= by;
+            Row -= by;
 
         public void MoveDown(uint by = 1) =>
-            row += by;
+            Row += by;
 
         public void MoveDownToToken(string token)
         {
             while (CurrentCell() != token)
             {
-                if (row > GetLastRow()) throw new ExcelToCodeException(string.Format("Cannot find token {0} in column {1}, reached last row ({2})", token, column, row));
+                if (Row > GetLastRow()) throw new ExcelToCodeException(string.Format("Cannot find token {0} in column {1}, reached last row ({2})", token, Column, Row));
                 MoveDown();
             }
         }
 
         public void MoveRight(uint by = 1) =>
-            column += by;
+            Column += by;
 
         public void MoveLeft(uint by = 1) =>
-            column -= by;
+            Column -= by;
 
         public uint? FindTokenInCurrentRowFromCurrentColumn(string token)
         {
-            uint columnToCheck = column;
-            while (Cell(row, columnToCheck) != token)
+            uint columnToCheck = Column;
+            while (Cell(Row, columnToCheck) != token)
             {
                 if (columnToCheck > GetLastColumn()) return null;
                 columnToCheck++;
@@ -86,10 +82,10 @@ namespace CustomerTestsExcel.ExcelToCode
 
         public TidyUp SavePosition()
         {
-            uint savedRow = this.row;
-            uint savedColumn = column;
+            uint savedRow = this.Row;
+            uint savedColumn = Column;
 
-            return new TidyUp(() => { row = savedRow; column = savedColumn; });
+            return new TidyUp(() => { Row = savedRow; Column = savedColumn; });
         }
 
         public TidyUp AutoRestoreMoveDown(uint by = 1)
@@ -117,47 +113,47 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         public uint GetLastRow() =>
-            worksheet.MaxRow;
+            Worksheet.MaxRow;
 
         public uint GetLastColumn() =>
-            worksheet.MaxColumn + 20; // maxcolumn seems to underreport the amount of columns that there are ...
+            Worksheet.MaxColumn + 20; // maxcolumn seems to underreport the amount of columns that there are ...
 
         public string PeekAbove(uint by = 1) =>
-            Cell(row - by, column);
+            Cell(Row - by, Column);
 
         public string PeekBelow(uint by = 1) =>
-            Cell(row + by, column);
+            Cell(Row + by, Column);
 
         public string PeekRight(uint by = 1) =>
-            Cell(row, column + by);
+            Cell(Row, Column + by);
 
         public string PeekBelowRight(uint belowBy = 1, uint rightBy = 1) =>
-            Cell(row + belowBy, column + rightBy);
+            Cell(Row + belowBy, Column + rightBy);
 
         public string CurrentCell() =>
-            Cell(row, column);
+            Cell(Row, Column);
 
         public object CurrentCellRaw() =>
-            CellRaw(row, column);
+            CellRaw(Row, Column);
 
         public string Cell(uint row, uint column)
         {
-            var value = worksheet.GetCell(row, column).Value;
+            var value = Worksheet.GetCell(row, column).Value;
 
             return (value == null) ? "" : value.ToString();
         }
 
         public object CellRaw(uint row, uint column) =>
-            worksheet.GetCell(row, column).Value;
+            Worksheet.GetCell(row, column).Value;
 
         public string CellReferenceA1Style() =>
-            CellReferenceA1Style(row, column);
+            CellReferenceA1Style(Row, Column);
 
         public string CellReferenceA1Style(uint row, uint column) =>
             $"{ColumnReferenceA1Style(column)}{row}";
 
         public string ColumnReferenceA1Style()
-            => ColumnReferenceA1Style(column);
+            => ColumnReferenceA1Style(Column);
 
         public string ColumnReferenceA1Style(uint column)
         {

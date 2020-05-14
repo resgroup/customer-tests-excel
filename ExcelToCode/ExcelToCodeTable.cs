@@ -78,7 +78,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 headers.Values);
 
             uint tableRow = 0;
-            uint moveDown = 1 + (headers.Max((KeyValuePair<uint, TableHeader> h) => h.Value.EndRow) - excel.row);
+            uint moveDown = 1 + (headers.Max((KeyValuePair<uint, TableHeader> h) => h.Value.EndRow) - excel.Row);
             excel.MoveDown(moveDown);
             while (TableHasMoreRows(lastColumn))
             {
@@ -90,7 +90,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
                         SetAllPropertiesOnTableRowVariable(
                             cSharpSpecificationSpecificClassName,
-                            excel.column,
+                            excel.Column,
                             propertiesEndColumn,
                             headers,
                             tableRow);
@@ -134,7 +134,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 .Where(h => !h.IsRoundTrippable)
                 .ToList()
                 .ForEach(h =>
-                    log.AddIssuePreventingRoundTrip($"There is a complex property ('{h.ExcelPropertyName}', cell {excel.CellReferenceA1Style()}) within a table in the Excel test, worksheet '{excel.worksheet.Name}'")
+                    log.AddIssuePreventingRoundTrip($"There is a complex property ('{h.ExcelPropertyName}', cell {excel.CellReferenceA1Style()}) within a table in the Excel test, worksheet '{excel.Worksheet.Name}'")
                 );
         }
 
@@ -156,7 +156,7 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 while (excel.CurrentCell() != "")
                 {
-                    headers.Add(excel.column, CreatePropertyHeader());
+                    headers.Add(excel.Column, CreatePropertyHeader());
                     excel.MoveRight();
                 }
             }
@@ -169,7 +169,7 @@ namespace CustomerTestsExcel.ExcelToCode
             using (excel.AutoRestoreMoveDown(2))
             {
                 if (excel.CurrentCell() == "" && excel.PeekRight() != "")
-                    throw new ExcelToCodeException($"The table starting at {startCellReference} is not formatted correctly. The properties start on column {excel.ColumnReferenceA1Style(excel.column + 1)}, but they should start start one to the left, on column {excel.ColumnReferenceA1Style()}");
+                    throw new ExcelToCodeException($"The table starting at {startCellReference} is not formatted correctly. The properties start on column {excel.ColumnReferenceA1Style(excel.Column + 1)}, but they should start start one to the left, on column {excel.ColumnReferenceA1Style()}");
             }
         }
 
@@ -178,7 +178,7 @@ namespace CustomerTestsExcel.ExcelToCode
             if (excel.PeekBelow(2) == converter.WithProperties)
                 return CreateSubClassHeader();
 
-            return new PropertyTableHeader(excel.CurrentCell(), excel.row, excel.column);
+            return new PropertyTableHeader(excel.CurrentCell(), excel.Row, excel.Column);
         }
 
         SubClassTableHeader CreateSubClassHeader()
@@ -192,24 +192,24 @@ namespace CustomerTestsExcel.ExcelToCode
             var headers = new Dictionary<uint, TableHeader>();
 
             // this is a almost a straight copy of the original read proeprty headers code so we will be able to reuse it (the detection of the end of the properties is different, and the positioning is different, other than that its identical I think)
-            startRow = excel.row;
+            startRow = excel.Row;
             using (excel.SavePosition())
             {
                 excelPropertyName = excel.CurrentCell();
                 excel.MoveDown();
                 subClassName = excel.CurrentCell();
                 excel.MoveDown();
-                propertiesStartColumn = excel.column;
+                propertiesStartColumn = excel.Column;
 
                 excel.MoveDown();
                 do
                 {
-                    headers.Add(excel.column, CreatePropertyHeader());
+                    headers.Add(excel.Column, CreatePropertyHeader());
                     excel.MoveRight();
                 } while (excel.PeekAbove(3) == "" && excel.CurrentCell() != "");// Need to detect end of the sub property. This is by the existence of a property name in the parent proeprty header row, which is 3 rows up, or by when there are no columns left in the table
 
-                propertiesEndColumn = excel.column - 1;
-                endRow = excel.row;
+                propertiesEndColumn = excel.Column - 1;
+                endRow = excel.Row;
             }
 
             excel.MoveRight((uint)headers.Count - 1);
@@ -249,14 +249,14 @@ namespace CustomerTestsExcel.ExcelToCode
         {
             if (propertiesStartColumn.HasValue)
             {
-                if (excel.column != propertiesStartColumn.Value) throw new ExcelToCodeException("Table must have a 'With Properties' token, which must be on the first column of the table.");
+                if (excel.Column != propertiesStartColumn.Value) throw new ExcelToCodeException("Table must have a 'With Properties' token, which must be on the first column of the table.");
 
-                while (excel.column <= propertiesEndColumn)
+                while (excel.Column <= propertiesEndColumn)
                 {
                     SetPropertyOnTableRowVariable(
                         headers,
                         tableRow,
-                        excel.column - propertiesStartColumn.Value);
+                        excel.Column - propertiesStartColumn.Value);
                     excel.MoveRight();
                 }
             }
@@ -268,11 +268,11 @@ namespace CustomerTestsExcel.ExcelToCode
             uint tableColumn)
         {
             // need to add the row and column of the table here, or just not have them
-            log.VisitGivenTablePropertyCellDeclaration(headers[excel.column], tableRow, tableColumn);
+            log.VisitGivenTablePropertyCellDeclaration(headers[excel.Column], tableRow, tableColumn);
 
-            if (headers[excel.column] is SubClassTableHeader)
+            if (headers[excel.Column] is SubClassTableHeader)
             {
-                var subClassHeader = headers[excel.column] as SubClassTableHeader;
+                var subClassHeader = headers[excel.Column] as SubClassTableHeader;
 
                 log.VisitGivenComplexPropertyDeclaration(
                     converter.GivenPropertyNameExcelNameToSutName(subClassHeader.ExcelPropertyName),
@@ -293,9 +293,9 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 excel.MoveLeft();
             }
-            else if (headers[excel.column] is PropertyTableHeader)
+            else if (headers[excel.Column] is PropertyTableHeader)
             {
-                var propertyHeader = headers[excel.column] as PropertyTableHeader;
+                var propertyHeader = headers[excel.Column] as PropertyTableHeader;
 
                 code.Add($".{converter.GivenPropertyNameExcelNameToCodeName(propertyHeader.ExcelPropertyName)}({converter.PropertyValueExcelToCode(propertyHeader.ExcelPropertyName, excel.CurrentCellRaw())})");
 
