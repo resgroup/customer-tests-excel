@@ -11,7 +11,7 @@
         {
             excel.MoveDownToToken(converter.Given);
 
-            if (excelToCodeState.ComplexProperty.CanParse())
+            if (!excelToCodeState.ComplexProperty.CanParse())
                 AddErrorToCodeAndLog($"The root object for the test (${sutName}) must have sub properties (the cell below and to the right must be 'With Properties'). This test does not, which means that the c# code generation will not work properly.");
 
 

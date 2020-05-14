@@ -74,6 +74,9 @@ namespace CustomerTestsExcel.ExcelToCode
             return code.GeneratedCode;
         }
 
+        void Initialise(ITabularPage worksheet) =>
+            excelToCodeState.Initialise(worksheet);
+
         string ReadSutName()
         {
             using (excel.SavePosition())
@@ -93,9 +96,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 return excel.PeekRight();
             }
         }
-
-        void Initialise(ITabularPage worksheet) =>
-            excelToCodeState.Initialise(worksheet);
 
         void DoHeaders(
             string sutName,
