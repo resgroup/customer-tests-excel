@@ -4,17 +4,33 @@ using System.Linq;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
+    public class GeneratedTest
+    {
+        public string Code { get; }
+        public IEnumerable<string> Errors { get; }
+        public IEnumerable<string> Warnings { get; }
+        public IEnumerable<string> IssuesPreventingRoundTrip { get; }
+
+        public GeneratedTest(
+            string code,
+            IEnumerable<string> errors,
+            IEnumerable<string> warnings,
+            IEnumerable<string> issuesPreventingRoundTrip)
+        {
+            Code = code;
+            Errors = errors;
+            Warnings = warnings;
+            IssuesPreventingRoundTrip = issuesPreventingRoundTrip;
+        }
+    }
+
     public class ExcelToCode : ExcelToCodeBase
     {
         public ExcelToCode(ICodeNameToExcelNameConverter converter)
             : base(new ExcelToCodeState(converter))
         { }
 
-        // This function also returns some data in the Errors, Warnings and 
-        // similar properties. It would be better to wrap all this in to 
-        // a new type, and return that type here. Or to take an ILogger
-        // and use this to communicate the errors and warnings.
-        public string GenerateCSharpTestCode(
+        public GeneratedTest GenerateCSharpTestCode(
             IEnumerable<string> usings,
             ITabularPage worksheet,
             string projectRootNamespace,
@@ -30,18 +46,26 @@ namespace CustomerTestsExcel.ExcelToCode
             }
             catch (ExcelToCodeException exception)
             {
-                log.AddError(exception.Message);
-                return $"// {exception.Message}";
+                return Error(exception.Message);
             }
             catch (Exception exception)
             {
-                string message = $"Unable to convert worksheet due to an unexpected internal error:\n{exception.ToString()}";
-                log.AddError(message);
-                return $"// {message}";
+                return Error($"Unable to convert worksheet due to an unexpected internal error:\n{exception.ToString()}");
             }
         }
 
-        string TryGenerateCSharpTestCode(
+        GeneratedTest Error(string message)
+        {
+            return new GeneratedTest(
+                message,
+                new List<string> { message },
+                new List<string>(),
+                new List<string>()
+            );
+
+        }
+
+        GeneratedTest TryGenerateCSharpTestCode(
             IEnumerable<string> usings,
             ITabularPage worksheet,
             string projectRootNamespace,
@@ -71,7 +95,13 @@ namespace CustomerTestsExcel.ExcelToCode
 
             DoFooters();
 
-            return code.GeneratedCode;
+            return
+                new GeneratedTest(
+                    code.GeneratedCode,
+                    log.Errors,
+                    log.Warnings,
+                    log.IssuesPreventingRoundTrip
+                );
         }
 
         void Initialise(ITabularPage worksheet) =>

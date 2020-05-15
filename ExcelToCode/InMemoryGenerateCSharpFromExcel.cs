@@ -121,24 +121,21 @@ namespace CustomerTestsExcel.ExcelToCode
         string OutputWorkSheet(string workBookName, ITabularPage sheet)
         {
             var sheetConverter = new ExcelToCode(new CodeNameToExcelNameConverter(assertionClassPrefix));
-            sheetConverter.log.AddVisitor(givenClassRecorder);
+            sheetConverter.AddVisitor(givenClassRecorder);
 
-            var cSharpTestCode = sheetConverter.GenerateCSharpTestCode(
+            var generatedTest = sheetConverter.GenerateCSharpTestCode(
                 usings,
                 sheet,
                 projectRootNamespace,
                 workBookName);
 
-            // Could potentially pass the logger in to sheet converter instead of doing this
-            // This would avoid the slightly messy situation where the class returns some
-            // data from the function and some as instance properties.
-            sheetConverter.log.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
+            generatedTest.Errors.ToList().ForEach(error => logger.LogWorkbookError(workBookName, sheet.Name, error));
 
-            sheetConverter.log.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
+            generatedTest.Warnings.ToList().ForEach(warning => logger.LogWarning(workBookName, sheet.Name, warning));
 
-            sheetConverter.log.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
+            generatedTest.IssuesPreventingRoundTrip.ToList().ForEach(issue => logger.LogIssuePreventingRoundTrip(workBookName, sheet.Name, issue));
 
-            return cSharpTestCode;
+            return generatedTest.Code;
         }
 
         void GenerateSpecificationSpecificPlaceholder()
