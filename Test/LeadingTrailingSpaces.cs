@@ -17,7 +17,7 @@ namespace CustomerTestsExcel.Test
 
             workbook = Workbook(@"TestExcelFiles\Leading Trailing Spaces .xlsx");
 
-            generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+            generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME).Code;
         }
 
 

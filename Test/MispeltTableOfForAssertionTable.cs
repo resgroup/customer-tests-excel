@@ -17,7 +17,7 @@ namespace CustomerTestsExcel.Test
 
             using (var workbook = Workbook(@"TestExcelFiles\MispeltTableOfForAssertionTable\MispeltTableOfForAssertionTable.xlsx"))
             {
-                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME).Code;
 
                 StringAssert.Contains("trying to set up a table assertion, starting at cell B8", generatedCode);
 

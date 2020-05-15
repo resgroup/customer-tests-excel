@@ -14,7 +14,7 @@ namespace CustomerTestsExcel
         string Given { get; }
         string WithProperties { get; }
         string When { get; }
-        string Assert { get; }
+        string Then { get; }
         string AssertionClassPrefixAddedByGenerator { get; }
         string TableOf { get; }
         string ListOf { get; }

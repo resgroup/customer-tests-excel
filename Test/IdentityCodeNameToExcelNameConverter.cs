@@ -26,7 +26,7 @@ namespace CustomerTestsExcel.Test
         public string When =>
             "When";
 
-        public string Assert =>
+        public string Then =>
             "Assert";
 
         public string TableOf =>

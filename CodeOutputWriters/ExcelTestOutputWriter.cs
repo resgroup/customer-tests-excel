@@ -200,7 +200,7 @@ namespace CustomerTestsExcel.CodeOutputWriters
 
             SetColumn(1);
 
-            SetCell(namer.Assert);
+            SetCell(namer.Then);
 
             MoveToNextRow();
 

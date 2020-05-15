@@ -13,7 +13,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         internal void DoThen(string sutName)
         {
-            excel.MoveDownToToken(converter.Assert);
+            excel.MoveDownToToken(converter.Then);
 
             code.Add("public override IEnumerable<IAssertion<" + CSharpSUTSpecificationSpecificClassName(sutName) + ">> Assertions()");
             code.Add("{");

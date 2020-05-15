@@ -14,11 +14,11 @@ namespace CustomerTestsExcel.Test
 
             using (var workbook = Workbook(@"TestExcelFiles\NoRowsForAssertionTable\NoRowsForAssertionTable.xlsx"))
             {
-                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                var generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
 
-                StringAssert.Contains("assertion table starting at cell B8 has no rows", generatedCode);
+                StringAssert.Contains("assertion table starting at cell B8 has no rows", generatedCode.Code);
 
-                StringAssert.Contains("row of Property Values starting at D12", generatedCode);
+                StringAssert.Contains("row of Property Values starting at D12", generatedCode.Code);
             }
         }
 

@@ -14,7 +14,7 @@ namespace CustomerTestsExcel.Test
 
             using (var workbook = Workbook(@"TestExcelFiles\MissingWithItemForList\MissingWithItemForList.xlsx"))
             {
-                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME).Code;
 
                 StringAssert.Contains("list property starting at C5", generatedCode);
 

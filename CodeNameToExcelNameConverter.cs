@@ -22,8 +22,8 @@ namespace CustomerTestsExcel
         public string When =>
             "When";
 
-        public string Assert =>
-            "Assert";
+        public string Then =>
+            "Then";
 
         public string TableOf =>
             "table of";

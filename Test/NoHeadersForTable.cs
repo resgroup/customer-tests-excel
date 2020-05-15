@@ -14,7 +14,7 @@ namespace CustomerTestsExcel.Test
 
             using (var workbook = Workbook(@"TestExcelFiles\NoHeadersForTable\NoHeadersForTable.xlsx"))
             {
-                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                string generatedCode = sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME).Code;
 
                 StringAssert.Contains("table starting at cell C5 has no headers", generatedCode);
             }
