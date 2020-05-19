@@ -17,7 +17,7 @@ build_script:
  - msbuild CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet /property:Configuration=Release
  - packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:"CustomerTestsExcel.nunit" -output:"coverage.xml" -returntargetcode
  # create the nuget package
- - nuget pack CustomerTestsExcel.csproj -Symbols
+ - nuget pack CustomerTestsExcel\CustomerTestsExcel.csproj -Symbols
 test_script:
   # upload the code coverage to codcov.io
   - ps: |
