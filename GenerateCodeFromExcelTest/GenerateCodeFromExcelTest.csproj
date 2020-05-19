@@ -117,7 +117,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomerTestsExcel.csproj">
+    <ProjectReference Include="..\CustomerTestsExcel\CustomerTestsExcel.csproj">
       <Project>{8D8AD476-9558-4039-82E0-E0441D81DB85}</Project>
       <Name>CustomerTestsExcel</Name>
     </ProjectReference>

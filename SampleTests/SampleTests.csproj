@@ -95,7 +95,7 @@
   </Target>
   -->
   <ItemGroup>
-    <ProjectReference Include="..\CustomerTestsExcel.csproj">
+    <ProjectReference Include="..\CustomerTestsExcel\CustomerTestsExcel.csproj">
       <Project>{8d8ad476-9558-4039-82e0-e0441d81db85}</Project>
       <Name>CustomerTestsExcel</Name>
     </ProjectReference>
