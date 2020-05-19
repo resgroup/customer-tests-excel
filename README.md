@@ -48,7 +48,7 @@ See the SampleTests and SampleSystemUnderTest projects for examples.
 
 The Excel test for the Rerouting example (`SampleTests/ExcelTests/Rerouting.xlsx`) looks like this:
 
-![Example Excel Test](example-excel-test.png "Example Excel Test")
+![Example Excel Test](media/example-excel-test.png "Example Excel Test")
 
 # Building Locally
 
