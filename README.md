@@ -4,7 +4,7 @@
 
 [![codecov](https://codecov.io/gh/resgroup/customer-tests-excel/branch/master/graph/badge.svg)](https://codecov.io/gh/resgroup/customer-tests-excel)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CustomerTestsExcel&metric=alert_status)](https://sonarcloud.io/dashboard?id=CustomerTestsExcel)
+[![Maintainability](https://api.codeclimate.com/v1/badges/1bc743c6d68c2f245cd8/maintainability)](https://codeclimate.com/github/resgroup/customer-tests-excel/maintainability)
 
 
 A framework to round trip NUnit to / from Microsoft Excel customer tests.
