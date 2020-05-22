@@ -12,17 +12,21 @@ namespace CustomerTestsExcel.ExcelToCode
         public void LogIssuePreventingRoundTrip(string workbookName, string worksheetName, string issue) =>
             Log($"Warning: Workbook '{workbookName}', Worksheet '{worksheetName}' will not be able to round trip to Excel. {issue}");
 
-        public void LogAssemblyError(string assemblyFilename, Exception exception) =>
+        public void LogAssemblyError(string assemblyFilename, string errorDetails, Exception exception)
+        {
             Log(
-$@"Error: Assembly '{assemblyFilename}' could not be loaded (the framework modifies existing projects, and doesn't create new ones).
-This filename comes from the '/folder' and '/project' command line parameters.
+$@"Error: Assembly '{assemblyFilename}' could not be loaded.
+This filename comes from the '/assembliesUnderTest' command line parameter, and needs to be an absolulate path (this is a requirement from System.Reflection.Assembly.LoadFile(...)).
+{errorDetails}
 The error returned is:
-{exception}");
+{exception}
+");
+        }
 
         public void LogCsprojLoadError(string csprojFilename, Exception exception) =>
             LogError(
-$@"Error: Project '{csprojFilename}' could not be loaded.
-This filename comes from the '/assembliesUnderTest' command line parameter.
+$@"Error: Project '{csprojFilename}' could not be loaded (the framework modifies existing projects, and doesn't create new ones).
+This filename comes from the '/folder' and '/project' command line parameters.
 The error returned is:
 {exception}");
 

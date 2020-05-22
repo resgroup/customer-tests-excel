@@ -92,11 +92,40 @@ namespace CustomerTestsExcel.ExcelToCode
             {
                 return Assembly.LoadFile(assemblyFilename).GetTypes();
             }
-            catch (Exception exception)
+            catch (ReflectionTypeLoadException exception)
             {
-                logger.LogAssemblyError(assemblyFilename, exception);
+                logger.LogAssemblyError(assemblyFilename, ReflectionTypeLoadExceptionDetails(exception), exception);
                 return new List<Type>();
             }
+            catch (Exception exception)
+            {
+                logger.LogAssemblyError(assemblyFilename, "", exception);
+                return new List<Type>();
+            }
+        }
+
+        static string ReflectionTypeLoadExceptionDetails(ReflectionTypeLoadException exception)
+        {
+            var sb = new StringBuilder();
+            foreach (var exSub in exception.LoaderExceptions)
+            {
+                sb.AppendLine(exSub.Message);
+                var exFileNotFound = exSub as FileNotFoundException;
+                if (exFileNotFound != null)
+                {
+                    if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                    {
+                        sb.AppendLine("Fusion Log:");
+                        sb.AppendLine(exFileNotFound.FusionLog);
+                    }
+                }
+                sb.AppendLine();
+            }
+
+            if (sb.Length > 0)
+                return $"Details from Loader exceptions:{Environment.NewLine}{sb}";
+            else
+                return "";
         }
 
         XDocument OpenProjectFile()
