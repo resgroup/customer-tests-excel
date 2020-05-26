@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using CustomerTestsExcel.ExcelToCode;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using NUnit.Framework;
@@ -46,11 +43,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassSimpleProperty("StringProperty", ExcelPropertyType.String)
             );
 
-            Assert.True(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
         [Test]
@@ -61,11 +59,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassSimpleProperty("StringFunction", ExcelPropertyType.String)
             );
 
-            Assert.False(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 0);
         }
 
         [Test]
@@ -76,11 +75,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassSimpleProperty("FunctionWithTwoParameters", ExcelPropertyType.Number)
             );
 
-            Assert.False(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 0);
         }
 
         [Test]
@@ -91,11 +91,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassSimpleProperty("FunctionWithoutParameter", ExcelPropertyType.Null)
             );
 
-            Assert.False(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 0);
         }
 
         [Test]
@@ -106,11 +107,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassSimpleProperty("FunctionWithReturnValue", ExcelPropertyType.String)
             );
 
-            Assert.False(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 0);
         }
 
         [Test]
@@ -121,11 +123,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassComplexListProperty("IEnumerableProperty", "Target")
             );
 
-            Assert.True(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
         [Test]
@@ -136,11 +139,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassComplexListProperty("ListProperty", "Target")
             );
 
-            Assert.True(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
         [Test]
@@ -151,11 +155,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassComplexListProperty("IReadOnlyListProperty", "Target")
             );
 
-            Assert.True(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
         [Test]
@@ -166,11 +171,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassComplexListProperty("ICollectionProperty", "Target")
             );
 
-            Assert.True(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
         [Test]
@@ -181,11 +187,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassComplexProperty("ComplexProperty", "Target")
             );
 
-            Assert.True(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
         [Test]
@@ -196,11 +203,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                 new GivenClassComplexListProperty("IEnumerableFloatProperty", "float")
             );
 
-            Assert.True(
-                new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass)
-                .Matches);
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
     }
