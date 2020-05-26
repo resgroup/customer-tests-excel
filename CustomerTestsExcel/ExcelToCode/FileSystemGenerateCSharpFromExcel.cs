@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Xml.Linq;
-using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using System.Reflection;
+using static System.Environment;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
@@ -88,42 +87,99 @@ namespace CustomerTestsExcel.ExcelToCode
 
         IEnumerable<Type> GetTypesFromAssembly(string assemblyFilename)
         {
+            string assemblyPath = Path.GetDirectoryName(assemblyFilename);
+            ResolveEventHandler resolver = (object sender, ResolveEventArgs args) => CurrentDomain_AssemblyResolve(assemblyPath, args);
+
+            AppDomain.CurrentDomain.AssemblyResolve += resolver;
             try
             {
-                return Assembly.LoadFile(assemblyFilename).GetTypes();
+
+                try
+                {
+                    return GetLoadableTypes(Assembly.LoadFile(assemblyFilename));
+                }
+                catch (ReflectionTypeLoadException exception)
+                {
+                    logger.LogAssemblyError(assemblyFilename, ReflectionTypeLoadExceptionDetails(exception), exception);
+                    return new List<Type>();
+                }
+                catch (Exception exception)
+                {
+                    logger.LogAssemblyError(assemblyFilename, "", exception);
+                    return new List<Type>();
+                }
+            }
+            finally
+            {
+                AppDomain.CurrentDomain.AssemblyResolve -= resolver;
+            }
+        }
+
+        static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
+        {
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(t => t != null);
+            }
+        }
+
+        Assembly CurrentDomain_AssemblyResolve(string assemblyPath, ResolveEventArgs args)
+        {
+            // Ignore missing resources
+            if (args.Name.Contains(".resources"))
+                return null;
+
+            // check for assemblies already loaded
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.FullName == args.Name);
+            if (assembly != null)
+                return assembly;
+
+            // Try to load by filename - split out the filename of the full assembly name
+            // and append the base path of the original assembly (ie. look in the same dir)
+            string filename = args.Name.Split(',')[0] + ".dll".ToLower();
+
+            string asmFile = Path.Combine(@".\", assemblyPath, filename);
+
+            try
+            {
+                return System.Reflection.Assembly.LoadFrom(asmFile);
             }
             catch (ReflectionTypeLoadException exception)
             {
-                logger.LogAssemblyError(assemblyFilename, ReflectionTypeLoadExceptionDetails(exception), exception);
-                return new List<Type>();
+                logger.LogAssemblyError(filename, ReflectionTypeLoadExceptionDetails(exception), exception);
+                return null;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                logger.LogAssemblyError(assemblyFilename, "", exception);
-                return new List<Type>();
+                return null;
             }
         }
 
         static string ReflectionTypeLoadExceptionDetails(ReflectionTypeLoadException exception)
         {
-            var sb = new StringBuilder();
-            foreach (var exSub in exception.LoaderExceptions)
+            var problems = new List<string>();
+            foreach (var subException in exception.LoaderExceptions)
             {
-                sb.AppendLine(exSub.Message);
-                var exFileNotFound = exSub as FileNotFoundException;
-                if (exFileNotFound != null)
+                var problem = subException.Message;
+                var fileNotFoundException = subException as FileNotFoundException;
+                if (fileNotFoundException != null)
                 {
-                    if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                    if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
                     {
-                        sb.AppendLine("Fusion Log:");
-                        sb.AppendLine(exFileNotFound.FusionLog);
+                        problem += $"Fusion Log:{NewLine}{fileNotFoundException.FusionLog}";
                     }
                 }
-                sb.AppendLine();
+                problems.Add(problem);
             }
 
-            if (sb.Length > 0)
-                return $"Details from Loader exceptions:{Environment.NewLine}{sb}";
+            var uniqueProblems = problems.Distinct();
+            if (uniqueProblems.Any())
+                return $"Details from Loader exceptions:{NewLine}{string.Join(NewLine, uniqueProblems)}";
             else
                 return "";
         }
