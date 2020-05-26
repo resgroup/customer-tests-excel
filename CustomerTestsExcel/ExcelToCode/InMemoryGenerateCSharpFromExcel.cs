@@ -158,7 +158,7 @@ namespace CustomerTestsExcel.ExcelToCode
                 GenerateSpecificationSpecificRootClass(excelGivenClass);
             else
             {
-                var matchingType = typesUnderTest.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass));
+                var matchingType = typesUnderTest.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass).Matches);
 
                 if (matchingType != null)
                 {

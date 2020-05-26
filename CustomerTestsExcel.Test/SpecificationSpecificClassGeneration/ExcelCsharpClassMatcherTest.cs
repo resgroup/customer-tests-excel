@@ -49,7 +49,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -63,7 +64,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.False(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -77,7 +79,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.False(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -91,7 +94,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.False(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -105,7 +109,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.False(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -119,7 +124,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -133,7 +139,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -147,7 +154,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -161,7 +169,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -175,7 +184,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
         [Test]
@@ -189,7 +199,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
                     typeof(ITarget),
-                    excelGivenClass));
+                    excelGivenClass)
+                .Matches);
         }
 
     }
