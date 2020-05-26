@@ -211,5 +211,21 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
+        [Test]
+        public void CalculatePercentMatchingProperties()
+        {
+            var excelGivenClass = ExcelGivenClass(
+                "Target",
+                new GivenClassComplexListProperty("IEnumerableFloatProperty", "float"),
+                new GivenClassComplexListProperty("NonMatchingProperty", "float")
+            );
+
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+                    typeof(ITarget),
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 0.5);
+        }
     }
 }

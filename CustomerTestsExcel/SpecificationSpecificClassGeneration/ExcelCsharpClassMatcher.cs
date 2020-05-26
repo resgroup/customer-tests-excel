@@ -40,15 +40,15 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 && ClassNameMatcher.NamesMatch(type.Name, simpleExcelClass.Name);
         }
 
-        float PercentMatchingProperties(Type type, GivenClass simpleExcelClass)
+        float PercentMatchingProperties(Type type, GivenClass excelClass)
         {
-            if (simpleExcelClass.Properties.Any())
+            if (excelClass.Properties.Any())
                 return
-                    simpleExcelClass.Properties.Count(
+                    (float) excelClass.Properties.Count(
                         excelProperty =>
                             MatchesAnyCsharpPropertyOrFunction(type, excelProperty)
                     )
-                    / simpleExcelClass.Properties.Count();
+                    / (float) excelClass.Properties.Count();
             else
                 return 1;
         }
