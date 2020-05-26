@@ -166,8 +166,7 @@ namespace CustomerTestsExcel.ExcelToCode
             foreach (var subException in exception.LoaderExceptions)
             {
                 var problem = subException.Message;
-                var fileNotFoundException = subException as FileNotFoundException;
-                if (fileNotFoundException != null)
+                if (subException is FileNotFoundException fileNotFoundException)
                 {
                     if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
                     {
