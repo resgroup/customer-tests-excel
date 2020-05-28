@@ -20,9 +20,6 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             MethodInfo cSharpMethod,
             IGivenClassProperty excelProperty)
         {
-            // Deciding not to try and generate code for functions now,
-            // as the setup is a bit of a pain.
-            // Could revisit this later if it looks useful.
             return false;
 
             //if (!NamesMatch(cSharpMethod.Name, excelProperty.Name))

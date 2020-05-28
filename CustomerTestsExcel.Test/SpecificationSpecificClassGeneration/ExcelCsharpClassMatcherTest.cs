@@ -200,7 +200,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         {
             var excelGivenClass = ExcelGivenClass(
                 "Target",
-                new GivenClassComplexListProperty("IEnumerableFloatProperty", "float")
+                new GivenClassComplexListProperty("IEnumerableFloatProperty", "Float")
             );
 
             var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
@@ -216,8 +216,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         {
             var excelGivenClass = ExcelGivenClass(
                 "Target",
-                new GivenClassComplexListProperty("IEnumerableFloatProperty", "float"),
-                new GivenClassComplexListProperty("NonMatchingProperty", "float")
+                new GivenClassComplexListProperty("IEnumerableFloatProperty", "Float"),
+                new GivenClassComplexListProperty("NonMatchingProperty", "Float")
             );
 
             var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(

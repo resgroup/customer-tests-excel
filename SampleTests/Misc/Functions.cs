@@ -17,37 +17,35 @@ using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleSystemUnderTest.Calculator;
 using SampleSystemUnderTest.CustomProperties;
 
-namespace SampleTests.Calculator
+namespace SampleTests.Misc
 {
     [TestFixture]
-    public class Taking_Away : SpecificationBase<SpecificationSpecificCalculator>, ISpecification<SpecificationSpecificCalculator>
+    public class Functions : SpecificationBase<SpecificationSpecificValidator>, ISpecification<SpecificationSpecificValidator>
     {
         public override string Description()
         {
-            return "Add";
+            return "Functions";
         }
         
-        public override SpecificationSpecificCalculator Given()
+        public override SpecificationSpecificValidator Given()
         {
             return
-                new SpecificationSpecificCalculator()
-                .FirstValue_of(3)
-                .SecondValue_of(4)
-                .Operation_of(Operation.Subtract)
+                new SpecificationSpecificValidator()
+                .WithValidProperties()
             ;
         }
         
-        public override string When(SpecificationSpecificCalculator calculator)
+        public override string When(SpecificationSpecificValidator validator)
         {
-            calculator.Perform_Operation();
-            return "Perform Operation";
+            validator.Validate();
+            return "Validate";
         }
         
-        public override IEnumerable<IAssertion<SpecificationSpecificCalculator>> Assertions()
+        public override IEnumerable<IAssertion<SpecificationSpecificValidator>> Assertions()
         {
-            return new List<IAssertion<SpecificationSpecificCalculator>>
+            return new List<IAssertion<SpecificationSpecificValidator>>
             {
-                  new EqualityAssertionWithPercentagePrecision<SpecificationSpecificCalculator>(calculator => calculator.Result, -1, 0.0001)
+                  new EqualityAssertion<SpecificationSpecificValidator>(validator => validator.Valid, true)
             };
         }
         

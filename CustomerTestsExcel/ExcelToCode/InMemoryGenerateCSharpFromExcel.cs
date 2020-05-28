@@ -158,17 +158,26 @@ namespace CustomerTestsExcel.ExcelToCode
                 GenerateSpecificationSpecificRootClass(excelGivenClass);
             else
             {
-                var matchingType = typesUnderTest.FirstOrDefault(t => excelCsharpClassMatcher.Matches(t, excelGivenClass).Matches);
+                // don't generate classes that already exist within the framework
+                if (ClassNameMatcher.IsFramworkSuppliedClass(excelGivenClass.Name))
+                    return;
 
-                if (matchingType != null)
-                {
-                    GeneratedSpecificationSpecificMatchedClass(excelGivenClass, matchingType);
-                }
-                else if (!excelGivenClass.IsFramworkSuppliedClass())
-                {
-                    GeneratedSpecificationSpecificClassWithoutMatchingTypeInSut(excelGivenClass);
-                }
+                GenerateLeafClass(excelGivenClass);
             }
+        }
+
+        void GenerateLeafClass(GivenClass excelGivenClass)
+        {
+            var matchingType =
+                typesUnderTest
+                .Where(t => excelCsharpClassMatcher.Matches(t, excelGivenClass).Matches)
+                .OrderByDescending(t => excelCsharpClassMatcher.Matches(t, excelGivenClass).PercentMatchingProperties)
+                .FirstOrDefault();
+
+            if (matchingType != null)
+                GeneratedSpecificationSpecificMatchedClass(excelGivenClass, matchingType);
+            else
+                GeneratedSpecificationSpecificClassWithoutMatchingTypeInSut(excelGivenClass);
         }
 
         void GenerateSpecificationSpecificRootClass(GivenClass excelGivenClass)

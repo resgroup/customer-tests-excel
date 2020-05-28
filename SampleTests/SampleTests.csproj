@@ -55,16 +55,19 @@
   <ItemGroup>
     <Compile Include="IgnoreOnGeneration\Calculator\SpecificationSpecificCalculatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculatorPartial.cs" />
-    <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificUnderscorePartial.cs" />
-    <Compile Include="IgnoreOnGeneration\NameConversions\SpecificationSpecificValidatorPartial.cs" />
+    <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificClassWithCustomPropertyPartial.cs" />
+    <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificUnmatchedClassPartial.cs" />
+    <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificUnderscorePartial.cs" />
+    <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificValidatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\PrimitiveLists\SpecificationSpecificObjectWithPrimiiveListsPartial.cs" />
     <Compile Include="IgnoreOnGeneration\Routing\SpecificationSpecificRoutingServicePartial.cs" />
     <Compile Include="IgnoreOnGeneration\Vermeulen Near Wake Length\SpecificationSpecificVermeulenNearWakeLengthCalculatorPartial.cs" />
     <Compile Include="Anova\One Way Anova.cs" />
     <Compile Include="Calculator\Adding Up.cs" />
     <Compile Include="Calculator\Taking Away.cs" />
-    <Compile Include="NameConversions\Functions.cs" />
-    <Compile Include="NameConversions\Underscores.cs" />
+    <Compile Include="Misc\Functions.cs" />
+    <Compile Include="Misc\Underscores.cs" />
+    <Compile Include="Misc\CustomProperties.cs" />
     <Compile Include="PrimitiveLists\PrimitiveLists.cs" />
     <Compile Include="Rerouting\Reroute To Sea.cs" />
     <Compile Include="Vermeulen Near Wake Length\VermeulenNearWakeLength.cs" />
@@ -74,6 +77,8 @@
     <Compile Include="GeneratedSpecificationSpecific\Validator.cs" />
     <Compile Include="GeneratedSpecificationSpecific\A_Table.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Underscore.cs" />
+    <Compile Include="GeneratedSpecificationSpecific\ClassWithCustomProperty.cs" />
+    <Compile Include="GeneratedSpecificationSpecific\UnmatchedClass.cs" />
     <Compile Include="GeneratedSpecificationSpecific\ObjectWithPrimiiveLists.cs" />
     <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Cargo.cs" />
@@ -108,7 +113,7 @@
     <None Include="IgnoreOnGeneration\GenerateTests.bat" />
     <None Include="ExcelTests\Anova.xlsx" />
     <None Include="ExcelTests\Calculator.xlsx" />
-    <None Include="ExcelTests\NameConversions.xlsx" />
+    <None Include="ExcelTests\Misc.xlsx" />
     <None Include="ExcelTests\PrimitiveLists.xlsx" />
     <None Include="ExcelTests\Rerouting.xlsx" />
     <None Include="ExcelTests\Vermeulen Near Wake Length.xlsx" />

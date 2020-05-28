@@ -45,9 +45,21 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             IEnumerable<IGivenClassProperty> excelProperties,
             Type type)
         {
-            return excelProperties
-            .Select(excelProperty => MatchWithCsharpType(excelProperty, type))
-            .Where(mp => mp.CsharpProperty != null);
+            return 
+                excelProperties
+                .Select(excelProperty => MatchWithCsharpType(excelProperty, type))
+                .Where(mp => mp.CsharpProperty != null);
+        }
+
+        protected IEnumerable<IGivenClassProperty> NonMatchingProperties(
+            IEnumerable<IGivenClassProperty> excelProperties,
+            Type type)
+        {
+            return 
+                excelProperties
+                .Select(excelProperty => MatchWithCsharpType(excelProperty, type))
+                .Where(mp => mp.CsharpProperty == null)
+                .Select(mp => mp.ExcelProperty);
         }
 
         MatchedProperty MatchWithCsharpType(

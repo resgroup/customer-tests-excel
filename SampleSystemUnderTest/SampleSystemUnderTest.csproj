@@ -54,6 +54,7 @@
     <Compile Include="AnovaCalculator\IAnovaResult.cs" />
     <Compile Include="Calculator\Calculator.cs" />
     <Compile Include="Calculator\Operation.cs" />
+    <Compile Include="CustomProperties\IClassWithCustomProperty.cs" />
     <Compile Include="Routing\Cargo.cs" />
     <Compile Include="Routing\ICargo.cs" />
     <Compile Include="Routing\IItineraryLeg.cs" />

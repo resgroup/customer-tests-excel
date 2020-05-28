@@ -15,8 +15,9 @@ using SampleSystemUnderTest.AnovaCalculator;
 using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleSystemUnderTest.Calculator;
+using SampleSystemUnderTest.CustomProperties;
 
-namespace SampleTests.NameConversions
+namespace SampleTests.Misc
 {
     [TestFixture]
     public class Underscores : SpecificationBase<SpecificationSpecificUnderscore>, ISpecification<SpecificationSpecificUnderscore>
@@ -45,7 +46,6 @@ namespace SampleTests.NameConversions
                     .FluentAdd(
                         new SpecificationSpecificA_Table()
                         .A_Property_of("Anything")
-                        .NonMatchingProperty_of("Anything")
                     )
                 )
             ;

@@ -23,6 +23,10 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var usingStatements = UsingStatements(usings);
 
+            var nonMatchingProperties =
+                NonMatchingProperties(excelGivenClass.ListProperties, type)
+                .Select(NonMatchingProperty);
+
             var simpleProperties = 
                 MatchWithCsharpType(excelGivenClass.SimpleProperties, type)
                 .Select(SimplePropertySetterOnMock);
@@ -156,6 +160,11 @@ $@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelPrope
 
             return this;
         }}";
+        }
+
+        string NonMatchingProperty(IGivenClassProperty givenClassProperty)
+        {
+            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {givenClassProperty.ClassName}.cs";
         }
 
         string InterfacePropertyName =>
