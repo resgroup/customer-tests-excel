@@ -58,7 +58,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 .ListProperties
                 .Select(ListPropertySetterOnSelf);
 
-            return
+            var code = 
 $@"{usingStatements}
 
 namespace {testNamespace}.GeneratedSpecificationSpecific
@@ -115,6 +115,8 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
     }}
 }}
 ";
+
+            return RemoveConsecutiveBlankLines(code);
         }
 
         string Function(IGivenClassProperty excelGivenProperty)

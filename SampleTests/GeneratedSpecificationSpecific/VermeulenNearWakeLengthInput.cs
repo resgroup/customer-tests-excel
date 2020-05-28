@@ -21,12 +21,9 @@ namespace SampleTests.GeneratedSpecificationSpecific
         public IVermeulenNearWakeLengthInput VermeulenNearWakeLengthInput =>
             vermeulenNearWakeLengthInput.Object;
 
-
-
         public SpecificationSpecificVermeulenNearWakeLengthInput()
         {
             vermeulenNearWakeLengthInput = new Mock<IVermeulenNearWakeLengthInput>();
-
 
         }
 
@@ -66,7 +63,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-
         internal SpecificationSpecificVermeulenNearWakeLengthInput TurbineGeometry_of(SpecificationSpecificTurbineGeometry turbineGeometry)
         {
             AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), turbineGeometry));
@@ -75,8 +71,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
 
     }
 }

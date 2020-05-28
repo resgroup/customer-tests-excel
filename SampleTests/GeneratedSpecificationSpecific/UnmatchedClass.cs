@@ -36,19 +36,12 @@ namespace SampleTests.GeneratedSpecificationSpecific
     public partial class SpecificationSpecificUnmatchedClass : ReportsSpecificationSetup
     {
 
-
         public SpecificationSpecificClassWithCustomProperty ClassWithCustomProperty { get; private set; }
-
-
 
         public SpecificationSpecificUnmatchedClass()
         {
 
         }
-
-
-
-
 
         internal SpecificationSpecificUnmatchedClass ClassWithCustomProperty_of(SpecificationSpecificClassWithCustomProperty classWithCustomProperty)
         {
@@ -58,8 +51,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
 
     }
 }

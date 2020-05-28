@@ -37,16 +37,12 @@ namespace SampleTests.GeneratedSpecificationSpecific
     {
         public String VariableDescription { get; private set; }
 
-
-
         readonly List<SpecificationSpecificGroup> groupss;
 
         public SpecificationSpecificAnovaCalculator()
         {
             groupss = new List<SpecificationSpecificGroup>();
         }
-
-
 
         internal SpecificationSpecificAnovaCalculator VariableDescription_of(String variableDescription)
         {
@@ -56,9 +52,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
-
 
         internal SpecificationSpecificAnovaCalculator Groups_of(SpecificationSpecificGroup groups)
         {

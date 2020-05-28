@@ -36,21 +36,12 @@ namespace SampleTests.GeneratedSpecificationSpecific
     public partial class SpecificationSpecificVermeulenNearWakeLengthCalculator : ReportsSpecificationSetup
     {
 
-
-
-
         readonly List<SpecificationSpecificVermeulenNearWakeLengthInput> vermeulenNearWakeLengthInputss;
 
         public SpecificationSpecificVermeulenNearWakeLengthCalculator()
         {
             vermeulenNearWakeLengthInputss = new List<SpecificationSpecificVermeulenNearWakeLengthInput>();
         }
-
-
-
-
-
-
 
         internal SpecificationSpecificVermeulenNearWakeLengthCalculator VermeulenNearWakeLengthInputs_of(SpecificationSpecificVermeulenNearWakeLengthInput vermeulenNearWakeLengthInputs)
         {

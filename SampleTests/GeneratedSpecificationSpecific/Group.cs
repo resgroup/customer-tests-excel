@@ -39,9 +39,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-
-
-
         internal SpecificationSpecificGroup Floats_of(SpecificationSpecificFloat floats)
         {
             AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), floats));

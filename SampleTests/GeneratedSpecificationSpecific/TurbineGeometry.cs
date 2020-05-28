@@ -21,12 +21,9 @@ namespace SampleTests.GeneratedSpecificationSpecific
         public ITurbineGeometry TurbineGeometry =>
             turbineGeometry.Object;
 
-
-
         public SpecificationSpecificTurbineGeometry()
         {
             turbineGeometry = new Mock<ITurbineGeometry>();
-
 
         }
 
@@ -47,10 +44,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
-
-
 
     }
 }

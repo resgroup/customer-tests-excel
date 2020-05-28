@@ -47,16 +47,10 @@ namespace SampleTests.GeneratedSpecificationSpecific
     {
         public String A_Property { get; private set; }
 
-
-
-
-
         public SpecificationSpecificA_Table()
         {
 
         }
-
-
 
         internal SpecificationSpecificA_Table A_Property_of(String a_Property)
         {
@@ -66,10 +60,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
-
-
 
     }
 }

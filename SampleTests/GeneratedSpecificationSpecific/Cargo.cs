@@ -48,9 +48,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-
-
-
         internal SpecificationSpecificCargo ItineraryLeg_of(SpecificationSpecificItineraryLeg itineraryLeg)
         {
             AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), itineraryLeg));

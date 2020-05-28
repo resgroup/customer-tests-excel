@@ -47,7 +47,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 MatchWithCsharpType(excelGivenClass.ListProperties, type)
                 .Select(ListPropertySetterOnMock);
 
-            return
+            var code =
 $@"{usingStatements}
 
 namespace {testNamespace}.GeneratedSpecificationSpecific
@@ -76,6 +76,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
     }}
 }}
 ";
+            return RemoveConsecutiveBlankLines(code);
         }
 
         string SimplePropertySetterOnMock(MatchedProperty matchedProperty)

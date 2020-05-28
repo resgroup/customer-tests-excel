@@ -222,5 +222,11 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         protected string ListPropertyName(IGivenClassProperty excelProperty) =>
            CamelCase(excelProperty.Name) + "s";
 
+        protected string RemoveConsecutiveBlankLines(string code) =>
+           code
+           .Replace(NewLine + NewLine + NewLine, NewLine + NewLine)
+           .Replace(NewLine + NewLine + NewLine, NewLine + NewLine)
+           .Replace(NewLine + NewLine + NewLine, NewLine + NewLine)
+           .Replace(NewLine + NewLine + NewLine, NewLine + NewLine);
     }
 }

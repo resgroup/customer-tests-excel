@@ -37,8 +37,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
     {
         public String A_Property { get; private set; }
 
-
-
         readonly List<SpecificationSpecificA_Table> table_Propertys;
         readonly List<SpecificationSpecificA_Table> list_Propertys;
 
@@ -48,8 +46,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             list_Propertys = new List<SpecificationSpecificA_Table>();
         }
 
-
-
         internal SpecificationSpecificUnderscore A_Property_of(String a_Property)
         {
             AddValueProperty(GetCurrentMethod(), a_Property);
@@ -58,9 +54,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
-
 
         internal SpecificationSpecificUnderscore Table_Property_of(SpecificationSpecificA_Table table_Property)
         {

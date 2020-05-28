@@ -58,7 +58,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 .ListProperties
                 .Select(ListPropertySetterOnSelf);
 
-            return
+            var code =
 $@"{usingStatements}
 
 namespace {testNamespace}.GeneratedSpecificationSpecific
@@ -105,13 +105,14 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
     }}
 }}
 ";
+            return RemoveConsecutiveBlankLines(code);
         }
 
         string Function(IGivenClassProperty excelGivenProperty)
         {
             var functionName = excelGivenProperty.Name;
 
-            return 
+            return
 $@"        // No sensible implementation can be generated for functions, so please 
         // add the function below in a custom class.
         // Custom classes should go under a directory called 'IgnoreOnGeneration'.

@@ -21,19 +21,11 @@ namespace SampleTests.GeneratedSpecificationSpecific
         public IClassWithCustomProperty ClassWithCustomProperty =>
             classWithCustomProperty.Object;
 
-
-
         public SpecificationSpecificClassWithCustomProperty()
         {
             classWithCustomProperty = new Mock<IClassWithCustomProperty>();
 
-
         }
-
-
-
-
-
 
     }
 }

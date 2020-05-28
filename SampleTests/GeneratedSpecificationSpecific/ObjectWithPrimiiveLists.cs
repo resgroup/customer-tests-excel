@@ -36,9 +36,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
     public partial class SpecificationSpecificObjectWithPrimiiveLists : ReportsSpecificationSetup
     {
 
-
-
-
         readonly List<SpecificationSpecificInteger> integerTableSyntaxs;
         readonly List<SpecificationSpecificInteger> integerListSyntaxs;
         readonly List<SpecificationSpecificFloat> floatTableSyntaxs;
@@ -59,12 +56,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             dateTimeTableSyntaxs = new List<SpecificationSpecificDateTime>();
             dateTimeListSyntaxs = new List<SpecificationSpecificDateTime>();
         }
-
-
-
-
-
-
 
         internal SpecificationSpecificObjectWithPrimiiveLists IntegerTableSyntax_of(SpecificationSpecificInteger integerTableSyntax)
         {

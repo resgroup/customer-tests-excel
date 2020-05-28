@@ -39,16 +39,10 @@ namespace SampleTests.GeneratedSpecificationSpecific
         public Single SecondValue { get; private set; }
         public Operation Operation { get; private set; }
 
-
-
-
-
         public SpecificationSpecificCalculator()
         {
 
         }
-
-
 
         internal SpecificationSpecificCalculator FirstValue_of(Single firstValue)
         {
@@ -76,10 +70,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
-
-
 
     }
 }

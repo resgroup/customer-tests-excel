@@ -21,12 +21,9 @@ namespace SampleTests.GeneratedSpecificationSpecific
         public IItineraryLeg ItineraryLeg =>
             itineraryLeg.Object;
 
-
-
         public SpecificationSpecificItineraryLeg()
         {
             itineraryLeg = new Mock<IItineraryLeg>();
-
 
         }
 
@@ -47,10 +44,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
-
-
 
     }
 }

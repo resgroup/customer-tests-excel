@@ -36,11 +36,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
     public partial class SpecificationSpecificValidator : ReportsSpecificationSetup
     {
 
-
-
-
-
-
         public SpecificationSpecificValidator()
         {
 
@@ -54,11 +49,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
         // say SpecificationSpecificValidatorPartial, then this class will remain, and
         // the custom class can add to it.
         // public void WithValidProperties() { .. } 
-
-
-
-
-
 
     }
 }

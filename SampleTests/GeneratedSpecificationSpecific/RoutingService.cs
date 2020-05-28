@@ -40,14 +40,10 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         public SpecificationSpecificCargo Cargo { get; private set; }
 
-
-
         public SpecificationSpecificRoutingService()
         {
 
         }
-
-
 
         internal SpecificationSpecificRoutingService RerouteFrom_of(String rerouteFrom)
         {
@@ -67,7 +63,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-
         internal SpecificationSpecificRoutingService Cargo_of(SpecificationSpecificCargo cargo)
         {
             AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), cargo));
@@ -76,8 +71,6 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
             return this;
         }
-
-
 
     }
 }
