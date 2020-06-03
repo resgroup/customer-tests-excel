@@ -191,7 +191,7 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
                 case ExcelPropertyType.StringNull:
                     return typeof(string).Name;
                 case ExcelPropertyType.Number:
-                    return typeof(float).Name;
+                    return typeof(double).Name;
                 case ExcelPropertyType.Decimal:
                     return typeof(decimal).Name;
                 case ExcelPropertyType.String:
