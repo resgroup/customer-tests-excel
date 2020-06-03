@@ -150,6 +150,15 @@ $@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelPrope
             return this;
         }}
 
+        internal {SpecificationSpecificClassName} {matchedProperty.ExcelProperty.Name}_list_of(string listType, List<{listClassName}> {listParameterName})
+        {{
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, {listParameterName}));
+
+            this.{listPropertyName}.AddRange({listParameterName});
+
+            return this;
+        }}
+
         internal {SpecificationSpecificClassName} {matchedProperty.ExcelProperty.Name}_table_of(ReportSpecificationSetupClassUsingTable<{listClassName}> {listParameterName})
         {{
             {listParameterName}.PropertyName = GetCurrentMethod().Name;
