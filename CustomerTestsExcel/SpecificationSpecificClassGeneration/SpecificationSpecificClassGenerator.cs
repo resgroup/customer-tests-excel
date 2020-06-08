@@ -103,7 +103,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({parameterTy
             var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
             var interfacePropertyName = matchedProperty.ExcelProperty.Name;
             var propertyClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
-            var propertyNameOfSutObject = matchedProperty.ExcelProperty.Name;
+            var propertyNameOfSutObject = matchedProperty.ExcelProperty.ClassName;
 
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
