@@ -120,7 +120,8 @@ $@"        // No sensible implementation can be generated for functions, so plea
         // then it will be used instead of this file. If it is called something else,
         // say {SpecificationSpecificClassName}Partial, then this class will remain, and
         // the custom class can add to it.
-        // public void {functionName}() {{ .. }} ";
+        // public void {functionName}() {{ .. }} 
+";
         }
 
     }
