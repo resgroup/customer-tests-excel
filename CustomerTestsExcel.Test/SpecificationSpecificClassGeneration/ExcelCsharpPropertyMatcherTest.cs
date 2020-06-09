@@ -38,6 +38,14 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         }
 
         [Test]
+        public void ExcelPropertyMatchesNullableDoubleCsharpProperty()
+        {
+            Assert.True(    
+                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.Number)
+                .TypesMatch(typeof(Double?)));
+        }
+
+        [Test]
         public void EnumExcelPropertyMatchesEnumCsharpProperty()
         {
             Assert.True(

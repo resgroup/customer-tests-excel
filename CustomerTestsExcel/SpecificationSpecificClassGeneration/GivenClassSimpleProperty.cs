@@ -61,17 +61,32 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         }
 
 
-        bool IsNumberType(Type csharpPropertytype) =>
-            csharpPropertytype == typeof(float)
-            || csharpPropertytype == typeof(double)
-            || csharpPropertytype == typeof(int)
-            || csharpPropertytype == typeof(sbyte)
-            || csharpPropertytype == typeof(byte)
-            || csharpPropertytype == typeof(short)
-            || csharpPropertytype == typeof(uint)
-            || csharpPropertytype == typeof(long)
-            || csharpPropertytype == typeof(ulong)
-            || csharpPropertytype == typeof(char);
+        bool IsNumberType(Type csharpPropertytype)
+        {
+            var underlyingType = Nullable.GetUnderlyingType(csharpPropertytype);
+
+            return
+                csharpPropertytype == typeof(float)
+                || csharpPropertytype == typeof(double)
+                || csharpPropertytype == typeof(int)
+                || csharpPropertytype == typeof(sbyte)
+                || csharpPropertytype == typeof(byte)
+                || csharpPropertytype == typeof(short)
+                || csharpPropertytype == typeof(uint)
+                || csharpPropertytype == typeof(long)
+                || csharpPropertytype == typeof(ulong)
+                || csharpPropertytype == typeof(char)
+                || csharpPropertytype == typeof(float?)
+                || csharpPropertytype == typeof(double?)
+                || csharpPropertytype == typeof(int?)
+                || csharpPropertytype == typeof(sbyte?)
+                || csharpPropertytype == typeof(byte?)
+                || csharpPropertytype == typeof(short?)
+                || csharpPropertytype == typeof(uint?)
+                || csharpPropertytype == typeof(long?)
+                || csharpPropertytype == typeof(ulong?)
+                || csharpPropertytype == typeof(char?);
+        }
 
         bool IsNullableType(Type csharpPropertytype) =>
             csharpPropertytype == typeof(float?)

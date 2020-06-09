@@ -84,7 +84,10 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
             var functionName = $"{matchedProperty.ExcelProperty.Name}_of";
             var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
             var interfacePropertyName = matchedProperty.ExcelProperty.Name;
-            var parameterType = matchedProperty.CsharpProperty.PropertyType.Name;
+            var parameterType = 
+                (Nullable.GetUnderlyingType(matchedProperty.CsharpProperty.PropertyType) == null)
+                ? matchedProperty.CsharpProperty.PropertyType.Name 
+                : Nullable.GetUnderlyingType(matchedProperty.CsharpProperty.PropertyType).Name + "?";
 
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({parameterType} {parameterName})
