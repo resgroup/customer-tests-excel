@@ -35,8 +35,8 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
     public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
     {
-        public Single FirstValue { get; private set; }
-        public Single SecondValue { get; private set; }
+        public Double? FirstValue { get; private set; }
+        public Double? SecondValue { get; private set; }
         public Operation Operation { get; private set; }
 
         public SpecificationSpecificCalculator()
@@ -44,7 +44,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         }
 
-        internal SpecificationSpecificCalculator FirstValue_of(Single firstValue)
+        internal SpecificationSpecificCalculator FirstValue_of(Double? firstValue)
         {
             AddValueProperty(GetCurrentMethod(), firstValue);
 
@@ -53,7 +53,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
-        internal SpecificationSpecificCalculator SecondValue_of(Single secondValue)
+        internal SpecificationSpecificCalculator SecondValue_of(Double? secondValue)
         {
             AddValueProperty(GetCurrentMethod(), secondValue);
 

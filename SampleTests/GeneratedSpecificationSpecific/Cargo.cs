@@ -57,6 +57,15 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
+        internal SpecificationSpecificCargo ItineraryLeg_list_of(string listType, List<SpecificationSpecificItineraryLeg> itineraryLegs)
+        {
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, itineraryLegs));
+
+            this.itineraryLegs.AddRange(itineraryLegs);
+
+            return this;
+        }
+
         internal SpecificationSpecificCargo ItineraryLeg_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificItineraryLeg> itineraryLegs)
         {
             itineraryLegs.PropertyName = GetCurrentMethod().Name;

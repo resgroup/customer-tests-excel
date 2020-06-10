@@ -48,6 +48,15 @@ namespace SampleTests.GeneratedSpecificationSpecific
             return this;
         }
 
+        internal SpecificationSpecificGroup Floats_list_of(string listType, List<SpecificationSpecificFloat> floatss)
+        {
+            AddListProperty(new ReportSpecificationSetupList(GetCurrentMethod().Name, listType, floatss));
+
+            this.floatss.AddRange(floatss);
+
+            return this;
+        }
+
         internal SpecificationSpecificGroup Floats_table_of(ReportSpecificationSetupClassUsingTable<SpecificationSpecificFloat> floatss)
         {
             floatss.PropertyName = GetCurrentMethod().Name;

@@ -11,7 +11,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         internal void Perform_Operation()
         {
-            Result = new SampleSystemUnderTest.Calculator.Calculator().Calculate(FirstValue, Operation, SecondValue);
+            Result = new SampleSystemUnderTest.Calculator.Calculator().Calculate(FirstValue ?? 0, Operation, SecondValue ?? 0);
         }
     }
 }
