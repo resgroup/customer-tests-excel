@@ -191,19 +191,19 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
                 case ExcelPropertyType.StringNull:
                     return typeof(string).Name;
                 case ExcelPropertyType.Number:
-                    return typeof(double).Name;
+                    return "Double?";
                 case ExcelPropertyType.Decimal:
-                    return typeof(decimal).Name;
+                    return "Deciml?";
                 case ExcelPropertyType.String:
                     return typeof(string).Name;
                 case ExcelPropertyType.DateTime:
-                    return typeof(DateTime).Name;
+                    return "DateTime?";
                 case ExcelPropertyType.TimeSpan:
-                    return typeof(TimeSpan).Name;
+                    return "TimeSpan?";
                 case ExcelPropertyType.Enum:
                     return propertyValue?.Substring(0, Math.Max(propertyValue.IndexOf('.'), 1)) ?? "Enum /* no value in excel tests for value of this enum, so unable to deduce the type */";
                 case ExcelPropertyType.Boolean:
-                    return typeof(bool).Name;
+                    return "bool?";
                 case ExcelPropertyType.Object:
                     return typeof(object).Name;
                 case ExcelPropertyType.List:
