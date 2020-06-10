@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -40,28 +41,46 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 && ClassNameMatcher.NamesMatch(type.Name, simpleExcelClass.Name);
         }
 
-        float PercentMatchingProperties(Type type, GivenClass excelClass)
+        float PercentMatchingProperties(Type interfaceType, GivenClass excelClass)
         {
             if (excelClass.Properties.Any())
+            {
+                // this gets things in ancestor interfaces as well as directly on the interface
+                var properties =
+                    (new Type[] { interfaceType })
+                    .Concat(interfaceType.GetInterfaces())
+                    .SelectMany(i => i.GetProperties());
+
+                var methods =
+                    (new Type[] { interfaceType })
+                    .Concat(interfaceType.GetInterfaces())
+                    .SelectMany(i => i.GetMethods());
+
                 return
                     (float) excelClass.Properties.Count(
                         excelProperty =>
-                            MatchesAnyCsharpPropertyOrFunction(type, excelProperty)
+                            MatchesAnyCsharpPropertyOrFunction(
+                                excelProperty,
+                                properties,
+                                methods)
                     )
                     / (float) excelClass.Properties.Count();
+            }
             else
                 return 1;
         }
         bool MatchesAnyCsharpPropertyOrFunction(
-            Type type,
-            IGivenClassProperty excelProperty)
+            IGivenClassProperty excelProperty,
+            IEnumerable<PropertyInfo> properties,
+            IEnumerable<MethodInfo> methods
+            )
         {
             return
-                type.GetProperties().Any(
+                properties.Any(
                     cSharpProperty =>
                         excelCsharpPropertyMatcher.PropertiesMatch(cSharpProperty, excelProperty)
                 )
-                || type.GetMethods().Any(
+                || methods.Any(
                     cSharpMethod =>
                         excelCsharpPropertyMatcher.MethodsMatch(cSharpMethod, excelProperty)
                 );

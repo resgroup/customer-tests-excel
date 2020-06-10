@@ -8,7 +8,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
     [TestFixture]
     public class ExcelCsharpClassMatcherTest : TestBase
     {
-        interface ITarget
+        interface ITargetAncestor
+        {
+            int AncestorIntegerProperty { get; }
+        }
+
+        interface ITarget : ITargetAncestor
         {
             int IntegerProperty { get; }
             float FloatProperty { get; set; }
@@ -31,6 +36,22 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             IReadOnlyList<ITarget> IReadOnlyListProperty { get; }
             ICollection<ITarget> ICollectionProperty { get; }
             ITarget ComplexProperty { get; }
+        }
+
+        [Test]
+        public void MatchesAncestorProperties()
+        {
+            var excelGivenClass = ExcelGivenClass(
+                "Target",
+                new GivenClassSimpleProperty("AncestorIntegerProperty", ExcelPropertyType.Number)
+            );
+
+            var match = new ExcelCsharpClassMatcher(new ExcelCsharpPropertyMatcher()).Matches(
+                    typeof(ITarget),
+                    excelGivenClass);
+
+            Assert.True(match.Matches);
+            Assert.AreEqual(match.PercentMatchingProperties, 1);
         }
 
         [Test]
