@@ -69,6 +69,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             else
                 return 1;
         }
+
         bool MatchesAnyCsharpPropertyOrFunction(
             IGivenClassProperty excelProperty,
             IEnumerable<PropertyInfo> properties,

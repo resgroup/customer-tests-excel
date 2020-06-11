@@ -64,14 +64,19 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         MatchedProperty MatchWithCsharpType(
             IGivenClassProperty excelProperty,
-            Type type)
+            Type interfaceType)
         {
+            // this gets things in ancestor interfaces as well as directly on the interface
+            var properties =
+                (new Type[] { interfaceType })
+                .Concat(interfaceType.GetInterfaces())
+                .SelectMany(i => i.GetProperties());
+
             return new MatchedProperty()
             {
                 ExcelProperty = excelProperty,
                 CsharpProperty =
-                    type
-                    .GetProperties()
+                    properties
                     .FirstOrDefault(c => excelCsharpPropertyMatcher.PropertiesMatch(c, excelProperty))
             };
         }
