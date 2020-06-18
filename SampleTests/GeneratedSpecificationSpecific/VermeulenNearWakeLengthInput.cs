@@ -11,6 +11,7 @@ using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleSystemUnderTest.Calculator;
 using SampleSystemUnderTest.CustomProperties;
+using SampleSystemUnderTest.Misc;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
@@ -67,7 +68,7 @@ namespace SampleTests.GeneratedSpecificationSpecific
         {
             AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), turbineGeometry));
 
-            vermeulenNearWakeLengthInput.Setup(m => m.TurbineGeometry).Returns(turbineGeometry.TurbineGeometry);
+            vermeulenNearWakeLengthInput.Setup(m => m.TurbineGeometry).Returns(turbineGeometry?.TurbineGeometry);
 
             return this;
         }

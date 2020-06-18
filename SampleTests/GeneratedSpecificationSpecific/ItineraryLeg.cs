@@ -11,6 +11,7 @@ using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleSystemUnderTest.Calculator;
 using SampleSystemUnderTest.CustomProperties;
+using SampleSystemUnderTest.Misc;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {

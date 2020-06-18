@@ -29,45 +29,26 @@ namespace SampleTests.GeneratedSpecificationSpecific
     // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/ExcelTests/Vermeulen%20Near%20Wake%20Length.xlsx
 
     // Custom classes should go under a directory called 'IgnoreOnGeneration'.
-    // If the custom class filename is the same as this one (SpecificationSpecificCalculator),
+    // If the custom class filename is the same as this one (SpecificationSpecificNullObjectTester),
     // then it will be used instead of this function. If it is called something else,
-    // say SpecificationSpecificCalculatorPartial, then this class will remain, and
+    // say SpecificationSpecificNullObjectTesterPartial, then this class will remain, and
     // the custom class can add to it.
 
-    public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
+    public partial class SpecificationSpecificNullObjectTester : ReportsSpecificationSetup
     {
-        public Double? FirstValue { get; private set; }
-        public Double? SecondValue { get; private set; }
-        public Operation Operation { get; private set; }
 
-        public SpecificationSpecificCalculator()
+        public SpecificationSpecificHasObjectProperty HasObjectProperty { get; private set; }
+
+        public SpecificationSpecificNullObjectTester()
         {
 
         }
 
-        internal SpecificationSpecificCalculator FirstValue_of(Double? firstValue)
+        internal SpecificationSpecificNullObjectTester HasObjectProperty_of(SpecificationSpecificHasObjectProperty hasObjectProperty)
         {
-            AddValueProperty(GetCurrentMethod(), firstValue);
+            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), hasObjectProperty));
 
-            this.FirstValue = firstValue;
-
-            return this;
-        }
-
-        internal SpecificationSpecificCalculator SecondValue_of(Double? secondValue)
-        {
-            AddValueProperty(GetCurrentMethod(), secondValue);
-
-            this.SecondValue = secondValue;
-
-            return this;
-        }
-
-        internal SpecificationSpecificCalculator Operation_of(Operation operation)
-        {
-            AddValueProperty(GetCurrentMethod(), operation);
-
-            this.Operation = operation;
+            this.HasObjectProperty = hasObjectProperty;
 
             return this;
         }

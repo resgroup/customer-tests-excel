@@ -343,6 +343,9 @@ namespace CustomerTestsExcel
                 return ExcelPropertyType.Null;
 
             if (stringValue.ToLower() == "null")
+                return ExcelPropertyType.Null;
+
+            if (stringValue.ToLower() == "\"null\"")
                 return ExcelPropertyType.StringNull;
 
             // Dates are a total disaster in Excel, so this might not always work as expected

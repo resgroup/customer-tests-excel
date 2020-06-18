@@ -28,7 +28,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         }
 
         public bool TypesMatch(Type cSharpPropertytype) =>
-            ClassNameMatcher.NamesMatch(cSharpPropertytype.Name, ClassName);
+            ClassNameMatcher.NamesMatch(cSharpPropertytype.Name, ClassName); // also check for null
 
         public override string ToString() =>
             $"Name {Name}, Type {Type}, ClassName {ClassName}";

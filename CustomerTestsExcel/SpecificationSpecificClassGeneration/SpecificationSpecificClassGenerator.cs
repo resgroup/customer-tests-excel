@@ -113,7 +113,7 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
         {{
             AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), {parameterName}));
 
-            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName}.{propertyNameOfSutObject});
+            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({parameterName}?.{propertyNameOfSutObject});
 
             return this;
         }}{NewLine}";

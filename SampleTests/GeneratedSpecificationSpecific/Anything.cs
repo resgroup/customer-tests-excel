@@ -15,17 +15,26 @@ using SampleSystemUnderTest.Misc;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
-    public partial class SpecificationSpecificClassWithCustomProperty : ReportsSpecificationSetup
+    public partial class SpecificationSpecificAnything : ReportsSpecificationSetup
     {
-        readonly Mock<IClassWithCustomProperty> classWithCustomProperty;
+        readonly Mock<IAnything> anything;
 
-        public IClassWithCustomProperty ClassWithCustomProperty =>
-            classWithCustomProperty.Object;
+        public IAnything Anything =>
+            anything.Object;
 
-        public SpecificationSpecificClassWithCustomProperty()
+        public SpecificationSpecificAnything()
         {
-            classWithCustomProperty = new Mock<IClassWithCustomProperty>();
+            anything = new Mock<IAnything>();
 
+        }
+
+        internal SpecificationSpecificAnything AnInteger_of(Int32 anInteger)
+        {
+            AddValueProperty(GetCurrentMethod(), anInteger);
+
+            anything.Setup(m => m.AnInteger).Returns(anInteger);
+
+            return this;
         }
 
     }

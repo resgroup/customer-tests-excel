@@ -11,7 +11,6 @@ using SampleSystemUnderTest.Routing;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 using SampleSystemUnderTest.Calculator;
 using SampleSystemUnderTest.CustomProperties;
-using SampleSystemUnderTest.Misc;
 
 namespace SampleTests.GeneratedSpecificationSpecific
 {
@@ -29,45 +28,25 @@ namespace SampleTests.GeneratedSpecificationSpecific
     // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/ExcelTests/Vermeulen%20Near%20Wake%20Length.xlsx
 
     // Custom classes should go under a directory called 'IgnoreOnGeneration'.
-    // If the custom class filename is the same as this one (SpecificationSpecificCalculator),
+    // If the custom class filename is the same as this one (SpecificationSpecificClassWithNullObjectProperty),
     // then it will be used instead of this function. If it is called something else,
-    // say SpecificationSpecificCalculatorPartial, then this class will remain, and
+    // say SpecificationSpecificClassWithNullObjectPropertyPartial, then this class will remain, and
     // the custom class can add to it.
 
-    public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
+    public partial class SpecificationSpecificClassWithNullObjectProperty : ReportsSpecificationSetup
     {
-        public Double? FirstValue { get; private set; }
-        public Double? SecondValue { get; private set; }
-        public Operation Operation { get; private set; }
+        public String ObjectProperty { get; private set; }
 
-        public SpecificationSpecificCalculator()
+        public SpecificationSpecificClassWithNullObjectProperty()
         {
 
         }
 
-        internal SpecificationSpecificCalculator FirstValue_of(Double? firstValue)
+        internal SpecificationSpecificClassWithNullObjectProperty ObjectProperty_of(String objectProperty)
         {
-            AddValueProperty(GetCurrentMethod(), firstValue);
+            AddValueProperty(GetCurrentMethod(), objectProperty);
 
-            this.FirstValue = firstValue;
-
-            return this;
-        }
-
-        internal SpecificationSpecificCalculator SecondValue_of(Double? secondValue)
-        {
-            AddValueProperty(GetCurrentMethod(), secondValue);
-
-            this.SecondValue = secondValue;
-
-            return this;
-        }
-
-        internal SpecificationSpecificCalculator Operation_of(Operation operation)
-        {
-            AddValueProperty(GetCurrentMethod(), operation);
-
-            this.Operation = operation;
+            this.ObjectProperty = objectProperty;
 
             return this;
         }

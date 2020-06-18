@@ -28,38 +28,37 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             ExampleValue = exampleValue;
         }
 
-        public bool TypesMatch(Type cSharpPropertytype)
+        public bool TypesMatch(Type cSharpPropertyType)
         {
-            if (Type == ExcelPropertyType.Null && IsNullableType(cSharpPropertytype))
+            if (Type == ExcelPropertyType.Null && IsNullableType(cSharpPropertyType))
                 return true;
 
-            if (Type == ExcelPropertyType.Enum && cSharpPropertytype.IsEnum)
+            if (Type == ExcelPropertyType.Enum && cSharpPropertyType.IsEnum)
                 return true;
 
-            if (Type == ExcelPropertyType.Number && IsNumberType(cSharpPropertytype))
+            if (Type == ExcelPropertyType.Number && IsNumberType(cSharpPropertyType))
                 return true;
 
-            if (Type == ExcelPropertyType.Decimal && cSharpPropertytype == typeof(decimal))
+            if (Type == ExcelPropertyType.Decimal && cSharpPropertyType == typeof(decimal))
                 return true;
 
-            if (Type == ExcelPropertyType.DateTime && cSharpPropertytype == typeof(DateTime))
+            if (Type == ExcelPropertyType.DateTime && cSharpPropertyType == typeof(DateTime))
                 return true;
 
-            if (Type == ExcelPropertyType.TimeSpan && cSharpPropertytype == typeof(TimeSpan))
+            if (Type == ExcelPropertyType.TimeSpan && cSharpPropertyType == typeof(TimeSpan))
                 return true;
 
-            if (Type == ExcelPropertyType.String && cSharpPropertytype == typeof(string))
+            if (Type == ExcelPropertyType.String && cSharpPropertyType == typeof(string))
                 return true;
 
-            if (Type == ExcelPropertyType.StringNull && cSharpPropertytype == typeof(string))
+            if (Type == ExcelPropertyType.StringNull && cSharpPropertyType == typeof(string))
                 return true;
 
-            if (Type == ExcelPropertyType.Boolean && cSharpPropertytype == typeof(bool))
+            if (Type == ExcelPropertyType.Boolean && cSharpPropertyType == typeof(bool))
                 return true;
 
             return false;
         }
-
 
         bool IsNumberType(Type csharpPropertytype)
         {

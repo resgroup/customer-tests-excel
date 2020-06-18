@@ -55,6 +55,8 @@
     <Compile Include="Calculator\Calculator.cs" />
     <Compile Include="Calculator\Operation.cs" />
     <Compile Include="CustomProperties\IClassWithCustomProperty.cs" />
+    <Compile Include="Misc\IAnything.cs" />
+    <Compile Include="Misc\IHasObjectProperty.cs" />
     <Compile Include="Routing\Cargo.cs" />
     <Compile Include="Routing\ICargo.cs" />
     <Compile Include="Routing\IItineraryLeg.cs" />
