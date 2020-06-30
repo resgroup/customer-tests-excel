@@ -84,7 +84,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         protected string SimplePropertyDeclarationOnSelf(IGivenClassProperty excelGivenProperty)
         {
             var parameterName = excelGivenProperty.Name;
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue);
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue);
 
             return $"        public {parameterType} {parameterName} {{ get; private set; }}";
         }
@@ -92,7 +93,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         protected string SimplePropertySetterOnSelf(IGivenClassProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue);
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue);
             var classPropertyName = excelGivenProperty.Name;
 
             return
@@ -109,7 +111,8 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         protected string ComplexPropertyDeclarationOnSelf(IGivenClassProperty excelGivenProperty)
         {
             var classVariableName = excelGivenProperty.Name;
-            var variableType = $"SpecificationSpecific{excelGivenProperty.ClassName}";
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var variableType = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexProperty).ClassName}";
 
             return $"        public {variableType} {classVariableName} {{ get; private set; }}";
         }
@@ -119,7 +122,8 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             var functionName = $"{excelGivenProperty.Name}_of";
             var classVariableName = excelGivenProperty.Name;
             var parameterName = CamelCase(excelGivenProperty.Name);
-            var propertyClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var propertyClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexProperty).ClassName}";
 
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
@@ -132,18 +136,20 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
         }}{NewLine}";
         }
 
-        protected string ListPropertyDeclarationOnSelf(IGivenClassProperty excelProperty)
+        protected string ListPropertyDeclarationOnSelf(IGivenClassProperty excelGivenProperty)
         {
-            var listClassName = $"SpecificationSpecific{excelProperty.ClassName}";
-            var listPropertyName = ListPropertyName(excelProperty);
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var listClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexListProperty).ClassName}";
+            var listPropertyName = ListPropertyName(excelGivenProperty);
 
             return $"        readonly List<{listClassName}> {listPropertyName};";
         }
 
-        protected string ListPropertyInitialisationOnSelf(IGivenClassProperty excelProperty)
+        protected string ListPropertyInitialisationOnSelf(IGivenClassProperty excelGivenProperty)
         {
-            var listClassName = $"SpecificationSpecific{excelProperty.ClassName}";
-            var listPropertyName = ListPropertyName(excelProperty);
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var listClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexListProperty).ClassName}";
+            var listPropertyName = ListPropertyName(excelGivenProperty);
 
             return $"            {listPropertyName} = new List<{listClassName}>();";
         }
@@ -153,7 +159,8 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             var parameterName = CamelCase(excelGivenProperty.Name);
             var listParameterName = ListPropertyName(excelGivenProperty);
             var listPropertyName = ListPropertyName(excelGivenProperty);
-            var listClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var listClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexListProperty).ClassName}";
 
             return
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({listClassName} {parameterName})

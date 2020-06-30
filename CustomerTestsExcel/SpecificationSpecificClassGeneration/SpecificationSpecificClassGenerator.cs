@@ -105,8 +105,9 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({parameterTy
             var functionName = $"{matchedProperty.ExcelProperty.Name}_of";
             var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
             var interfacePropertyName = matchedProperty.ExcelProperty.Name;
-            var propertyClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
-            var propertyNameOfSutObject = matchedProperty.ExcelProperty.ClassName;
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var propertyClassName = $"SpecificationSpecific{(matchedProperty.ExcelProperty as GivenClassComplexProperty).ClassName}";
+            var propertyNameOfSutObject = (matchedProperty.ExcelProperty as GivenClassComplexProperty).ClassName;
 
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
@@ -121,7 +122,8 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
 
         string ListPropertyDeclarationOfMock(MatchedProperty matchedProperty)
         {
-            var listClassName = $"SpecificationSpecific{ matchedProperty.ExcelProperty.ClassName}";
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var listClassName = $"SpecificationSpecific{(matchedProperty.ExcelProperty as GivenClassComplexListProperty).ClassName}";
             var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
 
             return $"        readonly List<{listClassName}> {listPropertyName} = new List<{listClassName}>();";
@@ -131,7 +133,8 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
         {
             var interfacePropertyName = matchedProperty.ExcelProperty.Name;
             var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
-            var interfaceUnderTestPropertyName = matchedProperty.ExcelProperty.ClassName;
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var interfaceUnderTestPropertyName = (matchedProperty.ExcelProperty as GivenClassComplexListProperty).ClassName;
 
             return $"            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({listPropertyName}.Select(l => l.{interfaceUnderTestPropertyName}));";
         }
@@ -141,7 +144,8 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
             var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
             var listParameterName = ListPropertyName(matchedProperty.ExcelProperty);
             var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
-            var listClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            var listClassName = $"SpecificationSpecific{(matchedProperty.ExcelProperty as GivenClassComplexListProperty).ClassName}";
 
             return
 $@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelProperty.Name}_of({listClassName} {parameterName})
@@ -177,7 +181,8 @@ $@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelPrope
 
         string NonMatchingProperty(IGivenClassProperty givenClassProperty)
         {
-            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {givenClassProperty.ClassName}.cs";
+            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
+            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {(givenClassProperty as GivenClassComplexProperty).ClassName}.cs";
         }
 
         string InterfacePropertyName =>
