@@ -29,10 +29,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
         {
-            AddToCurrentClass(
-                new GivenClassComplexProperty(
-                    givenComplexProperty.PropertyName,
-                    givenComplexProperty.ClassName));
+            if (currentClasses.Any())
+                currentClasses.Peek().AddComplexProperty(givenComplexProperty);
 
             CreateOrActivateCurrentClass(givenComplexProperty.ClassName);
         }
@@ -42,25 +40,20 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
         {
-            AddToCurrentClass(
-                new GivenClassSimpleProperty(
-                    givenSimpleProperty.PropertyOrFunctionName,
-                    givenSimpleProperty.ExcelPropertyType,
-                    givenSimpleProperty.CsharpCodeRepresentation));
+            if (currentClasses.Any())
+                currentClasses.Peek().AddSimpleProperty(givenSimpleProperty);
         }
 
-        public void VisitGivenFunction(IGivenFunction givenSimpleProperty)
+        public void VisitGivenFunction(IGivenFunction givenFunction)
         {
-            AddToCurrentClass(
-                new GivenClassFunction(givenSimpleProperty.PropertyOrFunctionName));
+            if (currentClasses.Any())
+                currentClasses.Peek().AddFunction(givenFunction);
         }
 
         public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)
         {
-            AddToCurrentClass(
-                new GivenClassComplexListProperty(
-                    givenListProperty.PropertyName,
-                    givenListProperty.ClassName));
+            if (currentClasses.Any())
+                currentClasses.Peek().AddListProperty(givenListProperty);
 
             CreateOrActivateCurrentClass(givenListProperty.ClassName);
         }
@@ -70,10 +63,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders)
         {
-            AddToCurrentClass(
-                new GivenClassComplexListProperty(
-                    givenTableProperty.PropertyName,
-                    givenTableProperty.ClassName));
+            if (currentClasses.Any())
+                currentClasses.Peek().AddTableProperty(givenTableProperty);
 
             CreateOrActivateCurrentClass(givenTableProperty.ClassName);
         }
@@ -99,14 +90,6 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public void VisitGivenTablePropertyCellFinalisation()
         {
             // don't need to do anything special with table cells
-        }
-
-        void AddToCurrentClass(IGivenClassProperty givenClassProperty)
-        {
-            if (currentClasses.Any() == false)
-                return;
-
-            currentClasses.Peek().AddProperty(givenClassProperty);
         }
 
         void CreateOrActivateCurrentClass(string className, bool isRootClass = false)
