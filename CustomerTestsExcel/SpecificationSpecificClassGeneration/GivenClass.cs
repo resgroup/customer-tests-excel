@@ -6,17 +6,33 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
     public class GivenClass
     {
+        private readonly IReadOnlyList<IGivenSimpleProperty> givenSimpleProperties;
+        private readonly IReadOnlyList<IGivenComplexProperty> givenComplexProperties;
+        private readonly IReadOnlyList<IGivenFunction> givenFunctions;
+        private readonly IReadOnlyList<IGivenListProperty> givenListProperties;
+        private readonly IReadOnlyList<IGivenTableProperty> givenTableProperties;
+
         public bool IsRootClass { get; }
         public string Name { get; }
         public IReadOnlyList<IGivenClassProperty> Properties { get; }
 
         public GivenClass(
-            string name, 
+            string name,
             IReadOnlyList<IGivenClassProperty> properties,
+            IReadOnlyList<IGivenSimpleProperty> givenSimpleProperties,
+            IReadOnlyList<IGivenComplexProperty> givenComplexProperties,
+            IReadOnlyList<IGivenFunction> givenFunctions,
+            IReadOnlyList<IGivenListProperty> givenListProperties,
+            IReadOnlyList<IGivenTableProperty> givenTableProperties,
             bool isRootClass = false)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
-            Properties = properties ?? throw new System.ArgumentNullException(nameof(properties));
+            Properties = properties;
+            this.givenSimpleProperties = givenSimpleProperties;
+            this.givenComplexProperties = givenComplexProperties;
+            this.givenFunctions = givenFunctions;
+            this.givenListProperties = givenListProperties;
+            this.givenTableProperties = givenTableProperties;
             IsRootClass = isRootClass;
         }
 

@@ -37,6 +37,11 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 new GivenClass(
                     Name,
                     AggregateProperties(),
+                    givenSimpleProperties,
+                    givenComplexProperties,
+                    givenFunctions,
+                    givenListProperties,
+                    givenTableProperties,
                     IsRootClass);
         }
 

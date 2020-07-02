@@ -24,11 +24,18 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("ThingToSetup",
-                    new List<IGivenClassProperty> {
-                        new GivenClassComplexProperty("Root1", "Root1ClassName"),
-                        new GivenClassComplexProperty("Root2", "Root2ClassName")
-                    })
+                    new GivenClass(
+                        "ThingToSetup",
+                        new List<IGivenClassProperty> {
+                            new GivenClassComplexProperty("Root1", "Root1ClassName"),
+                            new GivenClassComplexProperty("Root2", "Root2ClassName")
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>()
+                    )
                 );
 
                 CollectionAssert.Contains(
@@ -36,7 +43,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     new GivenClass("Root1ClassName",
                     new List<IGivenClassProperty> {
                         new GivenClassComplexProperty("Child1", "Child1ClassName")
-                    })
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>()
+                    )
                 );
 
                 CollectionAssert.Contains(
@@ -44,7 +57,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     new GivenClass("Child1ClassName",
                     new List<IGivenClassProperty> {
                         new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
-                    })
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>()
+                    )
                 );
 
                 CollectionAssert.Contains(
@@ -52,7 +71,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     new GivenClass("Root2ClassName",
                     new List<IGivenClassProperty> {
                         new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
-                    })
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>()
+                    )
                 );
             }
         }

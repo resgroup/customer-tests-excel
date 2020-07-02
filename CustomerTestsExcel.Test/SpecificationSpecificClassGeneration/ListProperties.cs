@@ -24,35 +24,61 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("ThingToSetup",
-                    new List<IGivenClassProperty> {
-                        new GivenClassComplexListProperty("RootList1", "RootList1ClassName"),
-                        new GivenClassComplexListProperty("RootList2", "RootList2ClassName")
-                    })
+                    new GivenClass(
+                        "ThingToSetup",
+                        new List<IGivenClassProperty> {
+                            new GivenClassComplexListProperty("RootList1", "RootList1ClassName"),
+                            new GivenClassComplexListProperty("RootList2", "RootList2ClassName")
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>()
+                    )
                 );
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("RootList1ClassName",
-                    new List<IGivenClassProperty> {
-                        new GivenClassComplexListProperty("ChildList1", "ChildList1ClassName")
-                    })
+                    new GivenClass(
+                        "RootList1ClassName",
+                        new List<IGivenClassProperty> {
+                            new GivenClassComplexListProperty("ChildList1", "ChildList1ClassName")
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>()
+                    )
                 );
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("ChildList1ClassName",
-                    new List<IGivenClassProperty> {
-                        new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
-                    })
+                    new GivenClass(
+                        "ChildList1ClassName",
+                        new List<IGivenClassProperty> {
+                            new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>())
                 );
 
                 CollectionAssert.Contains(
                     givenClassRecorder.Classes,
-                    new GivenClass("RootList2ClassName",
-                    new List<IGivenClassProperty> {
-                        new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
-                    })
+                    new GivenClass(
+                        "RootList2ClassName",
+                        new List<IGivenClassProperty> {
+                            new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
+                        },
+                        new List<IGivenSimpleProperty>(),
+                        new List<IGivenComplexProperty>(),
+                        new List<IGivenFunction>(),
+                        new List<IGivenListProperty>(),
+                        new List<IGivenTableProperty>())
                 );
             }
         }

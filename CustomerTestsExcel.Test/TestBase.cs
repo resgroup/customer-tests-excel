@@ -85,7 +85,15 @@ namespace CustomerTestsExcel.Test
             string className,
             params IGivenClassProperty[] properties)
             =>
-            new GivenClass(className, properties);
+            new GivenClass(
+                className,
+                properties,
+                new List<IGivenSimpleProperty>(),
+                new List<IGivenComplexProperty>(),
+                new List<IGivenFunction>(),
+                new List<IGivenListProperty>(),
+                new List<IGivenTableProperty>()
+            );
 
     }
 }
