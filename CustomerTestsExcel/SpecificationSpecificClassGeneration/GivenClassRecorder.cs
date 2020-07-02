@@ -15,7 +15,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 mutableClass => 
                     new GivenClass(
                         mutableClass.Name, 
-                        mutableClass.Properties,
+                        mutableClass.AggregateProperties(),
                         mutableClass.IsRootClass)
                     ).ToList();
 

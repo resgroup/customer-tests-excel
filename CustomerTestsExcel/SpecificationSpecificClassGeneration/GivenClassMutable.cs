@@ -12,52 +12,117 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         readonly List<IGivenClassProperty> properties;
         public IReadOnlyList<IGivenClassProperty> Properties => properties;
 
+        readonly List<IGivenSimpleProperty> givenSimpleProperties;
+        readonly List<IGivenComplexProperty> givenComplexProperties;
+        readonly List<IGivenFunction> givenFunctions;
+        readonly List<IGivenListProperty> givenListProperties;
+        readonly List<IGivenTableProperty> givenTableProperties;
+
         public GivenClassMutable(string name, bool isRootClass = false)
         {
             Name = name;
             IsRootClass = isRootClass;
             properties = new List<IGivenClassProperty>();
+
+            givenSimpleProperties = new List<IGivenSimpleProperty>();
+            givenComplexProperties = new List<IGivenComplexProperty>();
+            givenFunctions = new List<IGivenFunction>();
+            givenListProperties = new List<IGivenListProperty>();
+            givenTableProperties = new List<IGivenTableProperty>();
+        }
+
+        public IReadOnlyList<IGivenClassProperty> AggregateProperties()
+        {
+            foreach (var givenSimpleProperty in givenSimpleProperties)
+            {
+                AddProperty(
+                    new GivenClassSimpleProperty(
+                        givenSimpleProperty.PropertyOrFunctionName,
+                        givenSimpleProperty.ExcelPropertyType,
+                        givenSimpleProperty.CsharpCodeRepresentation
+                    )
+                );
+            }
+
+            foreach (var givenComplexProperty in givenComplexProperties)
+            {
+                AddProperty(
+                    new GivenClassComplexProperty(
+                        givenComplexProperty.PropertyName,
+                        givenComplexProperty.ClassName));
+            }
+
+            foreach (var givenFunction in givenFunctions)
+            {
+                AddProperty(
+                    new GivenClassFunction(givenFunction.PropertyOrFunctionName));
+            }
+
+            foreach (var givenListProperty in givenListProperties)
+            {
+                AddProperty(
+                    new GivenClassComplexListProperty(
+                        givenListProperty.PropertyName,
+                        givenListProperty.ClassName));
+            }
+
+            foreach (var givenTableProperty in givenTableProperties)
+            {
+                AddProperty(
+                    new GivenClassComplexListProperty(
+                        givenTableProperty.PropertyName,
+                        givenTableProperty.ClassName));
+            }
+
+            return properties;
         }
 
         public void AddSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
         {
-            AddProperty(
-                new GivenClassSimpleProperty(
-                    givenSimpleProperty.PropertyOrFunctionName,
-                    givenSimpleProperty.ExcelPropertyType,
-                    givenSimpleProperty.CsharpCodeRepresentation
-                )
-           );
+            givenSimpleProperties.Add(givenSimpleProperty);
+            
+            //AddProperty(
+            //    new GivenClassSimpleProperty(
+            //        givenSimpleProperty.PropertyOrFunctionName,
+            //        givenSimpleProperty.ExcelPropertyType,
+            //        givenSimpleProperty.CsharpCodeRepresentation
+            //    )
+           //);
         }
 
-        public void AddFunction(IGivenFunction givenSimpleProperty)
+        public void AddFunction(IGivenFunction givenFunction)
         {
-            AddProperty(
-                new GivenClassFunction(givenSimpleProperty.PropertyOrFunctionName));
+            givenFunctions.Add(givenFunction);
+            //AddProperty(
+            //    new GivenClassFunction(givenSimpleProperty.PropertyOrFunctionName));
         }
 
         public void AddComplexProperty(IGivenComplexProperty givenComplexProperty)
         {
-            AddProperty(
-                new GivenClassComplexProperty(
-                    givenComplexProperty.PropertyName,
-                    givenComplexProperty.ClassName));
+            givenComplexProperties.Add(givenComplexProperty);
+
+            //AddProperty(
+            //    new GivenClassComplexProperty(
+            //        givenComplexProperty.PropertyName,
+            //        givenComplexProperty.ClassName));
         }
 
         public void AddListProperty(IGivenListProperty givenListProperty)
         {
-            AddProperty(
-                new GivenClassComplexListProperty(
-                    givenListProperty.PropertyName,
-                    givenListProperty.ClassName));
+            givenListProperties.Add(givenListProperty);
+            //AddProperty(
+            //    new GivenClassComplexListProperty(
+            //        givenListProperty.PropertyName,
+            //        givenListProperty.ClassName));
         }
 
         public void AddTableProperty(IGivenTableProperty givenTableProperty)
         {
-            AddProperty(
-                new GivenClassComplexListProperty(
-                    givenTableProperty.PropertyName,
-                    givenTableProperty.ClassName));
+            givenTableProperties.Add(givenTableProperty);
+            //AddProperty(
+            //    new GivenClassComplexListProperty(
+            //        givenTableProperty.PropertyName,
+            //        givenTableProperty.ClassName));
         }
 
         void AddProperty(IGivenClassProperty property)
