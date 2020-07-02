@@ -31,6 +31,15 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             givenTableProperties = new List<IGivenTableProperty>();
         }
 
+        public GivenClass CreateGivenClass()
+        {
+            return
+                new GivenClass(
+                    Name,
+                    AggregateProperties(),
+                    IsRootClass);
+        }
+
         public IReadOnlyList<IGivenClassProperty> AggregateProperties()
         {
             foreach (var givenSimpleProperty in givenSimpleProperties)
@@ -80,14 +89,14 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public void AddSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
         {
             givenSimpleProperties.Add(givenSimpleProperty);
-            
+
             //AddProperty(
             //    new GivenClassSimpleProperty(
             //        givenSimpleProperty.PropertyOrFunctionName,
             //        givenSimpleProperty.ExcelPropertyType,
             //        givenSimpleProperty.CsharpCodeRepresentation
             //    )
-           //);
+            //);
         }
 
         public void AddFunction(IGivenFunction givenFunction)
