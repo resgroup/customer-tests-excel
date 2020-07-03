@@ -33,8 +33,36 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public GivenClass CreateGivenClass()
         {
-            return
-                new GivenClass(
+            // rationalise simple and complex propertires
+            //  if a property is in simple and complex, and the simple one has only null values, then use the complex one
+            var newGivenSimpleProperties = givenSimpleProperties.Select(p => p).ToList();
+            foreach (var givenComplexProperty in givenComplexProperties)
+            {
+                if (newGivenSimpleProperties.Any(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName)
+                    && newGivenSimpleProperties.Where(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName).All(p => p.ExcelPropertyType == ExcelPropertyType.Null))
+                {
+                    newGivenSimpleProperties = newGivenSimpleProperties.Where(p => p.PropertyOrFunctionName != givenComplexProperty.PropertyName).ToList();
+                }
+            }
+
+            // simple properties need to check their values
+            //  if there are only null values then the value type is null
+            //  if there are null and primtive then nullable primtive
+            //  if there are different types of primitive then error
+            foreach (var givenSimpleProperty in givenSimpleProperties.Select(p => p.PropertyOrFunctionName).Distinct())
+            {
+            }
+
+
+                // aggregating functions can just take the first one
+                // aggregating list and table properties can also take the first one
+                // complex properties can just take first one
+                // could check for incompatible things at end
+                //  same name but different type is an error
+
+
+                return
+                    new GivenClass(
                     Name,
                     AggregateProperties(),
                     givenSimpleProperties,
@@ -47,6 +75,14 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public IReadOnlyList<IGivenClassProperty> AggregateProperties()
         {
+            foreach (var givenComplexProperty in givenComplexProperties)
+            {
+                AddProperty(
+                    new GivenClassComplexProperty(
+                        givenComplexProperty.PropertyName,
+                        givenComplexProperty.ClassName));
+            }
+
             foreach (var givenSimpleProperty in givenSimpleProperties)
             {
                 AddProperty(
@@ -56,14 +92,6 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                         givenSimpleProperty.CsharpCodeRepresentation
                     )
                 );
-            }
-
-            foreach (var givenComplexProperty in givenComplexProperties)
-            {
-                AddProperty(
-                    new GivenClassComplexProperty(
-                        givenComplexProperty.PropertyName,
-                        givenComplexProperty.ClassName));
             }
 
             foreach (var givenFunction in givenFunctions)
