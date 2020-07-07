@@ -22,7 +22,7 @@ test_script:
   # upload the code coverage to codcov.io
   - ps: |
       $env:PATH = 'C:\msys64\usr\bin;' + $env:PATH
-      Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh
+      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/codecov/codecov-bash/master/codecov' -OutFile codecov.sh
       bash codecov.sh -f "coverage.xml" -v
 artifacts:
  - path: .\*.nupkg 
