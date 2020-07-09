@@ -5,5 +5,6 @@
         string PropertyOrFunctionName { get; }
         string CsharpCodeRepresentation { get; }
         ExcelPropertyType ExcelPropertyType { get; }
+        bool Nullable { get; }
     }
 }

@@ -7,15 +7,18 @@ namespace CustomerTestsExcel.ExcelToCode
         public string PropertyOrFunctionName { get; }
         public string CsharpCodeRepresentation { get; }
         public ExcelPropertyType ExcelPropertyType { get; }
+        public bool Nullable { get; }
 
         public GivenSimpleProperty(
             string propertyOrFunctionName,
             string cSharpCodeRepresentation,
-            ExcelPropertyType excelPropertyType)
+            ExcelPropertyType excelPropertyType,
+            bool nullable = false)
         {
             PropertyOrFunctionName = propertyOrFunctionName;
             CsharpCodeRepresentation = cSharpCodeRepresentation;
             ExcelPropertyType = excelPropertyType;
+            Nullable = nullable;
         }
 
         public override bool Equals(object obj) =>

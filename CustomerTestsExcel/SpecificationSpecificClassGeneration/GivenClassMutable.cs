@@ -33,38 +33,70 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         public GivenClass CreateGivenClass()
         {
-            // rationalise simple and complex propertires
-            //  if a property is in simple and complex, and the simple one has only null values, then use the complex one
-            var newGivenSimpleProperties = givenSimpleProperties.Select(p => p).ToList();
+            // Rationalise simple and complex propertires
+            // If a property is in simple and complex, and the simple one has only null values, then use the complex one
+            var simplePropertiesWithoutNullComplexProperties = givenSimpleProperties.Select(p => p).ToList();
             foreach (var givenComplexProperty in givenComplexProperties)
             {
-                if (newGivenSimpleProperties.Any(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName)
-                    && newGivenSimpleProperties.Where(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName).All(p => p.ExcelPropertyType == ExcelPropertyType.Null))
+                if (simplePropertiesWithoutNullComplexProperties.Any(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName)
+                    && simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName).All(p => p.ExcelPropertyType == ExcelPropertyType.Null))
                 {
-                    newGivenSimpleProperties = newGivenSimpleProperties.Where(p => p.PropertyOrFunctionName != givenComplexProperty.PropertyName).ToList();
+                    simplePropertiesWithoutNullComplexProperties = simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName != givenComplexProperty.PropertyName).ToList();
                 }
             }
 
             // simple properties need to check their values
             //  if there are only null values then the value type is null
-            //  if there are null and primtive then nullable primtive
-            //  if there are different types of primitive then error
-            foreach (var givenSimpleProperty in givenSimpleProperties.Select(p => p.PropertyOrFunctionName).Distinct())
+            //  if there are null and primitive then nullable primtive
+            //  if there are different types of primitive then oops
+            var aggregatedSimpleProperties = new List<IGivenSimpleProperty>();
+            foreach (var givenSimpleProperty in simplePropertiesWithoutNullComplexProperties)
             {
+                var sameProperties = simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName == givenSimpleProperty.PropertyOrFunctionName);
+
+                var hasNullValues = sameProperties.Any(p => p.ExcelPropertyType == ExcelPropertyType.Null);
+
+                // this wont work properly with StringNull at the moment, 
+                // need to just stop using this I think
+                var numberOfPrimitiveTypes = sameProperties.Select(p => p.ExcelPropertyType).Where(p => p.IsPrimitive()).Distinct().Count();
+
+                if (numberOfPrimitiveTypes > 1)
+                    throw new ExcelToCodeException($"Multiple different property types found for {givenSimpleProperty.PropertyOrFunctionName}");
+
+                // nullable primitive
+                if (numberOfPrimitiveTypes == 1 && hasNullValues == true)
+                {
+                    aggregatedSimpleProperties.Add(
+                        new GivenSimpleProperty(
+                            givenSimpleProperty.PropertyOrFunctionName,
+                            givenSimpleProperty.CsharpCodeRepresentation,
+                            givenSimpleProperty.ExcelPropertyType,
+                            true
+                        )
+                    );
+                }
+
+                // primitve
+                if (numberOfPrimitiveTypes == 1 && hasNullValues == false)
+                {
+                    aggregatedSimpleProperties.Add(givenSimpleProperty);
+                }
+
+                // null 
+                aggregatedSimpleProperties.Add(givenSimpleProperty);
             }
 
+            // aggregating functions can just take the first one
+            // aggregating list and table properties can also take the first one
+            // complex properties can just take first one
+            // could check for incompatible things at end
+            //  same name but different type is an error
 
-                // aggregating functions can just take the first one
-                // aggregating list and table properties can also take the first one
-                // complex properties can just take first one
-                // could check for incompatible things at end
-                //  same name but different type is an error
 
-
-                return
-                    new GivenClass(
+            return
+                new GivenClass(
                     Name,
-                    AggregateProperties(),
+                    AggregateProperties(aggregatedSimpleProperties),
                     givenSimpleProperties,
                     givenComplexProperties,
                     givenFunctions,
@@ -73,7 +105,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                     IsRootClass);
         }
 
-        public IReadOnlyList<IGivenClassProperty> AggregateProperties()
+        public IReadOnlyList<IGivenClassProperty> AggregateProperties(
+            IReadOnlyList<IGivenSimpleProperty> aggregatedGivenSimpleProperties)
         {
             foreach (var givenComplexProperty in givenComplexProperties)
             {
@@ -83,13 +116,17 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                         givenComplexProperty.ClassName));
             }
 
-            foreach (var givenSimpleProperty in givenSimpleProperties)
+            // the simple properties are already aggreated, and shouldn't
+            // conflict with any complex properties (as this is already
+            // checked for), but they could conflict with other things
+            foreach (var givenSimpleProperty in aggregatedGivenSimpleProperties)
             {
                 AddProperty(
                     new GivenClassSimpleProperty(
                         givenSimpleProperty.PropertyOrFunctionName,
                         givenSimpleProperty.ExcelPropertyType,
-                        givenSimpleProperty.CsharpCodeRepresentation
+                        givenSimpleProperty.CsharpCodeRepresentation,
+                        givenSimpleProperty.Nullable
                     )
                 );
             }

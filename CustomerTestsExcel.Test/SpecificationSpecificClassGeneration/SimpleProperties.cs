@@ -20,7 +20,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 
             using (var workbook = Workbook(@"TestExcelFiles\PropertyTypes.xlsx"))
             {
-                sheetConverter.GenerateCSharpTestCode(NO_USINGS, workbook.GetPage(0), ANY_ROOT_NAMESPACE, ANY_WORKBOOKNAME);
+                sheetConverter.GenerateCSharpTestCode(
+                    NO_USINGS,
+                    workbook.GetPage(0),
+                    ANY_ROOT_NAMESPACE,
+                    ANY_WORKBOOKNAME);
 
                 Assert.AreEqual(1, givenClassRecorder.Classes.Count);
 

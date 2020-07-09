@@ -9,10 +9,13 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public string Name { get; }
         public ExcelPropertyType Type { get; }
         public string ExampleValue { get; }
-        // This is a very obvious violation of the liskov substituation principle, and the interface segrgation principle. Not sure what to do about it yet.
-        public string ClassName => "";
+        public bool Nullable { get; }
 
-        public GivenClassSimpleProperty(string name, ExcelPropertyType type, string exampleValue = "")
+        public GivenClassSimpleProperty(
+            string name,
+            ExcelPropertyType type,
+            string exampleValue = "",
+            bool nullable = true)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new System.ArgumentException("name is required", nameof(name));
@@ -26,6 +29,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             Name = name;
             Type = type;
             ExampleValue = exampleValue;
+            Nullable = nullable;
         }
 
         public bool TypesMatch(Type cSharpPropertyType)
@@ -62,7 +66,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         bool IsNumberType(Type csharpPropertytype)
         {
-            var underlyingType = Nullable.GetUnderlyingType(csharpPropertytype);
+            _ = System.Nullable.GetUnderlyingType(csharpPropertytype);
 
             return
                 csharpPropertytype == typeof(float)

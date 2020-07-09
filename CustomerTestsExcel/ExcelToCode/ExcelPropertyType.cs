@@ -37,5 +37,29 @@ namespace CustomerTestsExcel.ExcelToCode
                 || excelPropertyType == ExcelPropertyType.StringNull
                 || excelPropertyType == ExcelPropertyType.TimeSpan;
         }
+
+        public static bool IsPrimitive(this ExcelPropertyType excelPropertyType)
+        {
+            return excelPropertyType ==
+                ExcelPropertyType.Boolean
+                || excelPropertyType == ExcelPropertyType.DateTime
+                || excelPropertyType == ExcelPropertyType.Decimal
+                || excelPropertyType == ExcelPropertyType.Enum
+                || excelPropertyType == ExcelPropertyType.Number
+                || excelPropertyType == ExcelPropertyType.String
+                || excelPropertyType == ExcelPropertyType.StringNull
+                || excelPropertyType == ExcelPropertyType.TimeSpan;
+        }
+
+        public static bool IsPossiblyNullablePrimitive(this ExcelPropertyType excelPropertyType)
+        {
+            return excelPropertyType ==
+                ExcelPropertyType.Boolean
+                || excelPropertyType == ExcelPropertyType.DateTime
+                || excelPropertyType == ExcelPropertyType.Decimal
+                || excelPropertyType == ExcelPropertyType.Enum
+                || excelPropertyType == ExcelPropertyType.Number
+                || excelPropertyType == ExcelPropertyType.TimeSpan;
+        }
     }
 }
