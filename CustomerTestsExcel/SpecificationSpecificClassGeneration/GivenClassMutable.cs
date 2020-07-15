@@ -31,131 +31,6 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             givenTableProperties = new List<IGivenTableProperty>();
         }
 
-        public GivenClass CreateGivenClass()
-        {
-            // Rationalise simple and complex propertires
-            // If a property is in simple and complex, and the simple one has only null values, then use the complex one
-            var simplePropertiesWithoutNullComplexProperties = givenSimpleProperties.Select(p => p).ToList();
-            foreach (var givenComplexProperty in givenComplexProperties)
-            {
-                if (simplePropertiesWithoutNullComplexProperties.Any(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName)
-                    && simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName).All(p => p.ExcelPropertyType == ExcelPropertyType.Null))
-                {
-                    simplePropertiesWithoutNullComplexProperties = simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName != givenComplexProperty.PropertyName).ToList();
-                }
-            }
-
-            // simple properties need to check their values
-            //  if there are only null values then the value type is null
-            //  if there are null and primitive then nullable primtive
-            //  if there are different types of primitive then oops
-            var aggregatedSimpleProperties = new List<IGivenSimpleProperty>();
-            foreach (var givenSimpleProperty in simplePropertiesWithoutNullComplexProperties)
-            {
-                var sameProperties = simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName == givenSimpleProperty.PropertyOrFunctionName);
-
-                var hasNullValues = sameProperties.Any(p => p.ExcelPropertyType == ExcelPropertyType.Null);
-
-                // this wont work properly with StringNull at the moment, 
-                // need to just stop using this I think
-                var numberOfPrimitiveTypes = sameProperties.Select(p => p.ExcelPropertyType).Where(p => p.IsPrimitive()).Distinct().Count();
-
-                if (numberOfPrimitiveTypes > 1)
-                    throw new ExcelToCodeException($"Multiple different property types found for {givenSimpleProperty.PropertyOrFunctionName}");
-
-                // nullable primitive
-                if (numberOfPrimitiveTypes == 1 && hasNullValues == true)
-                {
-                    aggregatedSimpleProperties.Add(
-                        new GivenSimpleProperty(
-                            givenSimpleProperty.PropertyOrFunctionName,
-                            givenSimpleProperty.CsharpCodeRepresentation,
-                            givenSimpleProperty.ExcelPropertyType,
-                            true
-                        )
-                    );
-                }
-
-                // primitve
-                if (numberOfPrimitiveTypes == 1 && hasNullValues == false)
-                {
-                    aggregatedSimpleProperties.Add(givenSimpleProperty);
-                }
-
-                // null 
-                aggregatedSimpleProperties.Add(givenSimpleProperty);
-            }
-
-            // aggregating functions can just take the first one
-            // aggregating list and table properties can also take the first one
-            // complex properties can just take first one
-            // could check for incompatible things at end
-            //  same name but different type is an error
-
-
-            return
-                new GivenClass(
-                    Name,
-                    AggregateProperties(aggregatedSimpleProperties),
-                    givenSimpleProperties,
-                    givenComplexProperties,
-                    givenFunctions,
-                    givenListProperties,
-                    givenTableProperties,
-                    IsRootClass);
-        }
-
-        public IReadOnlyList<IGivenClassProperty> AggregateProperties(
-            IReadOnlyList<IGivenSimpleProperty> aggregatedGivenSimpleProperties)
-        {
-            foreach (var givenComplexProperty in givenComplexProperties)
-            {
-                AddProperty(
-                    new GivenClassComplexProperty(
-                        givenComplexProperty.PropertyName,
-                        givenComplexProperty.ClassName));
-            }
-
-            // the simple properties are already aggreated, and shouldn't
-            // conflict with any complex properties (as this is already
-            // checked for), but they could conflict with other things
-            foreach (var givenSimpleProperty in aggregatedGivenSimpleProperties)
-            {
-                AddProperty(
-                    new GivenClassSimpleProperty(
-                        givenSimpleProperty.PropertyOrFunctionName,
-                        givenSimpleProperty.ExcelPropertyType,
-                        givenSimpleProperty.CsharpCodeRepresentation,
-                        givenSimpleProperty.Nullable
-                    )
-                );
-            }
-
-            foreach (var givenFunction in givenFunctions)
-            {
-                AddProperty(
-                    new GivenClassFunction(givenFunction.PropertyOrFunctionName));
-            }
-
-            foreach (var givenListProperty in givenListProperties)
-            {
-                AddProperty(
-                    new GivenClassComplexListProperty(
-                        givenListProperty.PropertyName,
-                        givenListProperty.ClassName));
-            }
-
-            foreach (var givenTableProperty in givenTableProperties)
-            {
-                AddProperty(
-                    new GivenClassComplexListProperty(
-                        givenTableProperty.PropertyName,
-                        givenTableProperty.ClassName));
-            }
-
-            return properties;
-        }
-
         public void AddSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
         {
             givenSimpleProperties.Add(givenSimpleProperty);
@@ -204,12 +79,252 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             //        givenTableProperty.ClassName));
         }
 
+        public GivenClass CreateGivenClass()
+        {
+            // Rationalise simple and complex propertires
+            // If a property is in simple and complex, and the simple one has only null values, then use the complex one
+            var simplePropertiesWithoutNullComplexProperties = SimplePropertiesWithoutNullComplexProperties();
+
+            // simple properties need to check their values
+            //  if there are only null values then the value type is null
+            //  if there are null and primitive then nullable primtive
+            //  if there are different types of primitive then oops
+            var rationalisedSimpleProperties = RationaliseSimpleProperties(simplePropertiesWithoutNullComplexProperties);
+
+            // functions can be overloaded, so I think we can just use all of them
+            var rationalisedFunctions = givenFunctions;
+
+            // complex properties with the same name but a different property type are invalid
+            var rationalisedComplexProperties = RationaliseComplexProperties();
+
+            // list / table properties are enumerables of a certain type
+            // Properties with then same name but different types are invalid
+            var rationalisedListProperties = RationaliseListProperties();
+            var rationalisedTableProperties = RationaliseTableProperties();
+
+            // Properties of all these varieties exist on this class, and  
+            // properties of the same name but different type are invalid
+            // (for example a list property and a function)
+            var rationalisedCombinedProperties = RationaliseProperties(
+                rationalisedSimpleProperties,
+                rationalisedComplexProperties,
+                rationalisedFunctions,
+                rationalisedListProperties,
+                rationalisedTableProperties
+            );
+
+            return
+                new GivenClass(
+                    Name,
+                    rationalisedCombinedProperties,
+                    rationalisedSimpleProperties,
+                    rationalisedComplexProperties,
+                    rationalisedFunctions,
+                    rationalisedListProperties,
+                    rationalisedTableProperties,
+                    IsRootClass);
+        }
+
+        List<IGivenListProperty> RationaliseListProperties()
+        {
+            var rationalisedListProperties = new List<IGivenListProperty>();
+            foreach (var givenListProperty in givenListProperties)
+            {
+                if (rationalisedListProperties.Any(r => r.PropertyName == givenListProperty.PropertyName))
+                    continue;
+
+                var sameProperties = givenListProperties.Where(p => p.PropertyName == givenListProperty.PropertyName).Select(p => p.ClassName).ToList();
+                var sameComplexProperties = givenComplexProperties.Where(p => p.PropertyName == givenListProperty.PropertyName).Select(p => p.ClassName);
+                sameProperties.AddRange(sameComplexProperties);
+                var uniqueClassNames = sameProperties.Distinct();
+
+                if (uniqueClassNames.Count() > 1)
+                {
+                    var distinctTypes = string.Join(", ", uniqueClassNames);
+                    throw new ExcelToCodeException($"Multiple different types found for Enumerable {givenListProperty.PropertyName}: {distinctTypes}");
+                }
+
+                rationalisedListProperties.Add(givenListProperty);
+            }
+
+            return rationalisedListProperties;
+        }
+
+        List<IGivenTableProperty> RationaliseTableProperties()
+        {
+            var rationalisedTableProperties = new List<IGivenTableProperty>();
+            foreach (var givenTableProperty in givenTableProperties)
+            {
+                if (rationalisedTableProperties.Any(r => r.PropertyName == givenTableProperty.PropertyName))
+                    continue;
+
+                var sameProperties = givenListProperties.Where(p => p.PropertyName == givenTableProperty.PropertyName).Select(p => p.ClassName).ToList();
+                var sameComplexProperties = givenComplexProperties.Where(p => p.PropertyName == givenTableProperty.PropertyName).Select(p => p.ClassName);
+                sameProperties.AddRange(sameComplexProperties);
+                var uniqueClassNames = sameProperties.Distinct();
+
+                if (uniqueClassNames.Count() > 1)
+                {
+                    var distinctTypes = string.Join(", ", uniqueClassNames);
+                    throw new ExcelToCodeException($"Multiple different types found for Enumerable {givenTableProperty.PropertyName}: {distinctTypes}");
+                }
+
+                rationalisedTableProperties.Add(givenTableProperty);
+            }
+
+            return rationalisedTableProperties;
+        }
+
+        List<IGivenComplexProperty> RationaliseComplexProperties()
+        {
+            var rationalisedComplexProperties = new List<IGivenComplexProperty>();
+            foreach (var givenComplexProperty in givenComplexProperties)
+            {
+                if (rationalisedComplexProperties.Any(r => r.PropertyName == givenComplexProperty.PropertyName))
+                    continue;
+
+                var sameProperties = givenComplexProperties.Where(p => p.PropertyName == givenComplexProperty.PropertyName);
+
+                var numberOfDistinctTypes = sameProperties.Select(p => p.ClassName).Distinct().Count();
+
+                if (numberOfDistinctTypes > 1)
+                {
+                    var distinctTypes = string.Join(", ", sameProperties.Select(p => p.ClassName).Distinct());
+                    throw new ExcelToCodeException($"Multiple different types found for {givenComplexProperty.PropertyName}: {distinctTypes}");
+                }
+
+                rationalisedComplexProperties.Add(givenComplexProperty);
+            }
+
+            return rationalisedComplexProperties;
+        }
+
+        static List<IGivenSimpleProperty> RationaliseSimpleProperties(List<IGivenSimpleProperty> simplePropertiesWithoutNullComplexProperties)
+        {
+            var rationalisedSimpleProperties = new List<IGivenSimpleProperty>();
+            foreach (var givenSimpleProperty in simplePropertiesWithoutNullComplexProperties)
+            {
+                if (rationalisedSimpleProperties.Any(r => r.PropertyOrFunctionName == givenSimpleProperty.PropertyOrFunctionName))
+                    continue;
+
+                var sameProperties = simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName == givenSimpleProperty.PropertyOrFunctionName);
+
+                var hasNullValues = sameProperties.Any(p => p.ExcelPropertyType == ExcelPropertyType.Null);
+
+                // this wont work properly with StringNull at the moment, 
+                // need to just stop using this I think
+                var numberOfPrimitiveTypes = sameProperties.Select(p => p.ExcelPropertyType).Where(p => p.IsPrimitive()).Distinct().Count();
+
+                if (numberOfPrimitiveTypes > 1)
+                    throw new ExcelToCodeException($"Multiple different property types found for {givenSimpleProperty.PropertyOrFunctionName}");
+
+                // nullable primitive
+                if (numberOfPrimitiveTypes == 1 && hasNullValues == true)
+                {
+                    rationalisedSimpleProperties.Add(
+                        new GivenSimpleProperty(
+                            givenSimpleProperty.PropertyOrFunctionName,
+                            givenSimpleProperty.CsharpCodeRepresentation,
+                            givenSimpleProperty.ExcelPropertyType,
+                            true
+                        )
+                    );
+                }
+                // primitve
+                else if (numberOfPrimitiveTypes == 1 && hasNullValues == false)
+                {
+                    rationalisedSimpleProperties.Add(givenSimpleProperty);
+                }
+                else
+                {
+                    // null 
+                    rationalisedSimpleProperties.Add(givenSimpleProperty);
+                }
+            }
+
+            return rationalisedSimpleProperties;
+        }
+
+        List<IGivenSimpleProperty> SimplePropertiesWithoutNullComplexProperties()
+        {
+            var simplePropertiesWithoutNullComplexProperties = givenSimpleProperties.Select(p => p).ToList();
+            foreach (var givenComplexProperty in givenComplexProperties)
+            {
+                if (simplePropertiesWithoutNullComplexProperties.Any(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName)
+                    && simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName).All(p => p.ExcelPropertyType == ExcelPropertyType.Null))
+                {
+                    simplePropertiesWithoutNullComplexProperties = simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName != givenComplexProperty.PropertyName).ToList();
+                }
+            }
+
+            return simplePropertiesWithoutNullComplexProperties;
+        }
+
+        IReadOnlyList<IGivenClassProperty> RationaliseProperties(
+            IReadOnlyList<IGivenSimpleProperty> rationalisedGivenSimpleProperties,
+            IReadOnlyList<IGivenComplexProperty> rationalisedGivenComplexProperties,
+            IReadOnlyList<IGivenFunction> rationalisedGivenFunctions,
+            IReadOnlyList<IGivenListProperty> rationalisedGivenListProperties,
+            IReadOnlyList<IGivenTableProperty> rationalisedGivenTableProperties
+        )
+        {
+            properties.Clear();
+
+            foreach (var givenComplexProperty in rationalisedGivenComplexProperties)
+            {
+                AddProperty(
+                    new GivenClassComplexProperty(
+                        givenComplexProperty.PropertyName,
+                        givenComplexProperty.ClassName));
+            }
+
+            foreach (var givenSimpleProperty in rationalisedGivenSimpleProperties)
+            {
+                AddProperty(
+                    new GivenClassSimpleProperty(
+                        givenSimpleProperty.PropertyOrFunctionName,
+                        givenSimpleProperty.ExcelPropertyType,
+                        givenSimpleProperty.CsharpCodeRepresentation,
+                        givenSimpleProperty.Nullable
+                    )
+                );
+            }
+
+            foreach (var givenFunction in rationalisedGivenFunctions)
+            {
+                AddProperty(
+                    new GivenClassFunction(givenFunction.PropertyOrFunctionName));
+            }
+
+            foreach (var givenListProperty in rationalisedGivenListProperties)
+            {
+                AddProperty(
+                    new GivenClassComplexListProperty(
+                        givenListProperty.PropertyName,
+                        givenListProperty.ClassName));
+            }
+
+            foreach (var givenTableProperty in rationalisedGivenTableProperties)
+            {
+                AddProperty(
+                    new GivenClassComplexListProperty(
+                        givenTableProperty.PropertyName,
+                        givenTableProperty.ClassName));
+            }
+
+            return properties;
+        }
+
         void AddProperty(IGivenClassProperty property)
         {
-            // could think about raising an exception if the property name already
-            // exists but with a different type
-            if (properties.Any(p => p.Name == property.Name) == false)
-                properties.Add(property);
+            if (properties.Any(p => p.Name == property.Name))
+            {
+                var multipleTypes = string.Join(", ", properties.Where(p => p.Name == property.Name).Select(s => s.ToString()));
+
+                throw new ExcelToCodeException($"Multiple different property types found for {property.Name}: {multipleTypes}");
+            }
+
+            properties.Add(property);
         }
     }
 }
