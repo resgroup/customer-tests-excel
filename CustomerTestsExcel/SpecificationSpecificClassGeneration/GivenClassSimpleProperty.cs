@@ -55,9 +55,6 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             if (Type == ExcelPropertyType.String && cSharpPropertyType == typeof(string))
                 return true;
 
-            if (Type == ExcelPropertyType.StringNull && cSharpPropertyType == typeof(string))
-                return true;
-
             if (Type == ExcelPropertyType.Boolean && cSharpPropertyType == typeof(bool))
                 return true;
 

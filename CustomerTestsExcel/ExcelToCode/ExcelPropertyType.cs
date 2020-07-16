@@ -34,7 +34,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 || excelPropertyType == ExcelPropertyType.Null
                 || excelPropertyType == ExcelPropertyType.Number
                 || excelPropertyType == ExcelPropertyType.String
-                || excelPropertyType == ExcelPropertyType.StringNull
                 || excelPropertyType == ExcelPropertyType.TimeSpan;
         }
 
@@ -47,7 +46,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 || excelPropertyType == ExcelPropertyType.Enum
                 || excelPropertyType == ExcelPropertyType.Number
                 || excelPropertyType == ExcelPropertyType.String
-                || excelPropertyType == ExcelPropertyType.StringNull
                 || excelPropertyType == ExcelPropertyType.TimeSpan;
         }
 

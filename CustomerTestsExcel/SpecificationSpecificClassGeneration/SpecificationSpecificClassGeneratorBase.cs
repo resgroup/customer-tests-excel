@@ -200,8 +200,6 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
             {
                 case ExcelPropertyType.Null:
                     return typeof(object).Name;
-                case ExcelPropertyType.StringNull:
-                    return typeof(string).Name;
                 case ExcelPropertyType.Number:
                     return "Double?";
                 case ExcelPropertyType.Decimal:

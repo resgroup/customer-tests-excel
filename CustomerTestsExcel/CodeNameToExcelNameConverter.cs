@@ -307,9 +307,6 @@ namespace CustomerTestsExcel
 
             var stringValue = StringValueFromExcelValue(excelPropertyValue);
 
-            if (excelPropertyType == ExcelPropertyType.StringNull)
-                return stringValue;
-
             if (excelPropertyType == ExcelPropertyType.Enum)
                 return stringValue;
 
@@ -344,9 +341,6 @@ namespace CustomerTestsExcel
 
             if (stringValue.ToLower() == "null")
                 return ExcelPropertyType.Null;
-
-            if (stringValue.ToLower() == "\"null\"")
-                return ExcelPropertyType.StringNull;
 
             // Dates are a total disaster in Excel, so this might not always work as expected
             // See ExcelTabularPage

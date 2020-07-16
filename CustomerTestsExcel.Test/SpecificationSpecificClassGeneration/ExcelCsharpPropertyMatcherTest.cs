@@ -100,10 +100,6 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             Assert.True(
                 new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.String)
                 .TypesMatch(typeof(string)));
-
-            Assert.True(
-                new GivenClassSimpleProperty(ANY_STRING, ExcelPropertyType.StringNull)
-                .TypesMatch(typeof(string)));
         }
 
         [Test]
