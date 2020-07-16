@@ -81,8 +81,8 @@
     <Compile Include="ExcelToCode\GeneratedCsharpProject.cs" />
     <Compile Include="ExcelToCode\GivenFunction.cs" />
     <Compile Include="ExcelToCode\GivenTableProperty.cs" />
-    <Compile Include="ExcelToCode\IGivenFunction.cs" />
-    <Compile Include="ExcelToCode\IGivenTableProperty.cs" />
+    <Compile Include="ExcelToCode\IVisitedGivenFunction.cs" />
+    <Compile Include="ExcelToCode\IVisitedGivenTableProperty.cs" />
     <Compile Include="ExcelToCode\InMemoryGenerateCSharpFromExcel.cs" />
     <Compile Include="FluentList.cs" />
     <Compile Include="IReportSpecificationSetupProperty.cs" />
@@ -99,9 +99,9 @@
     <Compile Include="ExcelToCode\GivenListProperty.cs" />
     <Compile Include="ExcelToCode\GivenComplexProperty.cs" />
     <Compile Include="ExcelToCode\IExcelToCodeVisitor.cs" />
-    <Compile Include="ExcelToCode\IGivenComplexProperty.cs" />
-    <Compile Include="ExcelToCode\IGivenListProperty.cs" />
-    <Compile Include="ExcelToCode\IGivenSimpleProperty.cs" />
+    <Compile Include="ExcelToCode\IVisitedGivenComplexProperty.cs" />
+    <Compile Include="ExcelToCode\IVisitedGivenListProperty.cs" />
+    <Compile Include="ExcelToCode\IVisitedGivenSimpleProperty.cs" />
     <Compile Include="ExcelToCode\LoggerBase.cs" />
     <Compile Include="CodeOutputWriters\ExcelUnRoundTrippableTestOutputWriter.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeException.cs" />

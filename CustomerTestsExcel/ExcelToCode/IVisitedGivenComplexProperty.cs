@@ -1,6 +1,6 @@
 ﻿namespace CustomerTestsExcel.ExcelToCode
 {
-    public interface IGivenComplexProperty
+    public interface IVisitedGivenComplexProperty
     {
         string PropertyName { get; }
         string ClassName { get; }

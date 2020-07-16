@@ -2,7 +2,7 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public interface IGivenListProperty
+    public interface IVisitedGivenListProperty
     {
         string PropertyName { get; }
         string ClassName { get; }

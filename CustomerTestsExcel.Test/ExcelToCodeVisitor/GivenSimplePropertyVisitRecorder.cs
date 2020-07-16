@@ -7,8 +7,8 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
 {
     public class GivenSimplePropertyVisitRecorder : IExcelToCodeVisitor
     {
-        readonly List<IGivenSimpleProperty> recordedSimpleProperties = new List<IGivenSimpleProperty>();
-        public IReadOnlyList<IGivenSimpleProperty> RecordedSimpleProperties =>
+        readonly List<IVisitedGivenSimpleProperty> recordedSimpleProperties = new List<IVisitedGivenSimpleProperty>();
+        public IReadOnlyList<IVisitedGivenSimpleProperty> RecordedSimpleProperties =>
             recordedSimpleProperties;
 
         public void VisitGivenRootClassDeclaration(string className)
@@ -21,10 +21,10 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore other properties to keep test simple, just focus on the simple property visits
         }
 
-        public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty) =>
+        public void VisitGivenSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty) =>
             recordedSimpleProperties.Add(givenSimpleProperty);
 
-        public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)
+        public void VisitGivenListPropertyDeclaration(IVisitedGivenListProperty givenListProperty)
         {
             // ignore other properties to keep test simple, just focus on the simple property visits
         }
@@ -34,7 +34,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore other properties to keep test simple, just focus on the simple property visits
         }
 
-        public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
+        public void VisitGivenComplexPropertyDeclaration(IVisitedGivenComplexProperty givenComplexProperty)
         {
             // ignore other properties to keep test simple, just focus on the simple property visits
         }
@@ -54,7 +54,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore to keep test simple, just focus on the complex visits
         }
 
-        public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<ExcelToCode.TableHeader> tableHeaders)
+        public void VisitGivenTablePropertyDeclaration(IVisitedGivenTableProperty givenTableProperty, IEnumerable<ExcelToCode.TableHeader> tableHeaders)
         {
             // ignore to keep test simple, just focus on the complex visits
         }
@@ -74,7 +74,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore to keep test simple, just focus on the complex visits
         }
 
-        public void VisitGivenFunction(IGivenFunction givenFunction)
+        public void VisitGivenFunction(IVisitedGivenFunction givenFunction)
         {
             // ignore to keep test simple, just focus on the complex visits
         }

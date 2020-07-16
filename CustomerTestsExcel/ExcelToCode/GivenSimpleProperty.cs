@@ -2,7 +2,7 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public class GivenSimpleProperty : IGivenSimpleProperty
+    public class GivenSimpleProperty : IVisitedGivenSimpleProperty
     {
         public string PropertyOrFunctionName { get; }
         public string CsharpCodeRepresentation { get; }

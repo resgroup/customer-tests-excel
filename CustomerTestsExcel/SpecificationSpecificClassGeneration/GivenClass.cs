@@ -6,11 +6,11 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
     public class GivenClass
     {
-        private readonly IReadOnlyList<IGivenSimpleProperty> givenSimpleProperties;
-        private readonly IReadOnlyList<IGivenComplexProperty> givenComplexProperties;
-        private readonly IReadOnlyList<IGivenFunction> givenFunctions;
-        private readonly IReadOnlyList<IGivenListProperty> givenListProperties;
-        private readonly IReadOnlyList<IGivenTableProperty> givenTableProperties;
+        private readonly IReadOnlyList<IVisitedGivenSimpleProperty> givenSimpleProperties;
+        private readonly IReadOnlyList<IVisitedGivenComplexProperty> givenComplexProperties;
+        private readonly IReadOnlyList<IVisitedGivenFunction> givenFunctions;
+        private readonly IReadOnlyList<IVisitedGivenListProperty> givenListProperties;
+        private readonly IReadOnlyList<IVisitedGivenTableProperty> givenTableProperties;
 
         public bool IsRootClass { get; }
         public string Name { get; }
@@ -19,11 +19,11 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public GivenClass(
             string name,
             IReadOnlyList<IGivenClassProperty> properties,
-            IReadOnlyList<IGivenSimpleProperty> givenSimpleProperties,
-            IReadOnlyList<IGivenComplexProperty> givenComplexProperties,
-            IReadOnlyList<IGivenFunction> givenFunctions,
-            IReadOnlyList<IGivenListProperty> givenListProperties,
-            IReadOnlyList<IGivenTableProperty> givenTableProperties,
+            IReadOnlyList<IVisitedGivenSimpleProperty> givenSimpleProperties,
+            IReadOnlyList<IVisitedGivenComplexProperty> givenComplexProperties,
+            IReadOnlyList<IVisitedGivenFunction> givenFunctions,
+            IReadOnlyList<IVisitedGivenListProperty> givenListProperties,
+            IReadOnlyList<IVisitedGivenTableProperty> givenTableProperties,
             bool isRootClass = false)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));

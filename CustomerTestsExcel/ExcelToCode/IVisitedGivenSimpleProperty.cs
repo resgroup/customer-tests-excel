@@ -1,6 +1,6 @@
 ﻿namespace CustomerTestsExcel.ExcelToCode
 {
-    public interface IGivenSimpleProperty
+    public interface IVisitedGivenSimpleProperty
     {
         string PropertyOrFunctionName { get; }
         string CsharpCodeRepresentation { get; }

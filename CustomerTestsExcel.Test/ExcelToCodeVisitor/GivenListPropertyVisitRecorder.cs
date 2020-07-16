@@ -22,13 +22,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore other properties to keep test simple, just focus on the simple property visits
         }
 
-        public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty) =>
+        public void VisitGivenListPropertyDeclaration(IVisitedGivenListProperty givenListProperty) =>
             recordedListProperties.Add(givenListProperty.ToString());
 
         public void VisitGivenListPropertyFinalisation() =>
             recordedListProperties.Add("Finalisation");
 
-        public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
+        public void VisitGivenComplexPropertyDeclaration(IVisitedGivenComplexProperty givenComplexProperty)
         {
             // ignore simple properties to keep test simple, just focus on the list visits
         }
@@ -38,7 +38,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore simple properties to keep test simple, just focus on the list visits
         }
 
-        public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
+        public void VisitGivenSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty)
         {
             // ignore simple properties to keep test simple, just focus on the list visits
         }
@@ -53,7 +53,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore to keep test simple, just focus on the complex visits
         }
 
-        public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<ExcelToCode.TableHeader> tableHeaders)
+        public void VisitGivenTablePropertyDeclaration(IVisitedGivenTableProperty givenTableProperty, IEnumerable<ExcelToCode.TableHeader> tableHeaders)
         {
             // ignore to keep test simple, just focus on the complex visits
         }
@@ -73,7 +73,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore to keep test simple, just focus on the complex visits
         }
 
-        public void VisitGivenFunction(IGivenFunction givenFunction)
+        public void VisitGivenFunction(IVisitedGivenFunction givenFunction)
         {
             // ignore to keep test simple, just focus on the complex visits
         }

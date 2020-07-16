@@ -2,7 +2,7 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public class GivenFunction : IGivenFunction
+    public class GivenFunction : IVisitedGivenFunction
     {
         public string PropertyOrFunctionName { get; }
         public ExcelPropertyType ExcelPropertyType =>

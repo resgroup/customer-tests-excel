@@ -1,6 +1,6 @@
 ﻿namespace CustomerTestsExcel.ExcelToCode
 {
-    public interface IGivenFunction
+    public interface IVisitedGivenFunction
     {
         string PropertyOrFunctionName { get; }
     }

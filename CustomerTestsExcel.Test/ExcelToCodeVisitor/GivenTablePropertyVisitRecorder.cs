@@ -13,7 +13,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public IReadOnlyList<string> RecordedTableProperties =>
             recordedTableProperties;
 
-        public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders) =>
+        public void VisitGivenTablePropertyDeclaration(IVisitedGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders) =>
             recordedTableProperties.Add($"Table [{string.Join(",", tableHeaders.Select(h => h.ToString()))}]");
 
         public void VisitGivenTablePropertyRowDeclaration(uint row) =>
@@ -22,13 +22,13 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column) =>
             recordedTableProperties.Add($"Cell({row}, {column})");
 
-        public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty) =>
+        public void VisitGivenComplexPropertyDeclaration(IVisitedGivenComplexProperty givenComplexProperty) =>
             recordedTableProperties.Add(givenComplexProperty.ToString());
 
         public void VisitGivenComplexPropertyFinalisation() =>
             recordedTableProperties.Add("ComplexPropertyFinalisation");
 
-        public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty) =>
+        public void VisitGivenSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty) =>
             recordedTableProperties.Add(givenSimpleProperty.ToString());
 
         public void VisitGivenTablePropertyCellFinalisation() =>
@@ -40,7 +40,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         public void VisitGivenTablePropertyFinalisation() =>
             recordedTableProperties.Add("TableFinalisation");
 
-        public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)
+        public void VisitGivenListPropertyDeclaration(IVisitedGivenListProperty givenListProperty)
         {
             // ignore to keep test simple, just focus on the complex visits
         }
@@ -60,7 +60,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             // ignore other properties to keep test simple, just focus on the simple property visits
         }
 
-        public void VisitGivenFunction(IGivenFunction givenFunction)
+        public void VisitGivenFunction(IVisitedGivenFunction givenFunction)
         {
             // ignore to keep test simple, just focus on the complex visits
         }

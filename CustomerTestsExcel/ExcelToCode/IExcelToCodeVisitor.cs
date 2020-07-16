@@ -14,17 +14,17 @@ namespace CustomerTestsExcel.ExcelToCode
         void VisitGivenRootClassDeclaration(string className);
         void VisitGivenRootClassFinalisation();
 
-        void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty);
+        void VisitGivenSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty);
 
-        void VisitGivenFunction(IGivenFunction givenFunction);
+        void VisitGivenFunction(IVisitedGivenFunction givenFunction);
 
-        void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty);
+        void VisitGivenListPropertyDeclaration(IVisitedGivenListProperty givenListProperty);
         void VisitGivenListPropertyFinalisation();
 
-        void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty);
+        void VisitGivenComplexPropertyDeclaration(IVisitedGivenComplexProperty givenComplexProperty);
         void VisitGivenComplexPropertyFinalisation();
 
-        void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders);
+        void VisitGivenTablePropertyDeclaration(IVisitedGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders);
         void VisitGivenTablePropertyRowDeclaration(uint row);
         void VisitGivenTablePropertyCellDeclaration(TableHeader tableHeader, uint row, uint column);
         void VisitGivenTablePropertyCellFinalisation();

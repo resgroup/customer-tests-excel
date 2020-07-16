@@ -30,11 +30,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                             new GivenClassComplexProperty("Root1", "Root1ClassName"),
                             new GivenClassComplexProperty("Root2", "Root2ClassName")
                         },
-                        new List<IGivenSimpleProperty>(),
-                        new List<IGivenComplexProperty>(),
-                        new List<IGivenFunction>(),
-                        new List<IGivenListProperty>(),
-                        new List<IGivenTableProperty>()
+                        new List<IVisitedGivenSimpleProperty>(),
+                        new List<IVisitedGivenComplexProperty>(),
+                        new List<IVisitedGivenFunction>(),
+                        new List<IVisitedGivenListProperty>(),
+                        new List<IVisitedGivenTableProperty>()
                     )
                 );
 
@@ -44,11 +44,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     new List<IGivenClassProperty> {
                         new GivenClassComplexProperty("Child1", "Child1ClassName")
                         },
-                        new List<IGivenSimpleProperty>(),
-                        new List<IGivenComplexProperty>(),
-                        new List<IGivenFunction>(),
-                        new List<IGivenListProperty>(),
-                        new List<IGivenTableProperty>()
+                        new List<IVisitedGivenSimpleProperty>(),
+                        new List<IVisitedGivenComplexProperty>(),
+                        new List<IVisitedGivenFunction>(),
+                        new List<IVisitedGivenListProperty>(),
+                        new List<IVisitedGivenTableProperty>()
                     )
                 );
 
@@ -58,11 +58,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     new List<IGivenClassProperty> {
                         new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
                         },
-                        new List<IGivenSimpleProperty>(),
-                        new List<IGivenComplexProperty>(),
-                        new List<IGivenFunction>(),
-                        new List<IGivenListProperty>(),
-                        new List<IGivenTableProperty>()
+                        new List<IVisitedGivenSimpleProperty>(),
+                        new List<IVisitedGivenComplexProperty>(),
+                        new List<IVisitedGivenFunction>(),
+                        new List<IVisitedGivenListProperty>(),
+                        new List<IVisitedGivenTableProperty>()
                     )
                 );
 
@@ -72,11 +72,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                     new List<IGivenClassProperty> {
                         new GivenClassSimpleProperty("Property", ExcelPropertyType.String)
                         },
-                        new List<IGivenSimpleProperty>(),
-                        new List<IGivenComplexProperty>(),
-                        new List<IGivenFunction>(),
-                        new List<IGivenListProperty>(),
-                        new List<IGivenTableProperty>()
+                        new List<IVisitedGivenSimpleProperty>(),
+                        new List<IVisitedGivenComplexProperty>(),
+                        new List<IVisitedGivenFunction>(),
+                        new List<IVisitedGivenListProperty>(),
+                        new List<IVisitedGivenTableProperty>()
                     )
                 );
             }

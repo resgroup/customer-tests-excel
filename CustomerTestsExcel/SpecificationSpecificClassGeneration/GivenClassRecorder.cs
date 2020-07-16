@@ -24,7 +24,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public void VisitGivenRootClassFinalisation() =>
             FinishCurrentClass();
 
-        public void VisitGivenComplexPropertyDeclaration(IGivenComplexProperty givenComplexProperty)
+        public void VisitGivenComplexPropertyDeclaration(IVisitedGivenComplexProperty givenComplexProperty)
         {
             if (currentClasses.Any())
                 currentClasses.Peek().AddComplexProperty(givenComplexProperty);
@@ -35,19 +35,19 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public void VisitGivenComplexPropertyFinalisation() =>
             FinishCurrentClass();
 
-        public void VisitGivenSimpleProperty(IGivenSimpleProperty givenSimpleProperty)
+        public void VisitGivenSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty)
         {
             if (currentClasses.Any())
                 currentClasses.Peek().AddSimpleProperty(givenSimpleProperty);
         }
 
-        public void VisitGivenFunction(IGivenFunction givenFunction)
+        public void VisitGivenFunction(IVisitedGivenFunction givenFunction)
         {
             if (currentClasses.Any())
                 currentClasses.Peek().AddFunction(givenFunction);
         }
 
-        public void VisitGivenListPropertyDeclaration(IGivenListProperty givenListProperty)
+        public void VisitGivenListPropertyDeclaration(IVisitedGivenListProperty givenListProperty)
         {
             if (currentClasses.Any())
                 currentClasses.Peek().AddListProperty(givenListProperty);
@@ -58,7 +58,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         public void VisitGivenListPropertyFinalisation() =>
             FinishCurrentClass();
 
-        public void VisitGivenTablePropertyDeclaration(IGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders)
+        public void VisitGivenTablePropertyDeclaration(IVisitedGivenTableProperty givenTableProperty, IEnumerable<TableHeader> tableHeaders)
         {
             if (currentClasses.Any())
                 currentClasses.Peek().AddTableProperty(givenTableProperty);

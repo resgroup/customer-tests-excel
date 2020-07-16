@@ -88,11 +88,11 @@ namespace CustomerTestsExcel.Test
             new GivenClass(
                 className,
                 properties,
-                new List<IGivenSimpleProperty>(),
-                new List<IGivenComplexProperty>(),
-                new List<IGivenFunction>(),
-                new List<IGivenListProperty>(),
-                new List<IGivenTableProperty>()
+                new List<IVisitedGivenSimpleProperty>(),
+                new List<IVisitedGivenComplexProperty>(),
+                new List<IVisitedGivenFunction>(),
+                new List<IVisitedGivenListProperty>(),
+                new List<IVisitedGivenTableProperty>()
             );
 
     }

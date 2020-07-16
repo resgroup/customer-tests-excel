@@ -2,7 +2,7 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public class GivenComplexProperty : IGivenComplexProperty
+    public class GivenComplexProperty : IVisitedGivenComplexProperty
     {
         public string PropertyName { get; }
         public string ClassName { get; }
