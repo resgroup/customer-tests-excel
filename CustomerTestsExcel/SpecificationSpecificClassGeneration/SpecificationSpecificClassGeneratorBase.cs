@@ -85,7 +85,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         {
             var parameterName = excelGivenProperty.Name;
             // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue);
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue, (excelGivenProperty as GivenClassSimpleProperty).Nullable);
 
             return $"        public {parameterType} {parameterName} {{ get; private set; }}";
         }
@@ -94,7 +94,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
             // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue);
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue, (excelGivenProperty as GivenClassSimpleProperty).Nullable);
             var classPropertyName = excelGivenProperty.Name;
 
             return
@@ -194,26 +194,28 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         }}";
         }
 
-        string CsharpPropertyTypeName(ExcelPropertyType type, string propertyValue)
+        string CsharpPropertyTypeName(ExcelPropertyType type, string propertyValue, bool nullable)
         {
+            var questionMark = nullable ? "?" : "";
+
             switch (type)
             {
                 case ExcelPropertyType.Null:
                     return typeof(object).Name;
                 case ExcelPropertyType.Number:
-                    return "Double?";
+                    return "Double" + questionMark;
                 case ExcelPropertyType.Decimal:
-                    return "Deciml?";
+                    return "Deciml" + questionMark;
                 case ExcelPropertyType.String:
                     return typeof(string).Name;
                 case ExcelPropertyType.DateTime:
-                    return "DateTime?";
+                    return "DateTime" + questionMark;
                 case ExcelPropertyType.TimeSpan:
-                    return "TimeSpan?";
+                    return "TimeSpan" + questionMark;
                 case ExcelPropertyType.Enum:
                     return propertyValue?.Substring(0, Math.Max(propertyValue.IndexOf('.'), 1)) ?? "Enum /* no value in excel tests for value of this enum, so unable to deduce the type */";
                 case ExcelPropertyType.Boolean:
-                    return "bool?";
+                    return "bool" + questionMark;
                 case ExcelPropertyType.Object:
                     return typeof(object).Name;
                 case ExcelPropertyType.List:

@@ -58,7 +58,9 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             //  if there are different types of primitive then oops
             var rationalisedSimpleProperties = RationaliseSimpleProperties(simplePropertiesWithoutNullComplexProperties);
 
-            // functions can be overloaded, so I think we can just use all of them
+            // Functions should all have different names, but this is enforced
+            // anyway in RationaliseProperties so not going to worry about it
+            // for now
             var rationalisedFunctions = givenFunctions;
 
             // complex properties with the same name but a different property type are invalid

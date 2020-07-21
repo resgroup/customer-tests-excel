@@ -29,45 +29,45 @@ namespace SampleTests.GeneratedSpecificationSpecific
     // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/ExcelTests/Vermeulen%20Near%20Wake%20Length.xlsx
 
     // Custom classes should go under a directory called 'IgnoreOnGeneration'.
-    // If the custom class filename is the same as this one (SpecificationSpecificCalculator),
+    // If the custom class filename is the same as this one (SpecificationSpecificRootObject),
     // then it will be used instead of this function. If it is called something else,
-    // say SpecificationSpecificCalculatorPartial, then this class will remain, and
+    // say SpecificationSpecificRootObjectPartial, then this class will remain, and
     // the custom class can add to it.
 
-    public partial class SpecificationSpecificCalculator : ReportsSpecificationSetup
+    public partial class SpecificationSpecificRootObject : ReportsSpecificationSetup
     {
-        public Double FirstValue { get; private set; }
-        public Double SecondValue { get; private set; }
-        public Operation Operation { get; private set; }
+        public Double? NullableInt { get; private set; }
+        public Double Number { get; private set; }
+        public String NullableString { get; private set; }
 
-        public SpecificationSpecificCalculator()
+        public SpecificationSpecificRootObject()
         {
 
         }
 
-        internal SpecificationSpecificCalculator FirstValue_of(Double firstValue)
+        internal SpecificationSpecificRootObject NullableInt_of(Double? nullableInt)
         {
-            AddValueProperty(GetCurrentMethod(), firstValue);
+            AddValueProperty(GetCurrentMethod(), nullableInt);
 
-            this.FirstValue = firstValue;
+            this.NullableInt = nullableInt;
 
             return this;
         }
 
-        internal SpecificationSpecificCalculator SecondValue_of(Double secondValue)
+        internal SpecificationSpecificRootObject Number_of(Double number)
         {
-            AddValueProperty(GetCurrentMethod(), secondValue);
+            AddValueProperty(GetCurrentMethod(), number);
 
-            this.SecondValue = secondValue;
+            this.Number = number;
 
             return this;
         }
 
-        internal SpecificationSpecificCalculator Operation_of(Operation operation)
+        internal SpecificationSpecificRootObject NullableString_of(String nullableString)
         {
-            AddValueProperty(GetCurrentMethod(), operation);
+            AddValueProperty(GetCurrentMethod(), nullableString);
 
-            this.Operation = operation;
+            this.NullableString = nullableString;
 
             return this;
         }

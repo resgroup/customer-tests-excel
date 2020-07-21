@@ -73,6 +73,7 @@
     <Compile Include="Misc\Underscores.cs" />
     <Compile Include="Misc\CustomProperties.cs" />
     <Compile Include="Misc\NullObjects.cs" />
+    <Compile Include="Misc\RootNullablePrimitives.cs" />
     <None Include="ExcelTests\PrimitiveLists.xlsx" />
     <Compile Include="PrimitiveLists\PrimitiveLists.cs" />
     <None Include="ExcelTests\Rerouting.xlsx" />
@@ -87,9 +88,9 @@
     <Compile Include="GeneratedSpecificationSpecific\Underscore.cs" />
     <Compile Include="GeneratedSpecificationSpecific\ClassWithCustomProperty.cs" />
     <Compile Include="GeneratedSpecificationSpecific\UnmatchedClass.cs" />
-    <Compile Include="GeneratedSpecificationSpecific\Anything.cs" />
     <Compile Include="GeneratedSpecificationSpecific\HasObjectProperty.cs" />
     <Compile Include="GeneratedSpecificationSpecific\NullObjectTester.cs" />
+    <Compile Include="GeneratedSpecificationSpecific\RootObject.cs" />
     <Compile Include="GeneratedSpecificationSpecific\ObjectWithPrimiiveLists.cs" />
     <Compile Include="GeneratedSpecificationSpecific\ItineraryLeg.cs" />
     <Compile Include="GeneratedSpecificationSpecific\Cargo.cs" />

@@ -21,37 +21,36 @@ using SampleSystemUnderTest.Misc;
 namespace SampleTests.Misc
 {
     [TestFixture]
-    public class NullObjects : SpecificationBase<SpecificationSpecificNullObjectTester>, ISpecification<SpecificationSpecificNullObjectTester>
+    public class RootNullablePrimitives : SpecificationBase<SpecificationSpecificRootObject>, ISpecification<SpecificationSpecificRootObject>
     {
         public override string Description()
         {
-            return "Nulls can be passed as objects";
+            return "Nullability is calculated from values for generated root setup classes";
         }
         
-        public override SpecificationSpecificNullObjectTester Given()
+        public override SpecificationSpecificRootObject Given()
         {
             return
-                new SpecificationSpecificNullObjectTester()
-                .HasObjectProperty_of(null)
-                
-                .HasObjectProperty_of(
-                    new SpecificationSpecificHasObjectProperty()
-                    .Anything_of(null)
-                )
+                new SpecificationSpecificRootObject()
+                .NullableInt_of(1)
+                .NullableInt_of(null)
+                .Number_of(2.3)
+                .NullableString_of("cedd")
+                .NullableString_of(null)
             ;
         }
         
-        public override string When(SpecificationSpecificNullObjectTester nullObjectTester)
+        public override string When(SpecificationSpecificRootObject rootObject)
         {
-            nullObjectTester.Do_Nothing();
+            rootObject.Do_Nothing();
             return "Do Nothing";
         }
         
-        public override IEnumerable<IAssertion<SpecificationSpecificNullObjectTester>> Assertions()
+        public override IEnumerable<IAssertion<SpecificationSpecificRootObject>> Assertions()
         {
-            return new List<IAssertion<SpecificationSpecificNullObjectTester>>
+            return new List<IAssertion<SpecificationSpecificRootObject>>
             {
-                  new EqualityAssertion<SpecificationSpecificNullObjectTester>(nullObjectTester => nullObjectTester.A_Result, 1)
+                  new EqualityAssertion<SpecificationSpecificRootObject>(rootObject => rootObject.A_Result, 1)
             };
         }
         

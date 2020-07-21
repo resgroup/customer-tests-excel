@@ -28,11 +28,11 @@ namespace SampleTests.GeneratedSpecificationSpecific
 
         }
 
-        internal SpecificationSpecificHasObjectProperty Anything_of(SpecificationSpecificAnything anything)
+        internal SpecificationSpecificHasObjectProperty Anything_of(IAnything anything)
         {
-            AddClassProperty(new ReportSpecificationSetupClass(GetCurrentMethod(), anything));
+            AddValueProperty(GetCurrentMethod(), anything);
 
-            hasObjectProperty.Setup(m => m.Anything).Returns(anything?.Anything);
+            hasObjectProperty.Setup(m => m.Anything).Returns(anything);
 
             return this;
         }
