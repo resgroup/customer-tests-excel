@@ -31,53 +31,20 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             givenTableProperties = new List<IVisitedGivenTableProperty>();
         }
 
-        public void AddSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty)
-        {
+        public void AddSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty) =>
             givenSimpleProperties.Add(givenSimpleProperty);
 
-            //AddProperty(
-            //    new GivenClassSimpleProperty(
-            //        givenSimpleProperty.PropertyOrFunctionName,
-            //        givenSimpleProperty.ExcelPropertyType,
-            //        givenSimpleProperty.CsharpCodeRepresentation
-            //    )
-            //);
-        }
-
-        public void AddFunction(IVisitedGivenFunction givenFunction)
-        {
+        public void AddFunction(IVisitedGivenFunction givenFunction) =>
             givenFunctions.Add(givenFunction);
-            //AddProperty(
-            //    new GivenClassFunction(givenSimpleProperty.PropertyOrFunctionName));
-        }
 
-        public void AddComplexProperty(IVisitedGivenComplexProperty givenComplexProperty)
-        {
+        public void AddComplexProperty(IVisitedGivenComplexProperty givenComplexProperty) =>
             givenComplexProperties.Add(givenComplexProperty);
 
-            //AddProperty(
-            //    new GivenClassComplexProperty(
-            //        givenComplexProperty.PropertyName,
-            //        givenComplexProperty.ClassName));
-        }
-
-        public void AddListProperty(IVisitedGivenListProperty givenListProperty)
-        {
+        public void AddListProperty(IVisitedGivenListProperty givenListProperty) =>
             givenListProperties.Add(givenListProperty);
-            //AddProperty(
-            //    new GivenClassComplexListProperty(
-            //        givenListProperty.PropertyName,
-            //        givenListProperty.ClassName));
-        }
 
-        public void AddTableProperty(IVisitedGivenTableProperty givenTableProperty)
-        {
+        public void AddTableProperty(IVisitedGivenTableProperty givenTableProperty) =>
             givenTableProperties.Add(givenTableProperty);
-            //AddProperty(
-            //    new GivenClassComplexListProperty(
-            //        givenTableProperty.PropertyName,
-            //        givenTableProperty.ClassName));
-        }
 
         public GivenClass CreateGivenClass()
         {
