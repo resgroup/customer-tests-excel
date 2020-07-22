@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="IgnoreOnGeneration\Calculator\SpecificationSpecificCalculatorPartial.cs" />
     <Compile Include="IgnoreOnGeneration\AnovaCalculator\SpecificationSpecificAnovaCalculatorPartial.cs" />
+    <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificRootObjectPartial.cs" />
     <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificClassWithCustomPropertyPartial.cs" />
     <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificUnmatchedClassPartial.cs" />
     <Compile Include="IgnoreOnGeneration\Misc\SpecificationSpecificUnderscorePartial.cs" />
