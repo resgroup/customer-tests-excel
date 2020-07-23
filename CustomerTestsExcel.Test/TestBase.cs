@@ -81,6 +81,7 @@ namespace CustomerTestsExcel.Test
             return logger;
         }
 
+        // This is a bit of a hacky test helper function, but not going to worry for now
         protected static GivenClass ExcelGivenClass(
             string className,
             params IGivenClassProperty[] properties)
@@ -88,11 +89,10 @@ namespace CustomerTestsExcel.Test
             new GivenClass(
                 className,
                 properties,
-                new List<IVisitedGivenSimpleProperty>(),
-                new List<IVisitedGivenComplexProperty>(),
-                new List<IVisitedGivenFunction>(),
-                new List<IVisitedGivenListProperty>(),
-                new List<IVisitedGivenTableProperty>()
+                properties.Where(p => p is GivenClassSimpleProperty).Cast<GivenClassSimpleProperty>().ToList(),
+                properties.Where(p => p is GivenClassComplexProperty).Cast<GivenClassComplexProperty>().ToList(),
+                properties.Where(p => p is GivenClassFunction).Cast<GivenClassFunction>().ToList(),
+                properties.Where(p => p is GivenClassComplexListProperty).Cast<GivenClassComplexListProperty>().ToList()
             );
 
     }

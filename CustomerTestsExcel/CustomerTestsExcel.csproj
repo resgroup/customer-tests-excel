@@ -79,8 +79,8 @@
     <Compile Include="ExcelToCode\ExcelToCodeTable.cs" />
     <Compile Include="ExcelToCode\LogState.cs" />
     <Compile Include="ExcelToCode\GeneratedCsharpProject.cs" />
-    <Compile Include="ExcelToCode\GivenFunction.cs" />
-    <Compile Include="ExcelToCode\GivenTableProperty.cs" />
+    <Compile Include="ExcelToCode\VisitedGivenFunction.cs" />
+    <Compile Include="ExcelToCode\VisitedGivenTableProperty.cs" />
     <Compile Include="ExcelToCode\IVisitedGivenFunction.cs" />
     <Compile Include="ExcelToCode\IVisitedGivenTableProperty.cs" />
     <Compile Include="ExcelToCode\InMemoryGenerateCSharpFromExcel.cs" />
@@ -96,8 +96,8 @@
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassMutable.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\IGivenClassProperty.cs" />
     <Compile Include="SpecificationSpecificClassGeneration\GivenClassRecorder.cs" />
-    <Compile Include="ExcelToCode\GivenListProperty.cs" />
-    <Compile Include="ExcelToCode\GivenComplexProperty.cs" />
+    <Compile Include="ExcelToCode\VisitedGivenListProperty.cs" />
+    <Compile Include="ExcelToCode\VisitedGivenComplexProperty.cs" />
     <Compile Include="ExcelToCode\IExcelToCodeVisitor.cs" />
     <Compile Include="ExcelToCode\IVisitedGivenComplexProperty.cs" />
     <Compile Include="ExcelToCode\IVisitedGivenListProperty.cs" />
@@ -108,7 +108,7 @@
     <Compile Include="ExcelToCode\ConsoleLogger.cs" />
     <Compile Include="ExcelToCode\ILogger.cs" />
     <Compile Include="ExcelToCode\PropertyTableHeader.cs" />
-    <Compile Include="ExcelToCode\GivenSimpleProperty.cs" />
+    <Compile Include="ExcelToCode\VisitedGivenSimpleProperty.cs" />
     <Compile Include="ExcelToCode\SubClassTableHeader.cs" />
     <Compile Include="ExcelToCode\AssertionTableHeader.cs" />
     <Compile Include="ExcelToCode\TableHeader.cs" />

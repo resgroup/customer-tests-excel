@@ -41,9 +41,10 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             return usingStatements;
         }
 
-        protected IEnumerable<MatchedProperty> MatchWithCsharpType(
-            IEnumerable<IGivenClassProperty> excelProperties,
+        protected IEnumerable<MatchedProperty<T>> MatchWithCsharpType<T>(
+            IEnumerable<T> excelProperties,
             Type type)
+            where T: IGivenClassProperty
         {
             return 
                 excelProperties
@@ -51,9 +52,10 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 .Where(mp => mp.CsharpProperty != null);
         }
 
-        protected IEnumerable<IGivenClassProperty> NonMatchingProperties(
-            IEnumerable<IGivenClassProperty> excelProperties,
-            Type type)
+        protected IEnumerable<T> NonMatchingProperties<T>(
+            IEnumerable<T> excelProperties,
+            Type type) 
+            where T : IGivenClassProperty
         {
             return 
                 excelProperties
@@ -62,9 +64,10 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 .Select(mp => mp.ExcelProperty);
         }
 
-        MatchedProperty MatchWithCsharpType(
-            IGivenClassProperty excelProperty,
+        MatchedProperty<T> MatchWithCsharpType<T>(
+            T excelProperty,
             Type interfaceType)
+            where T: IGivenClassProperty
         {
             // this gets things in ancestor interfaces as well as directly on the interface
             var properties =
@@ -72,7 +75,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 .Concat(interfaceType.GetInterfaces())
                 .SelectMany(i => i.GetProperties());
 
-            return new MatchedProperty()
+            return new MatchedProperty<T>()
             {
                 ExcelProperty = excelProperty,
                 CsharpProperty =
@@ -81,20 +84,18 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             };
         }
 
-        protected string SimplePropertyDeclarationOnSelf(IGivenClassProperty excelGivenProperty)
+        protected string SimplePropertyDeclarationOnSelf(GivenClassSimpleProperty excelGivenProperty)
         {
             var parameterName = excelGivenProperty.Name;
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue, (excelGivenProperty as GivenClassSimpleProperty).Nullable);
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue, excelGivenProperty.Nullable);
 
             return $"        public {parameterType} {parameterName} {{ get; private set; }}";
         }
 
-        protected string SimplePropertySetterOnSelf(IGivenClassProperty excelGivenProperty)
+        protected string SimplePropertySetterOnSelf(GivenClassSimpleProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, (excelGivenProperty as GivenClassSimpleProperty).ExampleValue, (excelGivenProperty as GivenClassSimpleProperty).Nullable);
+            var parameterType = CsharpPropertyTypeName(excelGivenProperty.Type, excelGivenProperty.ExampleValue, excelGivenProperty.Nullable);
             var classPropertyName = excelGivenProperty.Name;
 
             return
@@ -108,22 +109,20 @@ $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_o
         }}{NewLine}";
         }
 
-        protected string ComplexPropertyDeclarationOnSelf(IGivenClassProperty excelGivenProperty)
+        protected string ComplexPropertyDeclarationOnSelf(GivenClassComplexProperty excelGivenProperty)
         {
             var classVariableName = excelGivenProperty.Name;
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var variableType = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexProperty).ClassName}";
+            var variableType = $"SpecificationSpecific{excelGivenProperty.ClassName}";
 
             return $"        public {variableType} {classVariableName} {{ get; private set; }}";
         }
 
-        protected string ComplexPropertySetterOnSelf(IGivenClassProperty excelGivenProperty)
+        protected string ComplexPropertySetterOnSelf(GivenClassComplexProperty excelGivenProperty)
         {
             var functionName = $"{excelGivenProperty.Name}_of";
             var classVariableName = excelGivenProperty.Name;
             var parameterName = CamelCase(excelGivenProperty.Name);
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var propertyClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexProperty).ClassName}";
+            var propertyClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
 
             return
 $@"        internal {SpecificationSpecificClassName} {functionName}({propertyClassName} {parameterName})
@@ -136,31 +135,28 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
         }}{NewLine}";
         }
 
-        protected string ListPropertyDeclarationOnSelf(IGivenClassProperty excelGivenProperty)
+        protected string ListPropertyDeclarationOnSelf(GivenClassComplexListProperty excelGivenProperty)
         {
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var listClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexListProperty).ClassName}";
+            var listClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
             var listPropertyName = ListPropertyName(excelGivenProperty);
 
             return $"        readonly List<{listClassName}> {listPropertyName};";
         }
 
-        protected string ListPropertyInitialisationOnSelf(IGivenClassProperty excelGivenProperty)
+        protected string ListPropertyInitialisationOnSelf(GivenClassComplexListProperty excelGivenProperty)
         {
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var listClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexListProperty).ClassName}";
+            var listClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
             var listPropertyName = ListPropertyName(excelGivenProperty);
 
             return $"            {listPropertyName} = new List<{listClassName}>();";
         }
 
-        protected string ListPropertySetterOnSelf(IGivenClassProperty excelGivenProperty)
+        protected string ListPropertySetterOnSelf(GivenClassComplexListProperty excelGivenProperty)
         {
             var parameterName = CamelCase(excelGivenProperty.Name);
             var listParameterName = ListPropertyName(excelGivenProperty);
             var listPropertyName = ListPropertyName(excelGivenProperty);
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var listClassName = $"SpecificationSpecific{(excelGivenProperty as GivenClassComplexListProperty).ClassName}";
+            var listClassName = $"SpecificationSpecific{excelGivenProperty.ClassName}";
 
             return
 $@"        internal {SpecificationSpecificClassName} {excelGivenProperty.Name}_of({listClassName} {parameterName})

@@ -44,18 +44,18 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
             var listPropertyDeclarations =
                 excelGivenClass
-                .ListProperties
+                .ComplexListProperties
                 .Select(ListPropertyDeclarationOnSelf);
 
 
             var listPropertyInitialisers =
                 excelGivenClass
-                .ListProperties
+                .ComplexListProperties
                 .Select(ListPropertyInitialisationOnSelf);
 
             var listPropertyFunctions =
                 excelGivenClass
-                .ListProperties
+                .ComplexListProperties
                 .Select(ListPropertySetterOnSelf);
 
             var code =

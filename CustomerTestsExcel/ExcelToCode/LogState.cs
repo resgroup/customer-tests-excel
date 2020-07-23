@@ -33,14 +33,14 @@ namespace CustomerTestsExcel.ExcelToCode
             issuesPreventingRoundTrip.Clear();
         }
 
-        internal void VisitGivenSimpleProperty(GivenSimpleProperty givenSimpleProperty)
+        internal void VisitGivenSimpleProperty(VisitedGivenSimpleProperty givenSimpleProperty)
         {
             visitors.ForEach(
                 v =>
                     v.VisitGivenSimpleProperty(givenSimpleProperty));
         }
 
-        internal void VisitGivenFunction(GivenFunction givenFunction)
+        internal void VisitGivenFunction(VisitedGivenFunction givenFunction)
         {
             visitors.ForEach(
                 v =>
@@ -67,7 +67,7 @@ namespace CustomerTestsExcel.ExcelToCode
             visitors.ForEach(
                 v =>
                     v.VisitGivenComplexPropertyDeclaration(
-                        new GivenComplexProperty(
+                        new VisitedGivenComplexProperty(
                             sutPropertyName,
                             excelClassName)));
         }
@@ -82,7 +82,7 @@ namespace CustomerTestsExcel.ExcelToCode
             visitors.ForEach(
                 v =>
                     v.VisitGivenListPropertyDeclaration(
-                        new GivenListProperty(
+                        new VisitedGivenListProperty(
                             codePropertyName,
                             excelClassName)));
         }
@@ -98,7 +98,7 @@ namespace CustomerTestsExcel.ExcelToCode
             visitors.ForEach(
                 v =>
                     v.VisitGivenTablePropertyDeclaration(
-                        new GivenTableProperty(
+                        new VisitedGivenTableProperty(
                             codePropertyName,
                             excelClassName),
                         tableHeaders));

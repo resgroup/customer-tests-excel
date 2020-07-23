@@ -24,8 +24,12 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             var usingStatements = UsingStatements(usings);
 
             var nonMatchingProperties =
-                NonMatchingProperties(excelGivenClass.ListProperties, type)
+                NonMatchingProperties(excelGivenClass.ComplexProperties, type)
                 .Select(NonMatchingProperty);
+
+            var nonMatchingListProperties =
+                NonMatchingProperties(excelGivenClass.ComplexListProperties, type)
+                .Select(NonMatchingListProperty);
 
             var simpleProperties = 
                 MatchWithCsharpType(excelGivenClass.SimpleProperties, type)
@@ -36,15 +40,15 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 .Select(ComplexPropertySetterOnMock);
 
             var listPropertyDeclarations =
-                MatchWithCsharpType(excelGivenClass.ListProperties, type)
+                MatchWithCsharpType(excelGivenClass.ComplexListProperties, type)
                 .Select(ListPropertyDeclarationOfMock);
 
             var listPropertyMockSetups = 
-                MatchWithCsharpType(excelGivenClass.ListProperties, type)
+                MatchWithCsharpType(excelGivenClass.ComplexListProperties, type)
                 .Select(ListPropertyMockSetup);
 
             var listPropertyFunctions =
-                MatchWithCsharpType(excelGivenClass.ListProperties, type)
+                MatchWithCsharpType(excelGivenClass.ComplexListProperties, type)
                 .Select(ListPropertySetterOnMock);
 
             var code =
@@ -79,7 +83,7 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
             return RemoveConsecutiveBlankLines(code);
         }
 
-        string SimplePropertySetterOnMock(MatchedProperty matchedProperty)
+        string SimplePropertySetterOnMock(MatchedProperty<GivenClassSimpleProperty> matchedProperty)
         {
             var functionName = $"{matchedProperty.ExcelProperty.Name}_of";
             var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
@@ -100,13 +104,12 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({parameterTy
         }}{NewLine}";
         }
 
-        string ComplexPropertySetterOnMock(MatchedProperty matchedProperty)
+        string ComplexPropertySetterOnMock(MatchedProperty<GivenClassComplexProperty> matchedProperty)
         {
             var functionName = $"{matchedProperty.ExcelProperty.Name}_of";
             var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
             var interfacePropertyName = matchedProperty.ExcelProperty.Name;
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var propertyClassName = $"SpecificationSpecific{(matchedProperty.ExcelProperty as GivenClassComplexProperty).ClassName}";
+            var propertyClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
             var propertyNameOfSutObject = (matchedProperty.ExcelProperty as GivenClassComplexProperty).ClassName;
 
             return
@@ -120,32 +123,29 @@ $@"        internal {SpecificationSpecificClassName} {functionName}({propertyCla
         }}{NewLine}";
         }
 
-        string ListPropertyDeclarationOfMock(MatchedProperty matchedProperty)
+        string ListPropertyDeclarationOfMock(MatchedProperty<GivenClassComplexListProperty> matchedProperty)
         {
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var listClassName = $"SpecificationSpecific{(matchedProperty.ExcelProperty as GivenClassComplexListProperty).ClassName}";
+            var listClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
             var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
 
             return $"        readonly List<{listClassName}> {listPropertyName} = new List<{listClassName}>();";
         }
 
-        string ListPropertyMockSetup(MatchedProperty matchedProperty)
+        string ListPropertyMockSetup(MatchedProperty<GivenClassComplexListProperty> matchedProperty)
         {
             var interfacePropertyName = matchedProperty.ExcelProperty.Name;
             var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var interfaceUnderTestPropertyName = (matchedProperty.ExcelProperty as GivenClassComplexListProperty).ClassName;
+            var interfaceUnderTestPropertyName = matchedProperty.ExcelProperty.ClassName;
 
             return $"            {MockVariableName}.Setup(m => m.{interfacePropertyName}).Returns({listPropertyName}.Select(l => l.{interfaceUnderTestPropertyName}));";
         }
 
-        string ListPropertySetterOnMock(MatchedProperty matchedProperty)
+        string ListPropertySetterOnMock(MatchedProperty<GivenClassComplexListProperty> matchedProperty)
         {
             var parameterName = CamelCase(matchedProperty.ExcelProperty.Name);
             var listParameterName = ListPropertyName(matchedProperty.ExcelProperty);
             var listPropertyName = ListPropertyName(matchedProperty.ExcelProperty);
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            var listClassName = $"SpecificationSpecific{(matchedProperty.ExcelProperty as GivenClassComplexListProperty).ClassName}";
+            var listClassName = $"SpecificationSpecific{matchedProperty.ExcelProperty.ClassName}";
 
             return
 $@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelProperty.Name}_of({listClassName} {parameterName})
@@ -179,10 +179,14 @@ $@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelPrope
         }}";
         }
 
-        string NonMatchingProperty(IGivenClassProperty givenClassProperty)
+        string NonMatchingProperty(GivenClassComplexProperty givenClassProperty)
         {
-            // TODO fix up this cast to GivenClassSimpleProperty once using separate lists for each property type
-            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {(givenClassProperty as GivenClassComplexProperty).ClassName}.cs";
+            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {givenClassProperty.ClassName}.cs";
+        }
+
+        string NonMatchingListProperty(GivenClassComplexListProperty givenClassProperty)
+        {
+            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {givenClassProperty.ClassName}.cs";
         }
 
         string InterfacePropertyName =>

@@ -12,11 +12,15 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         readonly List<IGivenClassProperty> properties;
         public IReadOnlyList<IGivenClassProperty> Properties => properties;
 
-        readonly List<IVisitedGivenSimpleProperty> givenSimpleProperties;
-        readonly List<IVisitedGivenComplexProperty> givenComplexProperties;
-        readonly List<IVisitedGivenFunction> givenFunctions;
-        readonly List<IVisitedGivenListProperty> givenListProperties;
-        readonly List<IVisitedGivenTableProperty> givenTableProperties;
+        readonly List<IVisitedGivenSimpleProperty> visitedGivenSimpleProperties;
+        readonly List<IVisitedGivenComplexProperty> visitedGivenComplexProperties;
+        readonly List<IVisitedGivenFunction> visitedGivenFunctions;
+        readonly List<IVisitedGivenListProperty> visitedGivenListProperties;
+        readonly List<IVisitedGivenTableProperty> visitedGivenTableProperties;
+        readonly List<GivenClassSimpleProperty> givenSimpleProperties;
+        readonly List<GivenClassComplexProperty> givenComplexProperties;
+        readonly List<GivenClassFunction> givenFunctions;
+        readonly List<GivenClassComplexListProperty> givenComplexListProperties;
 
         public GivenClassMutable(string name, bool isRootClass = false)
         {
@@ -24,27 +28,32 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             IsRootClass = isRootClass;
             properties = new List<IGivenClassProperty>();
 
-            givenSimpleProperties = new List<IVisitedGivenSimpleProperty>();
-            givenComplexProperties = new List<IVisitedGivenComplexProperty>();
-            givenFunctions = new List<IVisitedGivenFunction>();
-            givenListProperties = new List<IVisitedGivenListProperty>();
-            givenTableProperties = new List<IVisitedGivenTableProperty>();
+            visitedGivenSimpleProperties = new List<IVisitedGivenSimpleProperty>();
+            visitedGivenComplexProperties = new List<IVisitedGivenComplexProperty>();
+            visitedGivenFunctions = new List<IVisitedGivenFunction>();
+            visitedGivenListProperties = new List<IVisitedGivenListProperty>();
+            visitedGivenTableProperties = new List<IVisitedGivenTableProperty>();
+
+            givenSimpleProperties = new List<GivenClassSimpleProperty>();
+            givenComplexProperties = new List<GivenClassComplexProperty>();
+            givenFunctions = new List<GivenClassFunction>();
+            givenComplexListProperties = new List<GivenClassComplexListProperty>();
         }
 
         public void AddSimpleProperty(IVisitedGivenSimpleProperty givenSimpleProperty) =>
-            givenSimpleProperties.Add(givenSimpleProperty);
+            visitedGivenSimpleProperties.Add(givenSimpleProperty);
 
         public void AddFunction(IVisitedGivenFunction givenFunction) =>
-            givenFunctions.Add(givenFunction);
+            visitedGivenFunctions.Add(givenFunction);
 
         public void AddComplexProperty(IVisitedGivenComplexProperty givenComplexProperty) =>
-            givenComplexProperties.Add(givenComplexProperty);
+            visitedGivenComplexProperties.Add(givenComplexProperty);
 
         public void AddListProperty(IVisitedGivenListProperty givenListProperty) =>
-            givenListProperties.Add(givenListProperty);
+            visitedGivenListProperties.Add(givenListProperty);
 
         public void AddTableProperty(IVisitedGivenTableProperty givenTableProperty) =>
-            givenTableProperties.Add(givenTableProperty);
+            visitedGivenTableProperties.Add(givenTableProperty);
 
         public GivenClass CreateGivenClass()
         {
@@ -61,7 +70,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // Functions should all have different names, but this is enforced
             // anyway in RationaliseProperties so not going to worry about it
             // for now
-            var rationalisedFunctions = givenFunctions;
+            var rationalisedFunctions = visitedGivenFunctions;
 
             // complex properties with the same name but a different property type are invalid
             var rationalisedComplexProperties = RationaliseComplexProperties();
@@ -74,6 +83,9 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // Properties of all these varieties exist on this class, and  
             // properties of the same name but different type are invalid
             // (for example a list property and a function)
+
+            // RationaliseProperties also set givenSimpleProperties and similar
+            // in a very hacky way. We should refactor this.
             var rationalisedCombinedProperties = RationaliseProperties(
                 rationalisedSimpleProperties,
                 rationalisedComplexProperties,
@@ -86,24 +98,23 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 new GivenClass(
                     Name,
                     rationalisedCombinedProperties,
-                    rationalisedSimpleProperties,
-                    rationalisedComplexProperties,
-                    rationalisedFunctions,
-                    rationalisedListProperties,
-                    rationalisedTableProperties,
+                    givenSimpleProperties,
+                    givenComplexProperties,
+                    givenFunctions,
+                    givenComplexListProperties,
                     IsRootClass);
         }
 
         List<IVisitedGivenListProperty> RationaliseListProperties()
         {
             var rationalisedListProperties = new List<IVisitedGivenListProperty>();
-            foreach (var givenListProperty in givenListProperties)
+            foreach (var givenListProperty in visitedGivenListProperties)
             {
                 if (rationalisedListProperties.Any(r => r.PropertyName == givenListProperty.PropertyName))
                     continue;
 
-                var sameProperties = givenListProperties.Where(p => p.PropertyName == givenListProperty.PropertyName).Select(p => p.ClassName).ToList();
-                var sameComplexProperties = givenComplexProperties.Where(p => p.PropertyName == givenListProperty.PropertyName).Select(p => p.ClassName);
+                var sameProperties = visitedGivenListProperties.Where(p => p.PropertyName == givenListProperty.PropertyName).Select(p => p.ClassName).ToList();
+                var sameComplexProperties = visitedGivenComplexProperties.Where(p => p.PropertyName == givenListProperty.PropertyName).Select(p => p.ClassName);
                 sameProperties.AddRange(sameComplexProperties);
                 var uniqueClassNames = sameProperties.Distinct();
 
@@ -122,13 +133,13 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         List<IVisitedGivenTableProperty> RationaliseTableProperties()
         {
             var rationalisedTableProperties = new List<IVisitedGivenTableProperty>();
-            foreach (var givenTableProperty in givenTableProperties)
+            foreach (var givenTableProperty in visitedGivenTableProperties)
             {
                 if (rationalisedTableProperties.Any(r => r.PropertyName == givenTableProperty.PropertyName))
                     continue;
 
-                var sameProperties = givenListProperties.Where(p => p.PropertyName == givenTableProperty.PropertyName).Select(p => p.ClassName).ToList();
-                var sameComplexProperties = givenComplexProperties.Where(p => p.PropertyName == givenTableProperty.PropertyName).Select(p => p.ClassName);
+                var sameProperties = visitedGivenListProperties.Where(p => p.PropertyName == givenTableProperty.PropertyName).Select(p => p.ClassName).ToList();
+                var sameComplexProperties = visitedGivenComplexProperties.Where(p => p.PropertyName == givenTableProperty.PropertyName).Select(p => p.ClassName);
                 sameProperties.AddRange(sameComplexProperties);
                 var uniqueClassNames = sameProperties.Distinct();
 
@@ -147,12 +158,12 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         List<IVisitedGivenComplexProperty> RationaliseComplexProperties()
         {
             var rationalisedComplexProperties = new List<IVisitedGivenComplexProperty>();
-            foreach (var givenComplexProperty in givenComplexProperties)
+            foreach (var givenComplexProperty in visitedGivenComplexProperties)
             {
                 if (rationalisedComplexProperties.Any(r => r.PropertyName == givenComplexProperty.PropertyName))
                     continue;
 
-                var sameProperties = givenComplexProperties.Where(p => p.PropertyName == givenComplexProperty.PropertyName);
+                var sameProperties = visitedGivenComplexProperties.Where(p => p.PropertyName == givenComplexProperty.PropertyName);
 
                 var numberOfDistinctTypes = sameProperties.Select(p => p.ClassName).Distinct().Count();
 
@@ -191,7 +202,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
                 if (numberOfPrimitiveTypes == 1 && hasNullValues == true)
                 {
                     rationalisedSimpleProperties.Add(
-                        new GivenSimpleProperty(
+                        new VisitedGivenSimpleProperty(
                             givenSimpleProperty.PropertyOrFunctionName,
                             givenSimpleProperty.CsharpCodeRepresentation,
                             givenSimpleProperty.ExcelPropertyType,
@@ -216,8 +227,8 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 
         List<IVisitedGivenSimpleProperty> SimplePropertiesWithoutNullComplexProperties()
         {
-            var simplePropertiesWithoutNullComplexProperties = givenSimpleProperties.Select(p => p).ToList();
-            foreach (var givenComplexProperty in givenComplexProperties)
+            var simplePropertiesWithoutNullComplexProperties = visitedGivenSimpleProperties.Select(p => p).ToList();
+            foreach (var givenComplexProperty in visitedGivenComplexProperties)
             {
                 if (simplePropertiesWithoutNullComplexProperties.Any(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName)
                     && simplePropertiesWithoutNullComplexProperties.Where(p => p.PropertyOrFunctionName == givenComplexProperty.PropertyName).All(p => p.ExcelPropertyType == ExcelPropertyType.Null))
@@ -238,47 +249,61 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         )
         {
             properties.Clear();
+            givenSimpleProperties.Clear();
 
             foreach (var givenComplexProperty in rationalisedGivenComplexProperties)
             {
-                AddProperty(
+                var complexProperty = 
                     new GivenClassComplexProperty(
                         givenComplexProperty.PropertyName,
-                        givenComplexProperty.ClassName));
+                        givenComplexProperty.ClassName);
+
+                givenComplexProperties.Add(complexProperty);
+                AddProperty(complexProperty);
             }
 
             foreach (var givenSimpleProperty in rationalisedGivenSimpleProperties)
             {
-                AddProperty(
+                var simpleProperty =
                     new GivenClassSimpleProperty(
                         givenSimpleProperty.PropertyOrFunctionName,
                         givenSimpleProperty.ExcelPropertyType,
                         givenSimpleProperty.CsharpCodeRepresentation,
                         givenSimpleProperty.Nullable
-                    )
-                );
+                    );
+
+                givenSimpleProperties.Add(simpleProperty);
+                AddProperty(simpleProperty);
             }
 
             foreach (var givenFunction in rationalisedGivenFunctions)
             {
-                AddProperty(
-                    new GivenClassFunction(givenFunction.PropertyOrFunctionName));
+                var function = new GivenClassFunction(givenFunction.PropertyOrFunctionName);
+
+                givenFunctions.Add(function);
+                AddProperty(function);
             }
 
             foreach (var givenListProperty in rationalisedGivenListProperties)
             {
-                AddProperty(
+                var complexListProperty = 
                     new GivenClassComplexListProperty(
                         givenListProperty.PropertyName,
-                        givenListProperty.ClassName));
+                        givenListProperty.ClassName);
+
+                givenComplexListProperties.Add(complexListProperty);
+                AddProperty(complexListProperty);
             }
 
             foreach (var givenTableProperty in rationalisedGivenTableProperties)
             {
-                AddProperty(
+                var complexListProperty =
                     new GivenClassComplexListProperty(
                         givenTableProperty.PropertyName,
-                        givenTableProperty.ClassName));
+                        givenTableProperty.ClassName);
+
+                givenComplexListProperties.Add(complexListProperty);
+                AddProperty(complexListProperty);
             }
 
             return properties;

@@ -2,12 +2,12 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public class GivenListProperty : IVisitedGivenListProperty
+    public class VisitedGivenTableProperty : IVisitedGivenTableProperty
     {
         public string PropertyName { get; }
         public string ClassName { get; }
 
-        public GivenListProperty(
+        public VisitedGivenTableProperty(
             string propertyName,
             string className)
         {
@@ -19,7 +19,7 @@ namespace CustomerTestsExcel.ExcelToCode
             $"{PropertyName}, {ClassName}";
 
         public override bool Equals(object obj) =>
-            obj is GivenListProperty property
+            obj is VisitedGivenListProperty property
             && PropertyName == property.PropertyName
             && ClassName == property.ClassName;
 

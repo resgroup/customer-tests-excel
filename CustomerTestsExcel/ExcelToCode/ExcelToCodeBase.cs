@@ -29,7 +29,7 @@ namespace CustomerTestsExcel.ExcelToCode
             if (excelGivenLeft.EndsWith(" of"))
             {
                 log.VisitGivenSimpleProperty(
-                    new GivenSimpleProperty(
+                    new VisitedGivenSimpleProperty(
                         converter.GivenPropertyNameExcelNameToSutName(excelGivenLeft),
                         converter.PropertyValueExcelToCode(excelGivenLeft, excelGivenRight),
                         converter.ExcelPropertyTypeFromCellValue(excelGivenRight)));
@@ -37,7 +37,7 @@ namespace CustomerTestsExcel.ExcelToCode
             else
             {
                 log.VisitGivenFunction(
-                    new GivenFunction(excelGivenLeft));
+                    new VisitedGivenFunction(excelGivenLeft));
             }
         }
 

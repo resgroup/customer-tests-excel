@@ -2,9 +2,9 @@
 
 namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
-    public struct MatchedProperty
+    public struct MatchedProperty<T> where T: IGivenClassProperty
     {
         public PropertyInfo CsharpProperty;
-        public IGivenClassProperty ExcelProperty;
+        public T ExcelProperty;
     }
 }

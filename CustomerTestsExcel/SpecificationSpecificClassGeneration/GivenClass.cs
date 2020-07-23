@@ -6,24 +6,22 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
 {
     public class GivenClass
     {
-        private readonly IReadOnlyList<IVisitedGivenSimpleProperty> givenSimpleProperties;
-        private readonly IReadOnlyList<IVisitedGivenComplexProperty> givenComplexProperties;
-        private readonly IReadOnlyList<IVisitedGivenFunction> givenFunctions;
-        private readonly IReadOnlyList<IVisitedGivenListProperty> givenListProperties;
-        private readonly IReadOnlyList<IVisitedGivenTableProperty> givenTableProperties;
-
         public bool IsRootClass { get; }
         public string Name { get; }
         public IReadOnlyList<IGivenClassProperty> Properties { get; }
 
+        readonly IReadOnlyList<GivenClassSimpleProperty> givenSimpleProperties;
+        readonly IReadOnlyList<GivenClassComplexProperty> givenComplexProperties;
+        readonly IReadOnlyList<GivenClassFunction> givenFunctions;
+        readonly IReadOnlyList<GivenClassComplexListProperty> givenComplexListProperties;
+
         public GivenClass(
             string name,
             IReadOnlyList<IGivenClassProperty> properties,
-            IReadOnlyList<IVisitedGivenSimpleProperty> givenSimpleProperties,
-            IReadOnlyList<IVisitedGivenComplexProperty> givenComplexProperties,
-            IReadOnlyList<IVisitedGivenFunction> givenFunctions,
-            IReadOnlyList<IVisitedGivenListProperty> givenListProperties,
-            IReadOnlyList<IVisitedGivenTableProperty> givenTableProperties,
+            IReadOnlyList<GivenClassSimpleProperty> givenSimpleProperties,
+            IReadOnlyList<GivenClassComplexProperty> givenComplexProperties,
+            IReadOnlyList<GivenClassFunction> givenFunctions,
+            IReadOnlyList<GivenClassComplexListProperty> givenComplexListProperties,
             bool isRootClass = false)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
@@ -31,26 +29,21 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             this.givenSimpleProperties = givenSimpleProperties;
             this.givenComplexProperties = givenComplexProperties;
             this.givenFunctions = givenFunctions;
-            this.givenListProperties = givenListProperties;
-            this.givenTableProperties = givenTableProperties;
+            this.givenComplexListProperties = givenComplexListProperties;
             IsRootClass = isRootClass;
         }
 
-        public IEnumerable<IGivenClassProperty> SimpleProperties =>
-            Properties
-            .Where(excelProperty => excelProperty.Type.IsSimpleProperty());
+        public IEnumerable<GivenClassSimpleProperty> SimpleProperties =>
+            givenSimpleProperties;
 
-        public IEnumerable<IGivenClassProperty> ComplexProperties =>
-            Properties
-            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Object);
+        public IEnumerable<GivenClassComplexProperty> ComplexProperties =>
+            givenComplexProperties;
 
-        public IEnumerable<IGivenClassProperty> ListProperties =>
-            Properties
-            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.List);
+        public IEnumerable<GivenClassComplexListProperty> ComplexListProperties =>
+            givenComplexListProperties;
 
         public IEnumerable<IGivenClassProperty> Functions =>
-            Properties
-            .Where(excelProperty => excelProperty.Type == ExcelPropertyType.Function);
+            givenFunctions;
 
         public override string ToString()
         {

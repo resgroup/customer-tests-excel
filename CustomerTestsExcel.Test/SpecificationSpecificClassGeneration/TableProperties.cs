@@ -29,11 +29,10 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                         new List<IGivenClassProperty> {
                             new GivenClassComplexListProperty("TableProperty", "TableClass"),
                         },
-                        new List<IVisitedGivenSimpleProperty>(),
-                        new List<IVisitedGivenComplexProperty>(),
-                        new List<IVisitedGivenFunction>(),
-                        new List<IVisitedGivenListProperty>(),
-                        new List<IVisitedGivenTableProperty>()
+                        new List<GivenClassSimpleProperty>(),
+                        new List<GivenClassComplexProperty>(),
+                        new List<GivenClassFunction>(),
+                        new List<GivenClassComplexListProperty>()
                     )
                 );
 
@@ -45,11 +44,10 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                             new GivenClassComplexProperty("ComplexProperty", "ComplexClass"),
                             new GivenClassSimpleProperty("SimpleProperty", ExcelPropertyType.String)
                         },
-                        new List<IVisitedGivenSimpleProperty>(),
-                        new List<IVisitedGivenComplexProperty>(),
-                        new List<IVisitedGivenFunction>(),
-                        new List<IVisitedGivenListProperty>(),
-                        new List<IVisitedGivenTableProperty>()
+                        new List<GivenClassSimpleProperty>(),
+                        new List<GivenClassComplexProperty>(),
+                        new List<GivenClassFunction>(),
+                        new List<GivenClassComplexListProperty>()
                     )
                 );
 
@@ -61,11 +59,11 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
                             new GivenClassSimpleProperty("ComplexProperty1", ExcelPropertyType.String),
                             new GivenClassSimpleProperty("ComplexProperty2", ExcelPropertyType.String)
                         },
-                        new List<IVisitedGivenSimpleProperty>(),
-                        new List<IVisitedGivenComplexProperty>(),
-                        new List<IVisitedGivenFunction>(),
-                        new List<IVisitedGivenListProperty>(),
-                        new List<IVisitedGivenTableProperty>())
+                        new List<GivenClassSimpleProperty>(),
+                        new List<GivenClassComplexProperty>(),
+                        new List<GivenClassFunction>(),
+                        new List<GivenClassComplexListProperty>()
+                    )
                 );
             }
         }

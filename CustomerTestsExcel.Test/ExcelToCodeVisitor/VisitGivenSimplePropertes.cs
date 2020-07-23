@@ -41,7 +41,7 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
             =>
             CollectionAssert.Contains(
                 visitRecorder.RecordedSimpleProperties,
-                new GivenSimpleProperty(
+                new VisitedGivenSimpleProperty(
                     propertyOrFunctionName,
                     cSharpCodeRepresentation,
                     excelPropertyType

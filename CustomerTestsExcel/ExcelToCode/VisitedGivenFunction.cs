@@ -2,7 +2,7 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public class GivenFunction : IVisitedGivenFunction
+    public class VisitedGivenFunction : IVisitedGivenFunction
     {
         public string PropertyOrFunctionName { get; }
         public ExcelPropertyType ExcelPropertyType =>
@@ -10,13 +10,13 @@ namespace CustomerTestsExcel.ExcelToCode
         public string CsharpCodeRepresentation =>
             "";
 
-        public GivenFunction(string propertyOrFunctionName)
+        public VisitedGivenFunction(string propertyOrFunctionName)
         {
             PropertyOrFunctionName = propertyOrFunctionName;
         }
 
         public override bool Equals(object obj) =>
-            obj is GivenFunction property
+            obj is VisitedGivenFunction property
             && PropertyOrFunctionName == property.PropertyOrFunctionName;
 
         public override int GetHashCode()

@@ -2,14 +2,14 @@
 
 namespace CustomerTestsExcel.ExcelToCode
 {
-    public class GivenSimpleProperty : IVisitedGivenSimpleProperty
+    public class VisitedGivenSimpleProperty : IVisitedGivenSimpleProperty
     {
         public string PropertyOrFunctionName { get; }
         public string CsharpCodeRepresentation { get; }
         public ExcelPropertyType ExcelPropertyType { get; }
         public bool Nullable { get; }
 
-        public GivenSimpleProperty(
+        public VisitedGivenSimpleProperty(
             string propertyOrFunctionName,
             string cSharpCodeRepresentation,
             ExcelPropertyType excelPropertyType,
@@ -22,7 +22,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         public override bool Equals(object obj) =>
-            obj is GivenSimpleProperty property
+            obj is VisitedGivenSimpleProperty property
             && PropertyOrFunctionName == property.PropertyOrFunctionName
             && CsharpCodeRepresentation == property.CsharpCodeRepresentation
             && ExcelPropertyType == property.ExcelPropertyType;

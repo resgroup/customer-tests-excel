@@ -15,12 +15,12 @@ namespace CustomerTestsExcel.Test.ExcelToCodeVisitor
         {
             var visitRecorder = new GivenClassRecorder();
 
-            var givenComplexProperty = new GivenComplexProperty(
+            var givenComplexProperty = new VisitedGivenComplexProperty(
                     "Leg",
                     "Leg"
                 );
 
-            var givenSimpleProperty = new GivenSimpleProperty(
+            var givenSimpleProperty = new VisitedGivenSimpleProperty(
                     "Origin of",
                     "Origin",
                     ExcelPropertyType.String
