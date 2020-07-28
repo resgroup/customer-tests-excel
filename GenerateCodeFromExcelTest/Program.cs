@@ -20,9 +20,9 @@ namespace GenerateCodeFromExcelTest
                 if (string.IsNullOrWhiteSpace(folder))
                     return ShowHelp("Missing Parameter: You must select a folder with /folder");
 
-                string specificationProject = GetSetting(args, "project");
-                if (string.IsNullOrWhiteSpace(specificationProject))
-                    return ShowHelp("Missing Parameter: You must select a specification project with /project");
+                //string specificationProject = GetSetting(args, "project");
+                //if (string.IsNullOrWhiteSpace(specificationProject))
+                //    return ShowHelp("Missing Parameter: You must select a specification project with /project");
 
                 string rootNamespace = GetSetting(args, "namespace");
                 if (string.IsNullOrWhiteSpace(rootNamespace))
