@@ -18,7 +18,7 @@ namespace CustomerTestsExcel.Test.SpecificationSpecificClassGeneration
             float FloatProperty { get; set; }
             string StringProperty { get; set; }
             DateTime DateTimeProperty { get; set; }
-            Double? NullableDoubleProperty { get; set; }
+            double? NullableDoubleProperty { get; set; }
         }
 
         // This test would be better if it did the properties one at a time like the other tests.

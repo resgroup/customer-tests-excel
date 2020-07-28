@@ -78,7 +78,6 @@
     <Compile Include="ExcelToCode\ExcelToCodeComplexProperty.cs" />
     <Compile Include="ExcelToCode\ExcelToCodeTable.cs" />
     <Compile Include="ExcelToCode\LogState.cs" />
-    <Compile Include="ExcelToCode\GeneratedCsharpProject.cs" />
     <Compile Include="ExcelToCode\VisitedGivenFunction.cs" />
     <Compile Include="ExcelToCode\VisitedGivenTableProperty.cs" />
     <Compile Include="ExcelToCode\IVisitedGivenFunction.cs" />

@@ -9,7 +9,7 @@ namespace GenerateCodeFromExcelTest
 {
     // To work with the SampleTests project included in this solution, use the following command line parameters
     // The path to the assembly must be absolute, so you will probably need to be change it
-    // /folder "..\..\SampleTests" /project SampleTests.csproj /namespace SampleTests /usings "SampleSystemUnderTest SampleSystemUnderTest.AnovaCalculator SampleSystemUnderTest.Routing SampleSystemUnderTest.VermeulenNearWakeLength SampleSystemUnderTest.Calculator" /assertionClassPrefix "I" /assembliesUnderTest "C:\Users\ceddl\Documents\GITHub\customer-tests-excel\Builtdlls\Debug\SampleSystemUnderTest.dll"
+    // /folder "..\..\SampleTests" /namespace SampleTests /usings "SampleSystemUnderTest SampleSystemUnderTest.AnovaCalculator SampleSystemUnderTest.Routing SampleSystemUnderTest.VermeulenNearWakeLength SampleSystemUnderTest.Calculator" /assertionClassPrefix "I" /assembliesUnderTest "C:\Users\ceddl\Documents\GITHub\customer-tests-excel\Builtdlls\Debug\SampleSystemUnderTest.dll"
     static class Program
     {
         static int Main(string[] args)
@@ -19,10 +19,6 @@ namespace GenerateCodeFromExcelTest
                 string folder = GetSetting(args, "folder");
                 if (string.IsNullOrWhiteSpace(folder))
                     return ShowHelp("Missing Parameter: You must select a folder with /folder");
-
-                //string specificationProject = GetSetting(args, "project");
-                //if (string.IsNullOrWhiteSpace(specificationProject))
-                //    return ShowHelp("Missing Parameter: You must select a specification project with /project");
 
                 string rootNamespace = GetSetting(args, "namespace");
                 if (string.IsNullOrWhiteSpace(rootNamespace))
@@ -39,7 +35,6 @@ namespace GenerateCodeFromExcelTest
                 new FileSystemGenerateCSharpFromExcel(
                     logger,
                     folder,
-                    //specificationProject,
                     rootNamespace,
                     "ExcelTests",
                     usings,

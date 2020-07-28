@@ -15,7 +15,6 @@ namespace CustomerTestsExcel.ExcelToCode
         readonly IEnumerable<string> assembliesUnderTest;
         readonly string assertionClassPrefix;
         readonly ITabularLibrary excel;
-        //readonly string projectFilePath;
         readonly ILogger logger;
         private readonly string projectRootFolder;
         readonly string projectRootNamespace;
@@ -23,7 +22,6 @@ namespace CustomerTestsExcel.ExcelToCode
         public FileSystemGenerateCSharpFromExcel(
             ILogger logger,
             string projectRootFolder,
-            //string specificationProject,
             string projectRootNamespace,
             string excelTestsFolderName,
             IEnumerable<string> usings,
@@ -39,7 +37,6 @@ namespace CustomerTestsExcel.ExcelToCode
             this.assembliesUnderTest = assembliesUnderTest;
             this.assertionClassPrefix = assertionClassPrefix;
             this.excel = excel;
-            //projectFilePath = Path.Combine(projectRootFolder, specificationProject);
         }
 
         public void Create()
@@ -51,14 +48,9 @@ namespace CustomerTestsExcel.ExcelToCode
             if (logger.HasErrors)
                 return;
 
-            //var existingCsproj = OpenProjectFile();
-
-            //if (logger.HasErrors)
-            //    return;
-
             var excelFilenames = ListValidSpecificationSpreadsheets();
 
-            GeneratedCsharpProject inMemoryGeneratedFiles;
+            List<CsharpProjectFileToSave> inMemoryGeneratedFiles;
 
             using (var tidyUp = OpenExcelFilesAndAutoClose(excelFilenames))
             {
@@ -67,14 +59,11 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 inMemoryGeneratedFiles = GenerateInMemory(
                     assemblyTypes, 
-                    //existingCsproj, 
                     tidyUp.RememberedThing.Select(e => e.ExcelWorkbook)
                 );
             }
 
-            //SaveProjectFile(inMemoryGeneratedFiles.CsprojFile);
-
-            SaveFiles(inMemoryGeneratedFiles.Files);
+            SaveFiles(inMemoryGeneratedFiles);
         }
 
         List<Type> GetTypesUnderTest()
@@ -183,25 +172,6 @@ namespace CustomerTestsExcel.ExcelToCode
                 return "";
         }
 
-        //XDocument OpenProjectFile()
-        //{
-        //    try
-        //    {
-        //        return TryOpenProjectFile(projectFilePath);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        logger.LogCsprojLoadError(projectFilePath, exception);
-        //        return new XDocument();
-        //    }
-        //}
-
-        //XDocument TryOpenProjectFile(string projectPath)
-        //{
-        //    using (var projectStreamReader = new StreamReader(projectPath))
-        //        return XDocument.Load(projectStreamReader.BaseStream);
-        //}
-
         IEnumerable<string> ListValidSpecificationSpreadsheets()
         {
             var excelTestsPath = Path.Combine(projectRootFolder, excelTestsFolderName);
@@ -297,42 +267,20 @@ namespace CustomerTestsExcel.ExcelToCode
             return templateStream;
         }
 
-        GeneratedCsharpProject GenerateInMemory(
+        List<CsharpProjectFileToSave> GenerateInMemory(
             List<Type> assemblyTypes, 
-            //XDocument existingCsproj, 
             IEnumerable<ITabularBook> excelWorkbooks)
         {
             return
                 new InMemoryGenerateCSharpFromExcel(
                     logger,
-                    //existingCsproj,
                     excelWorkbooks,
                     projectRootNamespace,
-                    excelTestsFolderName,
                     usings,
                     assemblyTypes,
                     assertionClassPrefix)
                 .Generate();
         }
-
-
-        //void SaveProjectFile(XDocument projectFile)
-        //{
-        //    try
-        //    {
-        //        TrySaveProjectFile(projectFilePath, projectFile);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        logger.LogCsprojSaveError(projectFilePath, exception);
-        //    }
-        //}
-
-        //void TrySaveProjectFile(string projectPath, XDocument projectFile)
-        //{
-        //    using (var projectStreamWriter = new StreamWriter(projectPath))
-        //        projectFile.Save(projectStreamWriter.BaseStream);
-        //}
 
         void SaveFiles(List<CsharpProjectFileToSave> files) =>
             files.ForEach(file => SaveFile(projectRootFolder, file));

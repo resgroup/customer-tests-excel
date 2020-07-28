@@ -69,7 +69,6 @@ namespace CustomerTestsExcel.Test
             new FileSystemGenerateCSharpFromExcel(
                 logger,
                 Path.Combine(TestContext.CurrentContext.TestDirectory, specificationFolderRelativeToOutputFolder),
-                //"DummyProject.csproj",
                 ANY_ROOT_NAMESPACE,
                 "",
                 NO_ASSEMBLIES_UNDER_TEST,

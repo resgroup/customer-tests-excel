@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Xml.Linq;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 
 namespace CustomerTestsExcel.ExcelToCode
 {
     public class InMemoryGenerateCSharpFromExcel
     {
-        readonly string excelTestsFolderName;
         readonly IEnumerable<string> usings;
         readonly IEnumerable<Type> typesUnderTest;
         readonly string assertionClassPrefix;
@@ -19,16 +17,12 @@ namespace CustomerTestsExcel.ExcelToCode
         readonly ILogger logger;
         readonly IEnumerable<ITabularBook> workbooks;
         readonly string projectRootNamespace;
-        readonly GeneratedCsharpProject generatedProject;
-        //readonly XElement compileItemGroupNode;
-        //readonly XElement excelItemGroupNode;
+        readonly List<CsharpProjectFileToSave> generatedFiles;
 
         public InMemoryGenerateCSharpFromExcel(
             ILogger logger,
-            //XDocument existingCsproj,
             IEnumerable<ITabularBook> workbooks,
             string projectRootNamespace,
-            string excelTestsFolderName,
             IEnumerable<string> usings,
             IEnumerable<Type> typesUnderTest,
             string assertionClassPrefix)
@@ -40,23 +34,17 @@ namespace CustomerTestsExcel.ExcelToCode
             this.logger = logger;
             this.workbooks = workbooks;
             this.projectRootNamespace = projectRootNamespace;
-            this.excelTestsFolderName = excelTestsFolderName;
             this.usings = usings;
             this.typesUnderTest = typesUnderTest;
             this.assertionClassPrefix = assertionClassPrefix;
 
-            generatedProject = new GeneratedCsharpProject();
-            //{
-            //    CsprojFile = new XDocument(existingCsproj)
-            //};
-            //compileItemGroupNode = GetOrCreateItemGroupForCompileNodes(generatedProject.CsprojFile);
-            //excelItemGroupNode = GetOrCreateItemGroupForExcelNodes(generatedProject.CsprojFile);
+            generatedFiles = new List<CsharpProjectFileToSave>();
         }
 
         // rename GeneratedCsharpProject to generatedfiles or just have a list or sometning
-        public GeneratedCsharpProject Generate()
+        public List<CsharpProjectFileToSave> Generate()
         {
-            //RemoveGeneratedFilesFromCsproj();
+            generatedFiles.Clear();
 
             GenerateTestClasses();
 
@@ -64,38 +52,13 @@ namespace CustomerTestsExcel.ExcelToCode
 
             GenerateSpecificationSpecificPlaceholder();
 
-            return generatedProject;
+            return generatedFiles;
         }
-
-        //void RemoveGeneratedFilesFromCsproj()
-        //{
-        //    var itemGroupNodes =
-        //        generatedProject
-        //        .CsprojFile
-        //        .Descendants()
-        //        .Where(n => n.Name.LocalName == "ItemGroup");
-
-        //    if (itemGroupNodes.Any())
-        //    {
-        //        // remove all code except things in the protected "IgnoreOnGeneration" folder, which is kept for non generated things
-        //        itemGroupNodes
-        //            .Elements()
-        //            .Where(e => e.Name.LocalName == "Compile" || e.Name.LocalName == "None")
-        //            .Where(e => e.Attribute("Include")
-        //            ?.Value
-        //            ?.StartsWith("IgnoreOnGeneration\\") != true)
-        //            .Remove();
-        //    }
-        //}
 
         void GenerateTestClasses()
         {
             foreach (var workbook in workbooks)
-            {
-                //AddFileToCsproj(excelItemGroupNode, "None", Path.Combine(excelTestsFolderName, Path.GetFileName(workbook.Filename)));
-
                 OutputWorkbook(workbook);
-            }
         }
 
         void OutputWorkbook(ITabularBook workbook)
@@ -110,14 +73,14 @@ namespace CustomerTestsExcel.ExcelToCode
 
                     var projectRelativePath = Path.Combine(workBookName, sheet.Name + ".cs");
 
-                    AddCsharpFile(cSharpCode, projectRelativePath);
+                    AddFile(cSharpCode, projectRelativePath);
                 }
             }
 
         }
 
         bool IsTestSheet(ITabularPage excelSheet) =>
-            excelSheet.GetCell(1, 1).Value != null 
+            excelSheet.GetCell(1, 1).Value != null
             && (excelSheet.GetCell(1, 1).Value.ToString() == "Specification");
 
         string OutputWorkSheet(string workBookName, ITabularPage sheet)
@@ -142,7 +105,7 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void GenerateSpecificationSpecificPlaceholder()
         {
-            AddCsharpFile(
+            AddFile(
                 SpecificationSpecificPlaceholderGenerator.GenerateSpecificationSpecificPlaceholder(projectRootNamespace),
                 Path.Combine("Setup", "Placeholder.cs"));
         }
@@ -197,7 +160,7 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
         void GeneratedSpecificationSpecificMatchedClass(
-            GivenClass excelGivenClass, 
+            GivenClass excelGivenClass,
             Type matchingType)
         {
             var code =
@@ -229,93 +192,20 @@ namespace CustomerTestsExcel.ExcelToCode
 
         void AddGeneratedFile(GivenClass excelGivenClass, string code)
         {
-            //var projectRelativePath = Path.Combine("GeneratedSpecificationSpecific", excelGivenClass.Name);
             var projectRelativePath = Path.Combine("Setup", excelGivenClass.Name);
 
-            //var customClassAlreadyExists =
-                //generatedProject
-                //.CsprojFile
-                //.Descendants()
-                //.Any(
-                //    e => 
-                //        e.Name.LocalName == "Compile" 
-                //        && e.Attributes().Any(
-                //            a => a.Name.LocalName == "Include" 
-                //            && a.Value.Contains(
-                //                $"SpecificationSpecific{excelGivenClass.Name}.cs"
-                //            )
-                //        )
-                // );
-
-            //if (customClassAlreadyExists)
-            //    AddTextFile(code, $"{projectRelativePath}.cs.txt");
-            //else
-                AddCsharpFile(code, $"{projectRelativePath}.cs");
+            AddFile(code, $"{projectRelativePath}.cs");
         }
-
-        void AddCsharpFile(string cSharpCode, string filePathRelativeToProject)
-        {
-            AddFile(cSharpCode, filePathRelativeToProject);
-
-            //AddFileToCsproj(compileItemGroupNode, "Compile", filePathRelativeToProject);
-        }
-
-        //void AddTextFile(string textFileContent, string filePathRelativeToProject)
-        //{
-        //    AddFile(textFileContent, filePathRelativeToProject);
-
-        //    //AddFileToCsproj(compileItemGroupNode, "None", filePathRelativeToProject);
-        //}
 
         void AddFile(string cSharpCode, string projectRelativePath)
         {
-            generatedProject.Files.Add(
-                new CsharpProjectFileToSave {
+            generatedFiles.Add(
+                new CsharpProjectFileToSave
+                {
                     Content = cSharpCode,
                     PathRelativeToProjectRoot = projectRelativePath
                 }
             );
         }
-
-        //void AddFileToCsproj(
-        //    XElement groupNode, 
-        //    string buildAction, 
-        //    string filePathRelativeToProject)
-        //{
-        //    groupNode.Add(
-        //        new XElement(
-        //            XName.Get(
-        //                buildAction,
-        //                groupNode.Name.Namespace.NamespaceName
-        //                ),
-        //            new XAttribute("Include", filePathRelativeToProject)
-        //        )
-        //    );
-        //}
-
-        //XElement GetOrCreateItemGroupForCompileNodes(XDocument projectFile) =>
-        //    GetOrCreateItemGroupForNodeType(projectFile, "Compile");
-
-        //XElement GetOrCreateItemGroupForExcelNodes(XDocument projectFile) =>
-        //    GetOrCreateItemGroupForNodeType(projectFile, "None");
-
-        //XElement GetOrCreateItemGroupForNodeType(XDocument projectFile, string nodeName)
-        //{
-        //    var itemGroupNodes =
-        //        projectFile
-        //        .Descendants()
-        //        .Where(n => n.Name.LocalName == nodeName);
-
-        //    if (itemGroupNodes.Any())
-        //    {
-        //        return itemGroupNodes.First().Parent;
-        //    }
-        //    else
-        //    {
-        //        var itemGroupNode = new XElement("ItemGroup");
-        //        projectFile.Root.Add(itemGroupNode);
-        //        return itemGroupNode;
-        //    }
-        //}
     }
 }
