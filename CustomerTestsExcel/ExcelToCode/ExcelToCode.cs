@@ -144,7 +144,7 @@ namespace CustomerTestsExcel.ExcelToCode
             code.Add("using CustomerTestsExcel.SpecificationSpecificClassGeneration;");
             code.Add("using System.Linq.Expressions;");
             code.Add($"using {projectRootNamespace};");
-            code.Add($"using {projectRootNamespace}.GeneratedSpecificationSpecific;");
+            code.Add($"using {projectRootNamespace}.Setup;");
             code.BlankLine();
             foreach (var usingNamespace in usings)
                 code.Add($"using {usingNamespace};");

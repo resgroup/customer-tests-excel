@@ -15,7 +15,7 @@ namespace CustomerTestsExcel.ExcelToCode
         readonly IEnumerable<string> assembliesUnderTest;
         readonly string assertionClassPrefix;
         readonly ITabularLibrary excel;
-        readonly string projectFilePath;
+        //readonly string projectFilePath;
         readonly ILogger logger;
         private readonly string projectRootFolder;
         readonly string projectRootNamespace;
@@ -23,7 +23,7 @@ namespace CustomerTestsExcel.ExcelToCode
         public FileSystemGenerateCSharpFromExcel(
             ILogger logger,
             string projectRootFolder,
-            string specificationProject,
+            //string specificationProject,
             string projectRootNamespace,
             string excelTestsFolderName,
             IEnumerable<string> usings,
@@ -39,7 +39,7 @@ namespace CustomerTestsExcel.ExcelToCode
             this.assembliesUnderTest = assembliesUnderTest;
             this.assertionClassPrefix = assertionClassPrefix;
             this.excel = excel;
-            projectFilePath = Path.Combine(projectRootFolder, specificationProject);
+            //projectFilePath = Path.Combine(projectRootFolder, specificationProject);
         }
 
         public void Create()
@@ -51,10 +51,10 @@ namespace CustomerTestsExcel.ExcelToCode
             if (logger.HasErrors)
                 return;
 
-            var existingCsproj = OpenProjectFile();
+            //var existingCsproj = OpenProjectFile();
 
-            if (logger.HasErrors)
-                return;
+            //if (logger.HasErrors)
+            //    return;
 
             var excelFilenames = ListValidSpecificationSpreadsheets();
 
@@ -67,12 +67,12 @@ namespace CustomerTestsExcel.ExcelToCode
 
                 inMemoryGeneratedFiles = GenerateInMemory(
                     assemblyTypes, 
-                    existingCsproj, 
+                    //existingCsproj, 
                     tidyUp.RememberedThing.Select(e => e.ExcelWorkbook)
                 );
             }
 
-            SaveProjectFile(inMemoryGeneratedFiles.CsprojFile);
+            //SaveProjectFile(inMemoryGeneratedFiles.CsprojFile);
 
             SaveFiles(inMemoryGeneratedFiles.Files);
         }
@@ -183,24 +183,24 @@ namespace CustomerTestsExcel.ExcelToCode
                 return "";
         }
 
-        XDocument OpenProjectFile()
-        {
-            try
-            {
-                return TryOpenProjectFile(projectFilePath);
-            }
-            catch (Exception exception)
-            {
-                logger.LogCsprojLoadError(projectFilePath, exception);
-                return new XDocument();
-            }
-        }
+        //XDocument OpenProjectFile()
+        //{
+        //    try
+        //    {
+        //        return TryOpenProjectFile(projectFilePath);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        logger.LogCsprojLoadError(projectFilePath, exception);
+        //        return new XDocument();
+        //    }
+        //}
 
-        XDocument TryOpenProjectFile(string projectPath)
-        {
-            using (var projectStreamReader = new StreamReader(projectPath))
-                return XDocument.Load(projectStreamReader.BaseStream);
-        }
+        //XDocument TryOpenProjectFile(string projectPath)
+        //{
+        //    using (var projectStreamReader = new StreamReader(projectPath))
+        //        return XDocument.Load(projectStreamReader.BaseStream);
+        //}
 
         IEnumerable<string> ListValidSpecificationSpreadsheets()
         {
@@ -299,13 +299,13 @@ namespace CustomerTestsExcel.ExcelToCode
 
         GeneratedCsharpProject GenerateInMemory(
             List<Type> assemblyTypes, 
-            XDocument existingCsproj, 
+            //XDocument existingCsproj, 
             IEnumerable<ITabularBook> excelWorkbooks)
         {
             return
                 new InMemoryGenerateCSharpFromExcel(
                     logger,
-                    existingCsproj,
+                    //existingCsproj,
                     excelWorkbooks,
                     projectRootNamespace,
                     excelTestsFolderName,
@@ -316,23 +316,23 @@ namespace CustomerTestsExcel.ExcelToCode
         }
 
 
-        void SaveProjectFile(XDocument projectFile)
-        {
-            try
-            {
-                TrySaveProjectFile(projectFilePath, projectFile);
-            }
-            catch (Exception exception)
-            {
-                logger.LogCsprojSaveError(projectFilePath, exception);
-            }
-        }
+        //void SaveProjectFile(XDocument projectFile)
+        //{
+        //    try
+        //    {
+        //        TrySaveProjectFile(projectFilePath, projectFile);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        logger.LogCsprojSaveError(projectFilePath, exception);
+        //    }
+        //}
 
-        void TrySaveProjectFile(string projectPath, XDocument projectFile)
-        {
-            using (var projectStreamWriter = new StreamWriter(projectPath))
-                projectFile.Save(projectStreamWriter.BaseStream);
-        }
+        //void TrySaveProjectFile(string projectPath, XDocument projectFile)
+        //{
+        //    using (var projectStreamWriter = new StreamWriter(projectPath))
+        //        projectFile.Save(projectStreamWriter.BaseStream);
+        //}
 
         void SaveFiles(List<CsharpProjectFileToSave> files) =>
             files.ForEach(file => SaveFile(projectRootFolder, file));
@@ -355,9 +355,21 @@ namespace CustomerTestsExcel.ExcelToCode
 
             Directory.CreateDirectory(Path.GetDirectoryName(filename));
 
-            File.WriteAllText(
-                filename,
-                file.Content);
+            if (File.Exists("Override" + filename))
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
+
+                File.WriteAllText(
+                    filename + ".txt",
+                    file.Content);
+            }
+            else
+            {
+                File.WriteAllText(
+                    filename,
+                    file.Content);
+            }
         }
 
     }

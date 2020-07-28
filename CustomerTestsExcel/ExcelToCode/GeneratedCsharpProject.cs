@@ -5,7 +5,7 @@ namespace CustomerTestsExcel.ExcelToCode
 {
     public class GeneratedCsharpProject
     {
-        public XDocument CsprojFile { get; set; }
+        //public XDocument CsprojFile { get; set; }
         public List<CsharpProjectFileToSave> Files { get; set; }
 
         public GeneratedCsharpProject()

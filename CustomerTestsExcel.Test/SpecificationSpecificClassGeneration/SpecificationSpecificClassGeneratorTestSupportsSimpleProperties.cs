@@ -52,7 +52,7 @@ using CustomerTestsExcel;
 using CustomerTestsExcel.SpecificationSpecificClassGeneration;
 using SampleSystemUnderTest.VermeulenNearWakeLength;
 
-namespace SampleTests.GeneratedSpecificationSpecific
+namespace SampleTests.Setup
 {
     public partial class SpecificationSpecificTarget : ReportsSpecificationSetup
     {

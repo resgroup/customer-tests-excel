@@ -132,49 +132,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="TestExcelFiles\BadIndentationForAssertionTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\MispeltTableOfForAssertionTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\MissingWithItemForList\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\MissingTableOfForAssertionTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\MissingListOfForList\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\MissingWithPropertiesForAssertionTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\NoRowsForTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\NoRowsForAssertionTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\NoHeadersForAssertionTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\NoHeadersForTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\MissingTableOfForTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\BadIndentationForTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\MissingWithPropertiesForTable\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="TestExcelFiles\NoBlankLineBetweenGivenAndWhen\NoBlankLineBetweenGivenAndWhen.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\ComplexObjectWithinTable\DummyProject.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\TwoBlankLinesBetweenGivenAndWhen.xlsx">
@@ -243,14 +201,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestExcelFiles\NoBlankLineBetweenGivenAndWhen\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestExcelFiles\TwoBlankLinesBetweenGivenAndWhen\DummyProject.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -61,7 +61,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             var code = 
 $@"{usingStatements}
 
-namespace {testNamespace}.GeneratedSpecificationSpecific
+namespace {testNamespace}.Setup
 {{
     // A class with the name {excelGivenClass.Name} was found in the Excel tests, but
     // no matching interface could be found in the assembliesUnderTest that were
@@ -88,9 +88,9 @@ namespace {testNamespace}.GeneratedSpecificationSpecific
 
     // Please see VermeulenNearWakeLengthInput.cs for an example of setting up simple and
     // complex properties
-    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/VermeulenNearWakeLengthInput.cs
+    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/VermeulenNearWakeLengthInput.cs
     // Please see Group.cs for an example of setting up list / table properties
-    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/Cargo.cs
+    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/Cargo.cs
 
     public partial class {SpecificationSpecificClassName} : ReportsSpecificationSetup
     {{

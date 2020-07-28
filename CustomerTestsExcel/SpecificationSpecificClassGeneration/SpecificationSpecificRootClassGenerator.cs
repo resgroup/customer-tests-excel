@@ -61,7 +61,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             var code =
 $@"{usingStatements}
 
-namespace {testNamespace}.GeneratedSpecificationSpecific
+namespace {testNamespace}.Setup
 {{
     // This is a generated class that matches the root class of an excel test.
 

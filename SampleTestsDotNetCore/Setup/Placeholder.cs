@@ -1,10 +1,5 @@
-﻿namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
+namespace SampleTests.Setup
 {
-    public static class SpecificationSpecificPlaceholderGenerator
-    {
-        public static string GenerateSpecificationSpecificPlaceholder(string projectRootNamespace) =>
-$@"namespace {projectRootNamespace}.Setup
-{{
     // This folder / namespace contains all the generated specification specific setup files
 
     // Files are generated unless there is already a matching '<ClassName>.cs' file in the
@@ -28,6 +23,4 @@ $@"namespace {projectRootNamespace}.Setup
     // system under test manually in the root object files. 
     // An example of this is:
     // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/A_Table.cs
-}}";
-    }
 }

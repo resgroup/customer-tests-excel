@@ -54,7 +54,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             var code =
 $@"{usingStatements}
 
-namespace {testNamespace}.GeneratedSpecificationSpecific
+namespace {testNamespace}.Setup
 {{
     public partial class {SpecificationSpecificClassName} : ReportsSpecificationSetup
     {{

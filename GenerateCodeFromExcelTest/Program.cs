@@ -39,7 +39,7 @@ namespace GenerateCodeFromExcelTest
                 new FileSystemGenerateCSharpFromExcel(
                     logger,
                     folder,
-                    specificationProject,
+                    //specificationProject,
                     rootNamespace,
                     "ExcelTests",
                     usings,
