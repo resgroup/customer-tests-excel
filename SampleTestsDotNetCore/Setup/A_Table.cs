@@ -40,9 +40,9 @@ namespace SampleTests.Setup
 
     // Please see VermeulenNearWakeLengthInput.cs for an example of setting up simple and
     // complex properties
-    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/VermeulenNearWakeLengthInput.cs
+    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/VermeulenNearWakeLengthInput.cs
     // Please see Group.cs for an example of setting up list / table properties
-    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/Cargo.cs
+    // - https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/Cargo.cs
 
     public partial class SpecificationSpecificA_Table : ReportsSpecificationSetup
     {

@@ -11,16 +11,16 @@ namespace SampleTests.Setup
     // implementation in the IgnoreUnderGeneration folder. The annoyance is that you have
     // to use this namespace, even though the file is in a different folder.
     // An example of this is:
-    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/Calculator.cs
+    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/Calculator.cs
 
     // The `/assembliesUnderTest` specified on the command line are searched to find matching
     // interfaces, and suitable files generated for them. 
     // An example of this is:
-    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/Cargo.cs
+    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/Cargo.cs
     // If there is no matching interface then a dummy file is created. This will compile, but 
     // won't set anything up in your code. These files can be useful for showing how things 
     // work, and sometimes you might just to just use them, and map values from them in to your 
     // system under test manually in the root object files. 
     // An example of this is:
-    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/GeneratedSpecificationSpecific/A_Table.cs
+    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/A_Table.cs
 }
