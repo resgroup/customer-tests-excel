@@ -11,7 +11,7 @@ build_script:
  - GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
  # run the tests, so that they re create the Excel Spreadsheets (requires some environment variables to be set)
- - nunit3-console.exe Builtdlls\Release\SampleTests.dll 
+ - nunit3-console.exe CustomerTestsExcel.nunit 
  # Regenerate the sample tests again and build / test
  - GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet /property:Configuration=Release
