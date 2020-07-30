@@ -3,6 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/wv0th0n4xknitplp?svg=true)](https://ci.appveyor.com/project/RESSoftwareTeam/customer-tests-excel)
 
 [![codecov](https://codecov.io/gh/resgroup/customer-tests-excel/branch/master/graph/badge.svg)](https://codecov.io/gh/resgroup/customer-tests-excel)
+(The end to end tests are included in this, due to OpenCover / NUnit / dotnet test issues with .net core test projects)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/1bc743c6d68c2f245cd8/maintainability)](https://codeclimate.com/github/resgroup/customer-tests-excel/maintainability)
 
