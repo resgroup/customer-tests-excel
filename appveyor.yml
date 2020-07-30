@@ -3,7 +3,7 @@ image:
 configuration:
   - Release
 build_script:
- - dotnet restore "CustomerTestsExcel.sln" -verbosity quiet
+ - dotnet restore "CustomerTestsExcel.sln"
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
  # Ensure that the Excel tests can round trip to C#
