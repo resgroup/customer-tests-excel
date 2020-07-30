@@ -1,9 +1,9 @@
 image:
-- Visual Studio 2017
+- Visual Studio 2019
 configuration:
   - Release
 build_script:
- - dotnet restore "CustomerTestsExcel.sln"
+ - nuget restore "CustomerTestsExcel.sln" -verbosity quiet
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
  # Ensure that the Excel tests can round trip to C#
