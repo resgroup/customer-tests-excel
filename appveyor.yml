@@ -1,6 +1,7 @@
 image:
 - Visual Studio 2019
 build_script:
+ - nuget
  - nuget restore CustomerTestsExcel.sln -verbosity quiet
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
