@@ -5,18 +5,17 @@ build_script:
  - nuget restore CustomerTestsExcel.sln -verbosity quiet
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
- - dotnet test SampleTests\SampleTests.csproj
  # Ensure that the Excel tests can round trip to C#
  # Regenerate the sample tests from the excel (requires GenerateCodeFromExcelTest.exe)
  - GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
  # run the tests, so that they re create the Excel Spreadsheets (requires some environment variables to be set)
- - dotnet test SampleTests\SampleTests.csproj
+ - packages\nunit.consolerunner.netcore\3.12.0-beta1\tools\nunit3-console.exe SampleTests\bin\Debug\netcoreapp3.1\SampleTests.dll
  # Regenerate the sample tests again and build / test
  - GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet /property:Configuration=Release
  # Run the end to end tests again, they are .net core now, so don't work with the nunit test runner / coverage
- - dotnet test SampleTests\SampleTests.csproj
+ - packages\nunit.consolerunner.netcore\3.12.0-beta1\tools\nunit3-console.exe SampleTests\bin\Debug\netcoreapp3.1\SampleTests.dll
  # run the unit tests and get coverage
  - packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register:Path64 -target:"nunit3-console.exe" -targetargs:"BuiltDlls\Release\CustomerTestsExcel.Test.dll" -output:"coverage.xml" -returntargetcode
  # create the nuget package
