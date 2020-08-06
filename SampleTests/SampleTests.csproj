@@ -5,7 +5,6 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>true</Optimize>

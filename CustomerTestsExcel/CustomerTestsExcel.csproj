@@ -1,198 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8D8AD476-9558-4039-82E0-E0441D81DB85}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net461</TargetFramework>
+    <Company>RES</Company>
     <RootNamespace>CustomerTestsExcel</RootNamespace>
-    <AssemblyName>CustomerTestsExcel</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <Version>3.0.0.0</Version>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Builtdlls\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>true</Optimize>
-    <OutputPath>..\Builtdlls\Release\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\packages\DocumentFormat.OpenXml.2.8.1\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Abstractions, Version=2.0.0.136, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Abstractions.2.0.0.136\lib\net40\System.IO.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.3" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="Moq" Version="4.14.5" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit.Console" Version="3.11.1" />
+    <PackageReference Include="NUnit.ConsoleRunner.NetCore" Version="3.12.0-beta1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="2.0.0.137" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CodeToExcelException.cs" />
-    <Compile Include="ExcelDateHelper.cs" />
-    <Compile Include="ExcelToCode\CsharpProjectFileToSave.cs" />
-    <Compile Include="ExcelToCode\ExcelFileIo.cs" />
-    <Compile Include="ExcelToCode\ExcelPropertyType.cs" />
-    <Compile Include="ExcelToCode\ExcelState.cs" />
-    <Compile Include="ExcelToCode\CodeState.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeThen.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeGiven.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeWhen.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeSimpleProperty.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeState.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeList.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeComplexProperty.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeTable.cs" />
-    <Compile Include="ExcelToCode\LogState.cs" />
-    <Compile Include="ExcelToCode\VisitedGivenFunction.cs" />
-    <Compile Include="ExcelToCode\VisitedGivenTableProperty.cs" />
-    <Compile Include="ExcelToCode\IVisitedGivenFunction.cs" />
-    <Compile Include="ExcelToCode\IVisitedGivenTableProperty.cs" />
-    <Compile Include="ExcelToCode\InMemoryGenerateCSharpFromExcel.cs" />
-    <Compile Include="FluentList.cs" />
-    <Compile Include="IReportSpecificationSetupProperty.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\ClassNameMatcher.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpClassMatcher.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\ExcelCsharpPropertyMatcher.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClass.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexListProperty.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClassFunction.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClassComplexProperty.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClassMutable.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\IGivenClassProperty.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClassRecorder.cs" />
-    <Compile Include="ExcelToCode\VisitedGivenListProperty.cs" />
-    <Compile Include="ExcelToCode\VisitedGivenComplexProperty.cs" />
-    <Compile Include="ExcelToCode\IExcelToCodeVisitor.cs" />
-    <Compile Include="ExcelToCode\IVisitedGivenComplexProperty.cs" />
-    <Compile Include="ExcelToCode\IVisitedGivenListProperty.cs" />
-    <Compile Include="ExcelToCode\IVisitedGivenSimpleProperty.cs" />
-    <Compile Include="ExcelToCode\LoggerBase.cs" />
-    <Compile Include="CodeOutputWriters\ExcelUnRoundTrippableTestOutputWriter.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeException.cs" />
-    <Compile Include="ExcelToCode\ConsoleLogger.cs" />
-    <Compile Include="ExcelToCode\ILogger.cs" />
-    <Compile Include="ExcelToCode\PropertyTableHeader.cs" />
-    <Compile Include="ExcelToCode\VisitedGivenSimpleProperty.cs" />
-    <Compile Include="ExcelToCode\SubClassTableHeader.cs" />
-    <Compile Include="ExcelToCode\AssertionTableHeader.cs" />
-    <Compile Include="ExcelToCode\TableHeader.cs" />
-    <Compile Include="Indentation\AutoIndentingStringBuilder.cs" />
-    <Compile Include="ReportsSpecificationSetupList.cs" />
-    <Compile Include="NavigationHTML\AddNavigationToHTMLOutput.cs" />
-    <Compile Include="Assertions\AssertionOperator.cs" />
-    <Compile Include="Assertions\BaseAssertion.cs" />
-    <Compile Include="DebugTextLineWriter.cs" />
-    <Compile Include="Assertions\EqualityAssertionWithStringFormat.cs" />
-    <Compile Include="Assertions\EqualityAssertionWithPercentagePrecision.cs" />
-    <Compile Include="ExcelTabularBook.cs" />
-    <Compile Include="ExcelTabularLibrary.cs" />
-    <Compile Include="ITabularBook.cs" />
-    <Compile Include="ITabularCell.cs" />
-    <Compile Include="ITabularLibrary.cs" />
-    <Compile Include="ITabularPage.cs" />
-    <Compile Include="ITextLineWriter.cs" />
-    <Compile Include="ExcelTabularPage.cs" />
-    <Compile Include="NavigationHTML\DirectoryToIndex.cs" />
-    <Compile Include="ReportSpecificationSetupClassUsingTable.cs" />
-    <Compile Include="ReportSpecificationSetupClassUsingTableRow.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\GivenClassSimpleProperty.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\MatchedProperty.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificClassGeneratorBase.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificPlaceholderGenerator.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificString.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificDateTime.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificInteger.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificUnmatchedClassGenerator.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificRootClassGenerator.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificClassGenerator.cs" />
-    <Compile Include="SpecificationSpecificClassGeneration\SpecificationSpecificFloat.cs" />
-    <Compile Include="StringBuilderTextLineWriter.cs" />
-    <Compile Include="CodeOutputWriters\StringTestOutputWriterBase.cs" />
-    <Compile Include="Assertions\EqualityAssertion.cs" />
-    <Compile Include="ExcelToCode\ExcelToCode.cs" />
-    <Compile Include="Assertions\ExcelFormulaDoesNotMatchCodeAssertion.cs" />
-    <Compile Include="ExcelToCode\ExcelToCodeBase.cs" />
-    <Compile Include="CodeOutputWriters\HumanFriendlyFormatter.cs" />
-    <Compile Include="Assertions\IAssertion.cs" />
-    <Compile Include="CodeOutputWriters\IHumanFriendlyFormatter.cs" />
-    <Compile Include="NavigationHTML\INavigationHTMLFormatter.cs" />
-    <Compile Include="Indentation\IndentingStringBuilder.cs" />
-    <Compile Include="NavigationHTML\NavigationHTMLFormatter.cs" />
-    <Compile Include="NoValue.cs" />
-    <Compile Include="Assertions\ParentAssertion.cs" />
-    <Compile Include="Assertions\ParseAssertionProperty.cs" />
-    <Compile Include="ReportSpecificationSetupClass.cs" />
-    <Compile Include="ReportSpecificationSetupProperty.cs" />
-    <Compile Include="ReportsSpecificationSetup.cs" />
-    <Compile Include="SpecificationBase.cs" />
-    <Compile Include="CodeNameToExcelNameConverter.cs" />
-    <Compile Include="CodeOutputWriters\CombinedTestOutputWriter.cs" />
-    <Compile Include="CodeOutputWriters\StringTestOutputWriter.cs" />
-    <Compile Include="CodeOutputWriters\ExcelTestOutputWriter.cs" />
-    <Compile Include="CodeOutputWriters\ExcelTestOutputWriterBase.cs" />
-    <Compile Include="ICodeNameToExcelNameConverter.cs" />
-    <Compile Include="CodeOutputWriters\HTMLTestOutputWriter.cs" />
-    <Compile Include="IReportsSpecificationSetup.cs" />
-    <Compile Include="ISpecification.cs" />
-    <Compile Include="CodeOutputWriters\ITestOutputWriter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunSpecification.cs" />
-    <Compile Include="Assertions\TableAssertion.cs" />
-    <Compile Include="TabularCell.cs" />
-    <Compile Include="ExcelToCode\FileSystemGenerateCSharpFromExcel.cs" />
-    <Compile Include="TidyUp.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
