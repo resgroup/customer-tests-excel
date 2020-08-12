@@ -6,7 +6,9 @@
     <Version>3.0.0.0</Version>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
-    <StartupObject />
+	<IsPackable>true</IsPackable>
+	<StartupObject />
+	<NuspecFile>CustomerTestsExcel.nuspec</NuspecFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>true</Optimize>

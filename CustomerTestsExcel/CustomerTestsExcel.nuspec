@@ -1,7 +1,7 @@
 <package>
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
+    <id>CustomerTestsExcel</id>
+    <version>3.0.0.0</version>
     <authors>RES</authors>
     <title>Customer Tests Excel</title>
     <description>A framework to round trip NUnit to / from Microsoft Excel customer tests</description>
@@ -13,8 +13,8 @@
   <files>
 	<file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
 	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\GenerateCodeFromExcelTest.exe" target="tools" />
-	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\GenerateCodeFromExcelTest.exe.config" target="tools" />
+	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\GenerateCodeFromExcelTest.runtimeconfig.json" target="tools" />
 	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\AddNavigationToSpecificationHTMLOutputFiles.exe" target="tools" />
-	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\AddNavigationToSpecificationHTMLOutputFiles.exe.config" target="tools" />
+	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\AddNavigationToSpecificationHTMLOutputFiles.runtimeconfig.json" target="tools" />
   </files>
 </package>
