@@ -2,8 +2,9 @@ image:
 - Visual Studio 2019
 environment:
  CUSTOMER_TESTS_EXCEL_WRITE_TO_EXCEL: true
- CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS: ..\..\..\..\..\..\SampleTests\ExcelTests
+ CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS: ..\..\..\..\SampleTests\ExcelTests
 build_script:
+ - echo %CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS%
  - nuget restore CustomerTestsExcel.sln -verbosity quiet
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
