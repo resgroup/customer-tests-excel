@@ -12,7 +12,7 @@
   </metadata>
   <files>
 	<file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
-	<file src="..\GenerateCodeFromExcelTest\bin\Release`\netcoreapp3.1\GenerateCodeFromExcelTest.exe" target="tools" />
+	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\GenerateCodeFromExcelTest.exe" target="tools" />
 	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\GenerateCodeFromExcelTest.exe.config" target="tools" />
 	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\AddNavigationToSpecificationHTMLOutputFiles.exe" target="tools" />
 	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\AddNavigationToSpecificationHTMLOutputFiles.exe.config" target="tools" />
