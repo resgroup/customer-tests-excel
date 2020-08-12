@@ -19,7 +19,7 @@ build_script:
  - GenerateTests.bat
  - msbuild CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet /property:Configuration=Release
  # run the unit tests and get coverage
- - packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register:Path64 -target:"dotnet" -targetargs:"test" -output:"coverage.xml" -returntargetcode -oldstyle
+ - packages\OpenCover\4.7.922\tools\OpenCover.Console.exe -register:Path64 -target:"dotnet" -targetargs:"test" -output:"coverage.xml" -returntargetcode -oldstyle
  # create the nuget package
  - nuget pack CustomerTestsExcel\CustomerTestsExcel.csproj -Symbols
 test_script:
