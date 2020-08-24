@@ -7,14 +7,12 @@
     <description>A framework to round trip NUnit to / from Microsoft Excel customer tests</description>
     <summary>Round trip NUnit / Microsoft Excel customer tests</summary>
     <projectUrl>https://github.com/resgroup/customer-tests-excel</projectUrl>
-    <licenseUrl>https://raw.githubusercontent.com/resgroup/customer-tests-excel/master/LICENSE</licenseUrl>
-    <iconUrl>https://raw.githubusercontent.com/resgroup/customer-tests-excel/master/media/customer-tests-excel-icon-small.png</iconUrl>
+    <License>https://raw.githubusercontent.com/resgroup/customer-tests-excel/master/LICENSE</License>
+    <PackageIcon>https://raw.githubusercontent.com/resgroup/customer-tests-excel/master/media/customer-tests-excel-icon-small.png</PackageIcon>
   </metadata>
   <files>
 	<file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
-	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\GenerateCodeFromExcelTest.exe" target="tools" />
-	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\GenerateCodeFromExcelTest.runtimeconfig.json" target="tools" />
-	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\AddNavigationToSpecificationHTMLOutputFiles.exe" target="tools" />
-	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\AddNavigationToSpecificationHTMLOutputFiles.runtimeconfig.json" target="tools" />
+	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" target="tools\GenerateCodeFromExcelTest" />
+	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" target="tools\AddNavigationToSpecificationHTMLOutputFiles" />
   </files>
 </package>

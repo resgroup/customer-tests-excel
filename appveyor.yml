@@ -21,7 +21,7 @@ build_script:
  # run the unit tests and get coverage
  - packages\OpenCover\4.7.922\tools\OpenCover.Console.exe -register:Path64 -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test" -output:"coverage.xml" -returntargetcode -oldstyle
  # create the nuget package
- - nuget pack CustomerTestsExcel\CustomerTestsExcel.csproj -Symbols
+ - dotnet pack CustomerTestsExcel\CustomerTestsExcel.csproj
 test_script:
   # upload the code coverage to codcov.io
   - ps: |
