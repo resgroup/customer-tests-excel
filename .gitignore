@@ -230,3 +230,4 @@ Web Applications/GEOleRes/Flex/bin-debug/*
 # python
 .idea/
 *.pyc
+GenerateCodeFromExcelTest/Properties/launchSettings.json
