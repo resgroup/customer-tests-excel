@@ -70,7 +70,7 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             // Functions should all have different names, but this is enforced
             // anyway in RationaliseProperties so not going to worry about it
             // for now
-            var rationalisedFunctions = visitedGivenFunctions;
+            var rationalisedFunctions = RationaliseFunctions();
 
             // complex properties with the same name but a different property type are invalid
             var rationalisedComplexProperties = RationaliseComplexProperties();
@@ -153,6 +153,20 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
             }
 
             return rationalisedTableProperties;
+        }
+
+        List<IVisitedGivenFunction> RationaliseFunctions()
+        {
+            var rationalisedFunctions = new List<IVisitedGivenFunction>();
+            foreach (var givenFunction in visitedGivenFunctions)
+            {
+                if (rationalisedFunctions.Any(r => r.PropertyOrFunctionName == givenFunction.PropertyOrFunctionName))
+                    continue;
+
+                rationalisedFunctions.Add(givenFunction);
+            }
+
+            return rationalisedFunctions;
         }
 
         List<IVisitedGivenComplexProperty> RationaliseComplexProperties()
@@ -313,7 +327,9 @@ namespace CustomerTestsExcel.SpecificationSpecificClassGeneration
         {
             if (properties.Any(p => p.Name == property.Name))
             {
-                var multipleTypes = string.Join(", ", properties.Where(p => p.Name == property.Name).Select(s => s.ToString()));
+                var allProperties = properties.ToList();
+                allProperties.Add(property);
+                var multipleTypes = string.Join(", ", allProperties.Where(p => p.Name == property.Name).Select(s => s.ToString()));
 
                 throw new ExcelToCodeException($"Multiple different property types found for {property.Name}: {multipleTypes}");
             }
