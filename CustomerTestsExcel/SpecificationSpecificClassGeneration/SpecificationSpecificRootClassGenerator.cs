@@ -69,17 +69,17 @@ namespace {testNamespace}.Setup
     // test, but you will need to add a method for the 'When' section, and a 
     // property for the 'Assert' section.
     // You can see an example at the link below
-    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/IgnoreOnGeneration/Vermeulen%20Near%20Wake%20Length/SpecificationSpecificVermeulenNearWakeLengthCalculatorPartial.cs
+    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/Vermeulen%20Near%20Wake%20Length/SpecificationSpecificVermeulenNearWakeLengthCalculatorPartial.cs
     // The 'Calculate()' method matches up with 'When', 'Calculate' from the 
     // test, and the 'VermeulenNearWakeLengths' property matches up with the 
     // 'Assert', 'VermeulenNearWakeLengths' from the test.
     // You can see the associated Excel test on the link below
     // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/ExcelTests/Vermeulen%20Near%20Wake%20Length.xlsx
 
-    // Custom classes should go under a directory called 'IgnoreOnGeneration'.
-    // If the custom class filename is the same as this one ({SpecificationSpecificClassName}),
+    // Custom classes should go in the 'Setup' folder.
+    // If the custom class filename is '{SpecificationSpecificClassName}Override.cs',
     // then it will be used instead of this function. If it is called something else,
-    // say {SpecificationSpecificClassName}Partial, then this class will remain, and
+    // say '{SpecificationSpecificClassName}Partial.cs', then this class will remain, and
     // the custom class can add to it.
 
     public partial class {SpecificationSpecificClassName} : ReportsSpecificationSetup
@@ -115,10 +115,10 @@ namespace {testNamespace}.Setup
             return
 $@"        // No sensible implementation can be generated for functions, so please 
         // add the function below in a custom class.
-        // Custom classes should go under a directory called 'IgnoreOnGeneration'.
-        // If the custom class filename is the same as this one ({SpecificationSpecificClassName}),
+        // Custom classes should go in the 'Setup' folder.
+        // If the custom class filename is '{SpecificationSpecificClassName}Override.cs',
         // then it will be used instead of this file. If it is called something else,
-        // say {SpecificationSpecificClassName}Partial, then this class will remain, and
+        // say {SpecificationSpecificClassName}Partial.cs, then this class will remain, and
         // the custom class can add to it.
         // public void {functionName}() {{ .. }} 
 ";

@@ -181,12 +181,12 @@ $@"        internal {SpecificationSpecificClassName} {matchedProperty.ExcelPrope
 
         string NonMatchingProperty(GivenClassComplexProperty givenClassProperty)
         {
-            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {givenClassProperty.ClassName}.cs";
+            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in the Setup subfolder called {givenClassProperty.ClassName}Override.cs";
         }
 
         string NonMatchingListProperty(GivenClassComplexListProperty givenClassProperty)
         {
-            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a IgnoreOnGeneration subfolder called {givenClassProperty.ClassName}.cs";
+            return $"// Could not match {givenClassProperty.Name}, please add this in a custom partial class, or override this file entirely, by creating a file in  a Setup subfolder called {givenClassProperty.ClassName}Override.cs";
         }
 
         string InterfacePropertyName =>
