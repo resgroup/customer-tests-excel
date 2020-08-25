@@ -9,7 +9,9 @@ namespace GenerateCodeFromExcelTest
 {
     // To work with the SampleTests project included in this solution, use the following command line parameters
     // The path to the assembly must be absolute, so you will probably need to be change it
-    // /folder "..\..\SampleTests" /namespace SampleTests /usings "SampleSystemUnderTest SampleSystemUnderTest.AnovaCalculator SampleSystemUnderTest.Routing SampleSystemUnderTest.VermeulenNearWakeLength SampleSystemUnderTest.Calculator" /assertionClassPrefix "I" /assembliesUnderTest "C:\Users\ceddl\Documents\GITHub\customer-tests-excel\Builtdlls\Debug\SampleSystemUnderTest.dll"
+    // /folder "..\..\..\..\SampleTests" /namespace SampleTests /usings "SampleSystemUnderTest SampleSystemUnderTest.AnovaCalculator SampleSystemUnderTest.Routing SampleSystemUnderTest.VermeulenNearWakeLength SampleSystemUnderTest.Calculator SampleSystemUnderTest.CustomProperties SampleSystemUnderTest.Misc" /assertionClassPrefix "I" /assembliesUnderTest "C:\Users\cburge\Documents\repos\customer-tests-excel\Builtdlls\debug\SampleSystemUnderTest.dll"
+
+    // /folder C:\Users\cburge\Documents\repos\software\Energy\Gross\CustomerTestsExcel\ /project RES.Energy.Gross.CustomerTestsExcel.csproj /namespace RES.Energy.Gross.CustomerTestsExcel /usings "RES.Energy.Gross.Calculation RES.Energy.Gross.Calculation.Base RES.Energy.Gross.Calculation.DnvGlBlockage RES.TurbineLayout.Base RES.TurbineModel.Base RES.Energy.Gross.Base RES.WindAnalysis.WindClimate.Base" /assertionClassPrefix "" /assembliesUnderTest "C:\Users\cburge\Documents\repos\software\BuiltDLLs\Debug\RES.TurbineModel.Base.dll C:\Users\cburge\Documents\repos\software\BuiltDLLs\Debug\RES.TurbineLayout.Base.dll C:\Users\cburge\Documents\repos\software\BuiltDLLs\Debug\RES.Energy.Gross.Calculation.Base.dll C:\Users\cburge\Documents\repos\software\BuiltDLLs\Debug\RES.Energy.Gross.Base.dll C:\Users\cburge\Documents\repos\software\BuiltDLLs\Debug\RES.WindAnalysis.WindClimate.Base.dll"
     static class Program
     {
         static int Main(string[] args)
