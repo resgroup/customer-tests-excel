@@ -303,7 +303,9 @@ namespace CustomerTestsExcel.ExcelToCode
 
             Directory.CreateDirectory(Path.GetDirectoryName(filename));
 
-            if (File.Exists("Override" + filename))
+            var overrideFilename = Path.GetDirectoryName(filename) + "\\" + Path.GetFileNameWithoutExtension(filename) + "Override" + Path.GetExtension(filename);
+
+            if (File.Exists(overrideFilename))
             {
                 if (File.Exists(filename))
                     File.Delete(filename);
