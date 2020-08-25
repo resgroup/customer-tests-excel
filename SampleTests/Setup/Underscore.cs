@@ -21,17 +21,17 @@ namespace SampleTests.Setup
     // test, but you will need to add a method for the 'When' section, and a 
     // property for the 'Assert' section.
     // You can see an example at the link below
-    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/IgnoreOnGeneration/Vermeulen%20Near%20Wake%20Length/SpecificationSpecificVermeulenNearWakeLengthCalculatorPartial.cs
+    // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/Setup/Vermeulen%20Near%20Wake%20Length/SpecificationSpecificVermeulenNearWakeLengthCalculatorPartial.cs
     // The 'Calculate()' method matches up with 'When', 'Calculate' from the 
     // test, and the 'VermeulenNearWakeLengths' property matches up with the 
     // 'Assert', 'VermeulenNearWakeLengths' from the test.
     // You can see the associated Excel test on the link below
     // https://github.com/resgroup/customer-tests-excel/blob/master/SampleTests/ExcelTests/Vermeulen%20Near%20Wake%20Length.xlsx
 
-    // Custom classes should go under a directory called 'IgnoreOnGeneration'.
-    // If the custom class filename is the same as this one (SpecificationSpecificUnderscore),
+    // Custom classes should go in the 'Setup' folder.
+    // If the custom class filename is 'SpecificationSpecificUnderscoreOverride.cs',
     // then it will be used instead of this function. If it is called something else,
-    // say SpecificationSpecificUnderscorePartial, then this class will remain, and
+    // say 'SpecificationSpecificUnderscorePartial.cs', then this class will remain, and
     // the custom class can add to it.
 
     public partial class SpecificationSpecificUnderscore : ReportsSpecificationSetup

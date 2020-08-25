@@ -32,10 +32,10 @@ namespace SampleTests.Setup
     // - https://github.com/resgroup/customer-tests-excel/tree/master/SampleTests
     // - https://github.com/resgroup/customer-tests-excel/tree/master/SampleSystemUnderTest
 
-    // Custom classes should go under a directory called 'IgnoreOnGeneration'.
-    // If the custom class filename is the same as this one (SpecificationSpecificA_Table),
+    // Custom classes should go in the 'Setup' folder.
+    // If the custom class filename is 'SpecificationSpecificA_TableOverride.cs',
     // then it will be used instead of this function. If it is called something else,
-    // say SpecificationSpecificA_TablePartial, then this class will remain, and
+    // say 'SpecificationSpecificA_TablePartial.cs', then this class will remain, and
     // the custom class can add to it.
 
     // Please see VermeulenNearWakeLengthInput.cs for an example of setting up simple and
