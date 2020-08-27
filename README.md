@@ -1,6 +1,6 @@
 # Customer Tests Excel 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/wv0th0n4xknitplp?svg=true)](https://ci.appveyor.com/project/RESSoftwareTeam/customer-tests-excel)
+[![Build status](https://buildstats.info/appveyor/chart/RESSoftwareTeam/customer-tests-excel)](https://ci.appveyor.com/project/RESSoftwareTeam/customer-tests-excel)
 
 [![codecov](https://codecov.io/gh/resgroup/customer-tests-excel/branch/master/graph/badge.svg)](https://codecov.io/gh/resgroup/customer-tests-excel)
 
