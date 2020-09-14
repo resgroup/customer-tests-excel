@@ -10,8 +10,8 @@
     <repository type="git" url="https://github.com/resgroup/customer-tests-excel" />
     <license type="expression">MIT</license>
     <icon>media\customer-tests-excel-icon-small.png</icon>
-	<copyright>Copyright © Cedd Burge 2020</copyright>
-	<tags>nunit excel customer-tests acceptance-tests end-to-end-tests code-generation</tags>
+	  <copyright>Copyright © Cedd Burge 2020</copyright>
+	  <tags>nunit excel customer-tests acceptance-tests end-to-end-tests code-generation</tags>
     <releaseNotes>
 The test project is now expected to be .Net Core (the project under test can be either Core or Framework).
 The framework can now scan assemblies / dlls for interfaces that match the definitions in the Excel tests, and generate the setup classes automatically.
@@ -20,9 +20,15 @@ The generated C# test code now uses fluent syntax and is more concise and readab
 	</releaseNotes>
   </metadata>
   <files>
-	<file src="..\media\customer-tests-excel-icon-small.png" target="media\" />
-	<file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
-	<file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" target="tools\GenerateCodeFromExcelTest" />
-	<file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" target="tools\AddNavigationToSpecificationHTMLOutputFiles" />
+	  <file src="..\media\customer-tests-excel-icon-small.png" target="media\" />
+	  <file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
+	  <file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" target="tools\GenerateCodeFromExcelTest" />
+	  <file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" target="tools\AddNavigationToSpecificationHTMLOutputFiles" />
   </files>
+  <dependencies>
+    <dependency id="DocumentFormat.OpenXml" version="[2,3]" />
+    <dependency id="Microsoft.CSharp" version="[4,5)" />
+    <dependency id="Moq" version="[4,5)" />
+    <dependency id="NUnit" version="[3,4)" />
+  </dependencies>
 </package>
