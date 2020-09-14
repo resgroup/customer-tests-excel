@@ -1,7 +1,7 @@
 <package>
   <metadata>
     <id>CustomerTestsExcel</id>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <authors>Cedd Burge</authors>
     <title>Customer Tests Excel</title>
     <description>A framework to round trip NUnit to / from Microsoft Excel customer tests</description>
@@ -26,9 +26,11 @@ The generated C# test code now uses fluent syntax and is more concise and readab
     </dependencies>
   </metadata>
   <files>
-	  <file src="..\media\customer-tests-excel-icon-small.png" target="media\" />
-	  <file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
-	  <file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" target="tools\GenerateCodeFromExcelTest" />
-	  <file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" target="tools\AddNavigationToSpecificationHTMLOutputFiles" />
+    <group targetFramework=".NETCoreApp3.1">
+      <file src="..\media\customer-tests-excel-icon-small.png" target="media\" />
+      <file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
+      <file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" target="tools\GenerateCodeFromExcelTest" />
+      <file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" target="tools\AddNavigationToSpecificationHTMLOutputFiles" />
+    </group>
   </files>
 </package>
