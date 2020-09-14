@@ -29,7 +29,7 @@ test_script:
       Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh
       bash codecov.sh -f "coverage.xml" -U "-s" -A "-s"
 artifacts:
- - path: '**\*.nupkg'
+ - path: 'CustomerTestsExcel\**\*.nupkg'
 notifications:
   - provider: Email
     to:
