@@ -17,7 +17,13 @@ The test project is now expected to be .Net Core (the project under test can be 
 The framework can now scan assemblies / dlls for interfaces that match the definitions in the Excel tests, and generate the setup classes automatically.
 Improved error / warning messages for badly formatted Excel tests.
 The generated C# test code now uses fluent syntax and is more concise and readable.
-	</releaseNotes>
+ 	  </releaseNotes>
+    <dependencies>
+      <dependency id="DocumentFormat.OpenXml" version="[2,3]" />
+      <dependency id="Microsoft.CSharp" version="[4,5)" />
+      <dependency id="Moq" version="[4,5)" />
+      <dependency id="NUnit" version="[3,4)" />
+    </dependencies>
   </metadata>
   <files>
 	  <file src="..\media\customer-tests-excel-icon-small.png" target="media\" />
@@ -25,10 +31,4 @@ The generated C# test code now uses fluent syntax and is more concise and readab
 	  <file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" target="tools\GenerateCodeFromExcelTest" />
 	  <file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" target="tools\AddNavigationToSpecificationHTMLOutputFiles" />
   </files>
-  <dependencies>
-    <dependency id="DocumentFormat.OpenXml" version="[2,3]" />
-    <dependency id="Microsoft.CSharp" version="[4,5)" />
-    <dependency id="Moq" version="[4,5)" />
-    <dependency id="NUnit" version="[3,4)" />
-  </dependencies>
 </package>
