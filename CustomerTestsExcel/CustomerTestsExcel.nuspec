@@ -12,12 +12,7 @@
     <icon>media\customer-tests-excel-icon-small.png</icon>
     <copyright>Copyright © Cedd Burge 2020</copyright>
     <tags>nunit excel customer-tests acceptance-tests end-to-end-tests code-generation</tags>
-    <releaseNotes>
-      The test project is now expected to be .Net Core (the project under test can be either Core or Framework).
-      The framework can now scan assemblies / dlls for interfaces that match the definitions in the Excel tests, and generate the setup classes automatically.
-      Improved error / warning messages for badly formatted Excel tests.
-      The generated C# test code now uses fluent syntax and is more concise and readable.
-    </releaseNotes>
+    <releaseNotes>Bug fix: Include DocumentFormat.OpenXml as a dependency</releaseNotes>
     <dependencies>
       <!-- I thought these were worked out automatically from the csproj, but they are not. I think this is because just using the csproj is the recommended thing to do now, but I can't do that, as there is no equivalent of the <files> element as far as I am aware -->
       <dependency id="DocumentFormat.OpenXml" version="[2,3]" />
