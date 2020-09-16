@@ -30,7 +30,7 @@
   </metadata>
   <files>
     <file src="..\media\customer-tests-excel-icon-small.png" target="media\" />
-    <file src="bin\Release\netcoreapp3.1\CustomerTestsExcel.dll" target="lib\net45" />
+    <file src="bin\Release\netstandard2.0\CustomerTestsExcel.dll" target="lib\net45" />
     <file src="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" target="tools\GenerateCodeFromExcelTest" />
     <file src="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" target="tools\AddNavigationToSpecificationHTMLOutputFiles" />
   </files>
