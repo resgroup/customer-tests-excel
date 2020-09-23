@@ -6,22 +6,24 @@
     <Version>2.0.3</Version>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
-	<IsPackable>true</IsPackable>
-	<StartupObject />
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<Authors>Cedd Burge</Authors>
-	<PackageReleaseNotes>The test project is now expected to be .Net Core (the project under test can be either Core or Framework).
-The framework can now scan assemblies / dlls for interfaces that match the definitions in the Excel tests, and generate the setup classes automatically. 
-The syntax or setting up lists is now ".. list of" instead of "...(n)"
-The framework tries to spot syntax problems in the Excel files and now provides warnings / errors for them.</PackageReleaseNotes>
-	<Description>A framework to round trip NUnit to / from Microsoft Excel customer tests</Description>
-	<Copyright>Copyright © Cedd Burge 2020</Copyright>
-	<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	<PackageProjectUrl>https://github.com/resgroup/customer-tests-excel</PackageProjectUrl>
-	<PackageIconUrl>..\media\customer-tests-excel-icon-small.png</PackageIconUrl>
-	<RepositoryUrl>https://github.com/resgroup/customer-tests-excel</RepositoryUrl>
-	<RepositoryType>git</RepositoryType>
-	<PackageTags>nunit excel customer-tests acceptance-tests end-to-end-tests code-generation</PackageTags>
+	  <IsPackable>true</IsPackable>
+	  <StartupObject />
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <Authors>Cedd Burge</Authors>
+	  <PackageReleaseNotes>The test project is now expected to be .Net Core (the project under test can be either Core or Framework).
+  The framework can now scan assemblies / dlls for interfaces that match the definitions in the Excel tests, and generate the setup classes automatically. 
+  The syntax or setting up lists is now ".. list of" instead of "...(n)"
+  The framework tries to spot syntax problems in the Excel files and now provides warnings / errors for them.</PackageReleaseNotes>
+    <Title>CustomerTestsExcel</Title>
+    <Summary>A framework to round trip NUnit to / from Microsoft Excel customer tests</Summary>
+    <Description>A framework to round trip NUnit to / from Microsoft Excel customer tests</Description>
+	  <Copyright>Copyright © Cedd Burge 2020</Copyright>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageProjectUrl>https://github.com/resgroup/customer-tests-excel</PackageProjectUrl>
+	  <PackageIconUrl>.\media\customer-tests-excel-icon-small.png</PackageIconUrl>
+	  <RepositoryUrl>https://github.com/resgroup/customer-tests-excel</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>nunit excel customer-tests acceptance-tests end-to-end-tests code-generation</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>false</Optimize>
