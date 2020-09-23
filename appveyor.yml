@@ -5,23 +5,21 @@ environment:
  CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS: ..\..\..\..\SampleTests\ExcelTests
 build_script:
  - echo %CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS%
- - nuget restore CustomerTestsExcel.sln -verbosity quiet
+ - dotnet restore CustomerTestsExcel.sln -verbosity quiet
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
- - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
+ - dotnet build CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release   
  # Ensure that the Excel tests can round trip to C#
  # Regenerate the sample tests from the excel (requires GenerateCodeFromExcelTest.exe)
  - dotnet test
  - GenerateTests.bat
- - msbuild CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
+ - dotnet build CustomerTestsExcel.sln /verbosity:minimal /property:Configuration=Release
  # run the tests, so that they re create the Excel Spreadsheets (requires some environment variables to be set)
  - dotnet test
  # Regenerate the sample tests again and build / test
  - GenerateTests.bat
- - msbuild CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet /property:Configuration=Release
+ - dotnet build CustomerTestsExcel.sln /nowarn:1125 /verbosity:quiet /property:Configuration=Release
  # run the unit tests and get coverage
  - packages\OpenCover\4.7.922\tools\OpenCover.Console.exe -register:Path64 -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test" -output:"coverage.xml" -returntargetcode -oldstyle
- # create the nuget package
- - dotnet pack CustomerTestsExcel\CustomerTestsExcel.csproj
 test_script:
   # upload the code coverage to codcov.io
   - ps: |
@@ -29,6 +27,7 @@ test_script:
       Invoke-WebRequest -Uri 'https://codecov.io/bash' -OutFile codecov.sh
       bash codecov.sh -f "coverage.xml" -U "-s" -A "-s"
 artifacts:
+ # The nuget package is created during `dotnet build`
  - path: 'CustomerTestsExcel\**\*.nupkg'
 notifications:
   - provider: Email
