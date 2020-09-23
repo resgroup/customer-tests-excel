@@ -6,6 +6,7 @@ environment:
 build_script:
  - echo %CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS%
  - dotnet restore CustomerTestsExcel.sln
+ - nuget restore SampleSystemUnderTest\SampleSystemUnderTest.sln
  # build GenerateCodeFromExcelTest.exe, which is used by GenerateTests.bat
  - dotnet build CustomerTestsExcel.sln
  # Ensure that the Excel tests can round trip to C#
