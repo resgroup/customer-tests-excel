@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Company></Company>
     <RootNamespace>CustomerTestsExcel</RootNamespace>
-    <Version>2.0.3</Version>
+    <Version>2.0.4</Version>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
 	  <IsPackable>true</IsPackable>
@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\customer-tests-excel-icon-small.png" PackagePath="media" Pack="true" />
-    <None Include="..\GenerateCodeFromExcelTest\bin\Release\netcoreapp3.1\**\*" PackagePath="tools\GenerateCodeFromExcelTest" Pack="true" />
-    <None Include="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Release\netcoreapp3.1\**\*" PackagePath="tools\AddNavigationToSpecificationHTMLOutputFiles" Pack="true" />
+    <None Include="..\GenerateCodeFromExcelTest\bin\Debug\netcoreapp3.1\**\*" PackagePath="tools\GenerateCodeFromExcelTest" Pack="true" />
+    <None Include="..\AddNavigationToSpecificationHTMLOutputFiles\bin\Debug\netcoreapp3.1\**\*" PackagePath="tools\AddNavigationToSpecificationHTMLOutputFiles" Pack="true" />
   </ItemGroup>
 </Project>
