@@ -24,39 +24,28 @@ The easiest way to get started is to use the [scaffolding project](https://githu
 
 However you can do it manually
 
-- Create a new project (.csproj) for the Customer Tests
+- Create a new .net Core project (.csproj) for the Customer Tests
 - Install the Nuget Package `CustomerTestsExcel`
-- Install the Nuget Package `CustomerTestsExcel`
-- Create an `ExcelTests` folder within the Customer Test project folder
-- Create an Excel Spreadsheet in the `ExcelTests` subfoloder, with a Test (see below for format).
-- Run `GenerateCodeFromExcelTest.exe` to create / update the C# test project
- - For example `GenerateCodeFromExcelTest.exe /folder "CustomerTests" /project CustomerTests.csproj /namespace CustomerTests /usings "SystemUnderTest" /assertionClassPrefix "I"`
- - `GenerateCodeFromExcelTest.exe` will be in the `tools` folder of the nuget package (for example `CustomerTestsExcel.1.0.1\tools`)
- - `/folder` is the folder of the Customer Test project relative to the current working directory 
- - `/project` is the name of the project
- - `/namespace' is the namespace to use for the tests
- - `/usings' is space delimited list of namespaces that will be added as `using` statements to the tests
- - `/assertionClassPrefix` is added to the Excel assertion type names when creating the C# names.
-- Open the Customer Test project in Visual Studio (For example `SampleTests\SampleTests.csproj`)
- - Put any custom code under a `IgnoreOnGeneration` folder, so that it will remain when the test project is regenerated.
-- To create the Excel Spreadsheet from the C# code (should you need to)
+- Create an `ExcelTests` subfolder
+- Create an Excel Spreadsheet in the `ExcelTests` subfoloder (like the ones in [SampleTests\ExcelTests\](SampleTests\ExcelTests\)).
+- To generate the C# tests run `GenerateCodeFromExcelTest.exe` (as is done in [SampleTests\ExcelTests\GenerateTests.bat](SampleTests\ExcelTests\GenerateTests.bat))
+- Enhance the generated code with any custom code required, and run the tests
+- To recreate the Excel Spreadsheets from the C# code (should you need to)
   - Set a `CUSTOMER_TESTS_EXCEL_WRITE_TO_EXCEL` environment variable to `true`
-  - Set a `CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS` environment variable from the Output Folder (for example `bin\debug`) to the `ExcelTests` folder
+  - Set a `CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS` environment variable from the Output Folder to the `ExcelTests` folder (usually `..\..\..\..\SampleTests\ExcelTests`)
   - Run the tests
   
-See the SampleTests and SampleSystemUnderTest projects for examples.
-
-The Excel test for the Rerouting example (`SampleTests/ExcelTests/Rerouting.xlsx`) looks like this:
+The Excel test for the classic Rerouting example (`SampleTests/ExcelTests/Rerouting.xlsx`) looks like this:
 
 ![Example Excel Test](media/example-excel-test.png "Example Excel Test")
+
+# Documentation
+
+The [scaffolding project](https://github.com/resgroup/customer-tests-excel-scaffolding) has sample tests that showcase virtually all of the functionality supported by the framework, and it contains instructions and examples for augmenting the generated code with custom code.
 
 # Building Locally
 
 - CustomerTestsExcel.sln
-
-# Build Server (private to RES)
-
-- https://ci.appveyor.com/project/RESSoftwareTeam/customer-tests-excel
 
 # End to End testing
 
@@ -69,9 +58,7 @@ During the AppVeyor build, the SampleTests Excel spreadsheets are converted in t
 Click "Deploy" on the relevant AppVeyor build if you have access to it.
 
 Otherwise
-- `msbuild.exe CustomerTestsExcel.sln /p:Configuration=Release`
-- `nuget restore`
-- `nuget pack CustomerTestsExcel.csproj -build`
+- `dotnet build.exe CustomerTestsExcel.sln`
 - push .nupkg to a feed
 
 
