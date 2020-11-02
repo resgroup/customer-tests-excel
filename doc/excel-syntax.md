@@ -1,9 +1,8 @@
 # CustomerTestsExcel Excel Syntax
 
-todo: add intro
-todo: add some pictures
-done: add links to sample tests
-done: standardise "Enter" and "should be" "must be"
+Each sheet / tab of a spreadsheet is converted by the framework in to an C# NUnit test, as long as Cell A1 is "Specification" (other tabs can be used to store calculations and comments and similar).
+
+The Test Entity will be generated, but will require the uset to define a partial class to supply the "When" action, and the 
 
 ## Test Name
 
