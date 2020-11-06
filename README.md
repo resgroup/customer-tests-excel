@@ -7,7 +7,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/1bc743c6d68c2f245cd8/maintainability)](https://codeclimate.com/github/resgroup/customer-tests-excel/maintainability)
 
 
-A framework to round trip NUnit to / from Microsoft Excel customer tests.
+A framework to round trip NUnit to / from Microsoft Excel customer tests. Please see [Introducing CustomerTestsExcel](https://dev.to/ceddlyburge/introducing-customertestsexcel-4f7b) for more details.
 
 Created as a replacment for Fitnesse. RES is primarily a science and engineering company, and due to the calculation heavy nature of the work, none of the existing customer test frameworks are a good fit.
 
