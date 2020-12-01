@@ -27,7 +27,7 @@ However you can do it manually
 - Create a new .net Core project (.csproj) for the Customer Tests
 - Install the Nuget Package `CustomerTestsExcel`
 - Create an `ExcelTests` subfolder
-- Create an Excel Spreadsheet in the `ExcelTests` subfolder (like the ones in [SampleTests\ExcelTests\](SampleTests\ExcelTests\)).
+- Create an Excel Spreadsheet in the `ExcelTests` subfolder (like the ones in [SampleTests\ExcelTests](SampleTests\ExcelTests)).
 - To generate the C# tests run `GenerateCodeFromExcelTest.exe` (as is done in [SampleTests\ExcelTests\GenerateTests.bat](SampleTests\ExcelTests\GenerateTests.bat))
 - Enhance the generated code with any custom code required, and run the tests
 - To recreate the Excel Spreadsheets from the C# code (should you want to)
@@ -35,7 +35,7 @@ However you can do it manually
   - Set a `CUSTOMER_TESTS_RELATIVE_PATH_TO_EXCELTESTS` environment variable from the Output Folder to the `ExcelTests` folder (usually `..\..\..\..\SampleTests\ExcelTests`)
   - Run the tests
   
-The Excel test for the classic Rerouting example (`SampleTests/ExcelTests/Rerouting.xlsx`) looks like this:
+The Excel test for the classic Rerouting example ([SampleTests/ExcelTests/Rerouting.xlsx](SampleTests/ExcelTests/Rerouting.xlsx)) looks like this:
 
 ![Example Excel Test](media/example-excel-test.png "Example Excel Test")
 
