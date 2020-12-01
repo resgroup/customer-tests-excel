@@ -1,4 +1,4 @@
-# Getting started Customer Tests Excel
+# Step by step guide
 
 This is a comprehensive and simple step by step guide, that came from a demo of adding CustomerTestsExcel to an existing solution. The demo took around an hour, with discussion and questions.
 
