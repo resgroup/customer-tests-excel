@@ -20,7 +20,7 @@ Advantages
 
 # Usage
 
-The easiest way to get started is to use the [scaffolding project](https://github.com/resgroup/customer-tests-excel-scaffolding).
+The easiest way to get started is to follow the [step by step guide](doc/step-by-step-guide.md).
 
 However you can do it manually
 
